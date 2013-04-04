@@ -3,7 +3,7 @@
 	<header>
 	    <hgroup class="crearfix">
 	        <title>Episode 4</title>
-	        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+	        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylem.css') }}"/>
 	    </hgroup>
     </header>
     <body>
@@ -14,15 +14,18 @@
 	        <div id="nav">
 	            Menu:
 	            <ul id="menu">
+	            	{% block nav %}{% endblock %}
+	            	<hr id="nav"/>
+	            	{% if 'username' in session %}
 					<li><a href="{{url_for('remote')}}">remote control</a></li>
-					<li>
-						<a href="#">Usuario Manager</a>
+					<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
 						<ul>
 							<li><a href="{{url_for('crearUsuario')}}">Crear Usuario</a></li>
 						</ul>
 					</li>
-					{% block nav %}{% endblock %}
+					{% else %}
 					<li><a href="#">Ayuda</a></li>
+					{% endif %}
 				</ul>
 	        </div>
         </aside>

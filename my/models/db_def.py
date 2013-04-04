@@ -1,62 +1,22 @@
-# table_def.py
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String
+from sqlalchemy import create_engine
+engine = create_engine('postgresql+psycopg2://postgres:pm@localhost:5432/wapm')
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, backref
-
- 
-engine = create_engine('postgres://postgres:pm@localhost:5432/wapm', echo=True)
 Base = declarative_base()
- 
-########################################################################
+from sqlalchemy import Column, Integer, String
+  
 class Usuario(Base):
-    """"""
-    __tablename__ = "usuario"
- 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)  
-   
- 
-    #----------------------------------------------------------------------
-    def __init__(self, name):
-        """"""
-        self.name = name 
-
-
-########################################################################
-class Artist(Base):
-    """"""
-    __tablename__ = "artists"
- 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)  
- 
-    #----------------------------------------------------------------------
-    def __init__(self, name):
-        """"""
-        self.name = name       
- 
-########################################################################
-class Album(Base):
-    """"""
-    __tablename__ = "albums"
- 
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    release_date = Column(Date)
-    publisher = Column(String)
-    media_type = Column(String)
- 
-    artist_id = Column(Integer, ForeignKey("artists.id"))
-    artist = relationship("Artist", backref=backref("albums", order_by=id))
- 
-    #----------------------------------------------------------------------
-    def __init__(self, title, release_date, publisher, media_type):
-        """"""
-        self.title = title
-        self.release_date = release_date
-        self.publisher = publisher
-        self.media_type = media_type
-
-# create tables
+    
+    __tablename__ = 'USUARIO'
+    id = Column("id",Integer, primary_key=True)
+    name =  Column("nombre",String(50))
+    passwd=Column("passwd",String(50))
+    
+    def __init__(self,id=None,nom=None,passwd=None):
+        self.id=id
+        self.name=nom
+        self.passwd=passwd
+    
+    def printMyself(self):
+        return "Mi Id es ",id,", me llamo ",self.name," y mi pass es...",self.passwd
+    
 Base.metadata.create_all(engine)

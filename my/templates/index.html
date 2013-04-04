@@ -8,7 +8,7 @@
         </form>
     {% else %}
         <p>A login is required:</p>
-        <form action="{{url_for('index')}}" method="post">
+        <form class='datosUsuario' action="{{url_for('index')}}" method="post">
             <p>Username:<br />
             <input type="text" name="username" /></p>
             <p>Password:<br />

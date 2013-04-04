@@ -1,8 +1,104 @@
 {% extends "base.html" %}
 {% block body %}
-    <h2>Modificar Usuario</h2>
+    <h2> Usuario Manager</h2>
     
-    <script type="text/javascript" src="{{url_for('jquery-1.8.3.min')}}"></script> 
+    <script type="text/javascript" src="{{url_for('static', filename='jquery.js')}}"></script> 
+    <table id="listaUsuarios"></table>
+    
+    <script type="text/javascript">
+				
+                        /* Se inicializa la lista de clientes */
+                        jQuery("#listaUsuarios")
+                        .jqGrid(
+                        {
+                            autowidth : true,<tr>
+												<th>Header 1</th>
+												<th>Header 2</th>
+												</tr>
+							height : 220,
+                            url : 'usuarioManager',
+                            datatype : "json",
+                            mtype : "POST",
+                            colNames : [ 'ID Cliente', 'Nombre',
+                                'Direccion', 'RUC',
+                                'Activo', 'Ult. Modificacion' ],
+                            colModel : [ {
+                                    name : 'idCliente', index : 'idCliente', hidden : true
+                                }, {
+                                    name : 'nombre', index : 'nombre'
+                                }, {
+                                    name : 'direccion', index : 'direccion'
+                                }, {
+                                    name : 'ruc', index : 'ruc'
+                                }, {
+                                    name : 'activo', index : 'activo',
+                                    formatter:'select', 
+                                    stype:'select',
+                                    editoptions:{value:"true:Activo;false:Inactivo"}
+                                }, {
+                                    name : 'ultModificacion',
+                                    index : 'ultModificacion',
+                                    formatter: function (cellval, opts) {
+                                        var date = new Date(cellval);
+                                        opts = $.extend({}, $.jgrid.formatter.date, opts);
+                                        return $.fmatter.util.DateFormat("", date, 'd-M-Y h:i:s', opts);
+                                    },
+                                    search : false
+                                } ],
+                            postData : {
+                                atributos : "idCliente,nombre,direccion,ruc,activo,ultModificacion",
+                                todos : false
+                            },
+                            rowNum : 10,
+                            pager : '#paginador-lista-clientes',
+                            rownumbers : true,
+                            emptyrecords : "Sin Datos",
+                            sortname : 'nombre',
+                            viewrecords : true,
+                            sortorder : "asc",
+                            caption : "Listado de Clientes",
+                            loadComplete : function(datos) {
+                                if (datos.error) {
+                                    mostrarMensaje(
+                                    "Error",
+                                    "No es posible recuperar los datos: \n"
+                                        + datos.msgError);
+                                }
+                            },
+                            jsonReader : {
+                                root : "respuesta.datos",
+                                page : "respuesta.pagina",
+                                total : "respuesta.totalPaginas",
+                                records : "respuesta.totalDatos",
+                                repeatitems : false,
+                                cell : "cell",
+                                id : "id"
+                            }
+                        });
+					
+                       // jQuery("#u").jqGrid('navGrid',
+                       // '#paginador-lista-clientes', {
+                     //       edit : false,
+                      //      add : false,
+                        //    del : false,
+                      //      search: false
+                      //  });
+					
+                        // se inicializa la barra de filtrado
+                     //   $("#lista-clientes").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : true, defaultSearch:"eq"});
+
+					
+                    </script>
+    <select id="firstList" multiple="multiple" style="height:400px;width: 500px;" >
+		<option value="1">PHP</option>
+		<option value="2">.Net</option>
+		<option value="4">Paste</option>
+		<option value="5">Pea</option>
+		<option value="6">Pamp</option>
+	</select>
+	<input id="to2" type="button" name="to2"  title='assign' value=">" /><br/><br/>
+	<input id="to1" type="button" name="to1" title='unassign' value="<">
+	<select id="secondList" multiple="multiple" style="height:420px;width: 250px;" ></select>
     
     {% with messages = get_flashed_messages() %}
         {% if messages %}

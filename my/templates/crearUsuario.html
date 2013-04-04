@@ -4,11 +4,12 @@
     
     <form action="{{url_for('crearUsuario')}}" method="post">
     	 <dl>
-        		<dt><label>NombreUsuario: </label><input type="text" id="nombreUsuario" name="nombreUsuario" required> </dt>       	 
+        		<dt><label>NombreUsuario: </label><input type="text" id="nombreUsuario" name="nombreUsuario" required > </dt>       	 
 		</dl>
         
         <dl>
-        		<dt><label>Contraseña</label> <input type="text" id="nombreUsuario" name="nombreUsuario" required> </dt>       	 
+        		<dt><label>Contraseña</label> <input type="text" id="nombreUsuario" 
+        		name="nombreUsuario" required data-requiredmsg=”llene el campo”> </dt>       	 
 		</dl>
         
         <dl>
@@ -19,17 +20,17 @@
         
         <dl>
         		<dt><label> Nombre </label>
-        		<input type="text" name="nombre" /> </dt>
+        		<input type="text" name="nombre" required /> </dt>
         </dl>
         
         <dl>
         		<dt><label>Apellido </label>
-        		<input type="text" name="apellido" /></dt>
+        		<input type="text" name="apellido" required /></dt>
         </dl>
         
         <dl>
         		<dt><label>Email </label>
-        		<input type="text" name="email" /></dt>
+        		<input type="text" name="email" required /></dt>
         </dl>
         
         <dl>
@@ -42,7 +43,7 @@
          		<input type="text" name="direccion" /></dt>
         </dl>
         
-        <input type="submit" value="Crear Usuario" />
+        <input type='submit' value="Crea usuario" />
     </form>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
