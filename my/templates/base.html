@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<header>
+	    <hgroup class="crearfix">
+	        <title>Episode 4</title>
+	        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+	    </hgroup>
+    </header>
+    <body>
+        <div id="content">
+            {% block body %}{% endblock %}
+        </div>
+        <aside>
+	        <div id="nav">
+	            Menu:
+	            <ul id="menu">
+					<li><a href="{{url_for('remote')}}">remote control</a></li>
+					<li>
+						<a href="#">Usuario Manager</a>
+						<ul>
+							<li><a href="{{url_for('crearUsuario')}}">Crear Usuario</a></li>
+						</ul>
+					</li>
+					{% block nav %}{% endblock %}
+					<li><a href="#">Ayuda</a></li>
+				</ul>
+	        </div>
+        </aside>
+    </body>
+</html>

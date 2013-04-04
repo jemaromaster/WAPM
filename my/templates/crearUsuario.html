@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block body %}
+    <h2>Crear Usuario</h2>
+    
+    <form action="{{url_for('crearUsuario')}}" method="post">
+    	 <dl>
+        		<dt><label>NombreUsuario: </label><input type="text" id="nombreUsuario" name="nombreUsuario" required> </dt>       	 
+		</dl>
+        
+        <dl>
+        		<dt><label>Contraseña</label> <input type="text" id="nombreUsuario" name="nombreUsuario" required> </dt>       	 
+		</dl>
+        
+        <dl>
+        		<dt><label>Repetir Contraseña </label>
+        		<input type="text" name="repPass" required> </dt>
+        </dl>
+        
+        
+        <dl>
+        		<dt><label> Nombre </label>
+        		<input type="text" name="nombre" /> </dt>
+        </dl>
+        
+        <dl>
+        		<dt><label>Apellido </label>
+        		<input type="text" name="apellido" /></dt>
+        </dl>
+        
+        <dl>
+        		<dt><label>Email </label>
+        		<input type="text" name="email" /></dt>
+        </dl>
+        
+        <dl>
+        		<dt><label>Telefono </label>
+        		<input type="text" name="telefono" /></dt>
+        </dl>
+        
+         <dl>
+        		<dt><label>Dirección</label>
+         		<input type="text" name="direccion" /></dt>
+        </dl>
+        
+        <input type="submit" value="Crear Usuario" />
+    </form>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            Results:
+            <pre>
+                {% for message in messages %}
+{{ message }}
+                {% endfor %}
+            </pre>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+{% block nav %}
+<li><a href="{{url_for('index')}}">back</a></li>
+{% endblock %}
