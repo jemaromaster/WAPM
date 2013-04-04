@@ -25,6 +25,8 @@ class CrearUsuario(flask.views.MethodView):
         nombre=flask.request.form['nombre']
         apellido= flask.request.form['apellido']
         email=flask.request.form['email']
+        direccion=flask.request.form['direccion']
+        telefono=flask.request.form['telefono']
         
         if passwd!=repPasswd:
             flask.flash("Las contrasenhas no coinciden")

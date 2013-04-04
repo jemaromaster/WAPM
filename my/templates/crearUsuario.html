@@ -2,48 +2,49 @@
 {% block body %}
     <h2>Crear Usuario</h2>
     
-    <form action="{{url_for('crearUsuario')}}" method="post">
-    	 <dl>
-        		<dt><label>NombreUsuario: </label><input type="text" id="nombreUsuario" name="nombreUsuario" required > </dt>       	 
+    <form name="formulario" action="{{url_for('crearUsuario')}}" method="post">
+    	<fieldset>
+    	<legend>Datos Nuevo Usuario</legend>
+        <dl>
+        		<dt><label>NombreUsuario:</label></dt> 
+                <dd><input type="text" id="nombreUsuario" name="nombreUsuario" required /> </dd>  	 
 		</dl>
         
         <dl>
-        		<dt><label>Contraseña</label> <input type="text" id="nombreUsuario" 
-        		name="nombreUsuario" required data-requiredmsg=”llene el campo”> </dt>       	 
+        		<dt><label>Contraseña:</label></dt> 
+                <dd><input type="text" id="pass" name="pass" required /> </dd>  	 
 		</dl>
         
         <dl>
-        		<dt><label>Repetir Contraseña </label>
-        		<input type="text" name="repPass" required> </dt>
-        </dl>
-        
-        
+        		<dt><label>Reingresar Contraseña:</label></dt> 
+                <dd><input type="text" id="repPass" name="repPass" required /> </dd>  	 
+		</dl>
+            
         <dl>
-        		<dt><label> Nombre </label>
-        		<input type="text" name="nombre" required /> </dt>
-        </dl>
-        
+        		<dt><label>Nombre:</label></dt> 
+                <dd><input type="text" id="nombre" name="nombre" required /> </dd>  	 
+		</dl>
         <dl>
-        		<dt><label>Apellido </label>
-        		<input type="text" name="apellido" required /></dt>
-        </dl>
-        
-        <dl>
-        		<dt><label>Email </label>
-        		<input type="text" name="email" required /></dt>
-        </dl>
-        
-        <dl>
-        		<dt><label>Telefono </label>
-        		<input type="text" name="telefono" /></dt>
-        </dl>
-        
+        		<dt><label>Apellido:</label></dt> 
+                <dd><input type="text" id="apellido" name="apellido" required /> </dd>  	 
+		</dl>
          <dl>
-        		<dt><label>Dirección</label>
-         		<input type="text" name="direccion" /></dt>
-        </dl>
-        
-        <input type='submit' value="Crea usuario" />
+        		<dt><label>Email:</label></dt> 
+                <dd><input type="text" id="email" name="email" required /> </dd>  	 
+		</dl>
+          <dl>
+        		<dt><label>Direccion:</label></dt> 
+                <dd><input type="text" id="direccion" name="direccion" required /> </dd>  	 
+		</dl>
+          <dl>
+        		<dt><label>Telefono:</label></dt> 
+                <dd><input type="text" id="telefono" name="telefono" required /> </dd>  	 
+		</dl>
+         </fieldset>
+       <fieldset class="action">
+    	<input type="submit" name="submit" id="submit" value="Crear Usuario" />
+    </fieldset>
+
     </form>
     {% with messages = get_flashed_messages() %}
         {% if messages %}

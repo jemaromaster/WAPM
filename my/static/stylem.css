@@ -1,8 +1,3 @@
-body{
-    font-family: 'Georgia', serif;
-    color:#3E4349;
-    background:white
-}
 
 #nav {
     position: absolute;
@@ -14,55 +9,21 @@ body{
 #content {
     margin-left: 100em;
 }
+/*Defaults Styling*/
+body {font:12px/17px Arial, Helvetica, sans-serif; color:#333; 
+background:#ccc; padding:40px 20px 20px 20px;}
+fieldset {background:#f2f2e6; padding:10px; border:1px solid #fff; 
+border-color:#fff #666661 #666661 #fff; margin-bottom:36px; width:600px;}
+input, textarea, select {font:12px/12px Arial, Helvetica, sans-serif; padding:0;}
+fieldset.action {background:#9da2a6; border-color:#e5e5e5 #797c80 #797c80 #e5e5e5; margin-top:-20px;}
+legend {background:#bfbf30; color:#fff; font:17px/21px Calibri, Arial, Helvetica, sans-serif; padding:0 10px; margin:-26px 0 0 -11px; font-weight:bold; border:1px solid #fff; border-color:#e5e5c3 #505014 #505014 #e5e5c3;}
+label {font-size:11px; font-weight:bold; color:#666;}
+label.opt {font-weight:normal;}
+dl {clear:both;}
+dt {float:left; text-align:right; width:90px; line-height:25px; margin:0 10px 10px 0;}
+dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
+#footer {font-size:11px;}
 
-.datosUsuario{
-    border: 1px solid #CED5D7;
-    border-radius: 6px;
-    padding: 45px 45px 20px;
-    margin-top: 50px;
-    background-color: white;
-    box-shadow: 0px 5px 10px #B5C1C5, 0 0 0 10px #EEF5F7 inset;
-}
+#container {width:700px; margin:0 auto;}
 
-.datosUsuario label{
-    display: block; /* esto es para que el label se sobreponga a la caja de texto */
-    font-weight: bold;
-}
-.datosUsuario div{
-    margin-bottom: 15px; /* esto los separara un poco */
-}
-
-.datosUsuario input[type='text'], .datosUsuario textarea{
-    padding: 7px 6px;
-    width: 294px; /* una longitud definida */
-    border: 1px solid #CED5D7;
-    resize: none; /* esta propiedad es para que el textarea no sea redimensionable */
-    box-shadow:0 0 0 3px #EEF5F7;
-    margin: 5px 0;
-}
-.datosUsuario input[type='text']:focus, .contacto textarea:focus{
-    outline: none; /* reset especifico para Chrome/Safari */
-    box-shadow:0 0 0 3px #dde9ec;
-}
-.datosUsuario input[type='submit']{
-    border: 1px solid #CED5D7;
-    box-shadow:0 0 0 3px #EEF5F7;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    text-shadow: 1px 1px 0px white;
- 
-    background: #e4f1f6; /* fallback para navegadores que no soporten degradados */
-    background: -moz-linear-gradient(top, #e4f1f6 0%, #cfe6ef 100%);
-    background: -webkit-linear-gradient(top, #e4f1f6 0%,#cfe6ef 100%);
-}
-.datosUsuario input[type='submit']:hover{
-    background: #edfcff;
-    background: -moz-linear-gradient(top, #edfcff 0%, #cfe6ef 100%);
-    background: -webkit-linear-gradient(top, #edfcff 0%,#cfe6ef 100%);
-}
-.datosUsuario input[type='submit']:active{
-    background: #cfe6ef;
-    background: -moz-linear-gradient(top, #cfe6ef 0%, #edfcff 100%);
-    background: -webkit-linear-gradient(top, #cfe6ef 0%,#edfcff 100%);
-}
+select, input, textarea, button {outline:none; resize:none;}
