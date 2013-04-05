@@ -4,6 +4,7 @@ from flask import jsonify
 from remote import Remote
 from usuarioManager import UsuarioManager
 from login import Login
+from listarUsuarios import ListarUsuarios
 from crearUsuario import CrearUsuario
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -25,6 +26,9 @@ app.add_url_rule('/remote/',
                  methods=['GET', 'POST'])
 app.add_url_rule('/usuarioManager/',
                  view_func=UsuarioManager.as_view('usuarioManager'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarUsuarios/',
+                 view_func=ListarUsuarios.as_view('listarUsuarios'),
                  methods=["GET", "POST"])
 
 app.debug = True

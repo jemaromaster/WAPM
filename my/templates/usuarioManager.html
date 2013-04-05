@@ -1,116 +1,74 @@
-{% extends "base.html" %}
-{% block body %}
-    <h2> Usuario Manager</h2>
-    
-    <script type="text/javascript" src="{{url_for('static', filename='jquery.js')}}"></script> 
-    <table id="listaUsuarios"></table>
-    
-    <script type="text/javascript">
-				
-                        /* Se inicializa la lista de clientes */
-                        jQuery("#listaUsuarios")
-                        .jqGrid(
-                        {
-                            autowidth : true,<tr>
-												<th>Header 1</th>
-												<th>Header 2</th>
-												</tr>
-							height : 220,
-                            url : 'usuarioManager',
-                            datatype : "json",
-                            mtype : "POST",
-                            colNames : [ 'ID Cliente', 'Nombre',
-                                'Direccion', 'RUC',
-                                'Activo', 'Ult. Modificacion' ],
-                            colModel : [ {
-                                    name : 'idCliente', index : 'idCliente', hidden : true
-                                }, {
-                                    name : 'nombre', index : 'nombre'
-                                }, {
-                                    name : 'direccion', index : 'direccion'
-                                }, {
-                                    name : 'ruc', index : 'ruc'
-                                }, {
-                                    name : 'activo', index : 'activo',
-                                    formatter:'select', 
-                                    stype:'select',
-                                    editoptions:{value:"true:Activo;false:Inactivo"}
-                                }, {
-                                    name : 'ultModificacion',
-                                    index : 'ultModificacion',
-                                    formatter: function (cellval, opts) {
-                                        var date = new Date(cellval);
-                                        opts = $.extend({}, $.jgrid.formatter.date, opts);
-                                        return $.fmatter.util.DateFormat("", date, 'd-M-Y h:i:s', opts);
-                                    },
-                                    search : false
-                                } ],
-                            postData : {
-                                atributos : "idCliente,nombre,direccion,ruc,activo,ultModificacion",
-                                todos : false
-                            },
-                            rowNum : 10,
-                            pager : '#paginador-lista-clientes',
-                            rownumbers : true,
-                            emptyrecords : "Sin Datos",
-                            sortname : 'nombre',
-                            viewrecords : true,
-                            sortorder : "asc",
-                            caption : "Listado de Clientes",
-                            loadComplete : function(datos) {
-                                if (datos.error) {
-                                    mostrarMensaje(
-                                    "Error",
-                                    "No es posible recuperar los datos: \n"
-                                        + datos.msgError);
-                                }
-                            },
-                            jsonReader : {
-                                root : "respuesta.datos",
-                                page : "respuesta.pagina",
-                                total : "respuesta.totalPaginas",
-                                records : "respuesta.totalDatos",
-                                repeatitems : false,
-                                cell : "cell",
-                                id : "id"
-                            }
-                        });
-					
-                       // jQuery("#u").jqGrid('navGrid',
-                       // '#paginador-lista-clientes', {
-                     //       edit : false,
-                      //      add : false,
-                        //    del : false,
-                      //      search: false
-                      //  });
-					
-                        // se inicializa la barra de filtrado
-                     //   $("#lista-clientes").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : true, defaultSearch:"eq"});
+<html lang="es-ES">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CompraVenta</title>
+<!-- Import jQuery UI and <span class="hiddenSpellError" pre="and ">jqGrid</span> UI -->
+	<link rel="stylesheet" type="text/css" media="screen" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="jquery.jqGrid-4.4.1/css/ui.jqgrid.css" />
 
-					
-                    </script>
-    <select id="firstList" multiple="multiple" style="height:400px;width: 500px;" >
-		<option value="1">PHP</option>
-		<option value="2">.Net</option>
-		<option value="4">Paste</option>
-		<option value="5">Pea</option>
-		<option value="6">Pamp</option>
-	</select>
-	<input id="to2" type="button" name="to2"  title='assign' value=">" /><br/><br/>
-	<input id="to1" type="button" name="to1" title='unassign' value="<">
-	<select id="secondList" multiple="multiple" style="height:420px;width: 250px;" ></select>
+	<link href="resources/css/style.css" rel="stylesheet" type="text/css" />
+	
+	<link href="resources/css/ui.multiselect.css" media="screen"
+		rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+	href="resources/css/jquery-ui-1.9.2.custom.css" />
+	
+	<script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="/static/compra-venta.js"></script>
+	<script type="text/javascript" src="/static/jquery.jqGrid.min.js"></script>
+	<script type="text/javascript" src="/static/grid.locale-es.js"></script>
+	
+	
+	<script src="/static/jquery-ui.js"></script>
+		
+
+</head>
+<body>	
+	<div id="caja" style='height: 10%; padding: 30px' align="center">
+		<table id="grid">
+		<div id="pager"></div>
+	
+	</div>
+<script type="text/javascript">
+var mydata = [
+    { idUsuario : "1", "nombreUsuario" : "Pablo", "nombre": "Pablo", "apellido": "Lopez"},
+    { idUsuario : "2", "nombreUsuario" : "Jesus","nombre" : "Jesus", "apellido": "Romero"},
+    { idUsuario : "3", "nombreUsuario" : "Juan ", "nombre" : "Juan ","apellido": "Perez"},
+    { idUsuario: "5", "nombreUsuario" : "Marco","nombre" : "Marco", "apellido": "Aponte"}
     
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            Results:
-            <pre>
-                {% for message in messages %}
-{{ message }}
-                {% endfor %}
-            </pre>
-        {% endif %}
-    {% endwith %}
-{% endblock %}
-{% block nav %}
-<li><a href="{{url_for('index')}}">back</a></li>
-{% endblock %}
+]; 
+
+$("#grid").jqGrid({ //set your grid id
+	data: mydata, //insert data from the data object we created above
+	datatype: 'local',
+	width: 400, //specify width; optional
+	colNames:['Id','Nombre de Usuario', 'Nombre', 'Apellido'], //define column names
+	colModel:[
+			{name:'idUsuario', index:'idUsuario', key: true, width:50, hidden:true},
+			{name:'nombreUsuario', index:'nombreUsuario', width:100},
+			{name:'nombre', index:'nombre', width:100},
+			{name:'apellido', index:'apellido', width:100}
+		], 
+	rowNum:8,//define column models
+	rowNumbers:true,
+	emptyrecords : "Sin Datos",
+	pager: '#pager', //set your pager div id
+	sortname: 'nombreUsuario', //the column according to which data is to be sorted; optional
+	viewrecords: true, //if true, displays the total number of records, etc. as: "View X to Y out of Z” optional
+	sortorder: "asc", //sort order; optional
+	caption:"jqGrid Example" //title of grid
+});
+jQuery("#grid").jqGrid('navGrid',
+        '#pager', {
+            edit : false,
+            add : false,
+            del : false,
+            search: false
+            
+        });
+	
+        // se inicializa la barra de filtrado
+        $("#grid").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : true, defaultSearch:"cn"});
+
+</script>
+</body>
