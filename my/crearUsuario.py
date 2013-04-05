@@ -1,10 +1,7 @@
 import flask
 from utils import login_required
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
-
-#from models.db_def import engine
-
+from models.usuarioModelo import Usuario 
+from models.bdCreator import Session
 
 class CrearUsuario(flask.views.MethodView):
     @login_required
@@ -22,16 +19,24 @@ class CrearUsuario(flask.views.MethodView):
         nombreUsuario=flask.request.form['nombreUsuario']
         passwd=flask.request.form['pass']
         repPasswd=flask.request.form['repPass']
+        ci=flask.request.form['ci']
         nombre=flask.request.form['nombre']
         apellido= flask.request.form['apellido']
         email=flask.request.form['email']
         direccion=flask.request.form['direccion']
         telefono=flask.request.form['telefono']
-        
+        observacion=flask.request.form['observacion']
+        u=Usuario(nombreUsuario,passwd, nombre, apellido,email,ci,telefono,observacion)
         if passwd!=repPasswd:
             flask.flash("Las contrasenhas no coinciden")
             return flask.redirect(flask.url_for('crearUsuario'))
-        #guardar
+        else:
+            sesion=Session()
+            sesion.add(u)
+            sesion.commit()
+            sesion.close()
+            return flask.redirect(flask.url_for('usuarioManager'))
+            
         
         
                

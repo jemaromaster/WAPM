@@ -6,10 +6,7 @@ from usuarioManager import UsuarioManager
 from login import Login
 from listarUsuarios import ListarUsuarios
 from crearUsuario import CrearUsuario
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 #from models.db_def import Album, Artist, engine
-
 
 app = flask.Flask(__name__)
 # Don't do this
