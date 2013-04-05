@@ -34,27 +34,30 @@
             var subcategories = ["All", "football", "formel 1", "physics", "mathematics"];
             var subcategoriesStr =":All;1:football;2:formel 1;3:physics;4:mathematics";
             var mydata = [
-                {id:0, Name:"Lukas Podolski",     Category:1, Subcategory:1},
-                {id:1, Name:"Michael Schumacher", Category:1, Subcategory:2},
-                {id:2, Name:"Albert Einstein",    Category:2, Subcategory:3},
-                {id:3, Name:"Blaise Pascal",      Category:2, Subcategory:4}
+                {idUsuario:0, NombreUsuario:"Lukas Podolski", Nombre:"Lukas Podolski",
+                	Apellido:"Lukas Podolski",
+                	email: "lalal"
+                	},
+               
             ];
 
             var grid = jQuery("#list").jqGrid({
-                data: mydata,
-                datatype: 'local',
+                
+               // datatype : "local",
+               // data:mydata,
+                 url : 'http://localhost:5000/listarUsuarios',
+                 datatype : "json",
+                 mtype : "get",
+                colNames : [ 'ID Usuario ', 'Nombre de Usuario',
+                             'Nombre', 'Apellido',
+                             'Email' ],
                 colModel: [
-                    { name: 'Name', index: 'Name', width: 200},
-                    { name: 'Category', index: 'Category', width: 200, formatter:'select', stype: 'select',
-                      sorttype: function(cell) {return categories[cell];},
-                      edittype:'select', editoptions: { value: categoriesStr },
-                      searchoptions:{ sopt:['eq'] }
-                    },
-                    { name: 'Subcategory', index: 'Subcategory', width: 200, formatter:'select', stype: 'select',
-                      sorttype: function(cell) {return categories[cell];},
-                      edittype:'select', editoptions: { value: subcategoriesStr},
-                      searchoptions:{ sopt:['eq'] }
-                    }
+					{ name: 'idUsuario', index: 'idUsuario', width: 200, hidden:true},
+                    { name: 'NombreUsuario', index: 'NombreUsuario', width: 200},
+                    { name: 'Nombre', index: 'Nombre', width: 200},
+                    { name: 'Apellido', index: 'Apellido', width: 200},
+                    { name: 'email', index: 'email', width: 200}
+                                      
                 ],
                 sortname: 'Name',
                 viewrecords: true,
@@ -62,7 +65,16 @@
                 sortorder: "desc",
                 ignoreCase: true,
                 pager: '#pager',
-                caption: "Setting filter in the filter toolbar"
+                caption: "Lista de Usuarios",
+                jsonReader : {
+                        root : "invdata",
+                        page : "currpage",
+                        total : "totalpages",
+                        records : "totalrecords",
+                        repeatitems : false,
+                        id : "idUsuario" 	
+                }
+                
             }).jqGrid('navGrid','#pager', { edit: false, add: false, del: false, search: false, refresh:false });
             grid.jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch : "cn"});
         });
