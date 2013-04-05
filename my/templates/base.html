@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<header>
+		{% block header %}{% endblock %}
 	    <hgroup class="crearfix">
 	        <title>Web Application Project Management - WAPM</title>
 	        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylem.css') }}"/>
@@ -17,11 +18,7 @@
 	            	{% block nav %}{% endblock %}
 	            	<hr id="nav"/>
 	            	{% if 'username' in session %}
-					<li><a href="{{url_for('remote')}}">remote control</a></li>
 					<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
-						<ul>
-							<li><a href="{{url_for('crearUsuario')}}">Crear Usuario</a></li>
-						</ul>
 					</li>
 					{% else %}
 					<li><a href="#">Ayuda</a></li>

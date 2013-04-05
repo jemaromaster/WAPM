@@ -1,74 +1,97 @@
-<html lang="es-ES">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>CompraVenta</title>
-<!-- Import jQuery UI and <span class="hiddenSpellError" pre="and ">jqGrid</span> UI -->
-	<link rel="stylesheet" type="text/css" media="screen" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="jquery.jqGrid-4.4.1/css/ui.jqgrid.css" />
+{% extends "base.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-	<link href="resources/css/style.css" rel="stylesheet" type="text/css" />
-	
-	<link href="resources/css/ui.multiselect.css" media="screen"
-		rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" type="text/css" media="screen"
-	href="resources/css/jquery-ui-1.9.2.custom.css" />
-	
-	<script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script>
-	<script type="text/javascript" src="/static/compra-venta.js"></script>
-	<script type="text/javascript" src="/static/jquery.jqGrid.min.js"></script>
-	<script type="text/javascript" src="/static/grid.locale-es.js"></script>
-	
-	
-	<script src="/static/jquery-ui.js"></script>
-		
+	{% block header %}
+    <title>How to set filterToolbar with initialized filter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-</head>
-<body>	
-	<div id="caja" style='height: 10%; padding: 30px' align="center">
-		<table id="grid">
-		<div id="pager"></div>
-	
-	</div>
-<script type="text/javascript">
-var mydata = [
-    { idUsuario : "1", "nombreUsuario" : "Pablo", "nombre": "Pablo", "apellido": "Lopez"},
-    { idUsuario : "2", "nombreUsuario" : "Jesus","nombre" : "Jesus", "apellido": "Romero"},
-    { idUsuario : "3", "nombreUsuario" : "Juan ", "nombre" : "Juan ","apellido": "Perez"},
-    { idUsuario: "5", "nombreUsuario" : "Marco","nombre" : "Marco", "apellido": "Aponte"}
-    
-]; 
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/redmond/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/css/ui.jqgrid.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/css/jquery.searchFilter.css" />
+    <!--<link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.7.2/css/ui.jqgrid.css" />-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>-->
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/i18n/grid.locale-en.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.base-fixed.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.common.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.formedit.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.inlinedit.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.custom.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/jquery.fmatter.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.grouping.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.jqueryui.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/jquery.searchFilter.js"></script>
+    <!--<script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/i18n/grid.locale-en.js"></script>
+    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/jquery.jqGrid.min.js"></script>-->
+    <script type="text/javascript">
+    //<![CDATA[
+        jQuery(document).ready(function() {
+            var categories = ["All", "sport", "science"];
+            var categoriesStr = ":All;1:sport;2:science";
+            var subcategories = ["All", "football", "formel 1", "physics", "mathematics"];
+            var subcategoriesStr =":All;1:football;2:formel 1;3:physics;4:mathematics";
+            var mydata = [
+                {id:0, Name:"Lukas Podolski",     Category:1, Subcategory:1},
+                {id:1, Name:"Michael Schumacher", Category:1, Subcategory:2},
+                {id:2, Name:"Albert Einstein",    Category:2, Subcategory:3},
+                {id:3, Name:"Blaise Pascal",      Category:2, Subcategory:4}
+            ];
 
-$("#grid").jqGrid({ //set your grid id
-	data: mydata, //insert data from the data object we created above
-	datatype: 'local',
-	width: 400, //specify width; optional
-	colNames:['Id','Nombre de Usuario', 'Nombre', 'Apellido'], //define column names
-	colModel:[
-			{name:'idUsuario', index:'idUsuario', key: true, width:50, hidden:true},
-			{name:'nombreUsuario', index:'nombreUsuario', width:100},
-			{name:'nombre', index:'nombre', width:100},
-			{name:'apellido', index:'apellido', width:100}
-		], 
-	rowNum:8,//define column models
-	rowNumbers:true,
-	emptyrecords : "Sin Datos",
-	pager: '#pager', //set your pager div id
-	sortname: 'nombreUsuario', //the column according to which data is to be sorted; optional
-	viewrecords: true, //if true, displays the total number of records, etc. as: "View X to Y out of Z” optional
-	sortorder: "asc", //sort order; optional
-	caption:"jqGrid Example" //title of grid
-});
-jQuery("#grid").jqGrid('navGrid',
-        '#pager', {
-            edit : false,
-            add : false,
-            del : false,
-            search: false
-            
+            var grid = jQuery("#list").jqGrid({
+                data: mydata,
+                datatype: 'local',
+                colModel: [
+                    { name: 'Name', index: 'Name', width: 200},
+                    { name: 'Category', index: 'Category', width: 200, formatter:'select', stype: 'select',
+                      sorttype: function(cell) {return categories[cell];},
+                      edittype:'select', editoptions: { value: categoriesStr },
+                      searchoptions:{ sopt:['eq'] }
+                    },
+                    { name: 'Subcategory', index: 'Subcategory', width: 200, formatter:'select', stype: 'select',
+                      sorttype: function(cell) {return categories[cell];},
+                      edittype:'select', editoptions: { value: subcategoriesStr},
+                      searchoptions:{ sopt:['eq'] }
+                    }
+                ],
+                sortname: 'Name',
+                viewrecords: true,
+                rownumbers: true,
+                sortorder: "desc",
+                ignoreCase: true,
+                pager: '#pager',
+                caption: "Setting filter in the filter toolbar"
+            }).jqGrid('navGrid','#pager', { edit: false, add: false, del: false, search: false, refresh:false });
+            grid.jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch : "cn"});
         });
-	
-        // se inicializa la barra de filtrado
-        $("#grid").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : true, defaultSearch:"cn"});
+    //]]>
+    </script>
+    <script type="text/javascript">
+    	function agregar(){
+    		window.location = "{{url_for('crearUsuario')}}"
+    	}
+    </script>
+    {% endblock %}
+{% block body %}
 
-</script>
-</body>
+	<tr>
+		<td><div>
+				<table id="list"></table>
+				<div id="pager"></div>
+			</div></td>
+		<td><div>
+				
+				<input type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
+				<input type="button" name="modificar" onclick='modificar();'
+					value="Modificar" /> 
+				<input type="button" onclick='desactivar();'
+					name="desactivar" value="Desactivar" />
+					
+			</div></td>
+	</tr>
+
+
+{% endblock %}
+</html>

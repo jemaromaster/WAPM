@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
+
+<script type="text/javascript">
+function sendUsuario(){
+	
+}
+</script>
+
     <h2>Crear Usuario</h2>
     
     <form name="formulario" action="{{url_for('crearUsuario')}}" method="post">
@@ -42,7 +49,7 @@
 		</dl>
          </fieldset>
        <fieldset class="action">
-    	<input type="submit" name="submit" id="submit" value="Crear Usuario" />
+    	<input type="submit" name="submit" id="submit" value="Crear Usuario" onclick="sendUsuario()" />
     </fieldset>
 
     </form>
@@ -58,5 +65,4 @@
     {% endwith %}
 {% endblock %}
 {% block nav %}
-<li><a href="{{url_for('index')}}">back</a></li>
 {% endblock %}
