@@ -1,12 +1,5 @@
 {% extends "base.html" %}
 {% block body %}
-
-<script type="text/javascript">
-function sendUsuario(){
-	
-}
-</script>
-
     <h2>Crear Usuario</h2>
     
     <form name="formulario" action="{{url_for('crearUsuario')}}" method="post">
@@ -26,7 +19,11 @@ function sendUsuario(){
         		<dt><label>Reingresar Contraseña:</label></dt> 
                 <dd><input type="text" id="repPass" name="repPass" required /> </dd>  	 
 		</dl>
-            
+            <dl>
+        		<dt><label>CI:</label></dt> 
+                <dd><input type="text" id="ci" name="ci" required /> </dd>  	 
+		</dl>
+        
         <dl>
         		<dt><label>Nombre:</label></dt> 
                 <dd><input type="text" id="nombre" name="nombre" required /> </dd>  	 
@@ -47,9 +44,14 @@ function sendUsuario(){
         		<dt><label>Telefono:</label></dt> 
                 <dd><input type="text" id="telefono" name="telefono" /> </dd>  	 
 		</dl>
+		<dl>
+        		<dt><label>Observacion:</label></dt> 
+                <dd><input type="text" id="obs" name="obs" required /> </dd>  	 
+		</dl>
+        
          </fieldset>
        <fieldset class="action">
-    	<input type="submit" name="submit" id="submit" value="Crear Usuario" onclick="sendUsuario()" />
+    	<input type="submit" name="submit" id="submit" value="Guardar"/>
     </fieldset>
 
     </form>

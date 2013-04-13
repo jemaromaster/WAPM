@@ -2,107 +2,455 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-	{% block header %}
-    <title>How to set filterToolbar with initialized filter</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+{% block header %}
+<title>WAPM</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/redmond/jquery-ui.css" />
-    <link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/css/ui.jqgrid.css" />
-    <link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/css/jquery.searchFilter.css" />
-    <!--<link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.7.2/css/ui.jqgrid.css" />-->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
-    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>-->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.js"></script>
-    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>-->
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/i18n/grid.locale-en.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.base-fixed.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.common.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.formedit.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.inlinedit.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.custom.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/jquery.fmatter.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.grouping.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/grid.jqueryui.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/src/jquery.searchFilter.js"></script>
-    <!--<script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/i18n/grid.locale-en.js"></script>
+
+<link rel="stylesheet" type="text/css"
+	href="/static/jquery-ui.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/ui.jqgrid.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/jquery.searchFilter.css" />
+<!--<link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.7.2/css/ui.jqgrid.css" />-->
+<script type="text/javascript"
+	src="/static/jquery.js"></script>
+<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>-->
+<script type="text/javascript"
+	src="/static/jquery-ui.js"></script>
+<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>-->
+<script type="text/javascript"
+	src="/static/grid.locale-en.js"></script>
+<script type="text/javascript"
+	src="/static/grid.base-fixed.js"></script>
+<script type="text/javascript"
+	src="/static/grid.common.js"></script>
+<script type="text/javascript"
+	src="/static/grid.formedit.js"></script>
+<script type="text/javascript"
+	src="/static/grid.inlinedit.js"></script>
+<script type="text/javascript"
+	src="/static/grid.custom.js"></script>
+<script type="text/javascript"
+	src="/static/jquery.fmatter.js"></script>
+<script type="text/javascript"
+	src="/static/grid.grouping.js"></script>
+<script type="text/javascript"
+	src="/static/grid.jqueryui.js"></script>
+<script type="text/javascript"
+	src="/static/jquery.searchFilter.js"></script>
+<!--<script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/i18n/grid.locale-en.js"></script>
     <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/jquery.jqGrid.min.js"></script>-->
-    <script type="text/javascript">
-    //<![CDATA[
-        jQuery(document).ready(function() {
-            var categories = ["All", "sport", "science"];
-            var categoriesStr = ":All;1:sport;2:science";
-            var subcategories = ["All", "football", "formel 1", "physics", "mathematics"];
-            var subcategoriesStr =":All;1:football;2:formel 1;3:physics;4:mathematics";
-            var mydata = [
-                {idUsuario:0, NombreUsuario:"Lukas Podolski", Nombre:"Lukas Podolski",
-                	Apellido:"Lukas Podolski",
-                	email: "lalal"
-                	},
-               
-            ];
+<script type="text/javascript">
+	//<![CDATA[
+	jQuery(document)
+			.ready(
+					function() {
+						var categories = [ "All", "sport", "science" ];
+						var categoriesStr = ":All;1:sport;2:science";
+						var subcategories = [ "All", "football", "formel 1",
+								"physics", "mathematics" ];
+						var subcategoriesStr = ":All;1:football;2:formel 1;3:physics;4:mathematics";
+						var mydata = [ {
+							idUsuario : 0,
+							NombreUsuario : "Lukas Podolski",
+							Nombre : "Lukas Podolski",
+							Apellido : "Lukas Podolski",
+							email : "lalal"
+						},
 
-            var grid = jQuery("#list").jqGrid({
-                
-               // datatype : "local",
-               // data:mydata,
-                 url : 'http://localhost:5000/listarUsuarios',
-                 datatype : "json",
-                 mtype : "get",
-                colNames : [ 'ID Usuario ', 'Nombre de Usuario',
-                             'Nombre', 'Apellido',
-                             'Email' ],
-                colModel: [
-					{ name: 'idUsuario', index: 'idUsuario', width: 200, hidden:true},
-                    { name: 'NombreUsuario', index: 'NombreUsuario', width: 200},
-                    { name: 'Nombre', index: 'Nombre', width: 200},
-                    { name: 'Apellido', index: 'Apellido', width: 200},
-                    { name: 'email', index: 'email', width: 200}
-                                      
-                ],
-                sortname: 'Name',
-                viewrecords: true,
-                rownumbers: true,
-                sortorder: "desc",
-                ignoreCase: true,
-                pager: '#pager',
-                caption: "Lista de Usuarios",
-                jsonReader : {
-                        root : "invdata",
-                        page : "currpage",
-                        total : "totalpages",
-                        records : "totalrecords",
-                        repeatitems : false,
-                        id : "idUsuario" 	
-                }
-                
-            }).jqGrid('navGrid','#pager', { edit: false, add: false, del: false, search: false, refresh:false });
-            grid.jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch : "cn"});
-        });
-    //]]>
-    </script>
-    <script type="text/javascript">
-    	function agregar(){
-    		window.location = "{{url_for('crearUsuario')}}"
-    	}
-    </script>
-    {% endblock %}
-{% block body %}
+						];
 
-	<tr>
-		<td><div>
-				<table id="list"></table>
-				<div id="pager"></div>
-			</div></td>
-		<td><div>
-				
-				<input type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
-				<input type="button" name="modificar" onclick='modificar();'
-					value="Modificar" /> 
-				<input type="button" onclick='desactivar();'
-					name="desactivar" value="Desactivar" />
-					
-			</div></td>
-	</tr>
+						var grid = jQuery("#list")
+								.jqGrid(
+										{
+
+											// datatype : "local",
+											// data:mydata,
+											url : 'http://localhost:5000/listarUsuarios',
+											datatype : "json",
+											mtype : "get",
+											colNames : [ 'ID Usuario ',
+													'Cedula',
+													'Nombre de Usuario',
+													'Nombre', 'Apellido',
+													'Password', 'Email',
+													'Direccion', 'Telefono',
+													'Observacion', 'Activo' ],
+											colModel : [
+													{
+														name : 'idUsuario',
+														index : 'idUsuario',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'ci',
+														index : 'ci',
+														width : 200,
+														hidden : true
+},{
+														name : 'nombreUsuario',
+														index : 'nombreUsuario',
+														width : 200
+													},
+													{
+														name : 'nombre',
+														index : 'nombre',
+														width : 200
+													},
+													{
+														name : 'apellido',
+														index : 'apellido',
+														width : 200
+													},
+													{
+														name : 'pass',
+														index : 'pass',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'email',
+														index : 'email',
+														width : 200
+													},
+													{
+														name : 'direccion',
+														index : 'direccion',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'telefono',
+														index : 'telefono',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'observacion',
+														index : 'observacion',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'activo',
+														index : 'activo',
+														formatter : 'select',
+														stype : 'select',
+														editoptions : {
+															value : "true:Activo;false:Inactivo"
+														},
+														hidden : false
+													}
+
+											],
+											sortname : 'nombreUsuario',
+											viewrecords : true,
+											rownumbers : true,
+											sortorder : "desc",
+											ignoreCase : true,
+											pager : '#pager',
+											caption : "Lista de Usuarios",
+											jsonReader : {
+												root : "invdata",
+												page : "currpage",
+												total : "totalpages",
+												records : "totalrecords",
+												repeatitems : false,
+												id : "idUsuario"
+											}
+
+										}).jqGrid('navGrid', '#pager', {
+									edit : false,
+									add : false,
+									del : false,
+									search : false,
+									refresh : false
+								});
+						grid.jqGrid('filterToolbar', {
+							stringResult : true,
+							searchOnEnter : false,
+							defaultSearch : "cn"
+						});
+					});
+	//]]>
+</script>
+
+
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<div id="dialogo-datos-cliente" title="Datos de Usuarios">
+	<form>
+		<fieldset>
+			<input type="hidden" name="idUsuario" id="idUsuario" /> 
+			
+			<label
+				for="name" style="display: block">Nombre de Usuario</label> <input
+				type="text" name="nombreUsuario" id="nombreUsuario"
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+
+			<label for="ci" style="display: block">Cedula</label> <input
+				type="text" name="ci" id="ci"
+				class="text ui-widget-content ui-corner-all" 
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"/>
+
+			<label for="name" style="display: block">Nombre</label> <input
+				type="text" name="nombre" id="nombre"
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+
+			<label for="apellido" style="display: block">Apellido</label> <input
+				type="text" name="apellido" id="apellido"
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+			<label for="pass" style="display: block">Password</label> <input
+				type="text" name="pass" id="pass"
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+
+			<label for="email" style="display: block">E-mail</label> <input
+				type="text" name="email" id="email"
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+
+			<label for="direccion" style="display: block">Dirección</label> <input
+				type="text" name="direccion" id="direccion" value=""
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+
+			<label for="telefono" style="display: block">Telefono</label> <input
+				type="text" name="telefono" id="telefono" value=""
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+			<label for="observacion" style="display: block">Observacion</label> <input
+				type="text" name="observacion" id="observacion" value=""
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+
+			<label for="activo" style="display: block">Activo</label> <select
+				id="activo"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 50%;"
+				class="ui-widget-content ui-corner-all">
+				<option value="true">Activo</option>
+				<option value="false">Inactivo</option>
+			</select>
+		</fieldset>
+	</form>
+</div>
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+var nuevo;
+/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+$("#dialogo-datos-cliente").dialog(
+{
+				autoOpen : false,
+				width : 600,
+				modal : true,
+				resizable : false,
+				buttons : {
+					/* funcion asociado al boton aceptar */
+					"Aceptar" : function() {
+						/* si el dato es nuevo se llamar a la url para agregar */
+						if (nuevo) {
+							/* se indica la URL */
+							$.post('/agregarUsuario/', { /* se indican los parametros*/
+								nombreUsuario : $("#nombreUsuario").val(),
+								password : $("#pass").val(),
+								ci : $("#ci").val(),
+								nombre : $("#nombre").val(),
+								apellido : $("#apellido").val(),
+								email : $("#email").val(),
+								direccion : $("#direccion").val(),
+								telefono : $("#telefono").val(),
+								observacion : $("#observacion").val(),
+								activo : $("#activo").val()
+							}, function(data,status) {
+								/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+								
+								/* si hay error se muestra el mensaje*/
+								if (data.substring(0,1)=='t') {
+									mostrarMensaje("Error",
+											"Los datos no se han podido guardar:\n"
+													+ data.substring(2));
+									/* se indica que no hubieron errores */
+								} else {
+									$("#dialogo-datos-cliente").dialog("close");
+									mostrarMensaje("Exito",
+											data.substring(2));
+								}
+								/* se indicar la recarga de la tabla */
+								$('#list').trigger("reloadGrid");
+							});
+
+							/* si el dato se modifica se llama a la url para modificar*/
+						} else {
+							/* se indica la url */
+							$.post('modificarUsuario', {
+								idUsuario : $("#idUsuario").val(),
+								nombreUsuario : $("#nombreUsuario").val(),
+								password : $("#pass").val(),
+								ci : $("#ci").val(),
+								nombre : $("#nombre").val(),
+								apellido : $("#apellido").val(),
+								email : $("#email").val(),
+								direccion : $("#direccion").val(),
+								telefono : $("#telefono").val(),
+								activo : $("#activo").val(),
+								observacion : $("#observacion").val()
+							}, function(data, status) {
+
+								if (data.substring(0,1)=='t') {
+									mostrarMensaje("Error",
+											"Los datos no se han podido modificar:\n"
+													+ data.substring(2));
+								} else {
+									$("#dialogo-datos-cliente").dialog("close");
+									mostrarMensaje("Exito",
+											"Los datos han sido modificados");
+								}
+								$('#list').trigger("reloadGrid");
+							});
+						}
+					},
+					"Cancelar" : function() {
+						$(this).dialog("close");
+					}
+				}
+			});
+
+	/* funcion para llamar al formulario agregar un nuevo datos */
+	function agregar() {
+		/* se indica que se cargará un nuevo dato */
+		nuevo = true;
+		/* se vacian los elementos HTML de captura de datos */
+		$("#idUsuario").val("");
+		$("#pass").val("");
+		$("#nombreUsuario").val("");
+		$("#ci").val("");
+		$("#nombre").val("");
+		$("#apellido").val("");
+		$("#email").val("");
+		$("#direccion").val("");
+		$("#telefono").val("");
+		$("#activo").val("");
+		$("#observacion").val("");
+		/* se llama al dialogo de captura de datos */
+		$("#dialogo-datos-cliente").dialog("open");
+	}
+
+	/* funcion para llamar al formulario para la modificación de datos */
+	function modificar() {
+		/* se indica que el dato no es nuevo */
+		nuevo = false;
+		/* se comprueba que hay un dato seleccionado para modificar */
+		var row = $('#list').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		var rowdata = $('#list').getRowData(row);
+		$("#idUsuario").val(rowdata.idUsuario);
+		$("#pass").val(rowdata.pass);
+		$("#nombreUsuario").val(rowdata.nombreUsuario);
+		$("#ci").val(rowdata.ci);
+		$("#nombre").val(rowdata.nombre);
+		$("#apellido").val(rowdata.apellido);
+		$("#email").val(rowdata.email);
+		$("#direccion").val(rowdata.direccion);
+		$("#telefono").val(rowdata.telefono);
+		$("#observacion").val(rowdata.observacion);
+		$("#activo").val(rowdata.activo);
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-datos-cliente").dialog("open");
+	}
+	
+	function consultar(){
+		/* se indica que el dato no es nuevo */
+		nuevo = false;
+		/* se comprueba que hay un dato seleccionado para modificar */
+		var row = $('#list').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		var rowdata = $('#list').getRowData(row);
+		$("#idUsuario").val(rowdata.idUsuario).attr('disabled',true);
+		$("#pass").val(rowdata.pass).attr('disabled',true);
+		$("#nombreUsuario").val(rowdata.nombreUsuario).attr('disabled',true);
+		$("#ci").val(rowdata.ci).attr('disabled',true);
+		$("#nombre").val(rowdata.nombre).attr('disabled',true);
+		$("#apellido").val(rowdata.apellido).attr('disabled',true);
+		$("#email").val(rowdata.email).attr('disabled',true);
+		$("#direccion").val(rowdata.direccion).attr('disabled',true);
+		$("#telefono").val(rowdata.telefono).attr('disabled',true);
+		$("#observacion").val(rowdata.observacion).attr('disabled',true);
+		$("#activo").val(rowdata.activo).attr('disabled',true);
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-datos-cliente").dialog("open");
+	}
+	/* funcion que maneja la accion de desactivar un cliente*/
+	function desactivar() {
+
+		var row = $('#list').jqGrid('getGridParam', 'selrow');
+
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a desactivar");
+			return;
+		}
+
+		var rowdata = $('#list').getRowData(row);
+
+		$.post('inactivarUsuario', {
+			idUsuario : rowdata.idUsuario
+		}, function(data, status) {
+			$("#dialogo-datos-cliente").dialog("close");
+
+			if (data.error) {
+				mostrarMensaje("Error",
+						"El Usuario no se lo ha podido inactivar");
+			} else {
+				mostrarMensaje("Suceso", "El Usuario ha sido inactivado");
+			}
+			$('#list').trigger("reloadGrid");
+		});
+	}
+
+	function mostrarMensaje(titulo, mensaje) {
+		 $('#msgbox').text(mensaje);
+	        $('#msgbox').dialog({
+	            title : titulo,
+	            modal : true,
+	            buttons : {
+	                "Ok" : function() {
+	                    $(this).dialog("close");
+	                }
+	            }
+	        });	
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+{% endblock %} {% block body %}
+
+<tr>
+	<td><div>
+			<table id="list"></table>
+			<div id="pager"></div>
+		</div></td>
+	<td><div>
+
+			<input type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
+			<input type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> 
+			<input type="button" name="consultar" value="Consultar" onclick='consultar()' />
+
+		</div></td>
+</tr>
 
 
 {% endblock %}
