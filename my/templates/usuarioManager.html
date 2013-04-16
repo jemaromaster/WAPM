@@ -242,7 +242,7 @@
 </div>
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
-var nuevo;
+var bandera;
 /* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 $("#dialogo-datos-cliente").dialog(
 {
@@ -254,7 +254,7 @@ $("#dialogo-datos-cliente").dialog(
 					/* funcion asociado al boton aceptar */
 					"Aceptar" : function() {
 						/* si el dato es nuevo se llamar a la url para agregar */
-						if (nuevo) {
+						if (bandera==1) {
 							/* se indica la URL */
 							$.post('/agregarUsuario/', { /* se indican los parametros*/
 								nombreUsuario : $("#nombreUsuario").val(),
@@ -286,7 +286,7 @@ $("#dialogo-datos-cliente").dialog(
 							});
 
 							/* si el dato se modifica se llama a la url para modificar*/
-						} else {
+						} else if(bandera==2){
 							/* se indica la url */
 							$.post('modificarUsuario', {
 								idUsuario : $("#idUsuario").val(),
@@ -313,6 +313,8 @@ $("#dialogo-datos-cliente").dialog(
 								}
 								$('#list').trigger("reloadGrid");
 							});
+						}else if(bandera==3){
+							$(this).dialog("close");
 						}
 					},
 					"Cancelar" : function() {
@@ -324,7 +326,7 @@ $("#dialogo-datos-cliente").dialog(
 	/* funcion para llamar al formulario agregar un nuevo datos */
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
-		nuevo = true;
+		bandera = 1;
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idUsuario").val("");
 		$("#pass").val("");
@@ -344,7 +346,7 @@ $("#dialogo-datos-cliente").dialog(
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
 		/* se indica que el dato no es nuevo */
-		nuevo = false;
+		bandera = 2;
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -370,11 +372,11 @@ $("#dialogo-datos-cliente").dialog(
 	
 	function consultar(){
 		/* se indica que el dato no es nuevo */
-		nuevo = false;
+		bandera = 3;
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
-			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
 			return;
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
