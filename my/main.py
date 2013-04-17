@@ -8,7 +8,10 @@ from modificarUsuario import ModificarUsuario
 from inactivarUsuario import InactivarUsuario
 
 from proyectoManager import ProyectoManager
+from modificarProyecto import ModificarProyecto
 from agregarProyecto import AgregarProyecto
+from listarProyecto import ListarProyectos
+
 from login import Login
 from listarUsuarios import ListarUsuarios
 from crearUsuario import CrearUsuario
@@ -45,12 +48,19 @@ app.add_url_rule('/agregarUsuario/',
 app.add_url_rule('/usuarioManager/modificarUsuario',
                  view_func=ModificarUsuario.as_view('modificarUsuario'),
                  methods=["GET", "POST"])
-app.add_url_rule('/usuarioManager/inactivarUsuario',
-                 view_func=InactivarUsuario.as_view('inactivarUsuario'),
-                 methods=["GET", "POST"])
-app.add_url_rule('/usuarioManager/agregarProyecto',
+
+
+app.add_url_rule('/agregarProyecto/',
                  view_func=AgregarProyecto.as_view('agregarProyecto'),
                  methods=["GET", "POST"])
+app.add_url_rule('/usuarioManager/modificarProyecto',
+                 view_func=ModificarProyecto.as_view('modificarProyecto'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarProyectos/',
+                 view_func=ListarProyectos.as_view('listarProyectos'),
+                 methods=["GET", "POST"])
+
+
 
 app.debug = True
 app.run()

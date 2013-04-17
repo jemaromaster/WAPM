@@ -13,4 +13,5 @@ def initDB():
     a crearse deberian haber sido importadas.
     """
     from models.usuarioModelo import Usuario
+    from models.proyectoModelo import Proyecto
     Base.metadata.create_all(engine)      

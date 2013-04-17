@@ -328,17 +328,17 @@ $("#dialogo-datos-cliente").dialog(
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
 		/* se vacian los elementos HTML de captura de datos */
-		$("#idUsuario").val("");
-		$("#pass").val("");
-		$("#nombreUsuario").val("");
-		$("#ci").val("");
-		$("#nombre").val("");
-		$("#apellido").val("");
-		$("#email").val("");
-		$("#direccion").val("");
-		$("#telefono").val("");
-		$("#activo").val("");
-		$("#observacion").val("");
+		$("#idUsuario").val("").attr('disabled',false);
+		$("#pass").val("").attr('disabled',false);
+		$("#nombreUsuario").val("").attr('disabled',false);
+		$("#ci").val("").attr('disabled',false);
+		$("#nombre").val("").attr('disabled',false);
+		$("#apellido").val("").attr('disabled',false);
+		$("#email").val("").attr('disabled',false);
+		$("#direccion").val("").attr('disabled',false);
+		$("#telefono").val("").attr('disabled',false);
+		$("#activo").val("").attr('disabled',false);
+		$("#observacion").val("").attr('disabled',false);
 		/* se llama al dialogo de captura de datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
@@ -355,17 +355,17 @@ $("#dialogo-datos-cliente").dialog(
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		var rowdata = $('#list').getRowData(row);
-		$("#idUsuario").val(rowdata.idUsuario);
-		$("#pass").val(rowdata.pass);
-		$("#nombreUsuario").val(rowdata.nombreUsuario);
-		$("#ci").val(rowdata.ci);
-		$("#nombre").val(rowdata.nombre);
-		$("#apellido").val(rowdata.apellido);
-		$("#email").val(rowdata.email);
-		$("#direccion").val(rowdata.direccion);
-		$("#telefono").val(rowdata.telefono);
-		$("#observacion").val(rowdata.observacion);
-		$("#activo").val(rowdata.activo);
+		$("#idUsuario").val(rowdata.idUsuario).attr('disabled',false);
+		$("#pass").val(rowdata.pass).attr('disabled',false);
+		$("#nombreUsuario").val(rowdata.nombreUsuario).attr('disabled',false);
+		$("#ci").val(rowdata.ci).attr('disabled',false);
+		$("#nombre").val(rowdata.nombre).attr('disabled',false);
+		$("#apellido").val(rowdata.apellido).attr('disabled',false);
+		$("#email").val(rowdata.email).attr('disabled',false);
+		$("#direccion").val(rowdata.direccion).attr('disabled',false);
+		$("#telefono").val(rowdata.telefono).attr('disabled',false);
+		$("#observacion").val(rowdata.observacion).attr('disabled',false);
+		$("#activo").val(rowdata.activo).attr('disabled',false);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}

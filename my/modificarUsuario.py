@@ -3,6 +3,7 @@ import flask.views
 from utils import login_required
 from models.usuarioModelo import Usuario 
 from models.bdCreator import Session
+from UsuarioController import UsuarioControllerClass
 
 class ModificarUsuario(flask.views.MethodView):
     """
@@ -34,7 +35,7 @@ class ModificarUsuario(flask.views.MethodView):
         telefono=flask.request.form['telefono']
         observacion=flask.request.form['observacion']
         activo=flask.request.form['activo']
-        
+        '''
         sesion=Session()
         
         #eSssion.query(MyClass).filter(MyClass.name == 'some name')
@@ -42,5 +43,11 @@ class ModificarUsuario(flask.views.MethodView):
         u=sesion.query(Usuario).filter(Usuario.id==idUsuario).first()
         u.setValues(nombreUsuario,passwd, nombre, apellido,email,ci,telefono,observacion,activo,direccion)
         sesion.commit()
-        sesion.close()
-        return "usuario guardado"
+        sesion.close()'''
+        
+        u=Usuario(nombreUsuario,passwd, nombre, apellido,email,ci,telefono,observacion,activo,direccion)
+        
+        uc=UsuarioControllerClass()
+        
+        return uc.controlarUsuario(u, idUsuario)
+        

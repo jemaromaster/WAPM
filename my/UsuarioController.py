@@ -7,7 +7,7 @@ from models.bdCreator import Session
 from usuarioManejador import UsuarioManejador
 
 class UsuarioControllerClass(flask.views.MethodView):
-    def controlarUsuario(self, usuario):
+    def controlarUsuario(self, usuario, idU):
         u=usuario
         
         u.username=u.username.strip()
@@ -41,11 +41,12 @@ class UsuarioControllerClass(flask.views.MethodView):
         '''consulta si es que existe ya usuario con ese nombre'''
         
         sesion=Session()
-        usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
-        if(usr is not None):
-            return make_response('t,Ya existe el usuario')
+        if(idU==0):
+            usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
+            if(usr is not None):
+                return make_response('t,Ya existe el usuario')
         
         um=UsuarioManejador()
         
-        return um.guardarUsuario(u)
+        return um.guardarUsuario(u, idU)
         

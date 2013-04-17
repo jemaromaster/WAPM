@@ -37,12 +37,14 @@
 						{
 							// datatype : "local",
 							// data:mydata,
-							url : 'http://localhost:5000/listarUsuarios',
+							url : 'http://localhost:5000/listarProyectos',
 							datatype : "json",
 							mtype : "get",
 							colNames : [ 'ID Proyecto', 'Nombre de Proyecto',
-									'Fecha de Inicio', 'Fecha de finalizacion',
-									'Observacion','numFases', 'Presupuesto', 'Fases' ],
+							        'Fecha de Inicio', 'ID ProjectLeader', 
+							        'Nombre ProjectLeader',
+							        'Fecha de finalizacion',
+									'Observacion','numFases', 'Presupuesto', 'Estado'],
 							colModel : [ {
 								name : 'idProyecto',
 								index : 'idProyecto',
@@ -56,6 +58,16 @@
 								name : 'fechaInicio',
 								index : 'fechaInicio',
 								width : 200
+							}, {
+								name : 'idProjectLeader',
+								index : 'fechaInicio',
+								width : 200,
+								hidden: true
+							}, {
+								name : 'nombreProjectLeader',
+								index : 'nombreProjectLeader',
+								width : 200,
+								hidden: true
 							}, {
 								name : 'fechaFinalizacion',
 								index : 'fechaFinalizacion',
@@ -73,16 +85,17 @@
 							}, {
 								name : 'Presupuesto',
 								index : 'Presupuesto',
-								width : 200
+								width : 150
 							}, {
-								name : 'fases',
-								index : 'fases',
+								name : 'estado',
+								index : 'estado',
 								formatter : 'select',
 								stype : 'select',
 								editoptions : {
-									value : "true:Activo;false:Inactivo"
+									value : "activo:Activo;finalizado:Finalizado"
 								},
 								hidden : false
+								
 							}
 
 							],
@@ -148,20 +161,27 @@
 	$(document).ready(function() {
 		$("#datepicker").datepicker();
 	});
+	
+	$(document).ready(function() {
+		$("#datepicker2").datepicker();
+	});
 </script>
 
 <!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
 <div id="dialogo-datos-cliente" title="Datos de Proyecto">
 	<form>
 		<fieldset>
-			<input type="hidden" name="idProyecto" id="idProyecto" /> <label
-				for="name" style="display: block">Id de Proyecto</label> <input
-				type="text" name="idProyecto" id="idProyecto"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+			<input type="hidden" name="idProyecto" id="idProyecto" /> 
 
 			<label for="nombreProyecto" style="display: block">Nombre Proyecto</label> <input
 				type="text" name="nombreProyecto" id="nombreProyecto"
+				class="text ui-widget-content ui-corner-all"
+				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+				
+			<input type="hidden" name="idProjectLeader" id="idProjectLeader" /> 
+				
+			<label for="nombreProjectLeader" style="display: block">Nombre de ProjectLeader</label> <input
+				type="text" name="nombreProjectLeader" id="nombreProjectLeader" 
 				class="text ui-widget-content ui-corner-all"
 				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 
@@ -170,8 +190,9 @@
 				class="text ui-widget-content ui-corner-all"
 				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 			
+			
 			<label for="fechaFinalizacion" style="display: block">Fecha de Finalizacion</label> <input
-				type="text" name="fechaFinalizacion" id="fechaFinalizacion"
+				type="text" name="datepicker2" id="datepicker2" readonly="readonly"
 				class="text ui-widget-content ui-corner-all"
 				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 			
@@ -189,14 +210,14 @@
 				type="text" name="observacion" id="observacion" value=""
 				class="text ui-widget-content ui-corner-all"
 				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="fases" style="display: block">Fases</label> <select
-				id="fases"
+			<label for="estado" style="display: block">Estado</label> <select
+				id="estado"
 				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 50%;"
 				class="ui-widget-content ui-corner-all">
-				<option value="true">Ninguna todavia</option>
-				<option value="false">Ninguna 2</option>
+				<option value="activo">Activo</option>
+				<option value="finalizado">Finalizado</option>
 			</select>
+			
 		</fieldset>
 	</form>
 </div>
@@ -218,103 +239,96 @@
 								if (bandera == 1) { /*si bandera==1 entonces es nuevo proyecto*/
 									/* se indica la URL */
 									$.post(
-													'/agregarProyecto/',
-													{ /* se indican los parametros*/
-														nombreProyecto : $(
-																"#nombreProyecto")
-																.val(),
-														fechaInicio : $("#fechaInicio")
-																.val(),
-														fechaFinal : $(
-																"#fechaFinal")
-																.val(),
-														presupuesto : $(
-																"#presupuesto")
-																.val(),		
-														nroFases : $("#nroFases")
-																.val(),
-														observacion : $(
-																"#observacion")
-																.val(),
-														fases : $("#fases")
-																.val()
-													},
-													function(data, status) {
-														/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+											'/agregarProyecto/',
+											{ /* se indican los parametros*/
+												nombreProyecto : $(
+														"#nombreProyecto")
+														.val(),
+												fechaInicio : $("#datepicker")
+														.val(),
+												fechaFinal : $(
+														"#datepicker2")
+														.val(),
+												presupuesto : $(
+														"#presupuesto")
+														.val(),		
+												nroFases : $("#nroFases")
+														.val(),
+												observacion : $(
+														"#observacion")
+														.val(),
+												idProjectLeader : 12
+														/*$(
+														"#idProjectLeader")
+														.val()*/,
+												estado : $(
+														"#estado")
+														.val()
+												
+											},
+											function(data, status) {
+												/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
 
-														/* si hay error se muestra el mensaje*/
-														if (data
-																.substring(0, 1) == 't') {
-															mostrarMensaje(
-																	"Error",
-																	"Los datos no se han podido guardar:\n"
-																			+ data
-																					.substring(2));
-															/* se indica que no hubieron errores */
-														} else {
-															$(
-																	"#dialogo-datos-cliente")
-																	.dialog(
-																			"close");
-															mostrarMensaje(
-																	"Exito",
-																	data
+												/* si hay error se muestra el mensaje*/
+												if (data.substring(0, 1) == 't') {
+													mostrarMensaje(
+															"Error",
+															"Los datos no se han podido guardar:\n"
+																	+ data
 																			.substring(2));
-														}
-														/* se indicar la recarga de la tabla */
-														$('#list').trigger(
-																"reloadGrid");
-													});
+													/* se indica que no hubieron errores */
+												} else {
+													$("#dialogo-datos-cliente").dialog("close");
+													mostrarMensaje("Exito",data.substring(2));
+												}
+												/* se indicar la recarga de la tabla */
+												$('#list').trigger(
+														"reloadGrid");
+											});
 
 									/* si el dato se modifica se llama a la url para modificar*/
 								} else if (bandera == 2) {
 									/* se indica la url */
 									$
 											.post(
-													'modificarUsuario',
+													'modificarProyecto',
 													{
-														idUsuario : $(
-																"#idUsuario")
+														idProyecto : $(
+																"#idProyecto")
 																.val(),
-														nombreUsuario : $(
-																"#nombreUsuario")
+														nombreProyecto : $(
+																"#nombreProyecto")
 																.val(),
-														password : $("#pass")
+														fechaInicio : $("#datepicker").val(),
+														fechaFinalizacion: $("#datepicker2")
 																.val(),
-														ci : $("#ci").val(),
-														nombre : $("#nombre")
+														presupuesto: $(
+																"#presupuesto")
 																.val(),
-														apellido : $(
-																"#apellido")
-																.val(),
-														email : $("#email")
-																.val(),
-														direccion : $(
-																"#direccion")
-																.val(),
-														telefono : $(
-																"#telefono")
+														nroFases: $(
+																"#nroFases")
 																.val(),
 														activo : $("#activo")
 																.val(),
 														observacion : $(
 																"#observacion")
+																.val(),
+														idProjectLeader : $(
+																"#idProjectLeader")
+																.val(),
+														estado : $(
+																"#estado")
 																.val()
+														
 													},
 													function(data, status) {
 
 														if (data
 																.substring(0, 1) == 't') {
-															mostrarMensaje(
-																	"Error",
-																	"Los datos no se han podido modificar:\n"
-																			+ data
-																					.substring(2));
+															mostrarMensaje("Error","Los datos no se han podido modificar:\n"
+																			+ data.substring(2));
 														} else {
-															$(
-																	"#dialogo-datos-cliente")
-																	.dialog(
-																			"close");
+															$("#dialogo-datos-cliente").dialog("close");
 															mostrarMensaje(
 																	"Exito",
 																	"Los datos han sido modificados");
@@ -337,13 +351,15 @@
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
 		/* se vacian los elementos HTML de captura de datos */
-		$("#nombreProyecto").val("");
-		$("#fechaInicio").val("");
-		$("#fechaFinalizacion").val("");
-		$("#presupuesto").val("");
-		$("#nroFases").val("");
-		$("#observacion").val("");
-		$("#activo").val("");
+		$("#nombreProyecto").val("").attr('disabled', false);
+		$("#idProjectLeader").val("").attr('disabled', false);
+		$("#nombreProjectLeader").val("").attr('disabled', false);
+		$("#fechaInicio").val("").attr('disabled', false);
+		$("#fechaFinalizacion").val("").attr('disabled', false);
+		$("#presupuesto").val("").attr('disabled', false);
+		$("#nroFases").val("").attr('disabled', false);
+		$("#observacion").val("").attr('disabled', false);
+		$("#estado").val("").attr('disabled',true);
 		/* se llama al dialogo de captura de datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
@@ -360,17 +376,17 @@
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		var rowdata = $('#list').getRowData(row);
-		$("#idUsuario").val(rowdata.idUsuario);
-		$("#pass").val(rowdata.pass);
-		$("#nombreUsuario").val(rowdata.nombreUsuario);
-		$("#ci").val(rowdata.ci);
-		$("#nombre").val(rowdata.nombre);
-		$("#apellido").val(rowdata.apellido);
-		$("#email").val(rowdata.email);
-		$("#direccion").val(rowdata.direccion);
-		$("#telefono").val(rowdata.telefono);
-		$("#observacion").val(rowdata.observacion);
-		$("#activo").val(rowdata.activo);
+		$("#idProyecto").val(rowdata.idProyecto);
+		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', false);
+		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', false);
+		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', false);
+		$("#fechaInicio").val(rowdata.fechaInicio).attr('disabled', false);
+		$("#fechaFinalizacion").val(rowdata.fechaFinalizacion).attr('disabled', false);
+		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', false);
+		$("#nroFases").val(rowdata.nroFases).attr('disabled', false);
+		$("#observacion").val(rowdata.observacion).attr('disabled', false);
+		$("#estado").val(rowdata.estado).attr('disabled',true);
+		
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
@@ -386,46 +402,20 @@
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		var rowdata = $('#list').getRowData(row);
-		$("#idUsuario").val(rowdata.idUsuario).attr('disabled', true);
-		$("#pass").val(rowdata.pass).attr('disabled', true);
-		$("#nombreUsuario").val(rowdata.nombreUsuario).attr('disabled', true);
-		$("#ci").val(rowdata.ci).attr('disabled', true);
-		$("#nombre").val(rowdata.nombre).attr('disabled', true);
-		$("#apellido").val(rowdata.apellido).attr('disabled', true);
-		$("#email").val(rowdata.email).attr('disabled', true);
-		$("#direccion").val(rowdata.direccion).attr('disabled', true);
-		$("#telefono").val(rowdata.telefono).attr('disabled', true);
+		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', true);
+		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', true);
+		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', true);
+		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', true);
+		$("#fechaInicio").val(rowdata.fechaInicio).attr('disabled', true);
+		$("#fechaFinalizacion").val(rowdata.fechaFinalizacion).attr('disabled', true);
+		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', true);
+		$("#nroFases").val(rowdata.nroFases).attr('disabled', true);
 		$("#observacion").val(rowdata.observacion).attr('disabled', true);
-		$("#activo").val(rowdata.activo).attr('disabled', true);
+		$("#estado").val(rowdata.estado).attr('disabled',true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
-	/* funcion que maneja la accion de desactivar un cliente*/
-	function desactivar() {
-
-		var row = $('#list').jqGrid('getGridParam', 'selrow');
-
-		if (row == null) {
-			mostrarMensaje("Atencion", "Seleccione la fila a desactivar");
-			return;
-		}
-
-		var rowdata = $('#list').getRowData(row);
-
-		$.post('inactivarUsuario', {
-			idUsuario : rowdata.idUsuario
-		}, function(data, status) {
-			$("#dialogo-datos-cliente").dialog("close");
-
-			if (data.error) {
-				mostrarMensaje("Error",
-						"El Usuario no se lo ha podido inactivar");
-			} else {
-				mostrarMensaje("Suceso", "El Usuario ha sido inactivado");
-			}
-			$('#list').trigger("reloadGrid");
-		});
-	}
+	
 
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);

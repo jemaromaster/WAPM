@@ -1,10 +1,10 @@
 
 import flask.views
 from utils import login_required
-from models.usuarioModelo import Usuario
-from UsuarioController import UsuarioControllerClass;
-
-
+from models.proyectoModelo import Proyecto
+from proyectoController import ProyectoControllerClass
+import datetime
+from datetime import date
 
 class AgregarProyecto(flask.views.MethodView):
     """
@@ -20,39 +20,30 @@ class AgregarProyecto(flask.views.MethodView):
     @login_required
     def post(self):
     
-        """nombreUsuario=flask.request.form['nombreUsuario']
-        passwd=flask.request.form['password']
-        ci=flask.request.form['ci']
-        nombre=flask.request.form['nombre']
-        apellido= flask.request.form['apellido']
-        email=flask.request.form['email']
-        direccion=flask.request.form['direccion']
-        telefono=flask.request.form['telefono']
-        observacion=flask.request.form['observacion']
-        activo=flask.request.form['activo']
         
-        u=Usuario(nombreUsuario,passwd, nombre, apellido,email,ci,telefono,observacion,activo,direccion)
+        nombreProyecto=flask.request.form['nombreProyecto']
+        idProjectLeader=flask.request.form['idProjectLeader']
+        nroFases=flask.request.form['nroFases']
+        observacion=flask.request.form['observacion']
+        presupuesto=flask.request.form['presupuesto']
+        fechaInicio=flask.request.form['fechaInicio']
+        fechaFinalizacion=flask.request.form['fechaFinal']
+        estado=flask.request.form['estado']
+        '''se intercambia de orden de la fecha de MDY a DMY'''
+        fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
+        fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
+        
+        u=Proyecto(nombreProyecto, 14, fechaInicio, \
+                   fechaFinalizacion, \
+                   presupuesto, observacion, nroFases,estado)
         
         # cu=UsuarioControllerClass()
         #retorno=cu.controlarUsuario(u)
         
-        u.username=u.username.strip()
-        u.nombres=u.nombres.strip()
-        u.passwd=u.passwd.strip()
-        u.apellidos=u.apellidos.strip()
-        u.email=u.email.strip()
-        u.ci=u.ci.strip()
-        u.telefono=u.telefono.strip()
-        u.observacion=u.observacion.strip()
-        u.activo=u.activo.strip()
-        u.direccion=u.direccion.strip()"""
         
-      
-        """
-        uc=UsuarioControllerClass()
-        """
+        pc=ProyectoControllerClass()
         
-        return uc.controlarUsuario(u)
+        return pc.controlarProyecto(u)
     
         
             

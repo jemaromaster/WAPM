@@ -51,7 +51,7 @@ class AgregarUsuario(flask.views.MethodView):
         
         uc=UsuarioControllerClass()
         
-        return uc.controlarUsuario(u)
+        return uc.controlarUsuario(u, 0)
     
         
             

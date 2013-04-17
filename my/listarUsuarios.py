@@ -69,7 +69,7 @@ class ListarUsuarios(flask.views.MethodView):
             filtrarPor='email'
         elif(sidx=='activo'):
             filtrarPor='activo'
-           
+        
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
         
         if (search=='true'):
@@ -127,7 +127,7 @@ class ListarUsuarios(flask.views.MethodView):
             #si no hubo filtro entonces se envian los datos de usuarios activos
             listaUsuario=sesion.query(Usuario).order_by(filtrarPor).filter(\
                                                     Usuario.activo.like('true'))[desde:hasta]
-            total=sesion.query(Usuario).count()
+            total=sesion.query(Usuario).filter(Usuario.activo=='true').count()
         print total 
         print desde
         print hasta 
