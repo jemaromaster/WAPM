@@ -12,6 +12,7 @@ def initDB():
     crea las tablas si aun no existen, para ello todos los modelos o clases que mapean a las tablas 
     a crearse deberian haber sido importadas.
     """
-    from models.usuarioModelo import Usuario
     from models.proyectoModelo import Proyecto
+    from models.usuarioModelo import Usuario
+    
     Base.metadata.create_all(engine)      

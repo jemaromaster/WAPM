@@ -24,7 +24,7 @@ app = flask.Flask(__name__)
 """
 Se realizan las redirecciones de las peticiones de manera conveniente. Cada peticion
 entrante debe estar asociada a una URL, con dicha URL la peticion es canalizada a travez
-de las reglas de URL a las funciones que se haran cargo de servirlas
+de las reglas de URL a las funciones que se haran cargo de senrvirlas
 """
 initDB()
 # Don't do this
@@ -53,7 +53,7 @@ app.add_url_rule('/usuarioManager/modificarUsuario',
 app.add_url_rule('/agregarProyecto/',
                  view_func=AgregarProyecto.as_view('agregarProyecto'),
                  methods=["GET", "POST"])
-app.add_url_rule('/usuarioManager/modificarProyecto',
+app.add_url_rule('/modificarProyecto',
                  view_func=ModificarProyecto.as_view('modificarProyecto'),
                  methods=["GET", "POST"])
 app.add_url_rule('/listarProyectos/',

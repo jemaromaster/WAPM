@@ -4,7 +4,6 @@ from models.bdCreator import Session
 from models.usuarioModelo import Usuario
 sesion=Session()
 
-
 class Login(flask.views.MethodView):
     """
     Clase utilizada para la verificacion de identiad del usuario. Recibe 
@@ -29,10 +28,15 @@ class Login(flask.views.MethodView):
         
         
         c=sesion.query(Usuario).filter(Usuario.username==username and Usuario.passwd==passwd).count()
+        usuarioSesion=sesion.query(Usuario).filter(Usuario.username==username and Usuario.passwd==passwd).first()
         
+        idUsuarioSession=usuarioSesion.id;
         if c==1:
             flask.session['username'] = username
+            flask.g.userId=usuarioSesion.id
+            print (flask.g.userId)
         else:
             if c==0:
                 flask.flash("Username doesn't exist or incorrect password")   
+        
         return flask.redirect(flask.url_for('index'))

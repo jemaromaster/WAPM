@@ -3,6 +3,7 @@ import flask.views
 from flask import jsonify,json
 from models.bdCreator import Session
 from models.usuarioModelo import Usuario 
+
 sesion=Session()
 
 
@@ -70,7 +71,7 @@ class ListarUsuarios(flask.views.MethodView):
         elif(sidx=='activo'):
             filtrarPor='activo'
         
-        filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
+        filtrarPor= "\""+ filtrarPor + '\" ' + sord #establece el si filtrar por asc o desc 
         
         if (search=='true'):
             filters=flask.request.args.get('filters', '')

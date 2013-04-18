@@ -44,12 +44,12 @@
 							        'Fecha de Inicio', 'ID ProjectLeader', 
 							        'Nombre ProjectLeader',
 							        'Fecha de finalizacion',
-									'Observacion','numFases', 'Presupuesto', 'Estado'],
+									'Observacion','Numero Fases', 'Presupuesto', 'Estado'],
 							colModel : [ {
 								name : 'idProyecto',
 								index : 'idProyecto',
 								width : 200,
-								hidden : true
+								hidden : false
 							}, {
 								name : 'nombreProyecto',
 								index : 'nombreProyecto',
@@ -57,10 +57,14 @@
 							}, {
 								name : 'fechaInicio',
 								index : 'fechaInicio',
-								width : 200
+								width : 200,
+								formatter: 'date',
+					            sorttype: 'date',
+					            datefmt: 'd/m/Y',
+					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' }
 							}, {
 								name : 'idProjectLeader',
-								index : 'fechaInicio',
+								index : 'idProjectLeader',
 								width : 200,
 								hidden: true
 							}, {
@@ -71,20 +75,24 @@
 							}, {
 								name : 'fechaFinalizacion',
 								index : 'fechaFinalizacion',
-								width : 200
-							}, {
-								name : 'Observacion',
-								index : 'Observacion',
+								width : 200,
+								formatter: 'date',
+					            sorttype: 'date',
+					            datefmt: 'd/m/Y',
+					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' }
+							}, {  
+								name : 'observacion',
+								index : 'observacion',
 								width : 200,
 								hidden : true
 							}, {
-								name : 'numFases',
-								index : 'numFases',
+								name : 'nroFases',
+								index : 'nroFases',
 								width : 200,
 								hidden : true
 							}, {
-								name : 'Presupuesto',
-								index : 'Presupuesto',
+								name : 'presupuesto',
+								index : 'presupuesto',
 								width : 150
 							}, {
 								name : 'estado',
@@ -291,7 +299,7 @@
 									/* se indica la url */
 									$
 											.post(
-													'modificarProyecto',
+													'/modificarProyecto',
 													{
 														idProyecto : $(
 																"#idProyecto")
@@ -354,8 +362,8 @@
 		$("#nombreProyecto").val("").attr('disabled', false);
 		$("#idProjectLeader").val("").attr('disabled', false);
 		$("#nombreProjectLeader").val("").attr('disabled', false);
-		$("#fechaInicio").val("").attr('disabled', false);
-		$("#fechaFinalizacion").val("").attr('disabled', false);
+		$("#datepicker").val("").attr('disabled', false);
+		$("#datepicker2").val("").attr('disabled', false);
 		$("#presupuesto").val("").attr('disabled', false);
 		$("#nroFases").val("").attr('disabled', false);
 		$("#observacion").val("").attr('disabled', false);
@@ -376,12 +384,13 @@
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		var rowdata = $('#list').getRowData(row);
-		$("#idProyecto").val(rowdata.idProyecto);
+		alert(rowdata.idProjectLeader)
+		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', false);
 		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', false);
 		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', false);
 		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', false);
-		$("#fechaInicio").val(rowdata.fechaInicio).attr('disabled', false);
-		$("#fechaFinalizacion").val(rowdata.fechaFinalizacion).attr('disabled', false);
+		$("#datepicker").val(rowdata.fechaInicio).attr('disabled', false);
+		$("#datepicker2").val(rowdata.fechaFinalizacion).attr('disabled', false);
 		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', false);
 		$("#nroFases").val(rowdata.nroFases).attr('disabled', false);
 		$("#observacion").val(rowdata.observacion).attr('disabled', false);
@@ -406,8 +415,8 @@
 		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', true);
 		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', true);
 		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', true);
-		$("#fechaInicio").val(rowdata.fechaInicio).attr('disabled', true);
-		$("#fechaFinalizacion").val(rowdata.fechaFinalizacion).attr('disabled', true);
+		$("#datepicker").val(rowdata.fechaInicio).attr('disabled', true);
+		$("#datepicker2").val(rowdata.fechaFinalizacion).attr('disabled', true);
 		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', true);
 		$("#nroFases").val(rowdata.nroFases).attr('disabled', true);
 		$("#observacion").val(rowdata.observacion).attr('disabled', true);
