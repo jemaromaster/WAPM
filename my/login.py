@@ -33,8 +33,7 @@ class Login(flask.views.MethodView):
         idUsuarioSession=usuarioSesion.id;
         if c==1:
             flask.session['username'] = username
-            flask.g.userId=usuarioSesion.id
-            print (flask.g.userId)
+            flask.session['idUsuario']= idUsuarioSession
         else:
             if c==0:
                 flask.flash("Username doesn't exist or incorrect password")   

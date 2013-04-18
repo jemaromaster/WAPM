@@ -83,7 +83,7 @@ class ListarProyectos(flask.views.MethodView):
             filtrarPor='activo'
         
         
-        projectLeaderId='12'
+        projectLeaderId=flask.session['idUsuario']
         
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
         print filtrarPor
