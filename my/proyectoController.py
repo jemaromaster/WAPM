@@ -6,7 +6,7 @@ from models.proyectoModelo import Proyecto
 from models.bdCreator import Session
 
 from proyectoManejador import ProyectoManejador
-from datetime import date
+from datetime import datetime
 class ProyectoControllerClass(flask.views.MethodView):
     
     def controlarProyecto(self, proyecto, idProyecto):
@@ -40,12 +40,28 @@ class ProyectoControllerClass(flask.views.MethodView):
         
         
         '''consulta si es que existe ya proyecto con ese nombre si es nuevo proyecto a crear'''
+        sesion=Session()
         if(idProyecto==0):
-            sesion=Session()
             pry=sesion.query(Proyecto).filter(Proyecto.nombreProyecto==p.nombreProyecto).first()
             if(pry is not None):
                 return make_response('t,Ya existe Proyecto con ese nombre')
+        else:
+            pry=sesion.query(Proyecto).filter(Proyecto.nombreProyecto==p.nombreProyecto).first()
+            if(pry is not None and pry.idProyecto!=idProyecto):
+                return make_response('t,Ya existe Proyecto con ese nombre')
         
+        try:
+            fi=datetime(int(p.fechaInicio[6:10]),\
+                             int(p.fechaInicio[0:2]),\
+                             int(p.fechaInicio[3:5]))
+            ff=datetime(int(p.fechaFinalizacion[6:10]),\
+                             int(p.fechaFinalizacion[0:2]),\
+                             int(p.fechaFinalizacion[3:5]))
+        except:
+            return make_response('t,Fecha invalida') 
+        
+        if not(fi<=ff):
+            return make_response('t,Fecha finalizacion antes que fecha inicio')
         um=ProyectoManejador()
         
         return um.guardarProyecto(p, idProyecto)
