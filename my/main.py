@@ -19,7 +19,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
 
-
 app = flask.Flask(__name__)
 """
 Se realizan las redirecciones de las peticiones de manera conveniente. Cada peticion

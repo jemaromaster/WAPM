@@ -41,4 +41,4 @@ class Login(flask.views.MethodView):
             responde=make_response("t,Usuario no existe o el passaword es incorrecto")   
             return responde
         return flask.redirect(flask.url_for('usuarioManager'))
-        #return flask.redirect( flask.render_template('usuarioManager.html'))
+        #return flask.render_template('usuarioManager.html')

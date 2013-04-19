@@ -32,8 +32,8 @@ class ModificarProyecto(flask.views.MethodView):
         estado=flask.request.form['estado']
         
         '''se intercambia de orden de la fecha de DMY a MDY'''
-        fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
-        fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
+        #fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
+        #fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
         
         print fechaInicio
         print fechaFinalizacion
@@ -41,7 +41,7 @@ class ModificarProyecto(flask.views.MethodView):
         u=Proyecto(nombreProyecto, idProjectLeader, fechaInicio, \
                    fechaFinalizacion, \
                    presupuesto, observacion, nroFases, estado)
-        print 'paso por aca'
+        
         
         # cu=UsuarioControllerClass()
         #retorno=cu.controlarUsuario(u)
