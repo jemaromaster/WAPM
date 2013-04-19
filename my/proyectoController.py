@@ -47,7 +47,7 @@ class ProyectoControllerClass(flask.views.MethodView):
                 return make_response('t,Ya existe Proyecto con ese nombre')
         else:
             pry=sesion.query(Proyecto).filter(Proyecto.nombreProyecto==p.nombreProyecto).first()
-            if(pry is not None and pry.idProyecto!=idProyecto):
+            if(pry is not None and int(pry.idProyecto)!=int(idProyecto)):
                 return make_response('t,Ya existe Proyecto con ese nombre')
         
         try:

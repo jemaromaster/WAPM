@@ -47,7 +47,7 @@ class UsuarioControllerClass(flask.views.MethodView):
                 return make_response('t,Ya existe el usuario')
         else:
             usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
-            if(usr is not None and usr.id !=idU):
+            if(usr is not None and int(usr.id) !=int(idU)):
                 return make_response('t,Ya existe el usuario')
         
         um=UsuarioManejador()
