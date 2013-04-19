@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
 	<header>
-		{% block header %}{% endblock %}
-	    <hgroup class="crearfix">
-	        <title>Web Application Project Management - WAPM</title>
-	        
-			<link rel="stylesheet" type="text/css" 
+	
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/ui.jqgrid.css" />	
+<link rel="stylesheet" type="text/css" 
 				href="/static/css/stylem.css"/>
-			
-			
-
-	    </hgroup>
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="/static/js/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="/static/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/static/js/WebToolKit.MD5.js"></script>
+		{% block header %}{% endblock %}
+	   
+	        <title>Web Application Project Management - WAPM</title>
+	  
     </header>
     <body>
         <div id="content">
@@ -20,16 +27,37 @@
 	        <div id="nav">
 	            Menu:
 	            <ul id="menu">
-	            	{% block nav %}{% endblock %}
-	            	<hr id="nav"/>
 	            	{% if 'username' in session %}
 					<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
 					</li>
+					<li><a href="{{url_for('proyectoManager')}}">Proyecto Manager</a>
+					</li>
+					<li><a href="#">Modulo Desarrollo</a>
+						<ul>
+						<li><a href="#">Item Manager</a>
+						<li><a href="#">Crear Solicitud de cambior</a>
+						<li><a href="#">Calculo de costos Manager</a>
+						</ul>
+					</li>
+					<li><a href="#">Modulo Gestion de Cambios</a>
+						<ul>
+						<li><a href="#">Linea Base Manager</a>
+						<li><a href="#">Tipo Item Manager</a>
+						<li><a href="#">Fases Manager</a>
+						</ul>
+					</li>
 					{% else %}
-					<li><a href="#">Ayuda</a></li>
 					{% endif %}
 				</ul>
 	        </div>
         </aside>
+         <script>
+$(function() {
+$( "#menu" ).menu();
+});
+</script>
+<style>
+.ui-menu { width: 150px; }
+</style>
     </body>
 </html>

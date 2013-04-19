@@ -32,6 +32,7 @@ app.secret_key = "bacon"
 app.add_url_rule('/',
                  view_func=Login.as_view('index'),
                  methods=["GET", "POST"])
+
 app.add_url_rule('/usuarioManager/',
                  view_func=UsuarioManager.as_view('usuarioManager'),
                  methods=["GET", "POST"])
