@@ -5,8 +5,7 @@
 	href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
 <link rel="stylesheet" type="text/css" media="screen"
 	href="/static/css/ui.jqgrid.css" />
-<link rel="stylesheet" type="text/css" media="screen"
-	href="/static/css/stylem.css" />	
+<!--<link rel="stylesheet" type="text/css" media="screen" href="/static/css/stylem.css" />-->	
 
 <script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
 <script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
@@ -17,18 +16,10 @@
 
 </header>
     <body>
-
-        
-    <h1>Welcome!</h1>
+   <h1>Welcome!</h1>
 
     {% if 'username' in session %}
-        <p>Welcome back {{session['username']}}!</p>
-        
-
-        
-        <form action="{{url_for('index')}}" method="post">
-            <input type="submit" name="logout" value="logout" />
-        </form>
+    	
     {% else %}
     
  <style type="text/css">
@@ -39,7 +30,7 @@
 </style>
     
   <div id="dialogoLogin" title="Login">
-	<form >
+	<form id="login" method="get" action="{{url_for('usuarioManager')}}">
 		<fieldset class="fieldset">
 				<table>
 					<tr>
@@ -94,7 +85,8 @@
 																mostrarMensaje("Error",
 																		"Usuario"+ data.substring(2));
 																/* se indica que no hubieron errores */
-													}
+													}else
+														$('#login').submit();
 													
 												}
 												);

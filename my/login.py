@@ -11,6 +11,8 @@ class Login(flask.views.MethodView):
     del sistema, se concede el acceso
     """
     def get(self):
+        if 'username' in flask.session:
+            return flask.render_template('usuarioManager.html')
         return flask.render_template('index.html')
     
     def post(self):
@@ -38,4 +40,5 @@ class Login(flask.views.MethodView):
         else:
             responde=make_response("t,Usuario no existe o el passaword es incorrecto")   
             return responde
-        return flask.redirect(flask.url_for('index'))
+        return flask.redirect(flask.url_for('usuarioManager'))
+        #return flask.redirect( flask.render_template('usuarioManager.html'))

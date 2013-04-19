@@ -1,63 +1,95 @@
 <!DOCTYPE html>
 <html>
-	<header>
+<header>
+
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="/static/css/ui.jqgrid.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="/static/css/stylem.css" />-->
 	
-<link rel="stylesheet" type="text/css" media="screen"
-	href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
-<link rel="stylesheet" type="text/css" media="screen"
-	href="/static/css/ui.jqgrid.css" />	
-<link rel="stylesheet" type="text/css" 
-				href="/static/css/stylem.css"/>
-<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
-<script type="text/javascript" src="/static/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="/static/js/i18n/grid.locale-en.js"></script>
-<script type="text/javascript" src="/static/js/jquery.jqGrid.min.js"></script>
-<script type="text/javascript" src="/static/js/WebToolKit.MD5.js"></script>
-		{% block header %}{% endblock %}
-	   
-	        <title>Web Application Project Management - WAPM</title>
-	  
-    </header>
-    <body>
-        <div id="content">
-            {% block body %}{% endblock %}
-        </div>
-        <aside>
-	        <div id="nav">
-	            Menu:
-	            <ul id="menu">
-	            	{% if 'username' in session %}
-					<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
-					</li>
-					<li><a href="{{url_for('proyectoManager')}}">Proyecto Manager</a>
-					</li>
-					<li><a href="#">Modulo Desarrollo</a>
-						<ul>
+	<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
+	<script type="text/javascript"
+		src="/static/js/jquery-ui-1.9.2.custom.js"></script>
+	<script type="text/javascript" src="/static/js/i18n/grid.locale-en.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.jqGrid.min.js"></script>
+	<script type="text/javascript" src="/static/js/WebToolKit.MD5.js"></script>
+		<title>WAPM</title>
+		
+	 <script>
+		$(function() {
+		$( "#menu" ).menu();
+		});
+	</script>
+	<style>
+		.ui-menu {  float:left;  z-index: 5; }
+	</style>
+	{% block header %}{% endblock %}
+</header>
+<body>
+
+	<div  style="float:right; background-color:#FFFFFF; ">
+	<iframe width="50px"style="border-style:none"> </iframe>
+	</div>
+	<div id="header" style=" background-color:#FFFFFF " >
+	<h6 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
+	
+	Bienvenido:{{session['username']}}!   
+	<br></br>
+	 <script> document.write( new Date().toLocaleString())</script>
+	<br></br> 
+	 <form action="{{url_for('index')}}" method="post">
+            <input id="btSubmit" type="submit" name="logout" value="logout" />
+        </form>
+     <script>
+			$("#btSubmit").button();
+    </script>
+	 </h6>
+	 <div  style="float:left; background-color:#FFFFFF; ">
+	<iframe width="50px"style="border-style:none"> </iframe>
+	</div>
+	<img src="/static/images/blue-23957_640.png" width="200px"/>
+	<h6>Web Aplication Project Manager</h6>
+	
+	
+	
+	</div>
+	<HR style="color:#659EC7"></hr>
+	
+	<div id="menuBarr" css=".ui-menu">
+			<ul id="menu">
+			<h2>Menu</h2>
+				{% if 'username' in session %}
+				<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
+				</li>
+				<li><a href="{{url_for('proyectoManager')}}">Proyecto
+						Manager</a></li>
+				<li><a href="#">Desarrollo</a>
+					<ul>
 						<li><a href="#">Item Manager</a>
 						<li><a href="#">Crear Solicitud de cambior</a>
 						<li><a href="#">Calculo de costos Manager</a>
-						</ul>
-					</li>
-					<li><a href="#">Modulo Gestion de Cambios</a>
-						<ul>
+					</ul></li>
+				<li><a href="#">Gestion de Cambios</a>
+					<ul>
 						<li><a href="#">Linea Base Manager</a>
 						<li><a href="#">Tipo Item Manager</a>
 						<li><a href="#">Fases Manager</a>
-						</ul>
-					</li>
-					{% else %}
-					{% endif %}
-				</ul>
-	        </div>
-        </aside>
-         <script>
-$(function() {
-$( "#menu" ).menu();
-});
-</script>
-<style>
-.ui-menu { width: 150px; }
-</style>
-    </body>
+					</ul></li> {% else %} {% endif %}
+			</ul>
+	</div>
+	<div id="relleno"  style="float:left; background-color:#FFFFFF; ">
+	<iframe width="100px"style="border-style:none"> </iframe>
+	</div>
+	<div id="content" style="float:left; background-color:#FFFFFF; ">
+	{% block body %}{% endblock %}</div>
+	
+	<div id="footer" style="clear:both;text-align:center; background-color: #659EC7">
+	Copyright © WAPM</div>
+	
+	</div>
+	
+
+</body>
 </html>
