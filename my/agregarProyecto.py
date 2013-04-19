@@ -21,7 +21,7 @@ class AgregarProyecto(flask.views.MethodView):
     def post(self):
     
         nombreProyecto=flask.request.form['nombreProyecto']
-        idProjectLeader=flask.request.form['idProjectLeader']
+        idProjectLeader=flask.session['idUsuario']
         nroFases=flask.request.form['nroFases']
         observacion=flask.request.form['observacion']
         presupuesto=flask.request.form['presupuesto']

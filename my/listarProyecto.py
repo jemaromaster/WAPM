@@ -123,7 +123,7 @@ class ListarProyectos(flask.views.MethodView):
             
                   
            
-            projectLeaderId='14'
+            projectLeaderId=flask.session['idUsuario']
             listaUsuario=sesion.query(Proyecto).order_by(filtrarPor).\
                                                     filter(Proyecto.nombreProyecto.like(nombreProyecto) \
                                                     #Proyecto.fechaInicio==date('2013-04-15') &  \

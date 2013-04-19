@@ -27,10 +27,14 @@ class Login(flask.views.MethodView):
         
         
         
-        c=sesion.query(Usuario).filter(Usuario.username==username and Usuario.passwd==passwd).count()
-        usuarioSesion=sesion.query(Usuario).filter(Usuario.username==username and Usuario.passwd==passwd).first()
+        c=sesion.query(Usuario).filter(Usuario.username==username).filter(Usuario.passwd==passwd).count()
+        print 'este es el pass' +passwd
+        print 'fdfdf'+str(c)
+        usuarioSesion=sesion.query(Usuario).filter(Usuario.username==username).filter(Usuario.passwd==passwd).first()
         
-        idUsuarioSession=usuarioSesion.id;
+        if usuarioSesion is not None:
+           idUsuarioSession=usuarioSesion.id;
+           
         if c==1:
             flask.session['username'] = username
             flask.session['idUsuario']= idUsuarioSession

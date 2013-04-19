@@ -41,7 +41,7 @@ class ModificarProyecto(flask.views.MethodView):
         u=Proyecto(nombreProyecto, idProjectLeader, fechaInicio, \
                    fechaFinalizacion, \
                    presupuesto, observacion, nroFases, estado)
-        print 'paso por aca'
+        
         
         # cu=UsuarioControllerClass()
         #retorno=cu.controlarUsuario(u)
