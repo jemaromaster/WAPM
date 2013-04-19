@@ -6,7 +6,6 @@ from usuarioManager import UsuarioManager
 from agregarUsuario import AgregarUsuario
 from modificarUsuario import ModificarUsuario
 
-
 from proyectoManager import ProyectoManager
 from modificarProyecto import ModificarProyecto
 from agregarProyecto import AgregarProyecto
