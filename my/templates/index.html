@@ -1,24 +1,108 @@
-{% extends "base.html" %}
-{% block body %}
+<!DOCTYPE html>
+<html>
+	<header>       
+        <link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/ui.jqgrid.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/stylem.css" />	
+
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="/static/js/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="/static/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/static/js/WebToolKit.MD5.js"></script>
+
+</header>
+    <body>
+
+        
     <h1>Welcome!</h1>
+
     {% if 'username' in session %}
         <p>Welcome back {{session['username']}}!</p>
+        
+
+        
         <form action="{{url_for('index')}}" method="post">
             <input type="submit" name="logout" value="logout" />
         </form>
     {% else %}
-        <p>A login is required:</p>
-        <form class='datosUsuario' action="{{url_for('index')}}" method="post">
-            <p>Username:<br />
-            <input type="text" name="username" /></p>
-            <p>Password:<br />
-            <input type="password" name="passwd" /></p>
-            <p><input type="submit" value="submit" /></p>
-        </form>
-    {% endif %}
-    {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
-            {{message}}
-        {% endfor %}
-    {% endwith %}
-{% endblock %}
+    
+ <style type="text/css">
+.fieldset {
+	width: 450px;
+	border: 0;
+}
+</style>
+    
+  <div id="dialogoLogin" title="Login">
+	<form >
+		<fieldset class="fieldset">
+				<table>
+					<tr>
+						<td><label for="User" style="display: block">Usuario</label>
+						    <input type="text" name="usuario"
+							id="usuario" class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						</td>
+						<td><label for="pass" style="display: block">Password</label>
+							<input type="password" name="pass" id="pass"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</form>
+	</div>			
+	<div id="msgbox"></div>
+	<script>
+
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});}
+	
+	
+		$("#dialogoLogin").dialog({
+						autoOpen : true,
+						modal : true,
+						resizable : false,
+						width : 500,
+						height:240,
+						buttons : {
+							"Aceptar" : function() {
+								passMd5= MD5($("#pass").val().trim());
+											$.post('/',{ 
+													username : $(
+													"#usuario")
+													.val(),
+													passwd : passMd5 
+												},
+												function(data, status) {
+													/* si hay error se muestra el mensaje*/
+													if (data.substring(0, 1) == 't') {
+																mostrarMensaje("Error",
+																		"Usuario"+ data.substring(2));
+																/* se indica que no hubieron errores */
+															} 
+														
+												});
+							}
+							
+						}
+					});
+		</script>
+	 {% endif %}	
+ </body>
+</html>   

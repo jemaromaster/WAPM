@@ -1,11 +1,11 @@
 import flask, flask.views
 from flask import jsonify
 
-from remote import Remote
+
 from usuarioManager import UsuarioManager
 from agregarUsuario import AgregarUsuario
 from modificarUsuario import ModificarUsuario
-from inactivarUsuario import InactivarUsuario
+
 
 from proyectoManager import ProyectoManager
 from modificarProyecto import ModificarProyecto
@@ -14,7 +14,7 @@ from listarProyecto import ListarProyectos
 
 from login import Login
 from listarUsuarios import ListarUsuarios
-from crearUsuario import CrearUsuario
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
@@ -29,7 +29,6 @@ de las reglas de URL a las funciones que se haran cargo de senrvirlas
 initDB()
 # Don't do this
 app.secret_key = "bacon"
-
 app.add_url_rule('/',
                  view_func=Login.as_view('index'),
                  methods=["GET", "POST"])

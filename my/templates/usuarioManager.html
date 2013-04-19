@@ -7,41 +7,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 
-<link rel="stylesheet" type="text/css"
-	href="/static/jquery-ui.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/ui.jqgrid.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/jquery.searchFilter.css" />
-<!--<link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.7.2/css/ui.jqgrid.css" />-->
-<script type="text/javascript"
-	src="/static/jquery.js"></script>
-<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>-->
-<script type="text/javascript"
-	src="/static/jquery-ui.js"></script>
-<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>-->
-<script type="text/javascript"
-	src="/static/grid.locale-en.js"></script>
-<script type="text/javascript"
-	src="/static/grid.base-fixed.js"></script>
-<script type="text/javascript"
-	src="/static/grid.common.js"></script>
-<script type="text/javascript"
-	src="/static/grid.formedit.js"></script>
-<script type="text/javascript"
-	src="/static/grid.inlinedit.js"></script>
-<script type="text/javascript"
-	src="/static/grid.custom.js"></script>
-<script type="text/javascript"
-	src="/static/jquery.fmatter.js"></script>
-<script type="text/javascript"
-	src="/static/grid.grouping.js"></script>
-<script type="text/javascript"
-	src="/static/grid.jqueryui.js"></script>
-<script type="text/javascript"
-	src="/static/jquery.searchFilter.js"></script>
-<!--<script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/i18n/grid.locale-en.js"></script>
-    <script type="text/javascript" src="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-3.8/js/jquery.jqGrid.min.js"></script>-->
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/static/css/ui.jqgrid.css" />
+	
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="/static/js/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="/static/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/static/js/WebToolKit.MD5.js"></script>
+
+
 <script type="text/javascript">
 	//<![CDATA[
 	jQuery(document)
@@ -90,7 +68,8 @@
 														index : 'ci',
 														width : 200,
 														hidden : true
-},{
+													},
+													{
 														name : 'nombreUsuario',
 														index : 'nombreUsuario',
 														width : 200
@@ -167,7 +146,7 @@
 									add : false,
 									del : false,
 									search : false,
-									refresh : false
+									refresh : true
 								});
 						grid.jqGrid('filterToolbar', {
 							stringResult : true,
@@ -181,165 +160,453 @@
 
 
 <!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	width: 500px;
+	border: 0;
+}
+</style>
+<!-- cambiar contraseña -->
+<div id="dialogoPass" title="Modificacion de Pass del Usuario">
+	<form >
+		<fieldset class="fieldset">
+				<input type="hidden" name="passControl" id="passControl" />
+				<input type="hidden" name="idControl" id="idControl" />
+				<table>
+					<tr>
+						<td><label for="Actual" style="display: block">Pass Actual</label>
+						    <input type="password" name="passActual"
+							id="passActual" class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						</td>
+						<td><label for="Nuevo" style="display: block">Password Nuevo</label>
+							<input type="password" name="passNuevo" id="passNuevo"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</form>
+	</div>				
+				
+
+
 <div id="dialogo-datos-cliente" title="Datos de Usuarios">
-	<form>
-		<fieldset>
-			<input type="hidden" name="idUsuario" id="idUsuario" /> 
-			
-			<label
-				for="name" style="display: block">Nombre de Usuario</label> <input
-				type="text" name="nombreUsuario" id="nombreUsuario"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="ci" style="display: block">Cedula</label> <input
-				type="text" name="ci" id="ci"
-				class="text ui-widget-content ui-corner-all" 
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"/>
-
-			<label for="name" style="display: block">Nombre</label> <input
-				type="text" name="nombre" id="nombre"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="apellido" style="display: block">Apellido</label> <input
-				type="text" name="apellido" id="apellido"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-			<label for="pass" style="display: block">Password</label> <input
-				type="text" name="pass" id="pass"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="email" style="display: block">E-mail</label> <input
-				type="text" name="email" id="email"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="direccion" style="display: block">Dirección</label> <input
-				type="text" name="direccion" id="direccion" value=""
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="telefono" style="display: block">Telefono</label> <input
-				type="text" name="telefono" id="telefono" value=""
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-			<label for="observacion" style="display: block">Observacion</label> <input
-				type="text" name="observacion" id="observacion" value=""
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-
-			<label for="activo" style="display: block">Activo</label> <select
-				id="activo"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 50%;"
-				class="ui-widget-content ui-corner-all">
-				<option value="true">Activo</option>
-				<option value="false">Inactivo</option>
-			</select>
+	<form title="(*) campos obligatorios">
+		<fieldset class="fieldset">
+			<input type="hidden" name="idUsuario" id="idUsuario" />
+			<table>
+				<tr>
+					<td><label for="name" style="display: block">*Nombre
+							de Usuario</label> <input type="text" name="nombreUsuario"
+						id="nombreUsuario" class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+					<td><label for="pass" style="display: block">*Password</label>
+						<input type="password" name="pass" id="pass"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="ci" style="display: block">*Cedula</label> <input
+						type="text" name="ci" id="ci"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%; text-align: right;" />
+					</td>
+					<td><label for="name" style="display: block">*Nombre</label> <input
+						type="text" name="nombre" id="nombre"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+					<td><label for="apellido" style="display: block">*Apellido</label>
+						<input type="text" name="apellido" id="apellido"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="email" style="display: block">*E-mail</label>
+						<input type="text" name="email" id="email"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+					<td><label for="direccion" style="display: block">Dirección</label>
+						<input type="text" name="direccion" id="direccion" value=""
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+					<td><label for="telefono" style="display: block">Telefono</label>
+						<input type="text" name="telefono" id="telefono" value=""
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="observacion" style="display: block">Observacion</label>
+						<textarea id="observacion"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
+			</textarea></td>
+					<td><label for="activo" style="display: block">Activo</label>
+						<select id="activo"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
+						class="ui-widget-content ui-corner-all">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+					</select></td>
+				</tr>
+			</table>
 		</fieldset>
 	</form>
 </div>
+
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
-var bandera;
-/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
-$("#dialogo-datos-cliente").dialog(
-{
-				autoOpen : false,
-				width : 600,
-				modal : true,
-				resizable : false,
-				buttons : {
-					/* funcion asociado al boton aceptar */
-					"Aceptar" : function() {
-						/* si el dato es nuevo se llamar a la url para agregar */
-						if (bandera==1) {
-							/* se indica la URL */
-							$.post('/agregarUsuario/', { /* se indican los parametros*/
-								nombreUsuario : $("#nombreUsuario").val(),
-								password : $("#pass").val(),
-								ci : $("#ci").val(),
-								nombre : $("#nombre").val(),
-								apellido : $("#apellido").val(),
-								email : $("#email").val(),
-								direccion : $("#direccion").val(),
-								telefono : $("#telefono").val(),
-								observacion : $("#observacion").val(),
-								activo : $("#activo").val()
-							}, function(data,status) {
-								/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
-								
-								/* si hay error se muestra el mensaje*/
-								if (data.substring(0,1)=='t') {
-									mostrarMensaje("Error",
-											"Los datos no se han podido guardar:\n"
-													+ data.substring(2));
-									/* se indica que no hubieron errores */
-								} else {
-									$("#dialogo-datos-cliente").dialog("close");
-									mostrarMensaje("Exito",
-											data.substring(2));
-								}
-								/* se indicar la recarga de la tabla */
-								$('#list').trigger("reloadGrid");
-							});
-
-							/* si el dato se modifica se llama a la url para modificar*/
-						} else if(bandera==2){
-							/* se indica la url */
-							$.post('modificarUsuario', {
-								idUsuario : $("#idUsuario").val(),
-								nombreUsuario : $("#nombreUsuario").val(),
-								password : $("#pass").val(),
-								ci : $("#ci").val(),
-								nombre : $("#nombre").val(),
-								apellido : $("#apellido").val(),
-								email : $("#email").val(),
-								direccion : $("#direccion").val(),
-								telefono : $("#telefono").val(),
-								activo : $("#activo").val(),
-								observacion : $("#observacion").val()
-							}, function(data, status) {
-
-								if (data.substring(0,1)=='t') {
-									mostrarMensaje("Error",
-											"Los datos no se han podido modificar:\n"
-													+ data.substring(2));
-								} else {
-									$("#dialogo-datos-cliente").dialog("close");
-									mostrarMensaje("Exito",
-											"Los datos han sido modificados");
-								}
-								$('#list').trigger("reloadGrid");
-							});
-						}else if(bandera==3){
-							$(this).dialog("close");
+	var bandera;
+	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+	$("#dialogoPass")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width : 550,
+						buttons : {
+							"Aceptar" : function() {
+								passMd5= MD5($("#passActual").val().trim());
+								if(passMd5 != $("#passControl").val() ){
+									
+									mostrarMensaje(
+											"Error",
+											"El pass actual introducido es erroneo"
+													);
+									
+								}else{
+										if ($("#passNuevo").val().trim().length > 1)
+											{
+												passMd5= MD5($("#passNuevo").val())
+												$.post('modificarUsuario',{ 
+													idUsuario : $(
+													"#idControl")
+													.val(),
+													passNuevo : passMd5 
+												},
+												function(data, status) {
+													/* si hay error se muestra el mensaje*/
+														$("#dialogoPass").dialog("close");
+														mostrarMensaje("Exito",data.substring(2));
+														$('#list')
+														.trigger(
+																"reloadGrid");
+												});
+											}else{
+												mostrarMensaje(
+														"Error",
+														"Se debe especificar el nuevo Pass"
+																);
+											}
+									}
+									
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
 						}
-					},
-					"Cancelar" : function() {
-						$(this).dialog("close");
-					}
-				}
-			});
+					});
+					
+	$("#dialogo-datos-cliente")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width : 550,
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Aceptar" : function() {
+								/* si el dato es nuevo se llamar a la url para agregar */
+								if (bandera == 1) {
+									/* se indica la URL */
+									if (control(true) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+										var passCd= MD5($("#pass").val());
+										$.post('/agregarUsuario/',{ 
+											/* se indican los parametros*/
+															nombreUsuario : $(
+																	"#nombreUsuario")
+																	.val(),
+															password : passCd,
+															ci : $("#ci").val(),
+															nombre : $(
+																	"#nombre")
+																	.val(),
+															apellido : $(
+																	"#apellido")
+																	.val(),
+															email : $("#email")
+																	.val(),
+															direccion : $(
+																	"#direccion")
+																	.val(),
+															telefono : $(
+																	"#telefono")
+																	.val(),
+															observacion : $(
+																	"#observacion")
+																	.val(),
+															activo : $(
+																	"#activo")
+																	.val()
+														},
+														function(data, status) {
+															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+															/* si hay error se muestra el mensaje*/
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido guardar:\n"
+																				+ data
+																						.substring(2));
+																/* se indica que no hubieron errores */
+															} else {
+																$(
+																		"#dialogo-datos-cliente")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		data
+																				.substring(2));
+															}
+															/* se indicar la recarga de la tabla */
+															$('#list')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+
+									/* si el dato se modifica se llama a la url para modificar*/
+								} else if (bandera == 2) {
+									if (control(false) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+
+										/* se indica la url */
+										$
+												.post(
+														'modificarUsuario',
+														{
+															idUsuario : $(
+																	"#idUsuario")
+																	.val(),
+															nombreUsuario : $(
+																	"#nombreUsuario")
+																	.val(),
+															password : $(
+																	"#pass")
+																	.val(),
+															ci : $("#ci").val(),
+															nombre : $(
+																	"#nombre")
+																	.val(),
+															apellido : $(
+																	"#apellido")
+																	.val(),
+															email : $("#email")
+																	.val(),
+															direccion : $(
+																	"#direccion")
+																	.val(),
+															telefono : $(
+																	"#telefono")
+																	.val(),
+															activo : $(
+																	"#activo")
+																	.val(),
+															observacion : $(
+																	"#observacion")
+																	.val()
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido modificar:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-datos-cliente")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Los datos han sido modificados");
+															}
+															$('#list')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} else if (bandera == 3) {
+									$(this).dialog("close");
+								}
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+
+	$.enmascarar = function() {
+		$("#ci").mask("?9999999999", {
+			placeholder : " "
+		});
+		$("#telefono").mask("?9999999999999", {
+			placeholder : " "
+		});
+	}
+	function cargarForm(rowdata, row) {
+		rowdata = $('#list').getRowData(row);
+		$("#idUsuario").val(rowdata.idUsuario);
+		$("#pass").val(rowdata.pass);
+		$("#nombreUsuario").val(rowdata.nombreUsuario);
+		$("#ci").val(rowdata.ci);
+		$("#nombre").val(rowdata.nombre);
+		$("#apellido").val(rowdata.apellido);
+		$("#email").val(rowdata.email);
+		$("#direccion").val(rowdata.direccion);
+		$("#telefono").val(rowdata.telefono);
+		$("#observacion").val(rowdata.observacion);
+		$("#activo").val(rowdata.activo);
+
+	}
+
+	function setCamposDisabled(habilitar) {
+		$("#idUsuario").attr('disabled', habilitar);
+		$("#pass").attr('disabled', habilitar);
+		$("#nombreUsuario").attr('disabled', habilitar);
+		$("#ci").attr('disabled', habilitar);
+		$("#nombre").attr('disabled', habilitar);
+		$("#apellido").attr('disabled', habilitar);
+		$("#email").attr('disabled', habilitar);
+		$("#direccion").attr('disabled', habilitar);
+		$("#telefono").attr('disabled', habilitar);
+		$("#activo").attr('disabled', habilitar);
+		$("#observacion").attr('disabled', habilitar);
+	}
+
+	function control(esNuevo) {
+		$("#nombreUsuario").css('border-color', 'skyblue');
+		$("#pass").css('border-color', 'skyblue');
+		$("#ci").css('border-color', 'skyblue');
+		$("#nombre").css('border-color', 'skyblue');
+		$("#apellido").css('border-color', 'skyblue');
+		$("#email").css('border-color', 'skyblue');
+		$("#direccion").css('border-color', 'skyblue');
+		$("#telefono").css('border-color', 'skyblue');
+		$("#observacion").css('border-color', 'skyblue');
+
+		var error = 0
+		var len;
+
+		len = $("#nombreUsuario").val().trim().length;
+		if (len > 20 || len <= 0) {
+			$("#nombreUsuario").css('border-color', 'red');
+			error = 1;
+		}
+
+		if (esNuevo) {
+			len = $("#pass").val().trim().length;
+			if (len <= 0) {
+				$("#pass").css('border-color', 'red');
+				error = 1;
+			}
+		}
+
+		len = $("#ci").val().trim().length;
+		if (len > 10 || len <= 0) {
+			$("#ci").css('border-color', 'red');
+			error = 1;
+		}
+		len = $("#nombre").val().trim().length;
+		if (len > 30 || len <= 0) {
+			$("#nombre").css('border-color', 'red');
+			error = 1;
+		}
+		len = $("#apellido").val().trim().length;
+		if (len > 30 || len <= 0) {
+			$("#apellido").css('border-color', 'red');
+			error = 1;
+		}
+		len = $("#email").val().trim().length;
+		if (len > 30 || len <= 0) {
+			$("#email").css('border-color', 'red');
+			error = 1;
+		}
+		len = $("#direccion").val().trim().length;
+		if (len > 30) {
+			$("#direccion").css('border-color', 'red');
+			error = 1;
+		}
+		len = $("#telefono").val().trim().length;
+		if (len > 13) {
+			$("#telefono").css('border-color', 'red');
+			error = 1;
+		}
+		len = document.getElementById("observacion").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len > 50) {
+			$("#observacion").css('border-color', 'red');
+			error = 1;
+		}
+		return error;
+	}
 
 	/* funcion para llamar al formulario agregar un nuevo datos */
+	function cambiarPass() {
+		
+		var row = $('#list').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		rowdata = $('#list').getRowData(row);
+		$("#idControl").val(rowdata.idUsuario);
+		$("#passControl").val(rowdata.pass);
+		$("#passActual").val("");
+		$("#passNuevo").val("");
+		$("#dialogoPass").dialog("open");
+	}
+	
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
 		/* se vacian los elementos HTML de captura de datos */
-		$("#idUsuario").val("").attr('disabled',false);
-		$("#pass").val("").attr('disabled',false);
-		$("#nombreUsuario").val("").attr('disabled',false);
-		$("#ci").val("").attr('disabled',false);
-		$("#nombre").val("").attr('disabled',false);
-		$("#apellido").val("").attr('disabled',false);
-		$("#email").val("").attr('disabled',false);
-		$("#direccion").val("").attr('disabled',false);
-		$("#telefono").val("").attr('disabled',false);
-		$("#activo").val("").attr('disabled',false);
-		$("#observacion").val("").attr('disabled',false);
+		$("#idUsuario").val("");
+		$("#pass").val("");
+		$("#nombreUsuario").val("");
+		$("#ci").val("");
+		$("#nombre").val("");
+		$("#apellido").val("");
+		$("#email").val("");
+		$("#direccion").val("");
+		$("#telefono").val("");
+		$("#activo").val("");
+		$("#observacion").val("");
 		/* se llama al dialogo de captura de datos */
+		setCamposDisabled(false);
+		$.enmascarar();
+
 		$("#dialogo-datos-cliente").dialog("open");
 	}
 
@@ -353,45 +620,32 @@ $("#dialogo-datos-cliente").dialog(
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
 			return;
 		}
+		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		var rowdata = $('#list').getRowData(row);
-		$("#idUsuario").val(rowdata.idUsuario).attr('disabled',false);
-		$("#pass").val(rowdata.pass).attr('disabled',false);
-		$("#nombreUsuario").val(rowdata.nombreUsuario).attr('disabled',false);
-		$("#ci").val(rowdata.ci).attr('disabled',false);
-		$("#nombre").val(rowdata.nombre).attr('disabled',false);
-		$("#apellido").val(rowdata.apellido).attr('disabled',false);
-		$("#email").val(rowdata.email).attr('disabled',false);
-		$("#direccion").val(rowdata.direccion).attr('disabled',false);
-		$("#telefono").val(rowdata.telefono).attr('disabled',false);
-		$("#observacion").val(rowdata.observacion).attr('disabled',false);
-		$("#activo").val(rowdata.activo).attr('disabled',false);
+		cargarForm(rowdata, row);
+		/*se habilita la edicion*/
+		setCamposDisabled(false);
+		$.enmascarar();
+		/*el pass no puede ser modificado aqui, se debe ir a cambiar pass*/
+		$("#pass").attr('disabled', true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
-	
-	function consultar(){
+
+	function consultar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
-		/* se comprueba que hay un dato seleccionado para modificar */
+		/* se comprueba que hay un dato seleccionado para consultar */
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
 			return;
 		}
+		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		var rowdata = $('#list').getRowData(row);
-		$("#idUsuario").val(rowdata.idUsuario).attr('disabled',true);
-		$("#pass").val(rowdata.pass).attr('disabled',true);
-		$("#nombreUsuario").val(rowdata.nombreUsuario).attr('disabled',true);
-		$("#ci").val(rowdata.ci).attr('disabled',true);
-		$("#nombre").val(rowdata.nombre).attr('disabled',true);
-		$("#apellido").val(rowdata.apellido).attr('disabled',true);
-		$("#email").val(rowdata.email).attr('disabled',true);
-		$("#direccion").val(rowdata.direccion).attr('disabled',true);
-		$("#telefono").val(rowdata.telefono).attr('disabled',true);
-		$("#observacion").val(rowdata.observacion).attr('disabled',true);
-		$("#activo").val(rowdata.activo).attr('disabled',true);
+		cargarForm(rowdata, row);
+		/*se inhabilita la edicion*/
+		setCamposDisabled(true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
@@ -423,16 +677,16 @@ $("#dialogo-datos-cliente").dialog(
 	}
 
 	function mostrarMensaje(titulo, mensaje) {
-		 $('#msgbox').text(mensaje);
-	        $('#msgbox').dialog({
-	            title : titulo,
-	            modal : true,
-	            buttons : {
-	                "Ok" : function() {
-	                    $(this).dialog("close");
-	                }
-	            }
-	        });	
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
 	}
 </script>
 <div id='msgbox' title='' style='display: none'></div>
@@ -449,9 +703,13 @@ $("#dialogo-datos-cliente").dialog(
 			<input type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
 			<input type="button" name="detalle" onclick='modificar();'
 				value="Modificar" /> 
-			<input type="button" name="consultar" value="Consultar" onclick='consultar()' />
+			<input type="button" name="cambiarPass"
+				value="Cambiar Pass" onclick='cambiarPass()' />
+			<input type="button" name="consultar"
+				value="Consultar" onclick='consultar()' />
 
 		</div></td>
+		
 </tr>
 
 

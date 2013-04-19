@@ -23,8 +23,14 @@ class ModificarUsuario(flask.views.MethodView):
     def post(self):
         """
         prueba
-        """
-        idUsuario=flask.request.form['idUsuario']
+        """ 
+        uc=UsuarioControllerClass()
+        idUsuario=flask.request.form['idUsuario'] 
+        print "id usuario es :  " + idUsuario
+        if 'passNuevo' in flask.request.form:
+            passNuevo=flask.request.form['passNuevo']
+            return  uc.controlarPass(passNuevo,idUsuario)
+        
         nombreUsuario=flask.request.form['nombreUsuario']
         passwd=flask.request.form['password']
         ci=flask.request.form['ci']
@@ -46,8 +52,6 @@ class ModificarUsuario(flask.views.MethodView):
         sesion.close()'''
         
         u=Usuario(nombreUsuario,passwd, nombre, apellido,email,ci,telefono,observacion,activo,direccion)
-        
-        uc=UsuarioControllerClass()
         
         return uc.controlarUsuario(u, idUsuario)
         

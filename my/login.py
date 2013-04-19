@@ -1,5 +1,5 @@
 import flask
-import flask.views
+from flask import views,make_response
 from models.bdCreator import Session
 from models.usuarioModelo import Usuario
 sesion=Session()
@@ -25,17 +25,17 @@ class Login(flask.views.MethodView):
         username = flask.request.form['username']
         passwd = flask.request.form['passwd']
         
-        
-        
-        c=sesion.query(Usuario).filter(Usuario.username==username and Usuario.passwd==passwd).count()
-        usuarioSesion=sesion.query(Usuario).filter(Usuario.username==username and Usuario.passwd==passwd).first()
-        
+        c=sesion.query(Usuario).filter(Usuario.username==username).filter(Usuario.passwd==passwd).count()
+        usuarioSesion=sesion.query(Usuario).filter(Usuario.username==username).filter(Usuario.passwd==passwd).first()
+        if usuarioSesion == None:
+            responde=make_response("t,Usuario no existe o el passaword es incorrecto")
+            return responde
         idUsuarioSession=usuarioSesion.id;
+        
         if c==1:
             flask.session['username'] = username
             flask.session['idUsuario']= idUsuarioSession
         else:
-            if c==0:
-                flask.flash("Username doesn't exist or incorrect password")   
-        
+            responde=make_response("t,Usuario no existe o el passaword es incorrecto")   
+            return responde
         return flask.redirect(flask.url_for('index'))
