@@ -50,7 +50,7 @@
 								name : 'idProyecto',
 								index : 'idProyecto',
 								width : 200,
-								hidden : false
+								hidden : true
 							}, {
 								name : 'nombreProyecto',
 								index : 'nombreProyecto',
@@ -62,7 +62,8 @@
 								formatter: 'date',
 					            sorttype: 'date',
 					            datefmt: 'd/m/Y',
-					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' }
+					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+								search:false
 							}, {
 								name : 'idProjectLeader',
 								index : 'idProjectLeader',
@@ -80,7 +81,8 @@
 								formatter: 'date',
 					            sorttype: 'date',
 					            datefmt: 'd/m/Y',
-					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' }
+					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+					            search:false
 							}, {  
 								name : 'observacion',
 								index : 'observacion',
@@ -94,7 +96,8 @@
 							}, {
 								name : 'presupuesto',
 								index : 'presupuesto',
-								width : 150
+								width : 150,
+								search:false
 							}, {
 								name : 'estado',
 								index : 'estado',

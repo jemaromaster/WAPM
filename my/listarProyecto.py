@@ -113,7 +113,7 @@ class ListarProyectos(flask.views.MethodView):
                     i=i+1
                     field=vector[i]['field']
                     continue
-                if field=='Presupuesto':
+                if field=='presupuesto':
                     presupuesto=vector[i]['data'].strip()+'%'
                     i=i+1
                     field=vector[i]['field']
