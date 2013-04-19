@@ -19,7 +19,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
 
-
+from agregarMiembrosProyecto import AgregarMiembrosProyecto
 app = flask.Flask(__name__)
 """
 Se realizan las redirecciones de las peticiones de manera conveniente. Cada peticion
@@ -59,6 +59,11 @@ app.add_url_rule('/modificarProyecto',
 app.add_url_rule('/listarProyectos/',
                  view_func=ListarProyectos.as_view('listarProyectos'),
                  methods=["GET", "POST"])
+
+#ESTO corresponde a many to many de agregar proyecto
+'''app.add_url_rule('/agregarMiembrosProyecto/',
+                 view_func=AgregarMiembrosProyecto.as_view('agregarMiembrosProyecto'),
+                 methods=["GET", "POST"])'''
 
 
 

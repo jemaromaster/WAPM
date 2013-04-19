@@ -235,14 +235,234 @@
 </div>
 {% endblock %} 
 {% block body %}
-<div>
+<div id="dialogo-agregar-miembros" title="Agregar Miembros a Proyecto" >
 	<table id="listMiembros"></table>
 	<div id="pagerMiembros"></div>
 </div>
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
-	var bandera;
+	var banderita;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+	agregarMiembros();
+	function abrirDialogoMiembros(){
+		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowProyecto== null) {
+			mostrarMensaje("Atencion", "Seleccione el proyecto a cual administrar miembros ");
+			return;
+		}
+		$('#dialogo-agregar-miembros').dialog("open");
+	}
+	$('#dialogo-agregar-miembros').dialog(
+			{
+				autoOpen : false,
+				width : 1000,
+				modal : true,
+				resizable : true,
+				buttons : {
+					/* funcion asociado al boton aceptar */
+					"Agregar" : function() {
+						/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+						var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
+						var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+						if (rowMiembros == null) {
+							mostrarMensaje("Atencion", "Seleccione el Usuario a agregar");
+							return;
+						}
+						if (rowProyecto== null) {
+							mostrarMensaje("Atencion", "Seleccione el proyecto");
+							return;
+						}
+						
+						var rowdata = $('#list').getRowData(rowProyecto);
+						var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
+						
+						if(rowdataMiembros.activo=='false'){
+							mostrarMensaje(
+									"Atencion",
+									"No se puede agregar usuario inactivo a un proyecto");
+						}
+							/* se indica la URL */
+							$.post(
+									'/agregarMiembrosProyecto/',
+									{ /* se indican los parametros*/
+										idProyecto : rowdata.idProyecto,
+										idUsuario: rowdataMiembros.idUsuario
+										
+									},
+									function(data, status) {
+										/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+										/* si hay error se muestra el mensaje*/
+										if (data.substring(0, 1) == 't') {
+											mostrarMensaje(
+													"Error",
+													"Los datos no se han podido guardar:\n"
+															+ data
+																	.substring(2));
+											/* se indica que no hubieron errores */
+										} else {
+											mostrarMensaje("Exito",data.substring(2));
+										}
+										/* se indicar la recarga de la tabla */
+										$('#listMiembros').trigger(
+												"reloadGrid");
+									});
+
+							/* si el dato se modifica se llama a la url para modificar*/
+						},"Quitar": function() {
+							var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
+							if (rowMiembros == null) {
+								mostrarMensaje("Atencion", "Seleccione el Usuario a agregar");
+								return;
+							}
+							var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+							if (rowProyecto== null) {
+								mostrarMensaje("Atencion", "Seleccione el proyecyo");
+								return;
+							}
+							
+							var rowdata = $('#list').getRowData(rowProyecto);
+							var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
+							/* se indica la url */
+							$.post('/QuitarMiembroProyecto',
+											{
+												idProyecto : rowdata.idProyecto,
+												idUsuario: rowdataMiembros.idUsuario
+											},
+											function(data, status) {
+
+												if (data
+														.substring(0, 1) == 't') {
+													mostrarMensaje("Error","Usuario no se ha podido quitar:\n"
+																	+ data.substring(2));
+												} else {
+													mostrarMensaje(
+															"Exito",
+															"Usuario ha sido quitado del proyecto");
+												}
+												$('#listMiembros').trigger(
+														"reloadGrid");
+											});
+						},
+					"Salir" : function() {
+						$(this).dialog("close");
+					}
+				}
+			});
+	function agregarMiembros(){
+						var grid = jQuery("#listMiembros")
+								.jqGrid(
+										{
+
+											// datatype : "local",
+											// data:mydata,
+											url : 'http://localhost:5000/listarUsuarios',
+											datatype : "json",
+											mtype : "get",
+											colNames : [ 'ID Usuario ',
+													'Cedula',
+													'Nombre de Usuario',
+													'Nombre', 'Apellido',
+													'Password', 'Email',
+													'Direccion', 'Telefono',
+													'Observacion', 'Activo' ],
+											colModel : [
+													{
+														name : 'idUsuario',
+														index : 'idUsuario',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'ci',
+														index : 'ci',
+														width : 200,
+														hidden : true
+},{
+														name : 'nombreUsuario',
+														index : 'nombreUsuario',
+														width : 200
+													},
+													{
+														name : 'nombre',
+														index : 'nombre',
+														width : 180
+													},
+													{
+														name : 'apellido',
+														index : 'apellido',
+														width : 180
+													},
+													{
+														name : 'pass',
+														index : 'pass',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'email',
+														index : 'email',
+														width : 180
+													},
+													{
+														name : 'direccion',
+														index : 'direccion',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'telefono',
+														index : 'telefono',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'observacion',
+														index : 'observacion',
+														width : 200,
+														hidden : true
+													},
+													{
+														name : 'activo',
+														index : 'activo',
+														formatter : 'select',
+														stype : 'select',
+														editoptions : {
+															value : "true:Activo;false:Inactivo"
+														},
+														hidden : true
+													}
+
+											],
+											sortname : 'nombreUsuario',
+											viewrecords : true,
+											rownumbers : true,
+											sortorder : "desc",
+											ignoreCase : true,
+											pager : '#pagerMiembros',
+											caption : "Lista de Usuarios",
+											jsonReader : {
+												root : "invdata",
+												page : "currpage",
+												total : "totalpages",
+												records : "totalrecords",
+												repeatitems : false,
+												id : "idUsuario"
+											}
+
+										}).jqGrid('navGrid', '#pagerMiembros', {
+									edit : false,
+									add : false,
+									del : false,
+									search : false,
+									refresh : false
+								});
+						grid.jqGrid('filterToolbar', {
+							stringResult : true,
+							searchOnEnter : false,
+							defaultSearch : "cn"
+						});
+					};
 	$("#dialogo-datos-cliente")
 			.dialog(
 					{
@@ -371,7 +591,7 @@
 		/* se vacian los elementos HTML de captura de datos */
 		$("#nombreProyecto").val("").attr('disabled', false);
 		$("#idProjectLeader").val("").attr('disabled', false);
-		$("#nombreProjectLeader").val("").attr('disabled', false);
+		$("#nombreProjectLeader").val("{{session['username']}}").attr('disabled', true);
 		$("#datepicker").val("").attr('disabled', false);
 		$("#datepicker2").val("").attr('disabled', false);
 		$("#presupuesto").val("").attr('disabled', false);
@@ -398,7 +618,7 @@
 		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', false);
 		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', false);
 		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', false);
-		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', false);
+		$("#nombreProjectLeader").val("{{session['username']}}").attr('disabled', true);
 		$("#datepicker").val(rowdata.fechaInicio).attr('disabled', false);
 		$("#datepicker2").val(rowdata.fechaFinalizacion).attr('disabled', false);
 		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', false);
@@ -423,7 +643,7 @@
 		var rowdata = $('#list').getRowData(row);
 		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', true);
 		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', true);
-		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', true);
+		$("#idProjectLeader").val("{{session['username']}}").attr('disabled', true);
 		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', true);
 		$("#datepicker").val(rowdata.fechaInicio).attr('disabled', true);
 		$("#datepicker2").val(rowdata.fechaFinalizacion).attr('disabled', true);
@@ -464,6 +684,8 @@
 			<input type="button" name="detalle" onclick='modificar();'
 				value="Modificar" /> <input type="button" name="consultar"
 				value="Consultar" onclick='consultar()' />
+			<input type="button" name="agregarMiembrosButton"
+				value="Agregar Miembros Proyecto" onclick='abrirDialogoMiembros()' />
 
 		</div></td>
 </tr>

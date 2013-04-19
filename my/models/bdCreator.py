@@ -14,5 +14,5 @@ def initDB():
     """
     from models.proyectoModelo import Proyecto
     from models.usuarioModelo import Usuario
-    
+    #from models.proyectoModelo import miembrosProyectoTabla
     Base.metadata.create_all(engine)      
