@@ -1,14 +1,14 @@
 from sqlalchemy import Table,Column, Integer, String, ForeignKey, Date, Float
-from sqlalchemy.orm import relationship,backref
+from sqlalchemy.orm import relationship,backref, mapper
 from bdCreator import Base
 import flask.views
 from usuarioModelo import Usuario
 
-'''miembrosProyectoTabla= Table('MIEMBROS_PROYECTO', Base.metadata,
+
+miembrosProyectoTabla= Table('MIEMBROS_PROYECTO', Base.metadata,
     Column('PROYECTO', Integer, ForeignKey('PROYECTO.id_proyecto')),
     Column('USUARIO', Integer, ForeignKey('USUARIO.id'))
-)'''
-
+)
 
 class Proyecto(Base):
     """
@@ -31,9 +31,9 @@ class Proyecto(Base):
     observacion=Column("observacion",String(50))
     nroFases=Column("nro_fases", Integer)
     estado=Column("estado",String(15))
-    '''usuariosMiembros=relationship("Usuario",
+    usuariosMiembros=relationship('Usuario',
                                   secondary=miembrosProyectoTabla,
-                                  backref="Usuario")'''
+                                  backref='proyectos')
     
     def setValues(self,nombreProyecto,projectLeaderId,fechaInicio,fechaFinalizacion,presupuesto, \
                   observacion,nroFases,estado):
@@ -61,8 +61,11 @@ class Proyecto(Base):
         self.nroFases=nroFases;
         self.presupuesto=presupuesto;
         self.estado=estado;
-    
-    '''def setMiembrosProyecto(self, usuarioMiembroId):
-        print ' el length es'+str((len(self.usuariosMiembros)))
-        
-        self.usuariosMiembros=self.usuariosMiembros.append(int(usuarioMiembroId))'''
+
+
+
+
+'''mapper(Proyecto,'PROYECTO', properties={
+
+})  '''   
+       

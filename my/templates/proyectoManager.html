@@ -220,8 +220,9 @@
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var banderita;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
-	agregarMiembros();
+	
 	function abrirDialogoMiembros(){
+		agregarMiembros();
 		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
 		if (rowProyecto== null) {
 			mostrarMensaje("Atencion", "Seleccione el proyecto a cual administrar miembros ");
@@ -263,7 +264,7 @@
 									'/agregarMiembrosProyecto/',
 									{ /* se indican los parametros*/
 										idProyecto : rowdata.idProyecto,
-										idUsuario: rowdataMiembros.idUsuario
+										idUsuarioAgregar: rowdataMiembros.idUsuario
 										
 									},
 									function(data, status) {
@@ -327,22 +328,27 @@
 				}
 			});
 	function agregarMiembros(){
+		//var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
+		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+		var rowdata = $('#list').getRowData(rowProyecto);
+		//var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
 						var grid = jQuery("#listMiembros")
 								.jqGrid(
 										{
 
 											// datatype : "local",
 											// data:mydata,
-											url : 'http://localhost:5000/listarUsuarios',
+											url : 'http://localhost:5000/listarMiembrosProyecto',
 											datatype : "json",
 											mtype : "get",
+											postData:{idProyecto:rowdata.idProyecto},
 											colNames : [ 'ID Usuario ',
 													'Cedula',
 													'Nombre de Usuario',
 													'Nombre', 'Apellido',
 													'Password', 'Email',
 													'Direccion', 'Telefono',
-													'Observacion', 'Activo' ],
+													'Observacion','Es Miembro', 'Activo' ],
 											colModel : [
 													{
 														name : 'idUsuario',
@@ -398,7 +404,16 @@
 														index : 'observacion',
 														width : 200,
 														hidden : true
-													},
+													},{ name: 'enProyecto', index: 'enProyecto', width: 90, 
+														align: "center",
+														formatter:'select',
+														stype:'select',
+														editoptions: { value:"true:Si;false:No"}, 
+														/*formatter:function (cellvalue, options, rowObject) {
+														      return '<input type="checkbox" name="checkbox'+rowObject.idUsuario+'"' + (cellvalue ? ' checked="checked"' : '') + 
+														      'onclick="postOnCheckBoxSelectAgregarProyecto(' +rowObject.idUsuario+','+cellvalue+')"/>';
+														  }*/
+														},
 													{
 														name : 'activo',
 														index : 'activo',
@@ -426,6 +441,7 @@
 												repeatitems : false,
 												id : "idUsuario"
 											}
+											
 
 										}).jqGrid('navGrid', '#pagerMiembros', {
 									edit : false,
@@ -440,6 +456,24 @@
 							defaultSearch : "cn"
 						});
 					};
+	 
+	  
+	/*function postOnCheckBoxSelectAgregarProyecto(idUsuario, valorCelda){
+		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowProyecto== null) {
+			mostrarMensaje("Atencion", "Seleccione el proyecto en la grilla anterior");
+			return;
+		}
+		
+		var rowdata = $('#list').getRowData(rowProyecto);
+		
+		if($('#checkbox').is(':checked')){
+			alert('proyecto eskjnkjjnjnkjkj'+ idUsuario+valorCelda)
+		}else{
+			alert('proyecto eslaal'+ idUsuario+valorCelda)
+		}
+	}*/
+	  
 	$("#dialogo-datos-cliente")
 			.dialog(
 					{

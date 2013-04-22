@@ -72,7 +72,7 @@
 						width : 500,
 						height:240,
 						buttons : {
-							"Aceptar" : function() {
+							"Aceptar" : function enviarPostLogin() {
 								passMd5= MD5($("#pass").val().trim());
 											$.post('/',{ 
 													username : $(
@@ -94,9 +94,16 @@
 							}
 							
 						}
-					});
+					})
+					
+			//Esto es para que cuando haga enter envie el post que esta mas arriba
+			$("#dialogoLogin").keypress(function(e) {
+        			if (e.which == 13) {
+     						 $("button:contains('Aceptar')").click();
+        			}
+        	});
 	
-	 
+	 $
 		</script>
 	 {% endif %}	
  </body>

@@ -2,7 +2,7 @@
 import flask.views
 from utils import login_required
 from models.usuarioModelo import Usuario
-from UsuarioController import UsuarioControllerClass;
+from Usuarios.UsuarioController import UsuarioControllerClass;
 
 
 
@@ -13,6 +13,7 @@ class AgregarUsuario(flask.views.MethodView):
     debe comportarse la clase segun el tipo de peticion que 
     se realizo 
     """
+    
     @login_required
     def get(self):
         return flask.render_template('crearUsuario.html')

@@ -2,17 +2,20 @@ import flask, flask.views
 from flask import jsonify
 
 
-from usuarioManager import UsuarioManager
-from agregarUsuario import AgregarUsuario
-from modificarUsuario import ModificarUsuario
+from Usuarios.usuarioManager import UsuarioManager
+from Usuarios.agregarUsuario import AgregarUsuario
+from Usuarios.modificarUsuario import ModificarUsuario
+from Usuarios.listarUsuarios import ListarUsuarios
 
-from proyectoManager import ProyectoManager
-from modificarProyecto import ModificarProyecto
-from agregarProyecto import AgregarProyecto
-from listarProyecto import ListarProyectos
+from Proyectos.proyectoManager import ProyectoManager
+from Proyectos.modificarProyecto import ModificarProyecto
+from Proyectos.agregarProyecto import AgregarProyecto
+from Proyectos.listarProyecto import ListarProyectos
+from Proyectos.agregarMiembrosProyecto import AgregarMiembrosProyecto
+from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
+
 
 from login import Login
-from listarUsuarios import ListarUsuarios
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -47,7 +50,9 @@ app.add_url_rule('/usuarioManager/modificarUsuario',
                  view_func=ModificarUsuario.as_view('modificarUsuario'),
                  methods=["GET", "POST"])
 
-
+app.add_url_rule('/listarMiembrosProyecto/',
+                 view_func=ListarMiembrosProyecto.as_view('listarMiembrosProyecto'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarProyecto/',
                  view_func=AgregarProyecto.as_view('agregarProyecto'),
                  methods=["GET", "POST"])
@@ -58,6 +63,10 @@ app.add_url_rule('/listarProyectos/',
                  view_func=ListarProyectos.as_view('listarProyectos'),
                  methods=["GET", "POST"])
 
+#Corresponde a agregar Miembro de proyecto
+app.add_url_rule('/agregarMiembrosProyecto/',
+                 view_func=AgregarMiembrosProyecto.as_view('agregarMiembrosProyecto'),
+                 methods=["GET", "POST"])
 
 
 app.debug = True

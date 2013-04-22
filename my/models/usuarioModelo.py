@@ -15,7 +15,7 @@ class Usuario(Base):
     #Columnas
     id = Column("id",Integer, primary_key=True)
     username =  Column("username",String(20))
-    passwd=Column("passwd",String(20))
+    passwd=Column("passwd",String(32))
     nombres=Column("nombres",String(30))
     apellidos=Column("apellidos",String(30))
     email=Column("email",String(30))

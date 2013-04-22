@@ -30,7 +30,7 @@ class Login(flask.views.MethodView):
         c=sesion.query(Usuario).filter(Usuario.username==username).filter(Usuario.passwd==passwd).count()
         usuarioSesion=sesion.query(Usuario).filter(Usuario.username==username).filter(Usuario.passwd==passwd).first()
         if usuarioSesion == None:
-            responde=make_response("t,Usuario no existe o el passaword es incorrecto")
+            responde=make_response("t,Usuario no existe o el password es incorrecto")
             return responde
         idUsuarioSession=usuarioSesion.id;
         

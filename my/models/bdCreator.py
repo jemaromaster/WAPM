@@ -1,6 +1,7 @@
 import flask.views
 from sqlalchemy import create_engine
-engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
+#engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
+engine = create_engine('postgresql://postgres:pm@localhost:5432/wapm')
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 from sqlalchemy.orm import sessionmaker
@@ -14,5 +15,5 @@ def initDB():
     """
     from models.proyectoModelo import Proyecto
     from models.usuarioModelo import Usuario
-    #from models.proyectoModelo import miembrosProyectoTabla
+    from models.proyectoModelo import miembrosProyectoTabla
     Base.metadata.create_all(engine)      
