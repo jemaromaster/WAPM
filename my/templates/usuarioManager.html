@@ -30,6 +30,7 @@
 													'Nombre', 'Apellido',
 													'Password', 'Email',
 													'Direccion', 'Telefono',
+													'pl','admin',
 													'Observacion', 'Activo' ],
 											colModel : [
 													{
@@ -74,6 +75,16 @@
 														name : 'direccion',
 														index : 'direccion',
 														
+														hidden : true
+													},
+													{
+														name : 'pl',
+														index : 'pl',
+														hidden : true
+													},
+													{
+														name : 'admin',
+														index : 'admin',
 														hidden : true
 													},
 													{
@@ -169,12 +180,12 @@
 
 <div id="dialogo-datos-cliente" title="Datos de Usuarios">
 	<form title="(*) campos obligatorios">
-		<fieldset class="fieldset">
+		<fieldset class="fieldset" style="width: 100%;" >
 			<input type="hidden" name="idUsuario" id="idUsuario" />
 			<table>
 				<tr>
-					<td><label for="name" style="display: block">*Nombre
-							de Usuario</label> <input type="text" name="nombreUsuario"
+					<td><label for="name" style="display: block">*Username</label> 
+					<input type="text" name="nombreUsuario"
 						id="nombreUsuario" class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
@@ -182,6 +193,11 @@
 						<input type="password" name="pass" id="pass"
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+					<td>
+					<input id="checkPL" type="checkbox">Es project Leader</input>	
+					<br></br>
+					<input id="checkAdmin" type="checkbox">Es Administrador</input>
 					</td>
 				</tr>
 				<tr>
@@ -224,7 +240,7 @@
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
 			</textarea></td>
-					<td><label for="activo" style="display: block">Activo</label>
+					<td><label for="activo" style="display: block">Estado</label>
 						<select id="activo"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
 						class="ui-widget-content ui-corner-all">
@@ -247,7 +263,7 @@
 						autoOpen : false,
 						modal : true,
 						resizable : false,
-						width : 550,
+						width : 650,
 						buttons : {
 							"Aceptar" : function() {
 								passMd5= MD5($("#passActual").val().trim());
@@ -297,7 +313,7 @@
 						autoOpen : false,
 						modal : true,
 						resizable : false,
-						width : 550,
+						width : 580,
 						buttons : {
 							/* funcion asociado al boton aceptar */
 							"Aceptar" : function() {
@@ -309,8 +325,21 @@
 												"Campos completados incorrectamente");
 									} else {
 										var passCd= MD5($("#pass").val());
+										
+										listaRS=["0","0"];
+										if ($('#checkPL').is(":checked")){
+											
+											listaRS[0]="1"
+										}
+										if ($('#checkAdmin').is(":checked")){
+											listaRS[1]="1"
+											
+										}
+										rolSistemaJSON=JSON.stringify(listaRS);	
+										
 										$.post('/agregarUsuario/',{ 
 											/* se indican los parametros*/
+															rolSistema: rolSistemaJSON,
 															nombreUsuario : $(
 																	"#nombreUsuario")
 																	.val(),
@@ -372,7 +401,7 @@
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
-
+										
 										/* se indica la url */
 										$
 												.post(
@@ -452,6 +481,15 @@
 	}
 	function cargarForm(rowdata, row) {
 		rowdata = $('#list').getRowData(row);
+		$('#checkPL').prop('checked', false);
+		$('#checkAdmin').prop('checked', false);
+		if(rowdata.pl=="1")
+			$('#checkPL').prop('checked', true);
+		if(rowdata.admin=="1")
+			$('#checkAdmin').prop('checked', true);
+		
+		
+		
 		$("#idUsuario").val(rowdata.idUsuario);
 		$("#pass").val(rowdata.pass);
 		$("#nombreUsuario").val(rowdata.nombreUsuario);
@@ -467,6 +505,8 @@
 	}
 
 	function setCamposDisabled(habilitar) {
+		$('#checkPL').prop('disabled', habilitar);
+		$('#checkAdmin').prop('disabled', habilitar);
 		$("#idUsuario").attr('disabled', habilitar);
 		$("#pass").attr('disabled', habilitar);
 		$("#nombreUsuario").attr('disabled', habilitar);
@@ -547,7 +587,7 @@
 		return error;
 	}
 
-	/* funcion para llamar al formulario agregar un nuevo datos */
+	/* funcion para llamar al formulario para modificar un pass*/
 	function cambiarPass() {
 		
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
@@ -562,10 +602,14 @@
 		$("#passNuevo").val("");
 		$("#dialogoPass").dialog("open");
 	}
-	
+	/* funcion para llamar al formulario agregar un nuevo datos */
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
+		
+		$('#checkPL').prop('checked', false);
+		$('#checkAdmin').prop('checked', false);	
+		
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idUsuario").val("");
 		$("#pass").val("");
@@ -601,6 +645,7 @@
 		/*se habilita la edicion*/
 		setCamposDisabled(false);
 		$.enmascarar();
+		
 		/*el pass no puede ser modificado aqui, se debe ir a cambiar pass*/
 		$("#pass").attr('disabled', true);
 		/* se llama al dialogo para modificar los datos */

@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from bdCreator import Base
-import flask.views
+from bdCreator import Base 
 class Usuario(Base):
     """
     Esta clase se utiliza para mapear a sus instancias con la tabla de USUARIO
@@ -10,7 +9,7 @@ class Usuario(Base):
     ci, telefono, observacion,activo,direccion
     """
     #Nombre de la tabla
-    __tablename__ = 'USUARIO'
+    __tablename__ = 'usuario'
     
     #Columnas
     id = Column("id",Integer, primary_key=True)

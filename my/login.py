@@ -2,6 +2,7 @@ import flask
 from flask import views,make_response
 from models.bdCreator import Session
 from models.usuarioModelo import Usuario
+from models.rolSistemaModelo import RolSistema
 sesion=Session()
 
 class Login(flask.views.MethodView):
@@ -12,12 +13,14 @@ class Login(flask.views.MethodView):
     """
     def get(self):
         if 'username' in flask.session:
-            return flask.render_template('usuarioManager.html')
+            return flask.render_template('main.html')
         return flask.render_template('index.html')
     
     def post(self):
         if 'logout' in flask.request.form:
             flask.session.pop('username', None)
+            flask.session.pop('rolPL', None)
+            flask.session.pop('rolAdmin', None)
             return flask.redirect(flask.url_for('index'))
         required = ['username', 'passwd']
         for r in required:
@@ -33,12 +36,21 @@ class Login(flask.views.MethodView):
             responde=make_response("t,Usuario no existe o el password es incorrecto")
             return responde
         idUsuarioSession=usuarioSesion.id;
-        
         if c==1:
             flask.session['username'] = username
             flask.session['idUsuario']= idUsuarioSession
+            self.includeRolSistemaSesion(usuarioSesion)
         else:
             responde=make_response("t,Usuario no existe o el passaword es incorrecto")   
             return responde
-        return flask.redirect(flask.url_for('usuarioManager'))
+        sesion.close()
+        return flask.redirect('/')
         #return flask.render_template('usuarioManager.html')
+    def includeRolSistemaSesion(self,usuario):
+        rolPL=sesion.query(RolSistema).filter(RolSistema.nombre=="Project Leader").one()
+        rolAdmin=sesion.query(RolSistema).filter(RolSistema.nombre=="Administrador").one()
+        if rolPL in usuario.roles_sistema:
+            print "pl is a project leader!"
+            flask.session['rolPL']="1"
+        if rolAdmin in usuario.roles_sistema:
+            flask.session['rolAdmin']="1"

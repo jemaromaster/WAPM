@@ -5,9 +5,9 @@ import flask.views
 from usuarioModelo import Usuario
 
 
-miembrosProyectoTabla= Table('MIEMBROS_PROYECTO', Base.metadata,
-    Column('PROYECTO', Integer, ForeignKey('PROYECTO.id_proyecto')),
-    Column('USUARIO', Integer, ForeignKey('USUARIO.id'))
+miembrosProyectoTabla= Table('miembros_proyecto', Base.metadata,
+    Column('proyecto', Integer, ForeignKey('proyecto.id_proyecto')),
+    Column('usuario', Integer, ForeignKey('usuario.id'))
 )
 
 class Proyecto(Base):
@@ -19,12 +19,12 @@ class Proyecto(Base):
     fases, projectLeader, Observacion, Presupuesto
     """
     #Nombre de la tabla
-    __tablename__ = 'PROYECTO'
+    __tablename__ = 'proyecto'
     
     #Columnas
     idProyecto = Column("id_proyecto",Integer, primary_key=True)
     nombreProyecto =  Column("nombre_proyecto",String(20))
-    projectLeaderId=Column("project_leader_id",Integer, ForeignKey("USUARIO.id"))
+    projectLeaderId=Column("project_leader_id",Integer, ForeignKey("usuario.id"))
     fechaInicio=Column("fecha_inicio",Date)
     fechaFinalizacion=Column("fecha_finalizacion" ,Date)
     presupuesto=Column("presupuesto",Float)

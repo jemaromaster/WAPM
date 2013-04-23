@@ -20,7 +20,8 @@ from login import Login
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
-
+from models import poblarBD
+ 
 app = flask.Flask(__name__)
 """
 Se realizan las redirecciones de las peticiones de manera conveniente. Cada peticion
@@ -28,12 +29,13 @@ entrante debe estar asociada a una URL, con dicha URL la peticion es canalizada 
 de las reglas de URL a las funciones que se haran cargo de senrvirlas
 """
 initDB()
+poblarBD.cargaEstatica()
+
 # Don't do this
 app.secret_key = "bacon"
 app.add_url_rule('/',
                  view_func=Login.as_view('index'),
                  methods=["GET", "POST"])
-
 app.add_url_rule('/usuarioManager/',
                  view_func=UsuarioManager.as_view('usuarioManager'),
                  methods=["GET", "POST"])

@@ -1,6 +1,7 @@
 import flask
 import flask.views
 from utils import login_required
+from utils import rolAdmin_required
 
 class UsuarioManager(flask.views.MethodView):
     """
@@ -8,10 +9,12 @@ class UsuarioManager(flask.views.MethodView):
     cuestiones de mantenimiento de usuarios del sistema
     """
     @login_required
+    @rolAdmin_required
     def get(self):
         return flask.render_template('usuarioManager.html')
-    
+        
     @login_required
+    @rolAdmin_required
     def post(self):
         result = eval(flask.request.form['expression'])
         flask.flash(result)

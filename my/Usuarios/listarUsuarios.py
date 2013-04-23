@@ -3,7 +3,7 @@ import flask.views
 from flask import jsonify,json
 from models.bdCreator import Session
 from models.usuarioModelo import Usuario 
-
+from models.rolSistemaModelo import RolSistema
 sesion=Session()
 
 
@@ -32,12 +32,21 @@ class Respuesta():
         p='' 
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
         pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
+        admin=sesion.query(RolSistema).filter(RolSistema.nombre=="Administrador").one()
+        pl=sesion.query(RolSistema).filter(RolSistema.nombre=="Project Leader").one()
         
         for usuario in listaUsuario:
-            p=p+"{\"nombreUsuario\": \""+usuario.username+"\",\"nombre\": \""+usuario.nombres+"\", \"idUsuario\": \""+str(usuario.id)+"\",\"email\": \""+usuario.email+"\", \"ci\": \""+usuario.ci +"\", \"apellido\": \""+usuario.apellidos+"\", \"telefono\": \""+usuario.telefono+"\", \"direccion\": \""+usuario.direccion+"\", \"pass\": \""+usuario.passwd+"\", \"observacion\": \""+usuario.observacion+"\", \"activo\":\""+usuario.activo+"\"},"
+            rolAdmin="0";rolPL="0"
+            if admin in usuario.roles_sistema:
+                rolAdmin="1"
+            if pl in usuario.roles_sistema:
+                rolPL="1"
+            p=p+"{\"nombreUsuario\": \""+usuario.username+"\",\"nombre\": \""+usuario.nombres+"\", \"idUsuario\": \""+str(usuario.id)+"\",\"email\": \""+usuario.email+"\", \"ci\": \""+usuario.ci +"\", \"apellido\": \""+usuario.apellidos+"\", \"telefono\": \""+usuario.telefono+"\", \"direccion\": \""+usuario.direccion+"\", \"pass\": \""+usuario.passwd+"\", \"pl\": \""+rolPL+"\",\"admin\": \""+rolAdmin+"\",\"observacion\": \""+usuario.observacion+"\", \"activo\":\""+usuario.activo+"\"},"
         p=p[0:len(p)-1]    
         p=p+"]}"    
         p=pre+p
+        
+        
         return p 
         
 class ListarUsuarios(flask.views.MethodView):
