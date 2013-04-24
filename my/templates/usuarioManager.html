@@ -156,17 +156,16 @@
 <div id="dialogoPass" title="Modificacion de Pass del Usuario">
 	<form >
 		<fieldset class="fieldset">
-				<input type="hidden" name="passControl" id="passControl" />
 				<input type="hidden" name="idControl" id="idControl" />
 				<table>
 					<tr>
-						<td><label for="Actual" style="display: block">Pass Actual</label>
-						    <input type="password" name="passActual"
-							id="passActual" class="text ui-widget-content ui-corner-all"
+						<td><label for="Nuevo" style="display: block">Pass Nuevo</label>
+						    <input type="password" name="passNuevo"
+							id="passNuevo" class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 						</td>
-						<td><label for="Nuevo" style="display: block">Password Nuevo</label>
-							<input type="password" name="passNuevo" id="passNuevo"
+						<td><label for="Actual" style="display: block">Confirmar Pass</label>
+							<input type="password" name="passActual" id="passActual"
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 						</td>
@@ -266,45 +265,43 @@
 						width : 650,
 						buttons : {
 							"Aceptar" : function() {
-								passMd5= MD5($("#passActual").val().trim());
-								if(passMd5 != $("#passControl").val() ){
-									
+								
+								if ($("#passNuevo").val().trim().length > 1 )
+								{
+												pass2Md5= MD5($("#passActual").val().trim());	
+												pass1Md5= MD5($("#passNuevo").val().trim());
+												if (pass2Md5 != pass1Md5){
+													mostrarMensaje("Error", "Pass no coinciden");
+												}else{
+														$.post('modificarUsuario',{ 
+															idUsuario : $(
+															"#idControl")
+															.val(),
+															passNuevo : pass1Md5 
+														},
+														function(data, status) {
+															/* si hay error se muestra el mensaje*/
+																$("#dialogoPass").dialog("close");
+																mostrarMensaje("Exito",data.substring(2));
+																$('#list')
+																.trigger(
+																		"reloadGrid");
+														}
+														);
+													}	
+								}else{
 									mostrarMensaje(
 											"Error",
-											"El pass actual introducido es erroneo"
+											"Se debe especificar el nuevo Pass"
 													);
-									
-								}else{
-										if ($("#passNuevo").val().trim().length > 1)
-											{
-												passMd5= MD5($("#passNuevo").val())
-												$.post('modificarUsuario',{ 
-													idUsuario : $(
-													"#idControl")
-													.val(),
-													passNuevo : passMd5 
-												},
-												function(data, status) {
-													/* si hay error se muestra el mensaje*/
-														$("#dialogoPass").dialog("close");
-														mostrarMensaje("Exito",data.substring(2));
-														$('#list')
-														.trigger(
-																"reloadGrid");
-												});
-											}else{
-												mostrarMensaje(
-														"Error",
-														"Se debe especificar el nuevo Pass"
-																);
-											}
+								}
 									}
 									
 							},
 							"Cancelar" : function() {
 								$(this).dialog("close");
 							}
-						}
+						
 					});
 					
 	$("#dialogo-datos-cliente")
@@ -597,7 +594,6 @@
 		}
 		rowdata = $('#list').getRowData(row);
 		$("#idControl").val(rowdata.idUsuario);
-		$("#passControl").val(rowdata.pass);
 		$("#passActual").val("");
 		$("#passNuevo").val("");
 		$("#dialogoPass").dialog("open");
