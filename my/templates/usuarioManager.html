@@ -181,35 +181,53 @@
 	<form title="(*) campos obligatorios">
 		<fieldset class="fieldset" style="width: 100%;" >
 			<input type="hidden" name="idUsuario" id="idUsuario" />
-			<table>
+			<table id="table1c" style="float:left">
 				<tr>
 					<td><label for="name" style="display: block">*Username</label> 
 					<input type="text" name="nombreUsuario"
 						id="nombreUsuario" class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
+				</tr>
+				<tr>
 					<td><label for="pass" style="display: block">*Password</label>
 						<input type="password" name="pass" id="pass"
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
+				</tr>
+				<tr>	
+					<td><label for="confirmPass" style="display: block">*Confirmar Password</label>
+						<input type="password" name="confirmPass" id="confirmPass"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				<tr>
 					<td>
 					<input id="checkPL" type="checkbox">Es project Leader</input>	
 					<br></br>
 					<input id="checkAdmin" type="checkbox">Es Administrador</input>
 					</td>
 				</tr>
+			</table>		
+			<table style="float:left">		
+				
 				<tr>
 					<td><label for="ci" style="display: block">*Cedula</label> <input
 						type="text" name="ci" id="ci"
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%; text-align: right;" />
 					</td>
+				</tr>
+				<tr>
 					<td><label for="name" style="display: block">*Nombre</label> <input
 						type="text" name="nombre" id="nombre"
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
+				</tr>
+				<tr>	
 					<td><label for="apellido" style="display: block">*Apellido</label>
 						<input type="text" name="apellido" id="apellido"
 						class="text ui-widget-content ui-corner-all"
@@ -222,11 +240,18 @@
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
+				</tr>
+			</table>
+			<table style="float:left">
+				
+				<tr>
 					<td><label for="direccion" style="display: block">Dirección</label>
 						<input type="text" name="direccion" id="direccion" value=""
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
+				</tr>	
+				<tr>	
 					<td><label for="telefono" style="display: block">Telefono</label>
 						<input type="text" name="telefono" id="telefono" value=""
 						class="text ui-widget-content ui-corner-all"
@@ -238,7 +263,9 @@
 						<textarea id="observacion"
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
-			</textarea></td>
+						</textarea></td>
+				</tr>
+				<tr>
 					<td><label for="activo" style="display: block">Estado</label>
 						<select id="activo"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
@@ -310,7 +337,7 @@
 						autoOpen : false,
 						modal : true,
 						resizable : false,
-						width : 580,
+						width : 780,
 						buttons : {
 							/* funcion asociado al boton aceptar */
 							"Aceptar" : function() {
@@ -489,6 +516,7 @@
 		
 		$("#idUsuario").val(rowdata.idUsuario);
 		$("#pass").val(rowdata.pass);
+		$("#confirmPass").val(rowdata.pass);
 		$("#nombreUsuario").val(rowdata.nombreUsuario);
 		$("#ci").val(rowdata.ci);
 		$("#nombre").val(rowdata.nombre);
@@ -506,6 +534,7 @@
 		$('#checkAdmin').prop('disabled', habilitar);
 		$("#idUsuario").attr('disabled', habilitar);
 		$("#pass").attr('disabled', habilitar);
+		$("#confirmPass").attr('disabled', habilitar);
 		$("#nombreUsuario").attr('disabled', habilitar);
 		$("#ci").attr('disabled', habilitar);
 		$("#nombre").attr('disabled', habilitar);
@@ -520,6 +549,7 @@
 	function control(esNuevo) {
 		$("#nombreUsuario").css('border-color', 'skyblue');
 		$("#pass").css('border-color', 'skyblue');
+		$("#confirmPass").css('border-color', 'skyblue');
 		$("#ci").css('border-color', 'skyblue');
 		$("#nombre").css('border-color', 'skyblue');
 		$("#apellido").css('border-color', 'skyblue');
@@ -541,6 +571,11 @@
 			len = $("#pass").val().trim().length;
 			if (len <= 0) {
 				$("#pass").css('border-color', 'red');
+				error = 1;
+			}
+			if ($("#pass").val().trim() != $("#confirmPass").val().trim()){
+				$("#pass").css('border-color', 'red');
+				$("#confirmPass").css('border-color', 'red');
 				error = 1;
 			}
 		}
@@ -600,6 +635,7 @@
 	}
 	/* funcion para llamar al formulario agregar un nuevo datos */
 	function agregar() {
+		$("#table1c").show();//muestra la tabla que contiene los campos pass confirmar pass roles y userName
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
 		
@@ -609,6 +645,7 @@
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idUsuario").val("");
 		$("#pass").val("");
+		$("#confirmPass").val("");
 		$("#nombreUsuario").val("");
 		$("#ci").val("");
 		$("#nombre").val("");
@@ -644,11 +681,18 @@
 		
 		/*el pass no puede ser modificado aqui, se debe ir a cambiar pass*/
 		$("#pass").attr('disabled', true);
+		$("#nombreUsuario").attr('disabled', true);
+		$("#confirmPass").attr('disabled', true);
+		$('#checkPL').prop('disabled', true);
+		$('#checkAdmin').prop('disabled', true);
+		$("#table1c").hide();//esconde la tabla que contiene los campos pass confirmar pass roles y userName 
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
+		
 	}
 
 	function consultar() {
+		$("#table1c").show();//muestra la tabla que contiene los campos pass confirmar pass roles y userName 
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
 		/* se comprueba que hay un dato seleccionado para consultar */
