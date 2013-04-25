@@ -61,11 +61,3 @@ class Proyecto(Base):
         self.nroFases=nroFases;
         self.presupuesto=presupuesto;
         self.estado=estado;
-
-
-
-
-'''mapper(Proyecto,'PROYECTO', properties={
-
-})  '''   
-       

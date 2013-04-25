@@ -219,15 +219,18 @@
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var banderita;
+	var yaentro;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 	
 	function abrirDialogoMiembros(){
-		agregarMiembros();
+		
 		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
 		if (rowProyecto== null) {
 			mostrarMensaje("Atencion", "Seleccione el proyecto a cual administrar miembros ");
 			return;
 		}
+		var rowdata = $('#list').getRowData(rowProyecto);
+		agregarMiembros(rowdata);
 		$('#dialogo-agregar-miembros').dialog("open");
 	}
 	$('#dialogo-agregar-miembros').dialog(
@@ -236,6 +239,8 @@
 				width : 1000,
 				modal : true,
 				resizable : true,
+				show: {effect: 'fade', duration: 400},
+				hide: {effect: 'fade', duration: 350},
 				buttons : {
 					/* funcion asociado al boton aceptar */
 					"Agregar" : function() {
@@ -302,7 +307,7 @@
 							var rowdata = $('#list').getRowData(rowProyecto);
 							var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
 							/* se indica la url */
-							$.post('/QuitarMiembroProyecto',
+							$.post('/QuitarMiembrosProyecto',
 											{
 												idProyecto : rowdata.idProyecto,
 												idUsuario: rowdataMiembros.idUsuario
@@ -327,10 +332,9 @@
 					}
 				}
 			});
-	function agregarMiembros(){
+	function agregarMiembros(rowdata){
 		//var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
-		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
-		var rowdata = $('#list').getRowData(rowProyecto);
+		
 		//var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
 						var grid = jQuery("#listMiembros")
 								.jqGrid(
@@ -342,13 +346,15 @@
 											datatype : "json",
 											mtype : "get",
 											postData:{idProyecto:rowdata.idProyecto},
+											show: {effect: 'fade', duration: 400},
+											hide: {effect: 'fade', duration: 350},
 											colNames : [ 'ID Usuario ',
 													'Cedula',
 													'Nombre de Usuario',
 													'Nombre', 'Apellido',
 													'Password', 'Email',
 													'Direccion', 'Telefono',
-													'Observacion','Es Miembro', 'Activo' ],
+													'Observacion','Es Miembro', 'Estado' ],
 											colModel : [
 													{
 														name : 'idUsuario',
@@ -361,7 +367,7 @@
 														index : 'ci',
 														width : 200,
 														hidden : true
-},{
+													},{
 														name : 'nombreUsuario',
 														index : 'nombreUsuario',
 														width : 200
@@ -408,11 +414,8 @@
 														align: "center",
 														formatter:'select',
 														stype:'select',
-														editoptions: { value:"true:Si;false:No"}, 
-														/*formatter:function (cellvalue, options, rowObject) {
-														      return '<input type="checkbox" name="checkbox'+rowObject.idUsuario+'"' + (cellvalue ? ' checked="checked"' : '') + 
-														      'onclick="postOnCheckBoxSelectAgregarProyecto(' +rowObject.idUsuario+','+cellvalue+')"/>';
-														  }*/
+														
+														editoptions: { value:"Todos:Todos;Si:Si;No:No"}, 
 														},
 													{
 														name : 'activo',
@@ -458,28 +461,15 @@
 					};
 	 
 	  
-	/*function postOnCheckBoxSelectAgregarProyecto(idUsuario, valorCelda){
-		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
-		if (rowProyecto== null) {
-			mostrarMensaje("Atencion", "Seleccione el proyecto en la grilla anterior");
-			return;
-		}
-		
-		var rowdata = $('#list').getRowData(rowProyecto);
-		
-		if($('#checkbox').is(':checked')){
-			alert('proyecto eskjnkjjnjnkjkj'+ idUsuario+valorCelda)
-		}else{
-			alert('proyecto eslaal'+ idUsuario+valorCelda)
-		}
-	}*/
-	  
+	
 	$("#dialogo-datos-cliente")
 			.dialog(
 					{
 						autoOpen : false,
 						width : 600,
 						modal : true,
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
 						resizable : false,
 						buttons : {
 							/* funcion asociado al boton aceptar */
@@ -672,6 +662,8 @@
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
+			show: {effect: 'fade', duration: 250},
+			hide: {effect: 'fade', duration: 200},
 			buttons : {
 				"Ok" : function() {
 					$(this).dialog("close");

@@ -21,7 +21,7 @@ class AgregarMiembrosProyecto(flask.views.MethodView):
     def post(self):
     
         idProyecto=flask.request.form['idProyecto']
-        
+        print 'Se busca ' + str(idProyecto)
         idUsuario=flask.request.form['idUsuarioAgregar']
         
         sesion=Session()
@@ -29,7 +29,10 @@ class AgregarMiembrosProyecto(flask.views.MethodView):
        
         if(idProyecto!=0):
             p=sesion.query(Proyecto).filter(Proyecto.idProyecto==int(idProyecto)).first()
-            p.usuariosMiembros.append(user)
+            if(user in p.usuariosMiembros):
+                return "t,Usuario ya existe en proyecto" 
+            else:
+                p.usuariosMiembros.append(user)
             sesion.add(p)
             sesion.commit()
         

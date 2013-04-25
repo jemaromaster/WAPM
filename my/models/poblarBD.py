@@ -3,6 +3,7 @@ from proyectoModelo import Proyecto
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
 import md5
+
 def poblar():
     sesion=Session()
     m=md5.new()
@@ -28,6 +29,10 @@ def cargaEstatica():
     """  
     sesion=Session()
     #Carga de valores de roles de sistema
+    u=None
+    rs1=None
+    rs2=None
+    rs3=None
     cargarValores=sesion.query(RolSistema).count()
     if cargarValores <= 0:
         rs1=RolSistema("Project Leader","El usuario tendra acceso a la creacion y administracion de proyectos")
@@ -36,8 +41,17 @@ def cargaEstatica():
         sesion.add(rs1)
         sesion.add(rs2)
         sesion.add(rs3)
-        sesion.commit()
         
-    #Carga de valores de permisos
-    #Carga de valores de tipos de atributos
+    
+    cargaValores=sesion.query(Usuario).count()
+    if cargarValores <= 0:
+        u=Usuario('super',str(md5.new('super').hexdigest()),'super','super','super@super.super','666'
+                  ,'0966666','ninguna','true','sl')
+        u.roles_sistema.append(rs1)
+        u.roles_sistema.append(rs2)
+        u.roles_sistema.append(rs3)
+        sesion.add(u)
+        
+    
+    sesion.commit()
     sesion.close()

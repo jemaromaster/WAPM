@@ -24,6 +24,8 @@
 											url : 'http://localhost:5000/listarUsuarios',
 											datatype : "json",
 											mtype : "get",
+											show: {effect: 'fade', duration: 200},
+											hide: {effect: 'fade', duration: 200},
 											colNames : [ 'ID Usuario ',
 													'Cedula',
 													'Nombre de Usuario',
@@ -168,6 +170,7 @@
 							<input type="password" name="passActual" id="passActual"
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+							
 						</td>
 					</tr>
 				</table>
@@ -266,13 +269,15 @@
 						</textarea></td>
 				</tr>
 				<tr>
-					<td><label for="activo" style="display: block">Estado</label>
+					<td><label  id="labelActivo" for="activo" style="display: block">Estado</label>
 						<select id="activo"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
 						class="ui-widget-content ui-corner-all">
 							<option value="true">Activo</option>
 							<option value="false">Inactivo</option>
-					</select></td>
+					</select>
+					<input  name="idEstado" id="idEstado" type="hidden" />
+					</td>
 				</tr>
 			</table>
 		</fieldset>
@@ -290,6 +295,8 @@
 						modal : true,
 						resizable : false,
 						width : 650,
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
 						buttons : {
 							"Aceptar" : function() {
 								
@@ -330,7 +337,7 @@
 							}
 						
 					});
-					
+
 	$("#dialogo-datos-cliente")
 			.dialog(
 					{
@@ -338,6 +345,8 @@
 						modal : true,
 						resizable : false,
 						width : 780,
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
 						buttons : {
 							/* funcion asociado al boton aceptar */
 							"Aceptar" : function() {
@@ -693,6 +702,9 @@
 
 	function consultar() {
 		$("#table1c").show();//muestra la tabla que contiene los campos pass confirmar pass roles y userName 
+		//$('#idEstado').detach().attr('type', 'text').attr('disabled',true).insertAfter('#activo').val($('#activo').val());
+		//cambia el comboBox por un campo disabled del estado 
+		//$('#activo').hide();
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
 		/* se comprueba que hay un dato seleccionado para consultar */

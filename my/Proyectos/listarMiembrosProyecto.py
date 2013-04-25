@@ -26,7 +26,7 @@ class Respuesta():
         self.totalRecords=totalRecords
         self.rows=rows
     
-    def jasonizar(self, listaUsuario):
+    def jasonizar(self, todosUsuarios, listaUsuariosEnProyecto, enProyecto):
         """
         modulo que jasoniza la respuesta
         """
@@ -34,8 +34,26 @@ class Respuesta():
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
         pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
         
-        for usuario in listaUsuario:
-            p=p+"{\"nombreUsuario\": \""+usuario.username+"\",\"nombre\": \""+usuario.nombres+"\", \"idUsuario\": \""+str(usuario.id)+"\",\"email\": \""+usuario.email+"\", \"ci\": \""+usuario.ci +"\", \"apellido\": \""+usuario.apellidos+"\", \"telefono\": \""+usuario.telefono+"\", \"direccion\": \""+usuario.direccion+"\", \"pass\": \""+usuario.passwd+"\", \"observacion\": \""+usuario.observacion+"\", \"activo\":\""+usuario.activo+"\"},"
+        SIoNO='no'
+        if(enProyecto=='Todos'):
+            for usuario in todosUsuarios:
+                if usuario in listaUsuariosEnProyecto:
+                    SIoNO='Si'
+                else:
+                    SIoNO='No'
+                
+                p=p+"{\"nombreUsuario\": \""+usuario.username+"\",\"nombre\": \""+usuario.nombres+"\", \"idUsuario\": \""+str(usuario.id)+"\",\"email\": \""+usuario.email+"\", \"ci\": \""+usuario.ci +"\", \"apellido\": \""+usuario.apellidos+"\", \"telefono\": \""+usuario.telefono+"\", \"direccion\": \""+usuario.direccion+"\", \"pass\": \""+usuario.passwd+"\", \"observacion\": \""+usuario.observacion+"\", \"enProyecto\": \""+ SIoNO + "\",\"activo\":\""+usuario.activo+"\"},"
+        elif enProyecto=='Si':
+            SIoNO='Si'
+            for usuario in listaUsuariosEnProyecto:
+                p=p+"{\"nombreUsuario\": \""+usuario.username+"\",\"nombre\": \""+usuario.nombres+"\", \"idUsuario\": \""+str(usuario.id)+"\",\"email\": \""+usuario.email+"\", \"ci\": \""+usuario.ci +"\", \"apellido\": \""+usuario.apellidos+"\", \"telefono\": \""+usuario.telefono+"\", \"direccion\": \""+usuario.direccion+"\", \"pass\": \""+usuario.passwd+"\", \"observacion\": \""+usuario.observacion+"\", \"enProyecto\": \""+ SIoNO + "\",\"activo\":\""+usuario.activo+"\"},"
+        elif enProyecto=='No':
+            SIoNO='No'
+            for usuario in todosUsuarios:
+                if usuario not in listaUsuariosEnProyecto:
+                    p=p+"{\"nombreUsuario\": \""+usuario.username+"\",\"nombre\": \""+usuario.nombres+"\", \"idUsuario\": \""+str(usuario.id)+"\",\"email\": \""+usuario.email+"\", \"ci\": \""+usuario.ci +"\", \"apellido\": \""+usuario.apellidos+"\", \"telefono\": \""+usuario.telefono+"\", \"direccion\": \""+usuario.direccion+"\", \"pass\": \""+usuario.passwd+"\", \"observacion\": \""+usuario.observacion+"\", \"enProyecto\": \""+ SIoNO + "\",\"activo\":\""+usuario.activo+"\"},"
+        
+            
         p=p[0:len(p)-1]    
         p=p+"]}"    
         p=pre+p
@@ -50,7 +68,7 @@ class ListarMiembrosProyecto(flask.views.MethodView):
         param2=flask.request.args.get('rows', '')
         idProyectoAFiltrar=flask.request.args.get('idProyecto', '')
         
-        
+        enProyecto='Todos'
         #caluclo de paginacion 
         page=long(param1)
         rows=long(param2)
@@ -110,21 +128,24 @@ class ListarMiembrosProyecto(flask.views.MethodView):
                     field=vector[i]['field']
                     continue
                 if field=='enProyecto':
-                    enProyecto=vector[i]['data']+'%'
+                    enProyecto=vector[i]['data']
                     i=i+1
                     field=vector[i]['field']
                     continue
             
             activo=vector[i]['data']
-           
-            
-            listaUsuario=sesion.query(Proyecto.usuariosMiembros).filter(Proyecto.idProyecto==idProyectoAFiltrar)\
-                .order_by(filtrarPor).filter((Usuario.username.like(nombreUsuario )& \
+            listaUsuarioEnProyecto=sesion.query(Usuario).join(Proyecto.usuariosMiembros)\
+                                    .filter(Proyecto.idProyecto==idProyectoAFiltrar)\
+                                    .filter(Usuario.activo.like('true'))
+                                    
+            todosUsuarios=sesion.query(Usuario).order_by(filtrarPor).filter((Usuario.username.like(nombreUsuario )& \
                                                     Usuario.nombres.like(nombre)&  \
                                                     Usuario.apellidos.like(apellido)&  \
                                                     Usuario.direccion.like(direccion)& \
                                                     Usuario.email.like (email) & \
                                                     Usuario.activo.like(activo)))[desde:hasta] 
+            
+             
             listaUsuario2=sesion.query(Usuario).order_by(filtrarPor).\
                                                     filter((Usuario.username.like(nombreUsuario )& \
                                                     Usuario.nombres.like(nombre)&  \
@@ -133,7 +154,7 @@ class ListarMiembrosProyecto(flask.views.MethodView):
                                                     Usuario.email.like (email) & \
                                                     Usuario.activo.like(activo)))[desde:hasta] 
                                                     
-            total=sesion.query(Usuario).filter((Usuario.username.like(nombreUsuario )& \
+            total=sesion.query(Usuario).order_by(filtrarPor).filter((Usuario.username.like(nombreUsuario )& \
                                                     Usuario.nombres.like(nombre)&  \
                                                     Usuario.apellidos.like(apellido)&  \
                                                     Usuario.direccion.like(direccion)& \
@@ -142,8 +163,9 @@ class ListarMiembrosProyecto(flask.views.MethodView):
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
-            listaUsuario=sesion.query(Usuario).join(Proyecto.usuariosMiembros).all()
-            
+            listaUsuarioEnProyecto=sesion.query(Usuario).join(Proyecto.usuariosMiembros).filter(Proyecto.idProyecto==idProyectoAFiltrar).filter(Usuario.activo.like('true'))
+            todosUsuarios=sesion.query(Usuario).order_by(filtrarPor).filter(Usuario.activo.like('true'))[desde:hasta]
+                                                    
             #listaUsuario=sesion.query(Usuario).order_by(filtrarPor).filter(\
                                                     #Usuario.activo.like('true'))[desde:hasta]
                                                     #.filter(Proyecto.idProyecto==idProyectoAFiltrar)\
@@ -158,7 +180,7 @@ class ListarMiembrosProyecto(flask.views.MethodView):
         else:
             totalPages=total/rows +1
         r=Respuesta(totalPages,page,total,rows);
-        respuesta=r.jasonizar(listaUsuario)
+        respuesta=r.jasonizar(todosUsuarios,listaUsuarioEnProyecto, enProyecto)
         return respuesta
         
       
