@@ -485,12 +485,12 @@
 								}
 							},
 							"Cancelar" : function() {
-								$(this).dialog("close");
+								$(this).dialog("close"); 
 							}
 						}
 					});
 	$.enmascarar = function() {
-		$("#ci").mask("?9999999999", {placeholder : ""});
+		$('#ci').number( true, 0 );
 		$("#telefono").mask("?9999999999999", {
 			placeholder : " "
 		});
@@ -654,13 +654,17 @@
 		$("#observacion").val("");
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
-		$.enmascarar(); 
+		
+		$.enmascarar();  
 
 		$("#dialogo-datos-cliente").dialog("open");
 	}
 
+	
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
+		
+		
 		prepararConsultar(false,0,0)
 		setBordeNormal();
 		/* se indica que el dato no es nuevo */
