@@ -11,273 +11,253 @@
 
 <script type="text/javascript">
 	//<![CDATA[
-	jQuery(document)
-			.ready(
-					function() {
-						
-						var grid = jQuery("#list")
-								.jqGrid(
-										{
+	jQuery(document).ready(
+			function() {
 
-											// datatype : "local",
-											// data:mydata,
-											url : 'http://localhost:5000/listarUsuarios',
-											datatype : "json",
-											mtype : "get",
-											show: {effect: 'fade', duration: 200},
-											hide: {effect: 'fade', duration: 200},
-											colNames : [ 'ID Usuario ',
-													'Cedula',
-													'Nombre de Usuario',
-													'Nombre', 'Apellido',
-													'Password', 'Email',
-													'Direccion', 'Telefono',
-													'pl','admin',
-													'Observacion', 'Activo' ],
-											colModel : [
-													{
-														name : 'idUsuario',
-														index : 'idUsuario',
-														
-														hidden : true
-													},
-													{
-														name : 'ci',
-														index : 'ci',
-														
-														hidden : true
-													},
-													{
-														name : 'nombreUsuario',
-														index : 'nombreUsuario',
-														
-													},
-													{
-														name : 'nombre',
-														index : 'nombre',
-														
-													},
-													{
-														name : 'apellido',
-														index : 'apellido',
-														
-													},
-													{
-														name : 'pass',
-														index : 'pass',
-														
-														hidden : true
-													},
-													{
-														name : 'email',
-														index : 'email',
-														
-													},
-													{
-														name : 'direccion',
-														index : 'direccion',
-														
-														hidden : true
-													},
-													{
-														name : 'pl',
-														index : 'pl',
-														hidden : true
-													},
-													{
-														name : 'admin',
-														index : 'admin',
-														hidden : true
-													},
-													{
-														name : 'telefono',
-														index : 'telefono',
-														
-														hidden : true
-													},
-													{
-														name : 'observacion',
-														index : 'observacion',
-														
-														hidden : true
-													},
-													{
-														name : 'activo',
-														index : 'activo',
-														formatter : 'select',
-														stype : 'select',
-														editoptions : {
-															value : "true:Activo;false:Inactivo"
-														},
-														hidden : false
-													}
+				var grid = jQuery("#list").jqGrid(
+						{
 
-											],
-											sortname : 'nombreUsuario',
-											viewrecords : true,
-											rownumbers : true,
-											sortorder : "desc",
-											ignoreCase : true,
-											pager : '#pager',
-											caption : "Lista de Usuarios",
-											jsonReader : {
-												root : "invdata",
-												page : "currpage",
-												total : "totalpages",
-												records : "totalrecords",
-												repeatitems : false,
-												id : "idUsuario"
-											}
+							// datatype : "local",
+							// data:mydata,
+							url : 'http://localhost:5000/listarUsuarios',
+							datatype : "json",
+							mtype : "get",
+							show : {
+								effect : 'fade',
+								duration : 200
+							},
+							hide : {
+								effect : 'fade',
+								duration : 200
+							},
+							colNames : [ 'ID Usuario ', 'Cedula',
+									'Nombre de Usuario', 'Nombre', 'Apellido',
+									'Password', 'Email', 'Direccion',
+									'Telefono', 'pl', 'admin', 'Observacion',
+									'Activo' ],
+							colModel : [ {
+								name : 'idUsuario',
+								index : 'idUsuario',
 
-										}).jqGrid('navGrid', '#pager', {
-									edit : false,
-									add : false,
-									del : false,
-									search : false,
-									refresh : true
-								});
-						grid.jqGrid('filterToolbar', {
-							stringResult : true,
-							searchOnEnter : false,
-							defaultSearch : "cn"
-						});
-					});
+								hidden : true
+							}, {
+								name : 'ci',
+								index : 'ci',
+
+								hidden : true
+							}, {
+								name : 'nombreUsuario',
+								index : 'nombreUsuario',
+
+							}, {
+								name : 'nombre',
+								index : 'nombre',
+
+							}, {
+								name : 'apellido',
+								index : 'apellido',
+
+							}, {
+								name : 'pass',
+								index : 'pass',
+
+								hidden : true
+							}, {
+								name : 'email',
+								index : 'email',
+
+							}, {
+								name : 'direccion',
+								index : 'direccion',
+
+								hidden : true
+							}, {
+								name : 'pl',
+								index : 'pl',
+								hidden : true
+							}, {
+								name : 'admin',
+								index : 'admin',
+								hidden : true
+							}, {
+								name : 'telefono',
+								index : 'telefono',
+
+								hidden : true
+							}, {
+								name : 'observacion',
+								index : 'observacion',
+
+								hidden : true
+							}, {
+								name : 'activo',
+								index : 'activo',
+								formatter : 'select',
+								stype : 'select',
+								editoptions : {
+									value : "true:Activo;false:Inactivo"
+								},
+								hidden : false
+							}
+
+							],
+							sortname : 'nombreUsuario',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "desc",
+							ignoreCase : true,
+							pager : '#pager',
+							caption : "Lista de Usuarios",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+								id : "idUsuario"
+							}
+
+						}).jqGrid('navGrid', '#pager', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : true
+				});
+				grid.jqGrid('filterToolbar', {
+					stringResult : true,
+					searchOnEnter : false,
+					defaultSearch : "cn"
+				});
+			});
 	//]]>
 </script>
-
-
 
 <!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
 <style type="text/css">
 .fieldset {
-	width: 500px;
+	width: auto;
 	border: 0;
 }
 </style>
 <!-- cambiar contraseña -->
 <div id="dialogoPass" title="Modificacion de Pass del Usuario">
-	<form >
+	<form>
 		<fieldset class="fieldset">
-				<input type="hidden" name="idControl" id="idControl" />
-				<table>
-					<tr>
-						<td><label for="Nuevo" style="display: block">Pass Nuevo</label>
-						    <input type="password" name="passNuevo"
-							id="passNuevo" class="text ui-widget-content ui-corner-all"
-							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-						</td>
-						<td><label for="Actual" style="display: block">Confirmar Pass</label>
-							<input type="password" name="passActual" id="passActual"
-							class="text ui-widget-content ui-corner-all"
-							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-							
-						</td>
-					</tr>
-				</table>
-			</fieldset>
-		</form>
-	</div>				
-				
+			<input type="hidden" name="idControl" id="idControl" />
+			<table>
+				<tr>
+					<td style="padding: 0.4em;"><label for="Nuevo"
+						style="display: block">Pass Nuevo</label> <input type="password"
+						name="passNuevo" id="passNuevo"
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td style="padding: 0.4em;"><label for="Actual"
+						style="display: block">Confirmar Pass</label> <input
+						type="password" name="passActual" id="passActual"
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						<!-- style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"  -->
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
+</div>
+
 
 
 <div id="dialogo-datos-cliente" title="Datos de Usuarios">
 	<form title="(*) campos obligatorios">
-		<fieldset class="fieldset" style="width: 100%;" >
+		<textarea rows="5" readonly id="paraConsulta" style="width:100%; resize: none; font-size:15px"></textarea>
+		<fieldset class="fieldset">
+		
 			<input type="hidden" name="idUsuario" id="idUsuario" />
-			<table id="table1c" style="float:left">
+			<table id="table1c" style="float: left; padding: 0.4em;">
 				<tr>
-					<td><label for="name" style="display: block">*Username</label> 
-					<input type="text" name="nombreUsuario"
-						id="nombreUsuario" class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					<td><label for="name" style="display: block">*Username</label>
+						<input type="text" name="nombreUsuario" id="nombreUsuario"
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="pass" style="display: block">*Password</label>
 						<input type="password" name="pass" id="pass"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-					</td>
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" /></td>
 				</tr>
-				<tr>	
-					<td><label for="confirmPass" style="display: block">*Confirmar Password</label>
-						<input type="password" name="confirmPass" id="confirmPass"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+				<tr>
+					<td><label for="confirmPass" style="display: block">*Confirmar
+							Password</label> <input type="password" name="confirmPass"
+						id="confirmPass"
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td>
-					<input id="checkPL" type="checkbox">Es project Leader</input>	
-					<br></br>
-					<input id="checkAdmin" type="checkbox">Es Administrador</input>
-					</td>
+					<input id="checkPL" type="checkbox">Es projectLeader</input> 
+					<br></br> 
+					<input id="checkAdmin" type="checkbox">EsAdministrador</input></td>
 				</tr>
-			</table>		
-			<table style="float:left">		
-				
+			</table>
+			
+			<table style="float: left; padding: 0.4em;">
+
 				<tr>
-					<td><label for="ci" style="display: block">*Cedula</label> <input
+				
+					<td>
+					
+					<label for="ci" style="display: block">*Cedula</label> 
+					<input 
 						type="text" name="ci" id="ci"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%; text-align: right;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="name" style="display: block">*Nombre</label> <input
 						type="text" name="nombre" id="nombre"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
-				<tr>	
+				<tr>
 					<td><label for="apellido" style="display: block">*Apellido</label>
 						<input type="text" name="apellido" id="apellido"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="email" style="display: block">*E-mail</label>
 						<input type="text" name="email" id="email"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 			</table>
-			<table style="float:left">
-				
+			<table style="float: left; padding: 0.4em;">
+
 				<tr>
 					<td><label for="direccion" style="display: block">Dirección</label>
 						<input type="text" name="direccion" id="direccion" value=""
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
-				</tr>	
-				<tr>	
-					<td><label for="telefono" style="display: block">Telefono</label>
+				</tr>
+				<tr>
+					<td><label for="telefono"  style="display: block">Telefono</label>
 						<input type="text" name="telefono" id="telefono" value=""
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="observacion" style="display: block">Observacion</label>
-						<textarea id="observacion"
-							class="text ui-widget-content ui-corner-all"
-							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
+						<textarea id="observacion" type="text"
+							style="display: block; margin-bottom: 12px; padding: 0.4em;">
 						</textarea></td>
 				</tr>
 				<tr>
-					<td><label  id="labelActivo" for="activo" style="display: block">Estado</label>
-						<select id="activo"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
-						class="ui-widget-content ui-corner-all">
+					<td> 
+					
+					<select  id="activo"
+						style="display: block; margin-bottom: 12px; padding: 0.4em;">
 							<option value="true">Activo</option>
 							<option value="false">Inactivo</option>
-					</select>
-					<input  name="idEstado" id="idEstado" type="hidden" />
-					</td>
+					</select> </td>
 				</tr>
 			</table>
 		</fieldset>
@@ -288,55 +268,51 @@
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
-	$("#dialogoPass")
-			.dialog(
-					{
-						autoOpen : false,
-						modal : true,
-						resizable : false,
-						width : 650,
-						show: {effect: 'fade', duration: 400},
-						hide: {effect: 'fade', duration: 350},
-						buttons : {
-							"Aceptar" : function() {
-								
-								if ($("#passNuevo").val().trim().length > 1 )
-								{
-												pass2Md5= MD5($("#passActual").val().trim());	
-												pass1Md5= MD5($("#passNuevo").val().trim());
-												if (pass2Md5 != pass1Md5){
-													mostrarMensaje("Error", "Pass no coinciden");
-												}else{
-														$.post('modificarUsuario',{ 
-															idUsuario : $(
-															"#idControl")
-															.val(),
-															passNuevo : pass1Md5 
-														},
-														function(data, status) {
-															/* si hay error se muestra el mensaje*/
-																$("#dialogoPass").dialog("close");
-																mostrarMensaje("Exito",data.substring(2));
-																$('#list')
-																.trigger(
-																		"reloadGrid");
-														}
-														);
-													}	
-								}else{
-									mostrarMensaje(
-											"Error",
-											"Se debe especificar el nuevo Pass"
-													);
-								}
-									}
-									
-							},
-							"Cancelar" : function() {
-								$(this).dialog("close");
+	$("#dialogoPass").dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				resizable : false,
+				width : 'auto',
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					"Aceptar" : function() {
+
+						if ($("#passNuevo").val().trim().length > 1) {
+							pass2Md5 = MD5($("#passActual").val().trim());
+							pass1Md5 = MD5($("#passNuevo").val().trim());
+							if (pass2Md5 != pass1Md5) {
+								mostrarMensaje("Error", "Pass no coinciden");
+							} else {
+								$.post('modificarUsuario', {
+									idUsuario : $("#idControl").val(),
+									passNuevo : pass1Md5
+								}, function(data, status) {
+									/* si hay error se muestra el mensaje*/
+									$("#dialogoPass").dialog("close");
+									mostrarMensaje("Exito", data.substring(2));
+									$('#list').trigger("reloadGrid");
+								});
 							}
-						
-					});
+						} else {
+							mostrarMensaje("Error",
+									"Se debe especificar el nuevo Pass");
+						}
+					}
+
+				},
+				"Cancelar" : function() {
+					$(this).dialog("close");
+				}
+
+			});
 
 	$("#dialogo-datos-cliente")
 			.dialog(
@@ -344,9 +320,15 @@
 						autoOpen : false,
 						modal : true,
 						resizable : false,
-						width : 780,
-						show: {effect: 'fade', duration: 400},
-						hide: {effect: 'fade', duration: 350},
+						width : 'auto',
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
 						buttons : {
 							/* funcion asociado al boton aceptar */
 							"Aceptar" : function() {
@@ -357,22 +339,26 @@
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
-										var passCd= MD5($("#pass").val());
-										
-										listaRS=["0","0"];
-										if ($('#checkPL').is(":checked")){
-											
-											listaRS[0]="1"
+										var passCd = MD5($("#pass").val());
+
+										listaRS = [ "0", "0" ];
+										if ($('#checkPL').is(":checked")) {
+
+											listaRS[0] = "1"
 										}
-										if ($('#checkAdmin').is(":checked")){
-											listaRS[1]="1"
-											
+										if ($('#checkAdmin').is(":checked")) {
+											listaRS[1] = "1"
+
 										}
-										rolSistemaJSON=JSON.stringify(listaRS);	
-										
-										$.post('/agregarUsuario/',{ 
-											/* se indican los parametros*/
-															rolSistema: rolSistemaJSON,
+										rolSistemaJSON = JSON
+												.stringify(listaRS);
+
+										$
+												.post(
+														'/agregarUsuario/',
+														{
+															/* se indican los parametros*/
+															rolSistema : rolSistemaJSON,
 															nombreUsuario : $(
 																	"#nombreUsuario")
 																	.val(),
@@ -434,7 +420,7 @@
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
-										
+
 										/* se indica la url */
 										$
 												.post(
@@ -503,26 +489,23 @@
 							}
 						}
 					});
-
 	$.enmascarar = function() {
-		$("#ci").mask("?9999999999", {
-			placeholder : " "
-		});
+		$("#ci").mask("?9999999999", {placeholder : ""});
 		$("#telefono").mask("?9999999999999", {
 			placeholder : " "
 		});
 	}
+	
+	
 	function cargarForm(rowdata, row) {
 		rowdata = $('#list').getRowData(row);
 		$('#checkPL').prop('checked', false);
 		$('#checkAdmin').prop('checked', false);
-		if(rowdata.pl=="1")
+		if (rowdata.pl == "1")
 			$('#checkPL').prop('checked', true);
-		if(rowdata.admin=="1")
+		if (rowdata.admin == "1")
 			$('#checkAdmin').prop('checked', true);
-		
-		
-		
+
 		$("#idUsuario").val(rowdata.idUsuario);
 		$("#pass").val(rowdata.pass);
 		$("#confirmPass").val(rowdata.pass);
@@ -555,7 +538,7 @@
 		$("#observacion").attr('disabled', habilitar);
 	}
 
-	function control(esNuevo) {
+	function setBordeNormal(){
 		$("#nombreUsuario").css('border-color', 'skyblue');
 		$("#pass").css('border-color', 'skyblue');
 		$("#confirmPass").css('border-color', 'skyblue');
@@ -566,8 +549,11 @@
 		$("#direccion").css('border-color', 'skyblue');
 		$("#telefono").css('border-color', 'skyblue');
 		$("#observacion").css('border-color', 'skyblue');
-
-		var error = 0
+	}
+	function control(esNuevo) {
+		
+		setBordeNormal();
+		var error = 0;
 		var len;
 
 		len = $("#nombreUsuario").val().trim().length;
@@ -582,7 +568,7 @@
 				$("#pass").css('border-color', 'red');
 				error = 1;
 			}
-			if ($("#pass").val().trim() != $("#confirmPass").val().trim()){
+			if ($("#pass").val().trim() != $("#confirmPass").val().trim()) {
 				$("#pass").css('border-color', 'red');
 				$("#confirmPass").css('border-color', 'red');
 				error = 1;
@@ -644,13 +630,15 @@
 	}
 	/* funcion para llamar al formulario agregar un nuevo datos */
 	function agregar() {
+		prepararConsultar(false,0,0)
+		setBordeNormal();
 		$("#table1c").show();//muestra la tabla que contiene los campos pass confirmar pass roles y userName
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
-		
+
 		$('#checkPL').prop('checked', false);
-		$('#checkAdmin').prop('checked', false);	
-		
+		$('#checkAdmin').prop('checked', false);
+
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idUsuario").val("");
 		$("#pass").val("");
@@ -666,13 +654,15 @@
 		$("#observacion").val("");
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
-		$.enmascarar();
+		$.enmascarar(); 
 
 		$("#dialogo-datos-cliente").dialog("open");
 	}
 
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
+		prepararConsultar(false,0,0)
+		setBordeNormal();
 		/* se indica que el dato no es nuevo */
 		bandera = 2;
 		/* se comprueba que hay un dato seleccionado para modificar */
@@ -687,7 +677,7 @@
 		/*se habilita la edicion*/
 		setCamposDisabled(false);
 		$.enmascarar();
-		
+
 		/*el pass no puede ser modificado aqui, se debe ir a cambiar pass*/
 		$("#pass").attr('disabled', true);
 		$("#nombreUsuario").attr('disabled', true);
@@ -697,11 +687,41 @@
 		$("#table1c").hide();//esconde la tabla que contiene los campos pass confirmar pass roles y userName 
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
+
+	}
+	
+	function prepararConsultar(preparar,pl,admin){
 		
+		if(preparar){
+		
+		var stringToShow="Nombre de usuario:\t"+
+			$("#nombreUsuario").val();
+		stringToShow= stringToShow+ "\nEstado:\t";
+		if($('#activo').val()=="true")
+			stringToShow= stringToShow + "El usuario está ACTIVO\n";
+		else	
+			stringToShow= stringToShow + "El usuario está INACTIVO";
+		stringToShow= stringToShow+"\nRoles de Sistema: ";
+		if (pl == "1")
+			stringToShow= stringToShow+ "\tEs Project Leader \n";
+		if (admin == "1")
+			stringToShow= stringToShow+ "\t\t\t\tEs Administrador";
+		if(admin != "1" && pl != "1")
+			stringToShow= stringToShow+ "\t\t\t\tMiembro en proyectos";
+		$('#paraConsulta').val(stringToShow);
+		$('#paraConsulta').show();
+		$('#activo').hide();
+		}else{
+			$('#paraConsulta').hide();
+			$('#activo').show();
+			
+		}
 	}
 
 	function consultar() {
-		$("#table1c").show();//muestra la tabla que contiene los campos pass confirmar pass roles y userName 
+		setBordeNormal();
+		$("#table1c").hide();//oculta la tabla que contiene los campos pass confirmar pass roles y userName
+		
 		//$('#idEstado').detach().attr('type', 'text').attr('disabled',true).insertAfter('#activo').val($('#activo').val());
 		//cambia el comboBox por un campo disabled del estado 
 		//$('#activo').hide();
@@ -717,6 +737,8 @@
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarForm(rowdata, row);
 		/*se inhabilita la edicion*/
+		rowdata = $('#list').getRowData(row);
+		prepararConsultar(true,rowdata.pl,rowdata.admin)
 		setCamposDisabled(true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
@@ -753,6 +775,7 @@
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
+			width:'auto',
 			buttons : {
 				"Ok" : function() {
 					$(this).dialog("close");
@@ -771,23 +794,21 @@
 			<div id="pager"></div>
 		</div></td>
 	<td><div>
-			<br></br>
-			<input id="btAgregar" type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
-			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
-				value="Modificar" /> 
-			<input id="btCambiarPass" type="button" name="cambiarPass"
-				value="Cambiar Pass" onclick='cambiarPass()' />
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> <input id="btCambiarPass" type="button"
+				name="cambiarPass" value="Cambiar Pass" onclick='cambiarPass()' />
 			<input id="btConsultar" type="button" name="consultar"
-				value="Consultar" onclick='consultar()' />
-			<br></br>
+				value="Consultar" onclick='consultar()' /> <br></br>
 			<script>
-			$("#btAgregar").button();
-			$("#btModificar").button();
-			$("#btCambiarPass").button();
-			$("#btConsultar").button();
+				$("#btAgregar").button();
+				$("#btModificar").button();
+				$("#btCambiarPass").button();
+				$("#btConsultar").button();
 			</script>
 		</div></td>
-		
+
 </tr>
 
 
