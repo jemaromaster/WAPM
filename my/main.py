@@ -20,6 +20,7 @@ from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
 
+from TiposDeItem.tipoItemManager import TipoItemManager
 
 from login import Login
 
@@ -92,6 +93,10 @@ app.add_url_rule('/listarFases/',
                  methods=["GET", "POST"])
 app.add_url_rule('/modificarFase/',
                  view_func=ModificarFase.as_view('modificarFase'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/tipoItemManager/',
+                 view_func=TipoItemManager.as_view('tipoItemManager'),
                  methods=["GET", "POST"])
 
 app.debug = True

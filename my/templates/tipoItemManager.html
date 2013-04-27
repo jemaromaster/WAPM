@@ -1,0 +1,715 @@
+{% extends "base.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% block header %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+
+<script type="text/javascript">
+	//<![CDATA[
+	jQuery(document)
+			.ready(
+					function() {
+						
+						var grid = jQuery("#listaTipoItem")
+								.jqGrid(
+										{
+
+											// datatype : "local",
+											// data:mydata,
+											url : 'http://localhost:5000/listarTiposdeItems',
+											datatype : "json",
+											mtype : "get",
+											postData:{idProyecto:'1'},
+											colNames : [ 'ID Tipo de Item',
+													'Nombre Tipo de Item', 'Descripcion', 'Estado',
+													'idFase', 'idProyecto'],
+											colModel : [
+													{
+														name : 'idTipoItem',
+														index : 'idTipoItem',
+														hidden : true
+													},
+													
+													{
+														name : 'nombreTipoItem',
+														index : 'nombreTipoItem',
+														width : 200
+													},
+													{
+														name : 'descripcion',
+														index : 'descripcion',
+														width : 200
+													},
+													{
+														name : 'estado',
+														index : 'estado',
+														width : 200,
+														formatter : 'select',
+														stype : 'select',
+														editoptions : {
+															value : "Activo:Activo;Inactivo:Inactivo"
+														},
+														hidden : false
+													},{
+														name : 'idFase',
+														index : 'idFase',
+														hidden: true
+														
+													},
+													{
+														name : 'idProyecto',
+														index : 'idProyecto',
+														hidden : true
+													}
+
+
+											],
+											sortname : 'nombreTipoItem',
+											viewrecords : true,
+											rownumbers : true,
+											sortorder : "desc",
+											ignoreCase : true,
+											pager : '#pager',
+											caption : "Fases",
+											jsonReader : {
+												root : "invdata",
+												page : "currpage",
+												total : "totalpages",
+												records : "totalrecords",
+												repeatitems : false,
+												//id : "idUsuario"
+											}
+
+										}).jqGrid('navGrid', '#pager', {
+									edit : false,
+									add : false,
+									del : false,
+									search : false,
+									refresh : true
+								});
+						grid.jqGrid('filterToolbar', {
+							stringResult : true,
+							searchOnEnter : false,
+							defaultSearch : "cn"
+						});
+					});
+	//]]>
+</script>
+
+
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	width: 500px;
+	border: 0;
+}
+</style>
+
+<script type="text/javascript">
+	jQuery(function($) {
+		$.datepicker.regional['es'] = {
+			closeText : 'Cerrar',
+			prevText : '&#x3c;Ant',
+			nextText : 'Sig&#x3e;',
+			currentText : 'Hoy',
+			monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+					'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+					'Noviembre', 'Diciembre' ],
+			monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+					'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+			dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Mi&eacute;rcoles',
+					'Jueves', 'Viernes', 'S&aacute;bado' ],
+			dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mi&eacute;', 'Juv', 'Vie',
+					'S&aacute;b' ],
+			dayNamesMin : [ 'Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'S&aacute;' ],
+			weekHeader : 'Sm',
+			dateFormat : 'dd/mm/yy',
+			firstDay : 1,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : ''
+		};
+		$.datepicker.setDefaults($.datepicker.regional['es']);
+	});
+
+	$(document).ready(function() {
+		$("#datepicker").datepicker();
+	});
+	
+	$(document).ready(function() {
+		$("#datepicker2").datepicker();
+	});
+</script>
+<div id="dialogo-datos-tipoItem" title="Datos de Tipo de Item">
+	<form title="(*) campos obligatorios">
+		<fieldset class="fieldset">
+			<input type="hidden" name="idTipoItem" id="idTipoItem" />
+			<input type="hidden" name="idFase" id="idFase" />
+			<input type="hidden" name="idProyecto" id="idProyecto" />
+			<table>
+				<tr>
+					<td><label for="nombreTipoItem" style="display: block">*Nombre del Tipo de Item</label> 
+						<input type="text" name="nombreTipoItem"
+						id="nombreTipoItem" class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td><label for="descripcion" style="display: block">*Descripcion</label>
+						<textarea id="descripcion"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
+						</textarea></td>
+					<td><label for="estado" style="display: block">*Estado</label>
+						<select id="estado"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+						class="ui-widget-content ui-corner-all">
+							<option value="activo">Activo</option>
+							<option value="finalizado">Inactivo</option>
+					</select></td>
+					<input type="hidden" name="idProyecto" id="idProyecto" />
+				</tr>
+					<td>
+						Atributos:<br/>
+							<table id="listaAtributos"></table>
+							<div id="atributosPager"></div>
+					</td>
+					<td>
+						<input id="btAgregarAtributo" type="button" name="Agregar>>" onclick='agregarAtributo();'
+							value="Agregar" /> <br/>
+						<input id="btModificarAtributo" type="button" name="Eliminar>>" onclick='modificarAtributo();'
+							value="Modificar" /> <br/>
+						<input id="btEliminarAtributo" type="button" name="Eliminar>>" onclick='eliminarAtributo();'
+							value="Eliminar" /> 
+					</td>
+					
+			
+			</table>
+		</fieldset>
+	</form>
+</div>
+
+<div id="dialogo-Atributos" title="Agregar Atributos">
+	<form title="(*) campos obligatorios">
+		<tr>
+			<fieldset class="fieldset">
+					<td>
+						<label for="nombreAtributo" style="display: block">Nombre Atributo</label> 
+						<input type="text" name="nombreAtributo"
+							id="nombreAtributo" class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+							
+						<label for="Tipo" style="display: block">Tipo</label> 
+						<td>
+							<select id='listBoxTipoPrimario' style='width:100px;'>
+									 	<option value="String">Texto</option>
+									 	<option value="Float">Numerico</option>
+									 	<option value="Integer">Entero</option>
+									 	<option value="Date">Fecha</option>
+							</select>
+							<div id='inputAtributosSector'>
+							<label for="nombreAtributo" style="display: block">Longitud del Texto</label> 
+							<input type="text" name="cadenaLongitud"
+								id="cadenaLongitud" class="text ui-widget-content ui-corner-all"
+								style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+							</div>
+							
+						</td>
+					</td>
+						
+			</fieldset>
+		</tr>
+	</form>
+</div>
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+	var bandera;
+	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+	///////////////////////////////////////////////////////////////////
+	//Tunear lista tipo atributo 
+	
+	/////////////////////////////////////////////////////////////////
+	
+	function agregarAtributo(){
+		//data.rows.push({ "idAtributos": "835685a", "nombreAtributo": "Name 5", "tipoPrimario": "83566a" })
+		//data.records="4"
+		//alert (data.rows[0].nombreAtributo)
+		$("#nombreAtributo").val("");
+		$("#cadenaLongitud").val("");
+		$("#listBoxTipoPrimario").change(function() { 
+		//alert($("#listBoxTipoPrimario").val())
+			if ($("#listBoxTipoPrimario").val()!='String'){
+				$("#cadenaLongitud").val("");
+				$("#inputAtributosSector").hide();
+			}else{
+				$("#cadenaLongitud").val("");
+				$("#inputAtributosSector").show();
+			}
+		});
+		$("#dialogo-Atributos").dialog("open")
+		
+		
+	}
+	
+	var data = {
+            "page": "1",
+            "records": "3",
+            "rows": [
+                { "idAtributos": "83123a", "nombreAtributo": "Name 1", "tipoPrimario": "83123a" },
+                { "idAtributos": "83432a", "nombreAtributo": "Name 3", "tipoPrimario": "83432a" },
+                { "idAtributos": "83566a", "nombreAtributo": "Name 2", "tipoPrimario": "83566a" }
+            ]
+        }
+	
+	
+	
+	var gridAtributos=jQuery("#listaAtributos")
+			.jqGrid(
+					{
+						datatype : "local",
+						data: data.rows,
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
+						colNames : [ 'idAtributo','Nombre Atributo',
+								'Tipo Primario', 'Longitud cadena'],
+						colModel : [
+								{
+									name : 'idAtributos',
+									index : 'idAtributos',
+									hidden : true
+									
+								},
+								{
+									name : 'nombreAtributo',
+									index : 'nombreAtributo',
+									width : 200,
+									search:true
+								},
+								{
+									name : 'tipoPrimario',
+									index : 'tipoPrimario',
+									width : 180,
+									search:true
+								}, 
+								{
+									name : 'longitudCadena',
+									index : 'longitudCadena',
+									width : 180,
+									hidden:true
+								}
+		
+						],
+						
+						sortname : 'nombreTipoItem',
+						viewrecords : true,
+						rownumbers : true,
+						sortorder : "desc",
+						ignoreCase : true,
+						pager : '#atributosPager',
+						caption : "Atributos",
+						jsonReader : {
+							root : "invdata",
+							page : "currpage",
+							total : "totalpages",
+							records : "totalrecords",
+							repeatitems : false,
+							//id : "idUsuario"
+						}
+
+					}).jqGrid('navGrid', '#atributosPager', {
+				edit : false,
+				add : false,
+				del : false,
+				search : false,
+				refresh : true
+			});
+		gridAtributos.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		
+	});
+						
+		
+	function controlAtributos(esString){
+			
+			$("#nombreAtributo").css('border-color', 'skyblue');
+			$("#cadenaLongitud").css('border-color', 'skyblue');
+			var error = 0
+			var len;
+
+			len = $("#nombreAtributo").val().trim().length;
+			if (len > 20 || len <= 0) {
+				$("#nombreAtributo").css('border-color', 'red');
+				error = 1;
+			}
+			
+			if(esString){
+				var cl=$("#cadenaLongitud").val();
+				if (cl > 255 || cl <= 0) {
+					$("#cadenaLongitud").css('border-color', 'red');
+					error = 1;
+				}
+				
+			}
+
+			return error;
+		
+	}			
+	
+	$("#dialogo-Atributos")
+	.dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				resizable : false,
+				width : 550,
+				show: {effect: 'fade', duration: 400},
+				hide: {effect: 'fade', duration: 350},
+				buttons : {
+					"Agregar" : function() {
+						
+						nombreAtributo=$('#nombreAtributo').val();
+						tipoPrimario=$('#comboBoxTipoPrimario').val();
+						esString=false
+						if(tipoPrimario=='String'){
+							esString=true;
+							longCad=$('#cadenaLongitud').val();
+						}
+						
+						if(controlAtributos(esString)==1){
+							mostrarMensaje('Error', "se debe completar correctamente el formulario ")
+						}
+						var cuantosDatos = $('#dialogo-Atributos').jqGrid('getRowData').lenght + 1
+						
+						var a={ "idAtributos": cuantosDatos, "nombreAtributo":nombreAtributo, "tipoPrimario": tipoPrimario, "longitudCadena":longCad }
+						mygrid=jQuery("#listaAtributos")
+						mygrid.addRowData(cuantosDatos-1,a,1,0); 
+						$("#listaAtributos").trigger("reloadGrid");
+						
+						
+					},
+					"Cancelar" : function() {
+						$(this).dialog("close");
+					}
+				}
+			});
+
+
+	$("#dialogo-datos-tipoItem")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width : 550,
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Aceptar" : function() {
+								/* si el dato es nuevo se llamar a la url para agregar */
+								if (bandera == 1) {
+									/* se indica la URL */
+									if (control(true) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+										
+										$.post('/agregarTipoItem/',{ 
+											/* se indican los parametros*/
+												nombreTipoItem : $(
+														"#nombreTipoItem")
+														.val(),
+												descripcion: $("#descripcion")
+														.val(),
+												estado : $("#estado")
+														.val(),
+												idProyecto: $("#idProyecto")
+														.val(),
+												//aca se debe obtener los datos del grid anterior
+												//se jasoniza la lista y se envia por el post
+												idFase: $("#idFase")
+														.val()
+												},
+														function(data, status) {
+															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+															/* si hay error se muestra el mensaje*/
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido guardar:\n"
+																				+ data
+																						.substring(2));
+																/* se indica que no hubieron errores */
+															} else {
+																$(
+																		"#dialogo-datos-tipoItem")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		data
+																				.substring(2));
+															}
+															/* se indicar la recarga de la tabla */
+															$('#listaTipoItem')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+
+									/* si el dato se modifica se llama a la url para modificar*/
+								} else if (bandera == 2) {
+									if (control(false) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+
+										/* se indica la url */
+										$
+												.post(
+														'/modificarTipoItem/',
+														{
+															nombreTipoItem : $(
+																	"#nombreTipoItem")
+																	.val(),
+															descripcion: $("#descripcion")
+																	.val(),
+															estado : $("#estado")
+																	.val(),
+															idProyecto: $("#idProyecto")
+																	.val(),
+															//aca se debe obtener los datos del grid dentro del form 
+															//se jasoniza la lista y se envia por el post
+															idFase: $("#idFase")
+																	.val(),
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido modificar:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-datos-tipoItem")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Los datos han sido modificados");
+															}
+															$('#listaTipoItem')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} else if (bandera == 3) {/*consultar*/
+									$(this).dialog("close");
+								}
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+
+	/*$.enmascarar = function() {
+		$("#ci").mask("?9999999999", {
+			placeholder : " "
+		});
+		$("#telefono").mask("?9999999999999", {
+			placeholder : " "
+		});
+	}*/
+	function cargarGridAtributosBox(){
+		var newOptions = { //se debe consultar un get
+			    'red' : 'Red',
+			    'blue' : 'Blue',
+			    'green' : 'Green',
+			    'yellow' : 'Yellow'
+			};
+		var selectedOption = 'green';
+		var select = $('#listBoxAtributo');
+		
+		if(select.prop) { //aca se ve dependiendo de la verison del JQuery para saber si aplicar attr o prop
+		  var options = select.prop('options');
+		}
+		else {
+		  var options = select.attr('options');
+		}
+		$('option', select).remove();
+		
+		$.each(newOptions, function(val, text) { //se va metiendo en el listbox las opciones
+		    options[options.length] = new Option(text, val);
+		});
+		
+		//select.val(selectedOption); //pra seleccionar el valor en la lista
+		
+		//aca se debe cargar los atributos del item en el listBoxAtributo
+		
+	}
+	function cargarForm(rowdata, row) {
+		rowdata = $('#listaTipoItem').getRowData(row);
+		$("#idTipoItem").val(rowdata.idTipoItem);
+		$("#nombreTipoItem").val(rowdata.nombreTipoItem);
+		$("#descripcion").val(rowdata.descripcion);
+		$("#estado").val(rowdata.estado);
+		$("#idFase").val(rowdata.idFase);
+		$("#idProyecto").val(rowdata.idProyecto);
+		cargarGridAtributosBox()
+		
+	}
+
+	function setCamposDisabled(habilitar) {
+		
+		$("#nombreTipoItem").attr('disabled', habilitar);
+		$("#descripcion").attr('disabled', habilitar);
+		$("#estado").attr('disabled', habilitar);
+		
+		//aca se debe cargar los atributos del item en el grid
+		//se deshabilita
+	}
+
+	function control(esNuevo) {
+		
+		$("#nombreTipoItem").css('border-color', 'skyblue');
+		$("#descripcion").css('border-color', 'skyblue');
+		$("#estado").css('border-color', 'skyblue');
+		
+		
+		var error = 0
+		var len;
+
+		len = $("#nombreTipoItem").val().trim().length;
+		if (len > 20 || len <= 0) {
+			$("#nombreTipoItem").css('border-color', 'red');
+			error = 1;
+		}
+
+		len = document.getElementById("descripcion").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len > 50 || len <= 0) {
+			$("#descripcion").css('border-color', 'red');
+			error = 1;
+		}
+		return error;
+	}
+
+	
+	function agregar() {
+		/* se indica que se cargará un nuevo dato */
+		bandera = 1; 
+		/* se vacian los elementos HTML de captura de datos */
+		$("#idTipoItem").val("");
+		$("#nombreTipoItem").val("");
+		$("#descripcion").val("");
+		$("#estado").val("");
+		$("#idFase").val(""); //esto se envia en el post el valor real, no se carga de este input 
+		$("#idProyecto").val(""); //esto se envia en el post el valor real, no se carga de este input 
+		/* se llama al dialogo de captura de datos */
+		setCamposDisabled(false);
+		//$.enmascarar();
+		var select = $('#listBoxAtributo');
+		//$('option', select).remove(); //se limpia el listbox de atributos 
+		$("#dialogo-datos-tipoItem").dialog("open");
+		
+	}
+
+	/* funcion para llamar al formulario para la modificación de datos */
+	function modificar() {
+		/* se indica que el dato no es nuevo */
+		bandera = 2;
+		/* se comprueba que hay un dato seleccionado para modificar */
+		var row = $('#listaTipoItem').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se habilita la edicion*/
+		setCamposDisabled(false);
+		//$.enmascarar();
+		/* se llama al dialogo para modificar los datos */
+		
+		$("#dialogo-datos-tipoItem").dialog("open");
+	}
+
+	function consultar() {
+		/* se indica que el dato no es nuevo */
+		bandera = 3;
+		/* se comprueba que hay un dato seleccionado para consultar */
+		var row = $('#listaTipoItem').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se inhabilita la edicion*/
+		setCamposDisabled(true);
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-datos-tipoItem").dialog("open");
+	}
+	/* funcion que maneja la accion de desactivar un cliente*/
+	
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			show: {effect: 'fade', duration: 250},
+			hide: {effect: 'fade', duration: 250},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+{% endblock %} {% block body %}
+
+<tr>
+	<td><div>
+			<table id="listaTipoItem"></table>
+			<div id="pager"></div>
+		</div></td>
+	<td><div>
+			<br></br>
+			<input id="btAgregar" type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
+			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> 
+			<input id="btConsultar" type="button" name="consultar"
+				value="Consultar" onclick='consultar()' />
+			<br></br>
+			<script>
+			$("#btAgregar").button();
+			$("#btModificar").button();
+			$("#btConsultar").button();
+			</script>
+		</div></td>
+		
+</tr>
+
+
+{% endblock %}
+</html>
