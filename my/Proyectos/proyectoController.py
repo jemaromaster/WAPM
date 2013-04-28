@@ -53,11 +53,19 @@ class ProyectoControllerClass(flask.views.MethodView):
         print p.fechaFinalizacion
         try:
             fi=datetime(int(p.fechaInicio[6:10]),\
-                             int(p.fechaInicio[0:2]),\
-                             int(p.fechaInicio[3:5]))
+                             #==================================================
+                             # int(p.fechaInicio[0:2]),\
+                             # int(p.fechaInicio[3:5]))
+                             #==================================================
+                             int(p.fechaInicio[3:5]),\
+                             int(p.fechaInicio[0:2]))
             ff=datetime(int(p.fechaFinalizacion[6:10]),\
-                             int(p.fechaFinalizacion[0:2]),\
-                             int(p.fechaFinalizacion[3:5]))
+                             #==================================================
+                             # int(p.fechaFinalizacion[0:2]),\
+                             # int(p.fechaFinalizacion[3:5]))
+                             #==================================================
+                             int(p.fechaFinalizacion[3:5]),\
+                             int(p.fechaFinalizacion[0:2]))
         except:
             return make_response('t,Fecha invalida') 
         

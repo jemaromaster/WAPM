@@ -28,8 +28,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
 from models import poblarBD
- 
+
+#configurations
+DATABASE='postgresql://postgres:postgres@localhost:5432/wapm'
+DEBUG=True
+SECRET_KEY='bacon'
+USERNAME='postgres'
+PASSWORD='postgres'
+
 app = flask.Flask(__name__)
+app.config.from_object(__name__)
 """
 Se realizan las redirecciones de las peticiones de manera conveniente. Cada peticion
 entrante debe estar asociada a una URL, con dicha URL la peticion es canalizada a travez
@@ -100,4 +108,4 @@ app.add_url_rule('/tipoItemManager/',
                  methods=["GET", "POST"])
 
 app.debug = True
-app.run()
+#app.run()
