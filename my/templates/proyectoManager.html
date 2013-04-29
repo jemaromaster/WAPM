@@ -8,115 +8,137 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript">
 	//<![CDATA[
-	jQuery(document).ready(
-			function() {
+	jQuery(document)
+			.ready(
+					function() {
 
-				var grid = jQuery("#list").jqGrid(
-						{
-							// datatype : "local",
-							// data:mydata,
-							url : 'http://localhost:5000/listarProyectos',
-							datatype : "json",
-							mtype : "get",
-							colNames : [ 'ID Proyecto', 'Nombre de Proyecto',
-							        'Fecha de Inicio', 'ID ProjectLeader', 
-							        'Nombre ProjectLeader',
-							        'Fecha de finalizacion',
-									'Observacion','Numero Fases', 'Presupuesto', 'Estado'],
-							colModel : [ {
-								name : 'idProyecto',
-								index : 'idProyecto',
-								
-								hidden : true
-							}, {
-								name : 'nombreProyecto',
-								index : 'nombreProyecto',
-								
-							}, {
-								name : 'fechaInicio',
-								index : 'fechaInicio',
-								
-								formatter: 'date',
-					            sorttype: 'date',
-					            datefmt: 'd/m/Y',
-					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
-								search:false
-							}, {
-								name : 'idProjectLeader',
-								index : 'idProjectLeader',
-								
-								hidden: true
-							}, {
-								name : 'nombreProjectLeader',
-								index : 'nombreProjectLeader',
-								
-								hidden: true
-							}, {
-								name : 'fechaFinalizacion',
-								index : 'fechaFinalizacion',
-								
-								formatter: 'date',
-					            sorttype: 'date',
-					            datefmt: 'd/m/Y',
-					            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
-					            search:false
-							}, {  
-								name : 'observacion',
-								index : 'observacion',
-								
-								hidden : true
-							}, {
-								name : 'nroFases',
-								index : 'nroFases',
-								
-								hidden : true
-							}, {
-								name : 'presupuesto',
-								index : 'presupuesto',
-								
-								search:false
-							}, {
-								name : 'estado',
-								index : 'estado',
-								formatter : 'select',
-								stype : 'select',
-								editoptions : {
-									value : "activo:Activo;finalizado:Finalizado"
-								},
-								hidden : false
-								
-							}
+						var grid = jQuery("#list")
+								.jqGrid(
+										{
+											// datatype : "local",
+											// data:mydata,
+											url : 'http://localhost:5000/listarProyectos',
+											datatype : "json",
+											mtype : "get",
+											colNames : [ 'ID Proyecto',
+													'Nombre de Proyecto',
+													'Fecha de Inicio',
+													'ID ProjectLeader',
+													'Nombre ProjectLeader',
+													'Fecha de finalizacion',
+													'Observacion',
+													'Numero Fases',
+													'Presupuesto', 'Estado' ],
+											colModel : [
+													{
+														name : 'idProyecto',
+														index : 'idProyecto',
 
-							],
-							sortname : 'nombreProyecto',
-							viewrecords : true,
-							rownumbers : true,
-							sortorder : "desc",
-							ignoreCase : true,
-							pager : '#pager',
-							caption : "Proyectos",
-							jsonReader : {
-								root : "invdata",
-								page : "currpage",
-								total : "totalpages",
-								records : "totalrecords",
-								repeatitems : false,
-								id : "idProyecto"
-							}
+														hidden : true
+													},
+													{
+														name : 'nombreProyecto',
+														index : 'nombreProyecto',
 
-						}).jqGrid('navGrid', '#pager', {
-					edit : false,
-					add : false,
-					del : false,
-					search : false,
-					refresh : false
-				});
-				grid.jqGrid('filterToolbar', {
-					stringResult : true,
-					searchOnEnter : false,
-					defaultSearch : "cn"
-				});
-			});
+													},
+													{
+														name : 'fechaInicio',
+														index : 'fechaInicio',
+
+														formatter : 'date',
+														sorttype : 'date',
+														datefmt : 'd/m/Y',
+														formatoptions : {
+															srcformat : 'Y-m-d',
+															newformat : 'd/m/Y'
+														},
+														search : false
+													},
+													{
+														name : 'idProjectLeader',
+														index : 'idProjectLeader',
+
+														hidden : true
+													},
+													{
+														name : 'nombreProjectLeader',
+														index : 'nombreProjectLeader',
+
+														hidden : true
+													},
+													{
+														name : 'fechaFinalizacion',
+														index : 'fechaFinalizacion',
+
+														formatter : 'date',
+														sorttype : 'date',
+														datefmt : 'd/m/Y',
+														formatoptions : {
+															srcformat : 'Y-m-d',
+															newformat : 'd/m/Y'
+														},
+														search : false
+													},
+													{
+														name : 'observacion',
+														index : 'observacion',
+
+														hidden : true
+													},
+													{
+														name : 'nroFases',
+														index : 'nroFases',
+
+														hidden : true
+													},
+													{
+														name : 'presupuesto',
+														index : 'presupuesto',
+
+														search : false
+													},
+													{
+														name : 'estado',
+														index : 'estado',
+														formatter : 'select',
+														stype : 'select',
+														editoptions : {
+															value : "activo:Activo;finalizado:Finalizado"
+														},
+														hidden : false
+
+													}
+
+											],
+											sortname : 'nombreProyecto',
+											viewrecords : true,
+											rownumbers : true,
+											sortorder : "desc",
+											ignoreCase : true,
+											pager : '#pager',
+											caption : "Proyectos",
+											jsonReader : {
+												root : "invdata",
+												page : "currpage",
+												total : "totalpages",
+												records : "totalrecords",
+												repeatitems : false,
+												id : "idProyecto"
+											}
+
+										}).jqGrid('navGrid', '#pager', {
+									edit : false,
+									add : false,
+									del : false,
+									search : false,
+									refresh : false
+								});
+						grid.jqGrid('filterToolbar', {
+							stringResult : true,
+							searchOnEnter : false,
+							defaultSearch : "cn"
+						});
+					});
 	//]]>
 </script>
 
@@ -150,69 +172,127 @@
 	$(document).ready(function() {
 		$("#datepicker").datepicker();
 	});
-	
+
 	$(document).ready(function() {
 		$("#datepicker2").datepicker();
 	});
 </script>
 
 <!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	width: auto;
+	border: 0;
+}
+</style>
 <div id="dialogo-datos-cliente" title="Datos de Proyecto">
 	<form>
-		<fieldset>
-			<input type="hidden" name="idProyecto" id="idProyecto" /> 
+		<fieldset class="fieldset">
+			<table style="float: left">
+				<tr>
+					<td><input type="hidden" name="idProyecto" id="idProyecto" />
+						<label for="nombreProyecto" style="display: block">*Nombre
+							Proyecto</label><input type="text" name="nombreProyecto"
+						id="nombreProyecto"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+						<input type="hidden" name="idProjectLeader" id="idProjectLeader" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="EnombreProyecto"
+						id="EnombreProyecto"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
 
-			<label for="nombreProyecto" style="display: block">Nombre Proyecto</label> <input
-				type="text" name="nombreProyecto" id="nombreProyecto"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-				
-			<input type="hidden" name="idProjectLeader" id="idProjectLeader" /> 
-				
-			<label for="nombreProjectLeader" style="display: block">Nombre de ProjectLeader</label> <input
-				type="text" name="nombreProjectLeader" id="nombreProjectLeader" 
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+				<tr>
+					<td><label for="nombreProjectLeader" style="display: block">*Nombre
+							de ProjectLeader</label> <input type="text" name="nombreProjectLeader"
+						id="nombreProjectLeader"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
 
-			<label for="fechaInicio" style="display: block">Fecha de Inicio</label> <input
-				type="text" name="datepicker" id="datepicker" readonly="readonly"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-			
-			
-			<label for="fechaFinalizacion" style="display: block">Fecha de Finalizacion</label> <input
-				type="text" name="datepicker2" id="datepicker2" readonly="readonly"
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-			
-			<label for="presupuesto" style="display: block">Presupuesto</label> <input
-				type="text" name="presupuesto" id="presupuesto" value=""
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-				
-			<label for="nroFases" style="display: block">Numero de fases</label> <input
-				type="text" name="nroFases" id="nroFases" value=""
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="EnombreProjectLeader"
+						id="EnombreProjectLeader"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="fechaInicio" style="display: block">Fecha
+							de Inicio</label> <input type="text" name="datepicker" id="datepicker"
+						readonly="readonly"
+						style=";width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="Edatepicker"
+						id="Edatepicker"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="fechaFinalizacion" style="display: block">Fecha
+							de Finalizacion</label> <input type="text" name="datepicker2"
+						id="datepicker2" readonly="readonly"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="Edatepicker2"
+						id="Edatepicker2"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
 
-			<label for="observacion" style="display: block">Observacion</label> <input
-				type="text" name="observacion" id="observacion" value=""
-				class="text ui-widget-content ui-corner-all"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-			<label for="estado" style="display: block">Estado</label> <select
-				id="estado"
-				style="display: block; margin-bottom: 12px; padding: 0.4em; width: 50%;"
-				class="ui-widget-content ui-corner-all">
-				<option value="activo">Activo</option>
-				<option value="finalizado">Finalizado</option>
-			</select>
-			
+				</tr>
+				<tr>
+					<td><label for="presupuesto" style="display: block">Presupuesto</label>
+						<input type="text" name="presupuesto" id="presupuesto" value=""
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="Epresupuesto"
+						id="Epresupuesto"
+						style="width: 200px;  border: none;display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="nroFases" style="display: block">Numero
+							de fases</label> <input type="text" name="nroFases" id="nroFases"
+						value=""
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="EnroFases"
+						id="EnroFases"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="observacion" style="display: block">Observacion</label>
+						<input type="text" name="observacion" id="observacion" value=""
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br>
+					<input type="text" readonly tabIndex="-1" name="Eobservacion"
+						id="Eobservacion"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="estado" style="display: block">Estado</label>
+						<select id="estado"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em; width: 50%;">
+							<option value="activo">Activo</option>
+							<option value="finalizado">Finalizado</option>
+					</select></td>
+				</tr>
+			</table>
+			<table style="float: left">
+
+			</table>
 		</fieldset>
 	</form>
 </div>
-{% endblock %} 
-{% block body %}
-<div id="dialogo-agregar-miembros" title="Agregar Miembros a Proyecto" >
+{% endblock %} {% block body %}
+<div id="dialogo-agregar-miembros" title="Agregar Miembros a Proyecto">
 	<table id="listMiembros"></table>
 	<div id="pagerMiembros"></div>
 </div>
@@ -221,255 +301,286 @@
 	var banderita;
 	var yaentro;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
-	
-	function abrirDialogoMiembros(){
-		
+
+	function abrirDialogoMiembros() {
+
 		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
-		if (rowProyecto== null) {
-			mostrarMensaje("Atencion", "Seleccione el proyecto a cual administrar miembros ");
+		if (rowProyecto == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el proyecto a cual administrar miembros ");
 			return;
 		}
 		var rowdata = $('#list').getRowData(rowProyecto);
 		agregarMiembros(rowdata);
 		$('#dialogo-agregar-miembros').dialog("open");
 	}
-	$('#dialogo-agregar-miembros').dialog(
-			{
-				autoOpen : false,
-				width : 1000,
-				modal : true,
-				resizable : true,
-				show: {effect: 'fade', duration: 400},
-				hide: {effect: 'fade', duration: 350},
-				buttons : {
-					/* funcion asociado al boton aceptar */
-					"Agregar" : function() {
-						/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
-						var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
-						var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
-						if (rowMiembros == null) {
-							mostrarMensaje("Atencion", "Seleccione el Usuario a agregar");
-							return;
-						}
-						if (rowProyecto== null) {
-							mostrarMensaje("Atencion", "Seleccione el proyecto");
-							return;
-						}
-						
-						var rowdata = $('#list').getRowData(rowProyecto);
-						var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
-						
-						if(rowdataMiembros.activo=='false'){
-							mostrarMensaje(
-									"Atencion",
-									"No se puede agregar usuario inactivo a un proyecto");
-						}
-							/* se indica la URL */
-							$.post(
-									'/agregarMiembrosProyecto/',
-									{ /* se indican los parametros*/
-										idProyecto : rowdata.idProyecto,
-										idUsuarioAgregar: rowdataMiembros.idUsuario
-										
-									},
-									function(data, status) {
-										/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
-
-										/* si hay error se muestra el mensaje*/
-										if (data.substring(0, 1) == 't') {
-											mostrarMensaje(
-													"Error",
-													"Los datos no se han podido guardar:\n"
-															+ data
-																	.substring(2));
-											/* se indica que no hubieron errores */
-										} else {
-											mostrarMensaje("Exito",data.substring(2));
-										}
-										/* se indicar la recarga de la tabla */
-										$('#listMiembros').trigger(
-												"reloadGrid");
-									});
-
-							/* si el dato se modifica se llama a la url para modificar*/
-						},"Quitar": function() {
-							var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
-							if (rowMiembros == null) {
-								mostrarMensaje("Atencion", "Seleccione el Usuario a agregar");
-								return;
-							}
-							var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
-							if (rowProyecto== null) {
-								mostrarMensaje("Atencion", "Seleccione el proyecyo");
-								return;
-							}
-							
-							var rowdata = $('#list').getRowData(rowProyecto);
-							var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
-							/* se indica la url */
-							$.post('/QuitarMiembrosProyecto',
-											{
-												idProyecto : rowdata.idProyecto,
-												idUsuario: rowdataMiembros.idUsuario
-											},
-											function(data, status) {
-
-												if (data
-														.substring(0, 1) == 't') {
-													mostrarMensaje("Error","Usuario no se ha podido quitar:\n"
-																	+ data.substring(2));
-												} else {
-													mostrarMensaje(
-															"Exito",
-															"Usuario ha sido quitado del proyecto");
-												}
-												$('#listMiembros').trigger(
-														"reloadGrid");
-											});
+	$('#dialogo-agregar-miembros')
+			.dialog(
+					{
+						autoOpen : false,
+						width : 1000,
+						modal : true,
+						resizable : true,
+						show : {
+							effect : 'fade',
+							duration : 400
 						},
-					"Salir" : function() {
-						$(this).dialog("close");
-					}
-				}
-			});
-	function agregarMiembros(rowdata){
-		//var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
-		
-		//var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
-						var grid = jQuery("#listMiembros")
-								.jqGrid(
-										{
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Agregar" : function() {
+								/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+								var rowMiembros = $('#listMiembros').jqGrid(
+										'getGridParam', 'selrow');
+								var rowProyecto = $('#list').jqGrid(
+										'getGridParam', 'selrow');
+								if (rowMiembros == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el Usuario a agregar");
+									return;
+								}
+								if (rowProyecto == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el proyecto");
+									return;
+								}
 
-											// datatype : "local",
-											// data:mydata,
-											url : 'http://localhost:5000/listarMiembrosProyecto',
-											datatype : "json",
-											mtype : "get",
-											postData:{idProyecto:rowdata.idProyecto},
-											show: {effect: 'fade', duration: 400},
-											hide: {effect: 'fade', duration: 350},
-											colNames : [ 'ID Usuario ',
-													'Cedula',
-													'Nombre de Usuario',
-													'Nombre', 'Apellido',
-													'Password', 'Email',
-													'Direccion', 'Telefono',
-													'Observacion','Es Miembro', 'Estado' ],
-											colModel : [
-													{
-														name : 'idUsuario',
-														index : 'idUsuario',
-														width : 200,
-														hidden : true
-													},
-													{
-														name : 'ci',
-														index : 'ci',
-														width : 200,
-														hidden : true
-													},{
-														name : 'nombreUsuario',
-														index : 'nombreUsuario',
-														width : 200
-													},
-													{
-														name : 'nombre',
-														index : 'nombre',
-														width : 180
-													},
-													{
-														name : 'apellido',
-														index : 'apellido',
-														width : 180
-													},
-													{
-														name : 'pass',
-														index : 'pass',
-														width : 200,
-														hidden : true
-													},
-													{
-														name : 'email',
-														index : 'email',
-														width : 180
-													},
-													{
-														name : 'direccion',
-														index : 'direccion',
-														width : 200,
-														hidden : true
-													},
-													{
-														name : 'telefono',
-														index : 'telefono',
-														width : 200,
-														hidden : true
-													},
-													{
-														name : 'observacion',
-														index : 'observacion',
-														width : 200,
-														hidden : true
-													},{ name: 'enProyecto', index: 'enProyecto', width: 90, 
-														align: "center",
-														formatter:'select',
-														stype:'select',
-														
-														editoptions: { value:"Todos:Todos;Si:Si;No:No"}, 
-														},
-													{
-														name : 'activo',
-														index : 'activo',
-														formatter : 'select',
-														stype : 'select',
-														editoptions : {
-															value : "true:Activo;false:Inactivo"
-														},
-														hidden : true
+								var rowdata = $('#list')
+										.getRowData(rowProyecto);
+								var rowdataMiembros = $('#listMiembros')
+										.getRowData(rowMiembros);
+
+								if (rowdataMiembros.activo == 'false') {
+									mostrarMensaje("Atencion",
+											"No se puede agregar usuario inactivo a un proyecto");
+								}
+								/* se indica la URL */
+								$
+										.post(
+												'/agregarMiembrosProyecto/',
+												{ /* se indican los parametros*/
+													idProyecto : rowdata.idProyecto,
+													idUsuarioAgregar : rowdataMiembros.idUsuario
+
+												},
+												function(data, status) {
+													/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+													/* si hay error se muestra el mensaje*/
+													if (data.substring(0, 1) == 't') {
+														mostrarMensaje(
+																"Error",
+																"Los datos no se han podido guardar:\n"
+																		+ data
+																				.substring(2));
+														/* se indica que no hubieron errores */
+													} else {
+														mostrarMensaje(
+																"Exito",
+																data
+																		.substring(2));
 													}
+													/* se indicar la recarga de la tabla */
+													$('#listMiembros').trigger(
+															"reloadGrid");
+												});
 
-											],
-											sortname : 'nombreUsuario',
-											viewrecords : true,
-											rownumbers : true,
-											sortorder : "desc",
-											ignoreCase : true,
-											pager : '#pagerMiembros',
-											caption : "Lista de Usuarios",
-											jsonReader : {
-												root : "invdata",
-												page : "currpage",
-												total : "totalpages",
-												records : "totalrecords",
-												repeatitems : false,
-												id : "idUsuario"
-											}
-											
+								/* si el dato se modifica se llama a la url para modificar*/
+							},
+							"Quitar" : function() {
+								var rowMiembros = $('#listMiembros').jqGrid(
+										'getGridParam', 'selrow');
+								if (rowMiembros == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el Usuario a agregar");
+									return;
+								}
+								var rowProyecto = $('#list').jqGrid(
+										'getGridParam', 'selrow');
+								if (rowProyecto == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el proyecyo");
+									return;
+								}
 
-										}).jqGrid('navGrid', '#pagerMiembros', {
-									edit : false,
-									add : false,
-									del : false,
-									search : false,
-									refresh : false
-								});
-						grid.jqGrid('filterToolbar', {
-							stringResult : true,
-							searchOnEnter : false,
-							defaultSearch : "cn"
-						});
-					};
-	 
-	  
-	
+								var rowdata = $('#list')
+										.getRowData(rowProyecto);
+								var rowdataMiembros = $('#listMiembros')
+										.getRowData(rowMiembros);
+								/* se indica la url */
+								$
+										.post(
+												'/QuitarMiembrosProyecto',
+												{
+													idProyecto : rowdata.idProyecto,
+													idUsuario : rowdataMiembros.idUsuario
+												},
+												function(data, status) {
+
+													if (data.substring(0, 1) == 't') {
+														mostrarMensaje(
+																"Error",
+																"Usuario no se ha podido quitar:\n"
+																		+ data
+																				.substring(2));
+													} else {
+														mostrarMensaje("Exito",
+																"Usuario ha sido quitado del proyecto");
+													}
+													$('#listMiembros').trigger(
+															"reloadGrid");
+												});
+							},
+							"Salir" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+	function agregarMiembros(rowdata) {
+		//var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
+
+		//var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
+		var grid = jQuery("#listMiembros").jqGrid(
+				{
+
+					// datatype : "local",
+					// data:mydata,
+					url : 'http://localhost:5000/listarMiembrosProyecto',
+					datatype : "json",
+					mtype : "get",
+					postData : {
+						idProyecto : rowdata.idProyecto
+					},
+					show : {
+						effect : 'fade',
+						duration : 400
+					},
+					hide : {
+						effect : 'fade',
+						duration : 350
+					},
+					colNames : [ 'ID Usuario ', 'Cedula', 'Nombre de Usuario',
+							'Nombre', 'Apellido', 'Password', 'Email',
+							'Direccion', 'Telefono', 'Observacion',
+							'Es Miembro', 'Estado' ],
+					colModel : [ {
+						name : 'idUsuario',
+						index : 'idUsuario',
+						width : 200,
+						hidden : true
+					}, {
+						name : 'ci',
+						index : 'ci',
+						width : 200,
+						hidden : true
+					}, {
+						name : 'nombreUsuario',
+						index : 'nombreUsuario',
+						width : 200
+					}, {
+						name : 'nombre',
+						index : 'nombre',
+						width : 180
+					}, {
+						name : 'apellido',
+						index : 'apellido',
+						width : 180
+					}, {
+						name : 'pass',
+						index : 'pass',
+						width : 200,
+						hidden : true
+					}, {
+						name : 'email',
+						index : 'email',
+						width : 180
+					}, {
+						name : 'direccion',
+						index : 'direccion',
+						width : 200,
+						hidden : true
+					}, {
+						name : 'telefono',
+						index : 'telefono',
+						width : 200,
+						hidden : true
+					}, {
+						name : 'observacion',
+						index : 'observacion',
+						width : 200,
+						hidden : true
+					}, {
+						name : 'enProyecto',
+						index : 'enProyecto',
+						width : 90,
+						align : "center",
+						formatter : 'select',
+						stype : 'select',
+
+						editoptions : {
+							value : "Todos:Todos;Si:Si;No:No"
+						},
+					}, {
+						name : 'activo',
+						index : 'activo',
+						formatter : 'select',
+						stype : 'select',
+						editoptions : {
+							value : "true:Activo;false:Inactivo"
+						},
+						hidden : true
+					}
+
+					],
+					sortname : 'nombreUsuario',
+					viewrecords : true,
+					rownumbers : true,
+					sortorder : "desc",
+					ignoreCase : true,
+					pager : '#pagerMiembros',
+					caption : "Lista de Usuarios",
+					jsonReader : {
+						root : "invdata",
+						page : "currpage",
+						total : "totalpages",
+						records : "totalrecords",
+						repeatitems : false,
+						id : "idUsuario"
+					}
+
+				}).jqGrid('navGrid', '#pagerMiembros', {
+			edit : false,
+			add : false,
+			del : false,
+			search : false,
+			refresh : false
+		});
+		grid.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+	};
+
 	$("#dialogo-datos-cliente")
 			.dialog(
 					{
 						autoOpen : false,
-						width : 600,
+						width : 'auto',
+						height : '500',
+						overflow : scroll,
 						modal : true,
-						show: {effect: 'fade', duration: 400},
-						hide: {effect: 'fade', duration: 350},
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
 						resizable : false,
 						buttons : {
 							/* funcion asociado al boton aceptar */
@@ -477,56 +588,73 @@
 								/* si el dato es nuevo se llamar a la url para agregar */
 								if (bandera == 1) { /*si bandera==1 entonces es nuevo proyecto*/
 									/* se indica la URL */
-									$.post(
-											'/agregarProyecto/',
-											{ /* se indican los parametros*/
-												nombreProyecto : $(
-														"#nombreProyecto")
-														.val(),
-												fechaInicio : $("#datepicker")
-														.val(),
-												fechaFinal : $(
-														"#datepicker2")
-														.val(),
-												presupuesto : $(
-														"#presupuesto")
-														.val(),		
-												nroFases : $("#nroFases")
-														.val(),
-												observacion : $(
-														"#observacion")
-														.val(),
-												idProjectLeader :
-														$(
-														"#idProjectLeader")
-														.val(),
-												estado : $(
-														"#estado")
-														.val()
-												
-											},
-											function(data, status) {
-												/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+									if (control() == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									}else{
+									$
+											.post(
+													'/agregarProyecto/',
+													{ /* se indican los parametros*/
+														nombreProyecto : $(
+																"#nombreProyecto")
+																.val(),
+														fechaInicio : $(
+																"#datepicker")
+																.val(),
+														fechaFinal : $(
+																"#datepicker2")
+																.val(),
+														presupuesto : $(
+																"#presupuesto")
+																.val(),
+														nroFases : $(
+																"#nroFases")
+																.val(),
+														observacion : $(
+																"#observacion")
+																.val(),
+														idProjectLeader : $(
+																"#idProjectLeader")
+																.val(),
+														estado : $("#estado")
+																.val()
 
-												/* si hay error se muestra el mensaje*/
-												if (data.substring(0, 1) == 't') {
-													mostrarMensaje(
-															"Error",
-															"Los datos no se han podido guardar:\n"
-																	+ data
+													},
+													function(data, status) {
+														/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+														/* si hay error se muestra el mensaje*/
+														if (data
+																.substring(0, 1) == 't') {
+															mostrarMensaje(
+																	"Error",
+																	"Los datos no se han podido guardar:\n"
+																			+ data
+																					.substring(2));
+															/* se indica que no hubieron errores */
+														} else {
+															$(
+																	"#dialogo-datos-cliente")
+																	.dialog(
+																			"close");
+															mostrarMensaje(
+																	"Exito",
+																	data
 																			.substring(2));
-													/* se indica que no hubieron errores */
-												} else {
-													$("#dialogo-datos-cliente").dialog("close");
-													mostrarMensaje("Exito",data.substring(2));
-												}
-												/* se indicar la recarga de la tabla */
-												$('#list').trigger(
-														"reloadGrid");
-											});
+														}
+														/* se indicar la recarga de la tabla */
+														$('#list').trigger(
+																"reloadGrid");
+													});
+									}
 
 									/* si el dato se modifica se llama a la url para modificar*/
 								} else if (bandera == 2) {
+									if (control() == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									}else{	
 									/* se indica la url */
 									$
 											.post(
@@ -538,13 +666,16 @@
 														nombreProyecto : $(
 																"#nombreProyecto")
 																.val(),
-														fechaInicio : $("#datepicker").val(),
-														fechaFinalizacion: $("#datepicker2")
+														fechaInicio : $(
+																"#datepicker")
 																.val(),
-														presupuesto: $(
+														fechaFinalizacion : $(
+																"#datepicker2")
+																.val(),
+														presupuesto : $(
 																"#presupuesto")
 																.val(),
-														nroFases: $(
+														nroFases : $(
 																"#nroFases")
 																.val(),
 														activo : $("#activo")
@@ -552,11 +683,10 @@
 														observacion : $(
 																"#observacion")
 																.val(),
-														idProjectLeader :$(
+														idProjectLeader : $(
 																"#idProjectLeader")
 																.val(),
-														estado : $(
-																"#estado")
+														estado : $("#estado")
 																.val()
 
 													},
@@ -564,10 +694,16 @@
 
 														if (data
 																.substring(0, 1) == 't') {
-															mostrarMensaje("Error","Los datos no se han podido modificar:\n"
-																			+ data.substring(2));
+															mostrarMensaje(
+																	"Error",
+																	"Los datos no se han podido modificar:\n"
+																			+ data
+																					.substring(2));
 														} else {
-															$("#dialogo-datos-cliente").dialog("close");
+															$(
+																	"#dialogo-datos-cliente")
+																	.dialog(
+																			"close");
 															mostrarMensaje(
 																	"Exito",
 																	"Los datos han sido modificados");
@@ -575,6 +711,7 @@
 														$('#list').trigger(
 																"reloadGrid");
 													});
+									}
 								} else if (bandera == 3) {
 									$(this).dialog("close");
 								}
@@ -585,20 +722,32 @@
 						}
 					});
 
+	$.enmascarar = function() {
+		$('#presupuesto').number( true, 0 );
+		$('#nroFases').number( true, 0 );
+		//$("#presup7uesto").mask("", {placeholder : " "}); 
+		//$("#nroFases").mask("?9999999999999", {placeholder : " "}); 
+	}
+	
+	
 	/* funcion para llamar al formulario agregar un nuevo datos */
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
+		$.enmascarar();
+		setBordeNormal();
+		setCampoErrores();
 		bandera = 1;
 		/* se vacian los elementos HTML de captura de datos */
 		$("#nombreProyecto").val("").attr('disabled', false);
 		$("#idProjectLeader").val("").attr('disabled', false);
-		$("#nombreProjectLeader").val("{{session['username']}}").attr('disabled', true);
+		$("#nombreProjectLeader").val("{{session['username']}}").attr(
+				'disabled', true);
 		$("#datepicker").val("").attr('disabled', false);
 		$("#datepicker2").val("").attr('disabled', false);
 		$("#presupuesto").val("").attr('disabled', false);
 		$("#nroFases").val("").attr('disabled', false);
 		$("#observacion").val("").attr('disabled', false);
-		$("#estado").val("").attr('disabled',true);
+		$("#estado").val("").attr('disabled', true);
 		/* se llama al dialogo de captura de datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
@@ -607,6 +756,9 @@
 	function modificar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 2;
+		$.enmascarar();
+		setBordeNormal();
+		setCampoErrores();
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -617,16 +769,20 @@
 		var rowdata = $('#list').getRowData(row);
 		/*alert(rowdata.idProjectLeader)*/
 		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', false);
-		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', false);
-		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled', false);
-		$("#nombreProjectLeader").val("{{session['username']}}").attr('disabled', true);
+		$("#nombreProyecto").val(rowdata.nombreProyecto)
+				.attr('disabled', false);
+		$("#idProjectLeader").val(rowdata.idProjectLeader).attr('disabled',
+				false);
+		$("#nombreProjectLeader").val("{{session['username']}}").attr(
+				'disabled', true);
 		$("#datepicker").val(rowdata.fechaInicio).attr('disabled', false);
-		$("#datepicker2").val(rowdata.fechaFinalizacion).attr('disabled', false);
+		$("#datepicker2").val(rowdata.fechaFinalizacion)
+				.attr('disabled', false);
 		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', false);
 		$("#nroFases").val(rowdata.nroFases).attr('disabled', false);
 		$("#observacion").val(rowdata.observacion).attr('disabled', false);
-		$("#estado").val(rowdata.estado).attr('disabled',true);
-		
+		$("#estado").val(rowdata.estado).attr('disabled', true);
+
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
@@ -634,6 +790,9 @@
 	function consultar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
+		$.enmascarar();
+		setBordeNormal();
+		setCampoErrores();
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -644,17 +803,85 @@
 		var rowdata = $('#list').getRowData(row);
 		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', true);
 		$("#nombreProyecto").val(rowdata.nombreProyecto).attr('disabled', true);
-		$("#idProjectLeader").val("{{session['username']}}").attr('disabled', true);
-		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr('disabled', true);
+		$("#idProjectLeader").val("{{session['username']}}").attr('disabled',
+				true);
+		$("#nombreProjectLeader").val(rowdata.nombreProjectLeader).attr(
+				'disabled', true);
 		$("#datepicker").val(rowdata.fechaInicio).attr('disabled', true);
 		$("#datepicker2").val(rowdata.fechaFinalizacion).attr('disabled', true);
 		$("#presupuesto").val(rowdata.presupuesto).attr('disabled', true);
 		$("#nroFases").val(rowdata.nroFases).attr('disabled', true);
 		$("#observacion").val(rowdata.observacion).attr('disabled', true);
-		$("#estado").val(rowdata.estado).attr('disabled',true);
+		$("#estado").val(rowdata.estado).attr('disabled', true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
 	}
+	
+	function setBordeNormal() {
+		$("#nombreProyecto").css('border-color', 'skyblue');
+		$("#datepicker").css('border-color', 'skyblue');
+		$("#datepicker2").css('border-color', 'skyblue');
+		$("#presupuesto").css('border-color', 'skyblue');
+		$("#nroFases").css('border-color', 'skyblue');
+		$("#observacion").css('border-color', 'skyblue');		
+	}
+	
+	function setCampoErrores(){
+		$("#EnombreProyecto").val("");
+		$("#Edatepicker").val("");
+		$("#Edatepicker2").val("");
+		$("#Epresupuesto").val("");
+		$("#EnroFases").val("");
+		$("#Eobservacion").val("");
+		}
+	
+	function control() {
+		setCampoErrores();
+		setBordeNormal();
+		var error = 0;
+		var len;
+
+		len = $("#nombreProyecto").val().trim().length;
+		if (len > 20 || len <= 0) {
+			$("#nombreProyecto").css('border-color', 'red');
+			$("#EnombreProyecto").val("Campo Obligario. Long. max 20").css('color', 'red');	
+			error = 1;
+		}
+		
+		len = $("#datepicker").val().trim().length;
+		if (len <= 0) {
+			$("#datepicker").css('border-color', 'red');
+			$("#Edatepicker").val("Campo Obligario.").css('color', 'red');	
+			error = 1;
+		}
+		len = $("#datepicker2").val().trim().length;
+		if (len <= 0) {
+			$("#datepicker2").css('border-color', 'red');
+			$("#Edatepicker2").val("Campo Obligario.").css('color', 'red');	
+			error = 1;
+		}
+		if ($("#datepicker2").val()<=$("#datepicker").val()){
+			$("#datepicker2").css('border-color', 'red');
+			$("#Edatepicker2").val("Fech. de finalizacion es <= Fch. inicio").css('color', 'red');
+			
+		}
+		len = $("#nroFases").val().trim().length;
+		if (len <= 0 || $("#nroFases").val().trim()=='0') {
+			$("#nroFases").css('border-color', 'red');
+			$("#EnroFases").val("Campo Obligario. Debe declarse al menos 1 fse").css('color', 'red');
+			error = 1;
+		}
+		
+		len = document.getElementById("observacion").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len > 50) {
+			$("#observacion").css('border-color', 'red');
+			$("#Eobservacion").val("Long max 50").css('color', 'red');
+			error = 1;
+		}
+		return error;
+	}
+
 	
 
 	function mostrarMensaje(titulo, mensaje) {
@@ -662,8 +889,14 @@
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
-			show: {effect: 'fade', duration: 250},
-			hide: {effect: 'fade', duration: 200},
+			show : {
+				effect : 'fade',
+				duration : 250
+			},
+			hide : {
+				effect : 'fade',
+				duration : 200
+			},
 			buttons : {
 				"Ok" : function() {
 					$(this).dialog("close");
@@ -682,22 +915,22 @@
 			<div id="pager"></div>
 		</div></td>
 	<td><div>
-			<br></br>
-			<input id="btAgregar" type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
-			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
-				value="Modificar" /> <input  id="btConsultar" type="button" name="consultar"
-				value="Consultar" onclick='consultar()' />
-			<input id="btAgregarMiembros" type="button" name="agregarMiembrosButton"
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> <input id="btConsultar" type="button"
+				name="consultar" value="Consultar" onclick='consultar()' /> <input
+				id="btAgregarMiembros" type="button" name="agregarMiembrosButton"
 				value="Agregar Miembros Proyecto" onclick='abrirDialogoMiembros()' />
 			<br></br>
 			<script>
-			$("#btAgregar").button();
-			$("#btModificar").button();
-			$("#btConsultar").button();
-			$("#btAgregarMiembros").button();
+				$("#btAgregar").button();
+				$("#btModificar").button();
+				$("#btConsultar").button();
+				$("#btAgregarMiembros").button();
 			</script>
 		</div></td>
-		
+
 </tr>
 
 

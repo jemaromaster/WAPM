@@ -150,13 +150,11 @@
 					<td style="padding: 0.4em;"><label for="Nuevo"
 						style="display: block">Pass Nuevo</label> <input type="password"
 						name="passNuevo" id="passNuevo"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
-					</td>
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" /></td>
 					<td style="padding: 0.4em;"><label for="Actual"
 						style="display: block">Confirmar Pass</label> <input
 						type="password" name="passActual" id="passActual"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
-						<!-- style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"  -->
+						style="display: block; margin-bottom: 12px; padding: 0.4em;" /> <!-- style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"  -->
 					</td>
 				</tr>
 			</table>
@@ -168,96 +166,141 @@
 
 <div id="dialogo-datos-cliente" title="Datos de Usuarios">
 	<form title="(*) campos obligatorios">
-		<textarea rows="5" readonly id="paraConsulta" style="width:100%; resize: none; font-size:15px"></textarea>
+		<textarea tabIndex="-1" rows="5" readonly id="paraConsulta"
+			style="width: 100%; overflow: hidden; border: none; resize: none; font-size: 15px"></textarea>
 		<fieldset class="fieldset">
-		
+
 			<input type="hidden" name="idUsuario" id="idUsuario" />
 			<table id="table1c" style="float: left; padding: 0.4em;">
 				<tr>
 					<td><label for="name" style="display: block">*Username</label>
-						<input type="text" name="nombreUsuario" id="nombreUsuario"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						<input title="20 caracteres max" type="text" name="nombreUsuario"
+						id="nombreUsuario"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="EnombreUsuario"
+						id="EnombreUsuario"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="pass" style="display: block">*Password</label>
 						<input type="password" name="pass" id="pass"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" /></td>
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" /></td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Epass"
+						id="Epass"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
 				</tr>
 				<tr>
 					<td><label for="confirmPass" style="display: block">*Confirmar
 							Password</label> <input type="password" name="confirmPass"
 						id="confirmPass"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="EconfirmPass"
+						id="EconfirmPass"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
-					<td>
-					<input id="checkPL" type="checkbox">Es projectLeader</input> 
-					<br></br> 
-					<input id="checkAdmin" type="checkbox">EsAdministrador</input></td>
+					<td><input id="checkPL" type="checkbox">Es projectLeader</input>
+					 <br></br>
+					  <input id="checkAdmin" type="checkbox">EsAdministrador</input></td>
 				</tr>
 			</table>
-			
-			<table style="float: left; padding: 0.4em;">
+
+			<table style="padding: 0.4em;">
 
 				<tr>
-				
-					<td>
-					
-					<label for="ci" style="display: block">*Cedula</label> 
-					<input 
+
+					<td><label for="ci" style="display: block">*Cedula</label> 
+					<input
 						type="text" name="ci" id="ci"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;"
+						 /></td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Eci"
+						id="Eci"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="name" style="display: block">*Nombre</label> <input
 						type="text" name="nombre" id="nombre"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Enombre"
+						id="Enombre"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="apellido" style="display: block">*Apellido</label>
 						<input type="text" name="apellido" id="apellido"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Eapellido"
+						id="Eapellido"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="email" style="display: block">*E-mail</label>
 						<input type="text" name="email" id="email"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Eemail"
+						id="Eemail"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
-			</table>
-			<table style="float: left; padding: 0.4em;">
 
 				<tr>
 					<td><label for="direccion" style="display: block">Dirección</label>
 						<input type="text" name="direccion" id="direccion" value=""
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Edireccion"
+						id="Edireccion"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
-					<td><label for="telefono"  style="display: block">Telefono</label>
+					<td><label for="telefono" style="display: block">Telefono</label>
 						<input type="text" name="telefono" id="telefono" value=""
-						style="display: block; margin-bottom: 12px; padding: 0.4em;" />
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Etelefono"
+						id="Etelefono"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
 				<tr>
 					<td><label for="observacion" style="display: block">Observacion</label>
 						<textarea id="observacion" type="text"
-							style="display: block; margin-bottom: 12px; padding: 0.4em;">
+							style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;">
 						</textarea></td>
+						<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Eobservacion"
+						id="Eobservacion"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
 				</tr>
 				<tr>
-					<td> 
-					
-					<select  id="activo"
-						style="display: block; margin-bottom: 12px; padding: 0.4em;">
+					<td><select id="activo"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;">
 							<option value="true">Activo</option>
 							<option value="false">Inactivo</option>
-					</select> </td>
+					</select></td>
 				</tr>
 			</table>
 		</fieldset>
@@ -319,8 +362,10 @@
 					{
 						autoOpen : false,
 						modal : true,
+						overflow : scroll,
 						resizable : false,
 						width : 'auto',
+						height : '500',
 						show : {
 							effect : 'fade',
 							duration : 400
@@ -485,18 +530,20 @@
 								}
 							},
 							"Cancelar" : function() {
-								$(this).dialog("close"); 
+								$(this).dialog("close");
 							}
 						}
 					});
 	$.enmascarar = function() {
-		$('#ci').number( true, 0 );
+		//$('#ci').number( true, 0 );
+		$("#ci").mask("?9999999999", {
+			placeholder : " "
+		});
 		$("#telefono").mask("?9999999999999", {
 			placeholder : " "
 		});
 	}
-	
-	
+
 	function cargarForm(rowdata, row) {
 		rowdata = $('#list').getRowData(row);
 		$('#checkPL').prop('checked', false);
@@ -538,7 +585,7 @@
 		$("#observacion").attr('disabled', habilitar);
 	}
 
-	function setBordeNormal(){
+	function setBordeNormal() {
 		$("#nombreUsuario").css('border-color', 'skyblue');
 		$("#pass").css('border-color', 'skyblue');
 		$("#confirmPass").css('border-color', 'skyblue');
@@ -550,8 +597,22 @@
 		$("#telefono").css('border-color', 'skyblue');
 		$("#observacion").css('border-color', 'skyblue');
 	}
+	
+	function setCampoErrores(){
+		$("#EnombreUsuario").val("");
+		$("#Epass").val("");
+		$("#EconfirmPass").val("");
+		$("#Eci").val("");
+		$("#Enombre").val("");
+		$("#Eapellido").val("");
+		$("#Eemail").val("");
+		$("#Edireccion").val("");
+		$("#Etelefono").val("");
+		$("#Eobservacion").val("");
+	}
+	
 	function control(esNuevo) {
-		
+		setCampoErrores();
 		setBordeNormal();
 		var error = 0;
 		var len;
@@ -559,18 +620,22 @@
 		len = $("#nombreUsuario").val().trim().length;
 		if (len > 20 || len <= 0) {
 			$("#nombreUsuario").css('border-color', 'red');
+			$("#EnombreUsuario").val("Campo Obligario. Long. max 20").css('color', 'red');	
 			error = 1;
 		}
+		
 
 		if (esNuevo) {
 			len = $("#pass").val().trim().length;
 			if (len <= 0) {
 				$("#pass").css('border-color', 'red');
+				$("#Epass").val("Campo Obligario").css('color', 'red');;
 				error = 1;
 			}
 			if ($("#pass").val().trim() != $("#confirmPass").val().trim()) {
 				$("#pass").css('border-color', 'red');
 				$("#confirmPass").css('border-color', 'red');
+				$("#EconfirmPass").val("No coincide con el Pass").css('color', 'red');
 				error = 1;
 			}
 		}
@@ -578,26 +643,31 @@
 		len = $("#ci").val().trim().length;
 		if (len > 10 || len <= 0) {
 			$("#ci").css('border-color', 'red');
+			$("#Eci").val("Campo Obligario. Long. max 10").css('color', 'red');	
 			error = 1;
 		}
 		len = $("#nombre").val().trim().length;
 		if (len > 30 || len <= 0) {
 			$("#nombre").css('border-color', 'red');
+			$("#Enombre").val("Campo Obligario. Long. max 30").css('color', 'red');
 			error = 1;
 		}
 		len = $("#apellido").val().trim().length;
 		if (len > 30 || len <= 0) {
 			$("#apellido").css('border-color', 'red');
+			$("#Eapellido").val("Campo Obligario. Long. max 30").css('color', 'red');
 			error = 1;
 		}
 		len = $("#email").val().trim().length;
 		if (len > 30 || len <= 0) {
 			$("#email").css('border-color', 'red');
+			$("#Eemail").val("Campo Obligario. Long. max 30").css('color', 'red');
 			error = 1;
 		}
 		len = $("#direccion").val().trim().length;
 		if (len > 30) {
 			$("#direccion").css('border-color', 'red');
+			$("#Edireccion").val("Long max 30").css('color', 'red');
 			error = 1;
 		}
 		len = $("#telefono").val().trim().length;
@@ -609,6 +679,7 @@
 		//len=$("#observacion").val().trim().length;
 		if (len > 50) {
 			$("#observacion").css('border-color', 'red');
+			$("#Eobservacion").val("Long max 50").css('color', 'red');
 			error = 1;
 		}
 		return error;
@@ -616,7 +687,8 @@
 
 	/* funcion para llamar al formulario para modificar un pass*/
 	function cambiarPass() {
-		
+		$("#passActual").css('border-color', 'skyblue');
+		$("#passNuevo").css('border-color', 'skyblue');
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
@@ -630,8 +702,9 @@
 	}
 	/* funcion para llamar al formulario agregar un nuevo datos */
 	function agregar() {
-		prepararConsultar(false,0,0)
+		prepararConsultar(false, 0, 0)
 		setBordeNormal();
+		setCampoErrores();
 		$("#table1c").show();//muestra la tabla que contiene los campos pass confirmar pass roles y userName
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
@@ -654,19 +727,18 @@
 		$("#observacion").val("");
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
-		
-		$.enmascarar();  
+
+		$.enmascarar();
 
 		$("#dialogo-datos-cliente").dialog("open");
 	}
 
-	
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
-		
-		
-		prepararConsultar(false,0,0)
+
+		prepararConsultar(false, 0, 0)
 		setBordeNormal();
+		setCampoErrores();
 		/* se indica que el dato no es nuevo */
 		bandera = 2;
 		/* se comprueba que hay un dato seleccionado para modificar */
@@ -693,39 +765,40 @@
 		$("#dialogo-datos-cliente").dialog("open");
 
 	}
-	
-	function prepararConsultar(preparar,pl,admin){
-		
-		if(preparar){
-		
-		var stringToShow="Nombre de usuario:\t"+
-			$("#nombreUsuario").val();
-		stringToShow= stringToShow+ "\nEstado:\t";
-		if($('#activo').val()=="true")
-			stringToShow= stringToShow + "El usuario está ACTIVO\n";
-		else	
-			stringToShow= stringToShow + "El usuario está INACTIVO";
-		stringToShow= stringToShow+"\nRoles de Sistema: ";
-		if (pl == "1")
-			stringToShow= stringToShow+ "\tEs Project Leader \n";
-		if (admin == "1")
-			stringToShow= stringToShow+ "\t\t\t\tEs Administrador";
-		if(admin != "1" && pl != "1")
-			stringToShow= stringToShow+ "\t\t\t\tMiembro en proyectos";
-		$('#paraConsulta').val(stringToShow);
-		$('#paraConsulta').show();
-		$('#activo').hide();
-		}else{
+
+	function prepararConsultar(preparar, pl, admin) {
+
+		if (preparar) {
+
+			var stringToShow = "Usuario:\t" + $("#nombreUsuario").val();
+			stringToShow = stringToShow + "\t\tEstado:\t";
+			if ($('#activo').val() == "true")
+				stringToShow = stringToShow + "Activo\n\n";
+			else
+				stringToShow = stringToShow + "Inactivo\n";
+			if (pl == "1")
+				stringToShow = stringToShow + "Es Project Leader\n";
+			if (admin == "1")
+				stringToShow = stringToShow + "Es Administrador\n";
+			$('#paraConsulta').val(stringToShow);
+			$('#paraConsulta').show();
+			$('#activo').hide();
+			$('#dialogo-datos-cliente').siblings('.ui-dialog-buttonpane').find(
+					'button').eq('1').hide();
+		} else {
+			$('#dialogo-datos-cliente').siblings('.ui-dialog-buttonpane').find(
+					'button').eq('1').show();
 			$('#paraConsulta').hide();
 			$('#activo').show();
-			
+
 		}
 	}
 
 	function consultar() {
 		setBordeNormal();
+		setCampoErrores();
 		$("#table1c").hide();//oculta la tabla que contiene los campos pass confirmar pass roles y userName
-		
+
 		//$('#idEstado').detach().attr('type', 'text').attr('disabled',true).insertAfter('#activo').val($('#activo').val());
 		//cambia el comboBox por un campo disabled del estado 
 		//$('#activo').hide();
@@ -742,7 +815,7 @@
 		cargarForm(rowdata, row);
 		/*se inhabilita la edicion*/
 		rowdata = $('#list').getRowData(row);
-		prepararConsultar(true,rowdata.pl,rowdata.admin)
+		prepararConsultar(true, rowdata.pl, rowdata.admin)
 		setCamposDisabled(true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-cliente").dialog("open");
@@ -779,7 +852,7 @@
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
-			width:'auto',
+			width : 'auto',
 			buttons : {
 				"Ok" : function() {
 					$(this).dialog("close");

@@ -133,8 +133,8 @@
 	$.fn.number = function( number, decimals, dec_point, thousands_sep ){
 	    
 	    // Enter the default thousands separator, and the decimal placeholder.
-	    thousands_sep	= (typeof thousands_sep === 'undefined') ? ',' : thousands_sep;
-	    dec_point		= (typeof dec_point === 'undefined') ? '.' : dec_point;
+	    thousands_sep	= (typeof thousands_sep === 'undefined') ? '.' : thousands_sep;
+	    dec_point		= (typeof dec_point === 'undefined') ? ',' : dec_point;
 	    decimals		= (typeof decimals === 'undefined' ) ? 0 : decimals;
 	    	    
 	    // Work out the unicode character for the decimal placeholder.

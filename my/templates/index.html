@@ -24,7 +24,7 @@
     
  <style type="text/css">
 .fieldset {
-	width: 450px;
+	width: auto;
 	border: 0;
 }
 </style>
@@ -58,6 +58,7 @@
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
+			width: 'auto',
 			buttons : {
 				"Ok" : function() {
 					$(this).dialog("close");
@@ -69,8 +70,8 @@
 						autoOpen : true,
 						modal : true,
 						resizable : false,
-						width : 500,
-						height:240,
+						width : 'auto',
+						
 						buttons : {
 							"Aceptar" : function enviarPostLogin() {
 								passMd5= MD5($("#pass").val().trim());
