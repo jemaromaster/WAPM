@@ -1,5 +1,6 @@
 from usuarioModelo import Usuario
 from proyectoModelo import Proyecto
+from permisoModelo import Permiso
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
 import md5
@@ -52,6 +53,26 @@ def cargaEstatica():
         u.roles_sistema.append(rs3)
         sesion.add(u)
         
+    cargaValores=sesion.query(Permiso).count()
+    if cargaValores <= 0:
+        p=[]
+        
+        p.append(Permiso('Consultar Fases','01-001','Consulta atributos de fase'))
+        p.append(Permiso('Edicion Fases','01-011','Edita atributos de fase'))
+        p.append(Permiso('Finalizar Fases','01-111','Finaliza (cierra) una fase'))
+        
+        p.append(Permiso('Consultar Linea Base','02-001','Consulta items en la linea base'))
+        p.append(Permiso('Edicion LB','02-011','Administra items en la linea base'))
+        p.append(Permiso('Finalizar LB','02-111','Finaliza (cierra) una linea Base'))
     
+        p.append(Permiso('Consultar Items','03-001','Consulta atributos item'))
+        p.append(Permiso('Edicion Iems','03-011','Crea item y edita atributos de item'))
+        p.append(Permiso('Finalizar Fases','03-111','Aprueba item'))
+    
+        p.append(Permiso('Consultar Tipo Item','04-001','Consulta atributos de tipo item'))
+        p.append(Permiso('Edicion Tipo Item','04-011','Crea tipo de item y edita atributos de TI'))
+        for permiso in p:
+            sesion.add(permiso)
+        
     sesion.commit()
     sesion.close()

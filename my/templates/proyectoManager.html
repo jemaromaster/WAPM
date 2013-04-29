@@ -862,13 +862,13 @@
 		}
 		if ($("#datepicker2").val()<=$("#datepicker").val()){
 			$("#datepicker2").css('border-color', 'red');
-			$("#Edatepicker2").val("Fech. de finalizacion es <= Fch. inicio").css('color', 'red');
+			$("#Edatepicker2").val("Debe ser mayor a Fch. inicio").css('color', 'red');
 			
 		}
 		len = $("#nroFases").val().trim().length;
 		if (len <= 0 || $("#nroFases").val().trim()=='0') {
 			$("#nroFases").css('border-color', 'red');
-			$("#EnroFases").val("Campo Obligario. Debe declarse al menos 1 fse").css('color', 'red');
+			$("#EnroFases").val("Debe declarse al menos 1 fase").css('color', 'red');
 			error = 1;
 		}
 		
