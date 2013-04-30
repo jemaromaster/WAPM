@@ -187,6 +187,34 @@ class WAPMTestCase(unittest.TestCase):
                          'activo')
         assert 'Ya existe Proyecto con ese nombre' in rv.data
   
+    def test_agregarProyecto_FechaInv(self):    
+        """Se prueba agregar un Proyecto con fecha invalida"""
+        self.test_login_OK()
+        rera='ProjectX'+str(random.randint(-9999999999,9999999999))
+        rv=self.agregarP(rera,
+                         '3',
+                         '5',
+                         'Proyecto de gran envergadura',
+                         '500000',
+                         '72/04/1998',
+                         '15/08/2001',
+                         'activo')
+        assert 'Fecha invalida' in rv.data
+        
+    def test_agregarProyecto_FechaIniFin(self):    
+        """Se prueba agregar un Proyecto con fecha de finalizacion anterior a la de inicio"""
+        self.test_login_OK()
+        rera='ProjectX'+str(random.randint(-9999999999,9999999999))
+        rv=self.agregarP(rera,
+                         '3',
+                         '5',
+                         'Proyecto de gran envergadura',
+                         '500000',
+                         '12/04/2015',
+                         '15/08/2001',
+                         'activo')
+        assert 'Fecha finalizacion antes que fecha inicio' in rv.data
+
 
     def modificarP(self, idProyecto, nombreProyecto, idProjectLeader, nroFases, observacion, presupuesto, fechaInicio, fechaFinalizacion, estado):
       return self.app.post('/modificarProyecto', data=dict(
@@ -203,21 +231,23 @@ class WAPMTestCase(unittest.TestCase):
 #===============================================================================
 # EESTOOO NO DEBERIA FUNCIONAR, ME DEJA MODIFICAR Y PONERLE EL MISMO NOMBRE DE PROYECTO YA EXISTENTE
 #===============================================================================
-    def test_modificarProyecto_OK(self):    
-        """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno nuevo(valido, no existente)"""
-        self.test_login_OK()
-        rera='ProjectX'+str(random.randint(-9999999999,9999999999))
-        rv=self.modificarP('2',
-                           'TUVIEJA',
-                           '1',
-                           '5',
-                           'Proyecto de gran envergadura',
-                           '500000',
-                           '12/04/1998',
-                           '15/08/2001',
-                           'activo')
-        print rv.data
-        assert 'Proyecto guardado correctamente' in rv.data
+    #===========================================================================
+    # def test_modificarProyecto_OK(self):    
+    #     """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno nuevo(valido, no existente)"""
+    #     self.test_login_OK()
+    #     rera='ProjectX'+str(random.randint(-9999999999,9999999999))
+    #     rv=self.modificarP('2',
+    #                        'TUVIEJA',
+    #                        '1',
+    #                        '5',
+    #                        'Proyecto de gran envergadura',
+    #                        '500000',
+    #                        '12/04/1998',
+    #                        '15/08/2001',
+    #                        'activo')
+    #     print rv.data
+    #     assert 'Proyecto guardado correctamente' in rv.data
+    #===========================================================================
         
     def test_modificarProyecto_FName(self):    
         """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno  YA existente)"""
@@ -233,10 +263,168 @@ class WAPMTestCase(unittest.TestCase):
                          'activo')
         assert 'Ya existe Proyecto con ese nombre' in rv.data
 
+    def test_modificarProyecto_FechaInv(self):    
+        """Se prueba modificar un Proyecto, poniendole una fecha invalida"""
+        self.test_login_OK()
+        rv=self.modificarP('2',
+                         'hola',
+                         '3',
+                         '5',
+                         'Proyecto de gran envergadura',
+                         '500000',
+                         '51/84/1998',
+                         '15/08/2001',
+                         'activo')
+        assert 'Fecha invalida' in rv.data
 
-'''    def logout(self):
-        return self.app.get('/logout', follow_redirects=True)
-'''
+    def test_modificarProyecto_FechaIniFin(self):    
+        """Se prueba modificar un Proyecto, poniendole una fecha de finalizacion anterior a la de inicio"""
+        self.test_login_OK()
+        rv=self.modificarP('2',
+                         'hola',
+                         '3',
+                         '5',
+                         'Proyecto de gran envergadura',
+                         '500000',
+                         '15/08/2010',
+                         '15/08/1985',
+                         'activo')
+        assert 'Fecha finalizacion antes que fecha inicio' in rv.data
 
+
+    def agregarMiembro(self, idProyecto, idUsuarioAgregar):
+      return self.app.post('/agregarMiembrosProyecto/', data=dict(
+          idProyecto=idProyecto,
+          idUsuarioAgregar=idUsuarioAgregar
+      ), follow_redirects=True)
+      
+    def test_agregarMiembro_OK(self):
+        """Se prueba agregar un Usuario a un proyecto determinado (a uno en donde ese usuario todavia no esta)"""
+        self.test_login_OK()
+        rv=self.agregarMiembro('2', '3')
+        assert 'Usuario agregado correctamente al proyecto' in rv.data
+        rv=self.quitarMiembro('2', '3')
+        assert 'Usuario eliminado correctamente del proyecto' in rv.data
+
+        
+    def test_agregarMiembro_Yaesta(self):
+        """Se prueba agregar un Usuario a un proyecto en el que el, ya se encuentra"""
+        self.test_login_OK()
+        rv=self.agregarMiembro('1', '5')
+        assert 'Usuario ya existe en proyecto' in rv.data
+
+    def quitarMiembro(self, idProyecto, idUsuario):
+      return self.app.post('/QuitarMiembrosProyecto', data=dict(
+          idProyecto=idProyecto,
+          idUsuario=idUsuario
+      ), follow_redirects=True)        
+
+    #===========================================================================
+    # def test_quitarMiembro_OK(self):
+    #     self.test_login_OK()
+    #     rv=self.quitarMiembro('2', '3')
+    #     print rv.data
+    #     assert 'Usuario eliminado correctamente del proyecto' in rv.data
+    #===========================================================================
+
+    def agregar_Fase(self, nombreFase, fechaInicio, fechaFinal, descripcion, estado, idProyecto):
+      return self.app.post('/agregarFase/', data=dict(
+          nombreFase=nombreFase,
+          fechaInicio=fechaInicio,
+          fechaFinal=fechaFinal,
+          descripcion=descripcion,
+          estado=estado,
+          idProyecto=idProyecto
+      ), follow_redirects=True)           
+     
+    def test_agregarFase_OK(self):
+        """Se prueba agregar una fase con un nombre valido(no existente)"""
+        self.test_login_OK()
+        rera=str(random.randint(-9999999999,9999999999))        
+        rv= self.agregar_Fase(rera, '12/04/1998', '20/04/1998', 'ninguna', 'activa', '3')   
+        assert 'Fase guardada correctamente' in rv.data
+        
+    def test_agregarFase_YA(self):
+        """Se prueba agregar una fase con un nombre ya existente"""
+        self.test_login_OK()
+        rv= self.agregar_Fase('primera', '12/04/1998', '20/04/1998', 'ninguna', 'activa', '3')   
+        assert 'Ya existe una fase con el nombre indicado' in rv.data
+
+    def test_agregarFase_FechaInv(self):
+        """Se prueba agregar una fase con una fecha invalida"""
+        self.test_login_OK()
+        rera=str(random.randint(-9999999999,9999999999))        
+        rv= self.agregar_Fase(rera, '12/04/1998', '31/04/1998', 'ninguna', 'activa', '3')   
+        assert 'Fecha invalida' in rv.data
+
+    def test_agregarFase_FechaIniFin(self):
+        """Se prueba agregar una fase con una fecha de finalizacion anterior a la de inicio"""
+        self.test_login_OK()
+        rera=str(random.randint(-9999999999,9999999999))        
+        rv= self.agregar_Fase(rera, '12/06/1998', '30/04/1998', 'ninguna', 'activa', '3')   
+        assert 'Fecha finalizacion antes que fecha inicio' in rv.data
+                
+    def modificar_Fase(self, idFase, nombreFase, fechaInicio, fechaFinal, descripcion, estado, idProyecto):
+      return self.app.post('/modificarFase/', data=dict(
+          idFase=idFase,
+          nombreFase=nombreFase,
+          fechaInicio=fechaInicio,
+          fechaFinal=fechaFinal,
+          descripcion=descripcion,
+          estado=estado,
+          idProyecto=idProyecto
+      ), follow_redirects=True)    
+    
+    def test_modificarFase_OK(self):
+        """Se prueba modificar una fase, poniendole un nombre valido(no existe)"""
+        self.test_login_OK()
+        rera=str(random.randint(-9999999999,9999999999))
+        rv=self.modificar_Fase('2',
+                         rera,
+                         '20/05/1998',
+                         '21/06/2000',
+                         'heello flow',
+                         'activa',
+                         '2')
+        assert 'Fase guardada correctamente' in rv.data
+
+    def test_modificarFase_YaEsta(self):
+        """Se prueba modificar una fase, poniendole un nombre ya existente"""
+        self.test_login_OK()
+        rv=self.modificar_Fase('5',
+                         'ya_estoy',
+                         '20/05/1998',
+                         '21/06/2000',
+                         'heello flow',
+                         'activa',
+                         '2')
+        assert 'Ya existe una fase con el nombre indicado' in rv.data
+ 
+    def test_modificarFase_FechaInv(self):
+        """Se prueba modificar una fase, poniendole una fecha invalida"""
+        self.test_login_OK()
+        rera=str(random.randint(-9999999999,9999999999))
+        rv=self.modificar_Fase('2',
+                         rera,
+                         '58/31/1998',
+                         '21/06/2000',
+                         'heello flow',
+                         'activa',
+                         '2')
+        assert 'Fecha invalida' in rv.data
+ 
+    def test_modificarFase_FechaIniFin(self):
+        """Se prueba modificar una fase, poniendole una fecha de finalizacion anterior a la de inicio"""
+        self.test_login_OK()
+        rera=str(random.randint(-9999999999,9999999999))
+        rv=self.modificar_Fase('2',
+                         rera,
+                         '20/05/2000',
+                         '21/06/1998',
+                         'heello flow',
+                         'activa',
+                         '2')
+        assert 'Fecha finalizacion antes que fecha inicio' in rv.data
+        
 if __name__ == '__main__':
     unittest.main()
