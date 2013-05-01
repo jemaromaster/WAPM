@@ -20,6 +20,10 @@ from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
 
+from rol_proyecto.rolProyectoManager import RolProyectoManager
+from rol_proyecto.listarRolProyecto import ListarRolProyecto
+from rol_proyecto.agregarRolProyecto import AgregarRolProyecto
+from rol_proyecto.modificarRolProyecto import ModificarRolProyecto
 
 from login import Login
 
@@ -92,6 +96,19 @@ app.add_url_rule('/listarFases/',
                  methods=["GET", "POST"])
 app.add_url_rule('/modificarFase/',
                  view_func=ModificarFase.as_view('modificarFase'),
+                 methods=["GET", "POST"])
+#roles de proyecto
+app.add_url_rule('/rolProyectoManager/',
+                 view_func=RolProyectoManager.as_view('rolProyectoManager'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarRolProyecto/',
+                 view_func= ListarRolProyecto.as_view('listarRolProyecto'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/agregarRolProyecto/',
+                 view_func=AgregarRolProyecto.as_view('agregarRolProyecto'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/modificarRolProyecto/',
+                 view_func=ModificarRolProyecto.as_view('modificarRolProyecto'),
                  methods=["GET", "POST"])
 
 app.debug = True

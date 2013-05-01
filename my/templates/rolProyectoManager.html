@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% block header %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">
+	//<![CDATA[
+	jQuery(document).ready(
+			function() {
+
+				var grid = jQuery("#list").jqGrid(
+						{
+
+							// datatype : "local",
+							// data:mydata,
+							url : 'http://localhost:5000/listarRolProyecto',
+							datatype : "json",
+							mtype : "get",
+							show : {
+								effect : 'fade',
+								duration : 200
+							},
+							hide : {
+								effect : 'fade',
+								duration : 200
+							},
+							colNames : [ 'ID rol ', 'Nombre',
+									'Descripcion', 'listaPermisos' ],
+							colModel : [ {
+								name : 'idRol',
+								index : 'idRol',
+								hidden : true
+							}, {
+								name : 'nombre',
+								index : 'nombre',
+							}, {
+								name : 'descripcion',
+								index : 'descripcion',
+
+							}							
+							, {
+								name : 'listaPermisos',
+								index : 'listaPermisos',
+								hidden : true
+							}
+
+							],
+							sortname : 'nombre',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "desc",
+							ignoreCase : true,
+							pager : '#pager',
+							caption : "Lista de Roles",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+								id : "idUsuario"
+							}
+
+						}).jqGrid('navGrid', '#pager', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : true
+				});
+				grid.jqGrid('filterToolbar', {
+					stringResult : true,
+					searchOnEnter : false,
+					defaultSearch : "cn"
+				});
+			});
+	//]] 
+</script>
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	width: auto;
+	border: 0;
+}
+</style>
+
+<div id="dialogo-rolProyecto" title="Roles de proyecto">
+	<form title="(*) campos obligatorios">
+		<textarea tabIndex="-1" rows="5" readonly id="paraConsulta"
+			style="width: 100%; overflow: hidden; border: none; resize: none; font-size: 15px"></textarea>
+		<fieldset class="fieldset">
+
+			<input type="hidden" name="idRol" id="idRol" />
+			<table id="table1c" style="float: left; padding: 0.4em;">
+				<tr>
+					<td><label for="nombre" style="display: block">*Nombre del Rol</label>
+						<input title="20 caracteres max" type="text" name="nombre"
+						id="nombre"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Enombre"
+						id="Enombre"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="descripcion" style="display: block">*Descripcion</label>
+						<input type="text" name="descripcion" id="descripcion"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" /></td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Edescripcion"
+						id="Edescripcion"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+				
+			</table>
+		</fieldset>
+	</form>
+</div>
+
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+	var bandera;
+	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+		$("#dialogo-rolProyecto")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						overflow : scroll,
+						resizable : false,
+						width : 'auto',
+						height : '500',
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Aceptar" : function() {
+								/* si el dato es nuevo se llamar a la url para agregar */
+								if (bandera == 1) {
+									/* se indica la URL */
+									if (control(true) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+										$.post('/agregarRolProyecto/',{
+														/* se indican los parametros*/
+														nombre : $(
+																"#nombre")
+																.val(),
+														descripcion : $("#descripcion").val()
+														},
+														function(data, status) {
+															/* funcion que maneja el resulado de la invocación */
+	
+															/* si hay error se muestra el mensaje*/
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido guardar:\n"
+																				+ data
+																						.substring(2));
+																/* se indica que no hubieron errores */
+															} else {
+																$(
+																		"#dialogo-datos-cliente")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		data
+																				.substring(2));
+															}
+															/* se indicar la recarga de la tabla */
+															$('#list')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+
+									/* si el dato se modifica se llama a la url para modificar*/
+								} else if (bandera == 2) {
+									if (control(false) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+
+										/* se indica la url */
+										$
+												.post(
+														'/modificarRolProyecto/',
+														{
+															idRol: $("#idRol").val(),
+															nombre : $("#nombre").val(),
+															descripcion : $("#descripcion").val()
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido modificar:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-datos-cliente")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Los datos han sido modificados");
+															}
+															$('#list')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} else if (bandera == 3) {
+									$(this).dialog("close");
+								}
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+
+	function cargarForm(rowdata, row) {
+		rowdata = $('#list').getRowData(row);
+		$("#idRol").val(rowdata.idRol);
+		$("#nombre").val(rowdata.nombre);
+		$("#descripcion").val(rowdata.descripcion);
+		}
+
+	function setCamposDisabled(habilitar) {
+		$("#nombre").attr('disabled', habilitar);
+		$("#descripcion").attr('disabled', habilitar);
+	}
+
+	function setBordeNormal() {
+		$("#nombre").css('border-color', 'skyblue');
+		$("#descripcion").css('border-color', 'skyblue');
+	}
+	
+	function setCampoErrores(){
+		$("#Enombre").val("");
+		$("#Edescripcion").val("");
+	}
+	
+	function control(esNuevo) {
+		setCampoErrores();
+		setBordeNormal();
+		var error = 0;
+		var len;
+
+		len = $("#nombre").val().trim().length;
+		if (len > 20 || len <= 0) {
+			$("#nombre").css('border-color', 'red');
+			$("#Enombre").val("Campo Obligario. Long. max 20").css('color', 'red');	
+			error = 1;
+		}
+
+
+		len = $("#descripcion").val().trim().length;
+		if (len > 50 || len <= 0) {
+			$("#descripcion").css('border-color', 'red');
+			$("#Edescripcion").val("Campo Obligario. Long. max 50").css('color', 'red');	
+			error = 1;
+		}		return error;
+	}
+	
+	/* funcion para llamar al formulario agregar un nuevo datos */
+	function agregar() {
+		setBordeNormal();
+		setCampoErrores();
+		bandera = 1;
+
+		/* se vacian los elementos HTML de captura de datos */
+		$("#idRol").val("");
+		$("#nombre").val("");
+		$("#descripcion").val("");
+		
+		/* se llama al dialogo de captura de datos */
+		setCamposDisabled(false);
+
+		$("#dialogo-rolProyecto").dialog("open");
+	}
+
+	/* funcion para llamar al formulario para la modificación de datos */
+	function modificar() {
+
+		setBordeNormal();
+		setCampoErrores();
+		/* se indica que el dato no es nuevo */
+		bandera = 2;
+		/* se comprueba que hay un dato seleccionado para modificar */
+		var row = $('#list').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se habilita la edicion*/
+		setCamposDisabled(false);
+		
+		$("#dialogo-rolProyecto").dialog("open");
+
+	}
+
+	function consultar() {
+		setBordeNormal();
+		setCampoErrores();
+
+		//$('#idEstado').detach().attr('type', 'text').attr('disabled',true).insertAfter('#activo').val($('#activo').val());
+		//cambia el comboBox por un campo disabled del estado 
+		//$('#activo').hide();
+		/* se indica que el dato no es nuevo */
+		bandera = 3;
+		/* se comprueba que hay un dato seleccionado para consultar */
+		var row = $('#list').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se inhabilita la edicion*/
+		rowdata = $('#list').getRowData(row);
+		setCamposDisabled(true);
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-rolProyecto").dialog("open");
+	}
+	/* funcion que maneja la accion de desactivar un cliente*/
+	
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			width : 'auto',
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+{% endblock %} {% block body %}
+
+<tr>
+	<td><div>
+			<table id="list"></table>
+			<div id="pager"></div>
+		</div></td>
+	<td><div>
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> 
+			<input id="btConsultar" type="button" name="consultar"
+				value="Consultar" onclick='consultar()' /> <br></br>
+			<script>
+				$("#btAgregar").button();
+				$("#btModificar").button();
+				$("#btConsultar").button();
+			</script>
+		</div></td>
+
+</tr>
+
+
+{% endblock %}
+</html>

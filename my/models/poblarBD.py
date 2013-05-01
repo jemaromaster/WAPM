@@ -58,7 +58,7 @@ def cargaEstatica():
         p=[]
         
         p.append(Permiso('Consultar Fases','01-001','Consulta atributos de fase'))
-        p.append(Permiso('Edicion Fases','01-011','Edita atributos de fase'))
+        #p.append(Permiso('Edicion Fases','01-011','Edita atributos de fase'))
         p.append(Permiso('Finalizar Fases','01-111','Finaliza (cierra) una fase'))
         
         p.append(Permiso('Consultar Linea Base','02-001','Consulta items en la linea base'))
