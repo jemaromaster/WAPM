@@ -3,12 +3,10 @@ from sqlalchemy.orm import relationship,backref, mapper
 from bdCreator import Base
 import flask.views
 from atributosModelo import Atributos
+from faseModelo import Fase
 
 
-tipo_item_atributo_tabla=Table('tipo_item#atributo', Base.metadata,
-    Column('TIPO_ITEM', Integer, ForeignKey('tipo_item.id')),
-    Column('ATRIBUTO', Integer, ForeignKey('atributos.id'))
-)
+
 
 
 class TipoItem(Base):
@@ -28,22 +26,25 @@ class TipoItem(Base):
     estado = Column("estado",String(10))
     descripcion = Column("descripcion",String(30))
     atributosItem=relationship('Atributos',
-                                secondary=tipo_item_atributo_tabla,
                                 backref='tipoitem')
     
+    fase=relationship('Fase', backref='tipoitem')
+    fase_id=Column(Integer,ForeignKey('fase.id'))
     
-    def setValues(self,nombreTipoItem,descripcion):
+    def setValues(self,nombreTipoItem,descripcion, estado):
         """
         Metodo para establecer valores de atributos de la clase. 
         Parametros: self,nombreTipoItem, faseId
         """
         self.nombreTipoItem=nombreTipoItem;
         self.descripcion=descripcion;
+        self.estado=estado;
         
         
-    def __init__(self,nombreTipoItem,descripcion):
+    def __init__(self,nombreTipoItem,descripcion, estado):
         self.nombreTipoItem=nombreTipoItem;
         self.descripcion=descripcion;
+        self.estado=estado;
 
 
 

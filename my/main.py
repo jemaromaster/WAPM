@@ -15,15 +15,20 @@ from Proyectos.agregarMiembrosProyecto import AgregarMiembrosProyecto
 from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
 
+from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
+
 from Fases.faseManager import FaseManager
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
 
 from TiposDeItem.tipoItemManager import TipoItemManager
-
+from TiposDeItem.agregarTipoItem import AgregarTipoItem
+from TiposDeItem.listarTipoItem import ListarTipoItem
+from TiposDeItem.modificarTipoItem import ModificarTipoItem
 from login import Login
 
+from TiposDeItem.listarAtributo import ListarAtributo
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
@@ -98,6 +103,24 @@ app.add_url_rule('/modificarFase/',
 app.add_url_rule('/tipoItemManager/',
                  view_func=TipoItemManager.as_view('tipoItemManager'),
                  methods=["GET", "POST"])
+app.add_url_rule('/agregarTipoItem/',
+                 view_func=AgregarTipoItem.as_view('agregarTipoItem'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarTipoItem/',
+                 view_func=ListarTipoItem.as_view('listarTipoItem'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarAtributo/',
+                 view_func=ListarAtributo.as_view('listarAtributo'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/modificarTipoItem/',
+                 view_func=ModificarTipoItem.as_view('modificarTipoItem'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/listarProyectosComboBox/',
+                 view_func=ListarProyectosComboBox.as_view('listarProyectosComboBox'),
+                 methods=["GET", "POST"])
+
 
 app.debug = True
 app.run()

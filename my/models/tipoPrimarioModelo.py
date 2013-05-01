@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship,backref, mapper
 from bdCreator import Base
 import flask.views
 
-class TipoAtributo(Base):
+class TipoPrimario(Base):
     """
     Esta clase se utiliza para mapear a sus instancias con la tabla de TIPODEATRIBUTO
     Hereda de la clase Base. La clase Base debe ser heredada por todas las 
@@ -11,12 +11,12 @@ class TipoAtributo(Base):
     Atributos de la clase: id, nombre, tipoPrimario
     """
     #Nombre de la tabla
-    __tablename__ = 'tipo_atributo'
+    __tablename__ = 'tipo_primario'
     
     #Columnas
     id = Column("id",Integer, primary_key=True)
     nombre =  Column("nombre",String(20))
-    tipoprimario=Column("tipoprimario",String(10))
+    tipoprimario=Column("nombre_tipo_primario",String(10))
     
     def setValues(self,nombre,tipoPrimario):
         """

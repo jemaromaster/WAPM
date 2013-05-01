@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship,backref, mapper
 from bdCreator import Base
 import flask.views
 #from models.tipoItemModelo import TipoItem
-from tipoAtributoModelo import TipoAtributo
+from tipoPrimarioModelo import TipoPrimario
 
 
 '''tipoItemTabla= Table('atributos_2', Base.metadata,
@@ -24,26 +24,33 @@ class Atributos(Base):
     #Columnas
     idAtributo = Column("id",Integer, primary_key=True)
     nombreAtributo = Column("nombre",String(20))
-    tipoAtributoId=Column("id_tipo_atributo",Integer, ForeignKey("tipo_atributo.id"))
-    tipoAtributo=relationship("TipoAtributo", backref='atributos')
+    longitudCadena=Column("longitud_cadena",Integer)
+    
+    tipoPrimarioId=Column("id_tipo_primario",Integer, ForeignKey("tipo_primario.id"))
+    tipoPrimario=relationship("TipoPrimario", backref='atributosPrimarios')
     #tipoItemId=Column("id_tipo_item",Integer, ForeignKey("TipoItem.idTipoItem"))
 #    usuariosMiembros=relationship('Usuario',
 #                                  secondary=miembrosProyectoTabla,
 #                                  backref='proyectos')
     
-    def setValues(self,nombreAtributo,tipoAtributoId):
+    tipoItemId = Column("tipo_item_id",Integer, ForeignKey('tipo_item.id'))
+    
+    def setValues(self,idAtributo,mbreAtributo,tipoPrimarioId, longitudCadena):
         """
         Metodo para establecer valores de atributos de la clase. 
         Parametros: self,nombreTipoItem, faseId
         """
+        self.idAtributo=idAtributo;
         self.nombreAtributo=nombreAtributo;
-        self.tipoAtributoId=tipoAtributoId;
-       
+        self.tipoPrimarioId=tipoPrimarioId;
+        self.longitudCadena=longitudCadena;
         
         
-    def __init__(self,nombreAtributo,tipoAtributoId):
+    def __init__(self,idAtributo,nombreAtributo,tipoPrimarioId, longitudCadena):
+        self.idAtributo=idAtributo;
         self.nombreAtributo=nombreAtributo;
-        self.tipoAtributoId=tipoAtributoId;
+        self.tipoPrimarioId=tipoPrimarioId;
+        self.longitudCadena=longitudCadena;
 
 
 

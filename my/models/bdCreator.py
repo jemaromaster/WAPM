@@ -18,7 +18,12 @@ def initDB():
     from proyectoModelo import Proyecto
     from proyectoModelo import miembrosProyectoTabla
     from rolSistemaModelo import RolSistema
+    
     from faseModelo import Fase
-
+    from tipoItemModelo import TipoItem
+    from tipoPrimarioModelo import TipoPrimario
+    from atributosModelo import Atributos
+    
+    
 
     Base.metadata.create_all(engine)

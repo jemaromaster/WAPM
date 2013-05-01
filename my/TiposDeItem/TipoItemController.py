@@ -1,64 +1,113 @@
 from flask import views, make_response
 import flask.views
 
-from models.tipoItemModelo import Tipo_item
+
 from models.bdCreator import Session
 
-from tipoItemManejador import tipoItemManejador
+from models.tipoItemModelo import TipoItem
+from models.atributosModelo import Atributos
+from tipoItemManejador import TipoItemManejador
+from models.tipoPrimarioModelo import TipoPrimario
+
+
 
 class TipoItemControllerClass(flask.views.MethodView):
-    def controlarPass(self, passNuevo, idU):
-        sesion=Session()
-
-        u=sesion.query(Usuario).filter(Usuario.id==idU).first()
-        u.passwd=passNuevo
-        um=UsuarioManejador()
-        return um.guardarUsuario(u, idU)
+   
+    def controlarTI(self, ti, idIT, atributos, idProyecto, idFase):
         
-    def controlarUsuario(self, usuario, idU):
-        u=usuario
+        ti.nombreTipoItem=ti.nombreTipoItem.strip()
+        ti.descripcion=ti.descripcion.strip()
+        ti.estado=ti.estado.strip()
         
-        u.username=u.username.strip()
-        u.nombres=u.nombres.strip()
-        u.passwd=u.passwd.strip()
-        u.apellidos=u.apellidos.strip()
-        u.email=u.email.strip()
-        u.ci=u.ci.strip()
-        u.telefono=u.telefono.strip()
-        u.observacion=u.observacion.strip()
-        u.activo=u.activo.strip()
-        u.direccion=u.direccion.strip()
-        
+        """Se controlan primeramente los campos de TIPO DE ITEM """
+       
         '''controla el tamano de los strings'''
          
-        if not(1<=len(u.username)<=20 and 1<=len(u.passwd)<=32 \
-              and 1<=len(u.nombres)<=30 and 1<=len(u.apellidos)<=30 and 1<=len(u.email)<=30 \
-              and 1<=len(u.ci)<=10and 0<=len(u.telefono)<=13 and 0<=len(u.observacion)<=50 \
-              and 1<=len(u.activo)<=10 and 0<=len(u.direccion)<=30): 
+        if not(1<=len(ti.nombreTipoItem)<=20 and 1<=len(ti.descripcion)<=50 \
+              and 1<=len(ti.estado)<=10): 
             return make_response('t,Se supera caracteres de los campos ')
             
         
-        '''controla caracteres validos en el username'''
         
-        for r in u.username:
-            if not(65<=ord(r)<=90 or 48<=ord(r)<=57 or 97<=ord(r)<=122):
-                responde=make_response("t,El username tiene espacios")
-                return responde
-        print "controla"
-        
-        '''consulta si es que existe ya usuario con ese nombre'''
+        '''consulta si es que existe ya tipo de item en la fase con ese nombre'''
         
         sesion=Session()
-        if(idU==0):
-            usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
-            if(usr is not None):
-                return make_response('t,Ya existe el usuario')
+        tipit=sesion.query(TipoItem).filter(TipoItem.fase_id==idFase).filter(TipoItem.nombreTipoItem==ti.nombreTipoItem).first()
+        if(idIT==0):
+            if(tipit is not None):
+                return make_response('t,Ya existe el tipo de item en esa fase')
         else:
-            usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
-            if( usr is not None and str(usr.id) != idU ):
-                return make_response('t,Ya existe el usuario')
-                   
-        um=UsuarioManejador()
+            if( tipit is not None and str(tipit.idTipoItem) != idIT):
+                return make_response('t,Ya existe el tipo de item en esa fase al intentar modificar')
         
-        return um.guardarUsuario(u, idU)
+        """Se crean objeto Atributo y agregan a una lista para su posterior control"""
+        lista=[]
+        sesion=Session()
+       
+       
+        for at in atributos:
+            #print('for'+at['nombreAtributo'])
+            #tPrimId=sesion.query(TipoPrimario.id).filter(TipoPrimario.nombre==at['tipoPrimario']).first()
+            #tPrim=sesion.query(TipoPrimario).filter(TipoPrimario.id==1).first()
+            tPrimId=0;
+            if(at['tipoPrimario']=='Texto'):
+                tPrimId=1
+            elif(at['tipoPrimario']=='Numerico'):
+                tPrimId=2
+            elif(at['tipoPrimario']=='Entero'):
+                tPrimId=3
+            elif(at['tipoPrimario']=='Fecha'):
+                tPrimId=4
+            #if(tPrim is None):
+            else:
+                return make_response('t,Tipo primario invalido')
+            '''if(tPrimId is None):
+                return make_response('t,Tipo primario invalido')'''
+            if(int(at['idAtributosRemoto'])==0):
+                at=Atributos(None,at['nombreAtributo'], tPrimId, at['longitudCadena'])
+            else:
+                at=Atributos(int(at['idAtributosRemoto']),at['nombreAtributo'], tPrimId, at['longitudCadena'])
+            lista.append(at)
+        sesion.close()
+      
         
+        listaControlada=[]
+        
+        
+        '''se controla cada uno de los atributos de la lista'''
+        for atrib in lista:
+           #print 'lalalalal el id de T atrib es'+str(atrib.tipoPrimarioId)
+            '''controla el tamano de los strings'''
+            if not(1<=len(atrib.nombreAtributo)<=20):
+                return ('t,Se supera caracteres para el nombre de tributo'+atrib.nombreAtributo)
+            
+            '''si es que es una cadena se controla el campo longitud, si no,se le coloca 0 como longitud'''
+            
+            #if(atrib.tipoPrimario.nombre=='Texto'): 
+            if(atrib.tipoPrimarioId==1): #si esl atributo es String
+               try:
+                   atrib.longitudCadena=int(atrib.longitudCadena)
+               except:
+                   return make_response('t,no es valido el numero ' + atrib.longitudCadena + 'en atributo '+ atrib.nombreAtributo)
+               
+               if not(1<=atrib.longitudCadena<=500):
+                        return make_response('t,Numeros valido para longitud cadena para atributo:' + atrib.nombreAtributo\
+                                             + 'debe ser entre 1 y 500')
+            else:
+                atrib.longitudCadena=int(0); 
+                #print 'numerico su longitud cadena es ' + str(atrib.longitudCadena)
+            '''se controla que no exista un atributo con ese nombre en el tipo de item'''
+            if(idIT!=0): 
+                consulta=sesion.query(Atributos).filter(Atributos.tipoItemId==idIT)\
+                                    .filter(Atributos.nombreAtributo==atrib.nombreAtributo).first()
+                #print 'consulta es'+ str(consulta)
+                if(consulta is not None and consulta.idAtributo!=atrib.idAtributo):
+                    return ('t,Ya existe atributo con cteres para el nombre de tributo'+atrib.nombreAtributo)
+           
+            listaControlada.append(atrib)
+        
+       
+            
+        timan=TipoItemManejador()
+        return timan.guardarTipoItem(ti, idIT, listaControlada,idProyecto, idFase)
+       
