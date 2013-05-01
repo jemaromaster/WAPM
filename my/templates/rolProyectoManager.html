@@ -109,8 +109,8 @@
 				</tr>
 				<tr>
 					<td><label for="descripcion" style="display: block">*Descripcion</label>
-						<input type="text" name="descripcion" id="descripcion"
-						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;" /></td>
+						<textarea type="text" name="descripcion" id="descripcion"
+						style="width: 200px; display: block; margin-bottom: 12px; padding: 0.4em;"> </textarea></td>
 					<td><br></br> <input title="20 caracteres max" readonly
 						tabIndex="-1" type="text" name="Edescripcion"
 						id="Edescripcion"
@@ -135,7 +135,7 @@
 						overflow : scroll,
 						resizable : false,
 						width : 'auto',
-						height : '500',
+						
 						show : {
 							effect : 'fade',
 							duration : 400
@@ -175,7 +175,7 @@
 																/* se indica que no hubieron errores */
 															} else {
 																$(
-																		"#dialogo-datos-cliente")
+																		"#dialogo-rolProyecto")
 																		.dialog(
 																				"close");
 																mostrarMensaje(
@@ -217,7 +217,7 @@
 																						.substring(2));
 															} else {
 																$(
-																		"#dialogo-datos-cliente")
+																		"#dialogo-rolProyecto")
 																		.dialog(
 																				"close");
 																mostrarMensaje(
