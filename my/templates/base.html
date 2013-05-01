@@ -84,7 +84,7 @@
 		  
 		var select = $('#proyectosUsuario');
 		var options = select.prop('options');
-		
+		//alert ('hola')
 		var newOptions = {
 			    'red' : 'Red',
 			    'blue' : 'Blue',
@@ -94,7 +94,7 @@
 		$('option', select).remove();
 
 		$.each(atribs, function(index,atrib) { //val,text
-		    options[options.length] = new Option(atrib.idProyecto, atrib.nombreProyecto);
+		    options[options.length] = new Option(atrib.nombreProyecto,atrib.idProyecto);
 		});
 		//select.val(selectedOption);
 		  //);
