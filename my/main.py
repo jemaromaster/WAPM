@@ -10,10 +10,11 @@ from Usuarios.listarUsuarios import ListarUsuarios
 from Proyectos.proyectoManager import ProyectoManager
 from Proyectos.modificarProyecto import ModificarProyecto
 from Proyectos.agregarProyecto import AgregarProyecto
-from Proyectos.listarProyecto import ListarProyectos
+from Proyectos.listarProyecto import ListarProyectos, ListarProyectosCombo
 from Proyectos.agregarMiembrosProyecto import AgregarMiembrosProyecto
 from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
+from Proyectos.miembroManager import MiembroManager
 
 from Fases.faseManager import FaseManager
 from Fases.agregarFase import AgregarFase
@@ -38,7 +39,7 @@ Se realizan las redirecciones de las peticiones de manera conveniente. Cada peti
 entrante debe estar asociada a una URL, con dicha URL la peticion es canalizada a travez
 de las reglas de URL a las funciones que se haran cargo de senrvirlas
 """
-initDB()
+initDB() 
 poblarBD.cargaEstatica()
 # Don't do this
 app.secret_key = "bacon"
@@ -71,6 +72,9 @@ app.add_url_rule('/modificarProyecto',
                  methods=["GET", "POST"])
 app.add_url_rule('/listarProyectos/',
                  view_func=ListarProyectos.as_view('listarProyectos'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarProyectoCombo/',
+                 view_func=ListarProyectosCombo.as_view('listarProyectoCombo'),
                  methods=["GET", "POST"])
 
 #Corresponde a agregar Miembro de proyecto
@@ -109,6 +113,11 @@ app.add_url_rule('/agregarRolProyecto/',
                  methods=["GET", "POST"])
 app.add_url_rule('/modificarRolProyecto/',
                  view_func=ModificarRolProyecto.as_view('modificarRolProyecto'),
+                 methods=["GET", "POST"])
+
+
+app.add_url_rule('/miembroManager/',
+                 view_func=MiembroManager.as_view('miembroManager'),
                  methods=["GET", "POST"])
 
 app.debug = True

@@ -67,7 +67,8 @@ class ListarMiembrosProyecto(flask.views.MethodView):
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
         idProyectoAFiltrar=flask.request.args.get('idProyecto', '')
-        
+        if idProyectoAFiltrar =='' or idProyectoAFiltrar =='0':
+            return "NO HAY ID PROYECTO"
         enProyecto='Todos'
         #caluclo de paginacion 
         page=long(param1)
@@ -179,6 +180,7 @@ class ListarMiembrosProyecto(flask.views.MethodView):
             totalPages=total/rows
         else:
             totalPages=total/rows +1
+            
         r=Respuesta(totalPages,page,total,rows);
         respuesta=r.jasonizar(todosUsuarios,listaUsuarioEnProyecto, enProyecto)
         return respuesta

@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% block header %}
+<title>WAPM</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">
+	
+	function cargaCombo(){
+		$.getJSON("http://localhost:5000/listarProyectoCombo", function(atribs) {
+
+			var select = $('#comboProyecto');
+			var options = select.prop('options');
+			//alert ('hola')
+			
+			$('option', select).remove();
+			options[0] = new Option("--Seleccione un proyecto--","0");
+			var index=0
+			$.each(atribs, function(index,atrib) {
+			index=index+1;
+			options[options.length] = new Option(index+" : "+atrib.nombreProyecto,atrib.idProyecto);
+			})		
+	})}
+
+	function reloadGrid(){
+		/*if ($('#comboProyecto').val()=="0"){
+			jQuery("#listMiembros").clearGridData(true);
+		}*/
+		$("#comboProyecto option[value='0']").remove();
+		
+		var myPostData = $('#listMiembros').jqGrid("getGridParam", "postData");
+		delete myPostData.idProyecto;
+		//eso borra el idFase actual
+		$('#listMiembros').setGridParam({
+		postData: { idProyecto: comboProyectoSeleccion() } });
+		//eso se setea el nuevo valor
+		$('#listMiembros').trigger("reloadGrid");
+		
+		
+	}
+	
+	function comboProyectoSeleccion()
+	{
+		return $('#comboProyecto').val()
+		
+	}
+	
+	jQuery(document)
+			.ready(
+					function() {
+						cargaCombo();
+						var grid = 	jQuery("#listMiembros").jqGrid(
+								{
+									// datatype : "local"
+									// data:mydata 
+									url : 'http://localhost:5000/listarMiembrosProyecto',
+									datatype : "json",
+									mtype : "get",
+									postData : {idProyecto: comboProyectoSeleccion()},
+									show : {
+										effect : 'fade',
+										duration : 400
+									},
+									hide : {
+										effect : 'fade',
+										duration : 350
+									},
+									colNames : [ 'ID Usuario ', 'Cedula', 'Nombre de Usuario',
+											'Nombre', 'Apellido', 'Password', 'Email',
+											'Direccion', 'Telefono', 'Observacion',
+											'Es Miembro', 'Estado' ],
+									colModel : [ {
+										name : 'idUsuario',
+										index : 'idUsuario',
+										width : 200,
+										hidden : true
+									}, {
+										name : 'ci',
+										index : 'ci',
+										width : 200,
+										hidden : true
+									}, {
+										name : 'nombreUsuario',
+										index : 'nombreUsuario',
+										width : 200
+									}, {
+										name : 'nombre',
+										index : 'nombre',
+										width : 180
+									}, {
+										name : 'apellido',
+										index : 'apellido',
+										width : 180
+									}, {
+										name : 'pass',
+										index : 'pass',
+										width : 200,
+										hidden : true
+									}, {
+										name : 'email',
+										index : 'email',
+										width : 180
+									}, {
+										name : 'direccion',
+										index : 'direccion',
+										width : 200,
+										hidden : true
+									}, {
+										name : 'telefono',
+										index : 'telefono',
+										width : 200,
+										hidden : true
+									}, {
+										name : 'observacion',
+										index : 'observacion',
+										width : 200,
+										hidden : true
+									}, {
+										name : 'enProyecto',
+										index : 'enProyecto',
+										width : 90,
+										align : "center",
+										formatter : 'select',
+										stype : 'select',
+
+										editoptions : {
+											value : "Todos:Todos;Si:Si;No:No"
+										},
+									}, {
+										name : 'activo',
+										index : 'activo',
+										formatter : 'select',
+										stype : 'select',
+										editoptions : {
+											value : "true:Activo;false:Inactivo"
+										},
+										hidden : true
+									}
+
+									],
+									sortname : 'nombreUsuario',
+									viewrecords : true,
+									rownumbers : true,
+									sortorder : "desc",
+									ignoreCase : true,
+									pager : '#pagerMiembros',
+									caption : "Lista de Usuarios",
+									jsonReader : {
+										root : "invdata",
+										page : "currpage",
+										total : "totalpages",
+										records : "totalrecords",
+										repeatitems : false,
+										id : "idUsuario"
+									}
+
+								}).jqGrid('navGrid', '#pagerMiembros', {
+							edit : false,
+							add : false,
+							del : false,
+							search : false,
+							refresh : false
+						});
+						grid.jqGrid('filterToolbar', {
+							stringResult : true,
+							searchOnEnter : false,
+							defaultSearch : "cn"
+						});
+					});		
+</script>
+
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	width: auto;
+	border: 0;
+}
+</style>
+{% endblock %} {% block body %}
+<div>
+<label for="comboProyecto" style="display: block ; padding: 0.4em; float:left ">Administrar un proyecto</label> 
+<select id="comboProyecto" onchange="reloadGrid()"
+style="display: block; margin-bottom: 12px; padding: 0.4em;"
+class="ui-widget-content ui-corner-all">
+</select>
+</div>
+<br></br>
+<div id="dialogo-agregar-miembros" title="Agregar Miembros a Proyecto">
+	<table id="listMiembros"></table>
+	<div id="pagerMiembros"></div>
+</div>
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+	var banderita;
+	var yaentro;
+	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+
+	 function Agregar() {
+		/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+		var rowMiembros = $('#listMiembros').jqGrid(
+				'getGridParam', 'selrow');
+		if (rowMiembros == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el Usuario a agregar");
+			return;
+		}
+		var rowdataMiembros = $('#listMiembros')
+				.getRowData(rowMiembros);
+
+		if (rowdataMiembros.activo == 'false') {
+			mostrarMensaje("Atencion",
+					"No se puede agregar usuario inactivo a un proyecto");
+		}
+		/* se indica la URL */
+		$
+				.post(
+						'/agregarMiembrosProyecto/',
+						{ /* se indican los parametros*/
+							idProyecto : $('#comboProyecto').val(),
+							idUsuarioAgregar : rowdataMiembros.idUsuario
+
+						},
+						function(data, status) {
+							/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+							/* si hay error se muestra el mensaje*/
+							if (data.substring(0, 1) == 't') {
+								mostrarMensaje(
+										"Error",
+										"Los datos no se han podido guardar:\n"
+												+ data
+														.substring(2));
+								/* se indica que no hubieron errores */
+							} else {
+								mostrarMensaje(
+										"Exito",
+										data
+												.substring(2));
+							}
+							/* se indicar la recarga de la tabla */
+							$('#listMiembros').trigger(
+									"reloadGrid");
+						});
+
+							/* si el dato se modifica se llama a la url para modificar*/
+	}
+	 function Quitar() {
+		var rowMiembros = $('#listMiembros').jqGrid(
+				'getGridParam', 'selrow');
+		if (rowMiembros == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el Usuario a agregar");
+			return;
+		}
+		var rowdataMiembros = $('#listMiembros')
+				.getRowData(rowMiembros);
+		/* se indica la url */
+		$
+				.post(
+						'/QuitarMiembrosProyecto',
+						{
+							idProyecto : $('#comboProyecto').val(),
+							idUsuario : rowdataMiembros.idUsuario
+						},
+						function(data, status) {
+
+							if (data.substring(0, 1) == 't') {
+								mostrarMensaje(
+										"Error",
+										"Usuario no se ha podido quitar:\n"
+												+ data
+														.substring(2));
+							} else {
+								mostrarMensaje("Exito",
+										"Usuario ha sido quitado del proyecto");
+							}
+							$('#listMiembros').trigger(
+									"reloadGrid");
+						});
+	}
+
+		
+
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			show : {
+				effect : 'fade',
+				duration : 250
+			},
+			hide : {
+				effect : 'fade',
+				duration : 200
+			},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+<tr>
+	
+	<td><div>
+			<br></br> <input id="btAgregar" type="button" name="btAgregar"
+				value="Agregar" onclick='Agregar()' /> <input id="btQuitar"
+				type="button" name="btQuitar" onclick='Quitar();'
+				value="Quitar" /> 
+			<br></br>
+			<script>
+				$("#btAgregar").button();
+				$("#btQuitar").button();
+			</script>
+		</div></td>
+
+</tr>
+
+
+{% endblock %}
+</html>

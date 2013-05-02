@@ -50,7 +50,17 @@ class Respuesta():
         p=p+"]}"    
         p=pre+p
         return p 
-        
+class ListarProyectosCombo(flask.views.MethodView):
+    @login_required
+    def get(self):
+        lp=sesion.query(Proyecto).all()
+        jsonP='['
+        for proyecto in lp:
+            jsonP=jsonP+"{\"idProyecto\":\""+str(proyecto.idProyecto)+"\",\"nombreProyecto\":\""+proyecto.nombreProyecto+"\"},"
+        jsonP=jsonP[0:len(jsonP)-1]    
+        jsonP=jsonP+"]"        
+        return jsonP
+            
 class ListarProyectos(flask.views.MethodView):
     @login_required
     def get(self): 
