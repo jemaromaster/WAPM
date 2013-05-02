@@ -1,6 +1,6 @@
 #import flask
 import os
-import main
+import mainPyUnit
 import unittest
 import tempfile
 import json
@@ -10,15 +10,15 @@ class TestsLogin(unittest.TestCase):
  
     def setUp(self):
         """Before each test, set up a blank database"""
-        self.db_fd, main.app.config['DATABASE'] = tempfile.mkstemp()
-        main.app.config['TESTING'] = True
-        self.app = main.app.test_client()
-        #main.init_db()
+        self.db_fd, mainPyUnit.app.config['DATABASE'] = tempfile.mkstemp()
+        mainPyUnit.app.config['TESTING'] = True
+        self.app = mainPyUnit.app.test_client()
+        #mainPyUnit.init_db()
 
     def tearDown(self):
         """Get rid of the database again after each test."""
         os.close(self.db_fd)
-        os.unlink(main.app.config['DATABASE'])
+        os.unlink(mainPyUnit.app.config['DATABASE'])
 
     def login(self, username, passwd):
         return self.app.post('/', data=dict(

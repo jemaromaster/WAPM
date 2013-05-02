@@ -1,6 +1,6 @@
 #import flask
 import os
-import main
+import mainPyUnit
 import unittest
 import tempfile
 import json
@@ -10,15 +10,15 @@ class WAPMTestCase(unittest.TestCase):
  
     def setUp(self):
         """Before each test, set up a blank database"""
-        self.db_fd, main.app.config['DATABASE'] = tempfile.mkstemp()
-        main.app.config['TESTING'] = True
-        self.app = main.app.test_client()
-        #main.init_db()
+        self.db_fd, mainPyUnit.app.config['DATABASE'] = tempfile.mkstemp()
+        mainPyUnit.app.config['TESTING'] = True
+        self.app = mainPyUnit.app.test_client()
+        #mainPyUnit.init_db()
 
     def tearDown(self):
         """Get rid of the database again after each test."""
         os.close(self.db_fd)
-        os.unlink(main.app.config['DATABASE'])
+        os.unlink(mainPyUnit.app.config['DATABASE'])
 
     def login(self, username, passwd):
         return self.app.post('/', data=dict(
@@ -59,25 +59,23 @@ class WAPMTestCase(unittest.TestCase):
           activo=activo
       ), follow_redirects=True)
 
-    #===========================================================================
-    # def test_agregarUsuario_OK(self):
-    #     """Se prueba agregar un Usuario con nuevo nombre de usuario valido"""
-    #     #self.login('username1', 'pass2')
-    #     self.test_login_OK()
-    #     rera=str(random.randint(-999999999999999999,9999999999999999999))
-    #     rv=self.agregarU('[ "0", "0" ]',
-    #                      rera,
-    #                      '4d186321c1a7f0f354b297e8914ab240',
-    #                      '65874',
-    #                      'john',
-    #                      'smith',
-    #                      'john@smith.com',
-    #                      'brasil 876',
-    #                      '124874',
-    #                      'ninguna por ahora',
-    #                      'true')
-    #     assert 'Usuario guardado correctamente' in rv.data
-    #===========================================================================
+    def test_agregarUsuario_OK(self):
+        """Se prueba agregar un Usuario con nuevo nombre de usuario valido"""
+        #self.login('username1', 'pass2')
+        self.test_login_OK()
+        rera=str(random.randint(-999999999999999999,9999999999999999999))
+        rv=self.agregarU('[ "0", "0" ]',
+                         rera,
+                         '4d186321c1a7f0f354b297e8914ab240',
+                         '65874',
+                         'john',
+                         'smith',
+                         'john@smith.com',
+                         'brasil 876',
+                         '124874',
+                         'ninguna por ahora',
+                         'true')
+        assert 'Usuario guardado correctamente' in rv.data
         
     def test_agregarUsuario_FUsername(self):
         """Se prueba agregar un Usuario con nombre de usuario ya existente"""
@@ -111,24 +109,22 @@ class WAPMTestCase(unittest.TestCase):
           activo=activo
       ), follow_redirects=True)
 
-    #===========================================================================
-    # def test_modificarUsuario_OK(self):
-    #     """Se prueba modificar un Usuario, asignandole un nombre de usuario nuevo valido"""
-    #     self.test_login_OK()
-    #     rera=str(random.randint(-999999999999999999,9999999999999999999))
-    #     rv=self.modificarU('3',
-    #                      rera,
-    #                      'hola',
-    #                      '65874',
-    #                      'john',
-    #                      'smith',
-    #                      'john@smith.com',
-    #                      'brasil 876',
-    #                      '124874',
-    #                      'ninguna por ahora',
-    #                      'activo')
-    #     assert 'Usuario guardado correctamente' in rv.data
-    #===========================================================================
+    def test_modificarUsuario_OK(self):
+        """Se prueba modificar un Usuario, asignandole un nombre de usuario nuevo valido"""
+        self.test_login_OK()
+        rera=str(random.randint(-999999999999999999,9999999999999999999))
+        rv=self.modificarU('3',
+                         rera,
+                         'hola',
+                         '65874',
+                         'john',
+                         'smith',
+                         'john@smith.com',
+                         'brasil 876',
+                         '124874',
+                         'ninguna por ahora',
+                         'activo')
+        assert 'Usuario guardado correctamente' in rv.data
 
     def test_modificarUsuario_FUsername(self):
         """Se prueba modificar un Usuario y asignarle un nombre de usuario ya existente"""
@@ -158,21 +154,19 @@ class WAPMTestCase(unittest.TestCase):
           estado=estado
       ), follow_redirects=True)
 
-    #===========================================================================
-    # def test_agregarProyecto_OK(self):    
-    #     """Se prueba agregar un Proyecto con un nombre de proyecto nuevo(valido, no existente)"""
-    #     self.test_login_OK()
-    #     rera='ProjectX'+str(random.randint(-9999999999,9999999999))
-    #     rv=self.agregarP(rera,
-    #                      '3',
-    #                      '5',
-    #                      'Proyecto de gran envergadura',
-    #                      '500000',
-    #                      '12/04/1998',
-    #                      '15/08/2001',
-    #                      'activo')
-    #     assert 'Proyecto guardado correctamente' in rv.data
-    #===========================================================================
+    def test_agregarProyecto_OK(self):    
+        """Se prueba agregar un Proyecto con un nombre de proyecto nuevo(valido, no existente)"""
+        self.test_login_OK()
+        rera='ProjectX'+str(random.randint(-9999999999,9999999999))
+        rv=self.agregarP(rera,
+                         '3',
+                         '5',
+                         'Proyecto de gran envergadura',
+                         '500000',
+                         '12/04/1998',
+                         '15/08/2001',
+                         'activo')
+        assert 'Proyecto guardado correctamente' in rv.data
 
     def test_agregarProyecto_FName(self):    
         """Se prueba agregar un Proyecto con un nombre de proyecto nuevo(valido, no existente)"""
@@ -228,26 +222,26 @@ class WAPMTestCase(unittest.TestCase):
           fechaFinalizacion=fechaFinalizacion,
           estado=estado
       ), follow_redirects=True)
+      
 #===============================================================================
 # EESTOOO NO DEBERIA FUNCIONAR, ME DEJA MODIFICAR Y PONERLE EL MISMO NOMBRE DE PROYECTO YA EXISTENTE
 #===============================================================================
-    #===========================================================================
-    # def test_modificarProyecto_OK(self):    
-    #     """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno nuevo(valido, no existente)"""
-    #     self.test_login_OK()
-    #     rera='ProjectX'+str(random.randint(-9999999999,9999999999))
-    #     rv=self.modificarP('2',
-    #                        'TUVIEJA',
-    #                        '1',
-    #                        '5',
-    #                        'Proyecto de gran envergadura',
-    #                        '500000',
-    #                        '12/04/1998',
-    #                        '15/08/2001',
-    #                        'activo')
-    #     print rv.data
-    #     assert 'Proyecto guardado correctamente' in rv.data
-    #===========================================================================
+
+
+    def test_modificarProyecto_OK(self):    
+        """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno nuevo(valido, no existente)"""
+        self.test_login_OK()
+        rera='ProjectX'+str(random.randint(-9999999999,9999999999))
+        rv=self.modificarP('2',
+                           rera,
+                           '1',
+                           '5',
+                           'Proyecto de gran envergadura',
+                           '500000',
+                           '12/04/1998',
+                           '15/08/2001',
+                           'activo')
+        assert 'Proyecto guardado correctamente' in rv.data
         
     def test_modificarProyecto_FName(self):    
         """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno  YA existente)"""
@@ -258,8 +252,8 @@ class WAPMTestCase(unittest.TestCase):
                          '5',
                          'Proyecto de gran envergadura',
                          '500000',
-                         '12/04/98',
-                         '15/08/01',
+                         '12/04/1998',
+                         '15/08/2001',
                          'activo')
         assert 'Ya existe Proyecto con ese nombre' in rv.data
 
@@ -267,7 +261,7 @@ class WAPMTestCase(unittest.TestCase):
         """Se prueba modificar un Proyecto, poniendole una fecha invalida"""
         self.test_login_OK()
         rv=self.modificarP('2',
-                         'hola',
+                         'lol',
                          '3',
                          '5',
                          'Proyecto de gran envergadura',
@@ -275,13 +269,14 @@ class WAPMTestCase(unittest.TestCase):
                          '51/84/1998',
                          '15/08/2001',
                          'activo')
+        print rv.data
         assert 'Fecha invalida' in rv.data
-
+ 
     def test_modificarProyecto_FechaIniFin(self):    
         """Se prueba modificar un Proyecto, poniendole una fecha de finalizacion anterior a la de inicio"""
         self.test_login_OK()
         rv=self.modificarP('2',
-                         'hola',
+                         'lol',
                          '3',
                          '5',
                          'Proyecto de gran envergadura',
@@ -290,7 +285,6 @@ class WAPMTestCase(unittest.TestCase):
                          '15/08/1985',
                          'activo')
         assert 'Fecha finalizacion antes que fecha inicio' in rv.data
-
 
     def agregarMiembro(self, idProyecto, idUsuarioAgregar):
       return self.app.post('/agregarMiembrosProyecto/', data=dict(
@@ -426,5 +420,27 @@ class WAPMTestCase(unittest.TestCase):
                          '2')
         assert 'Fecha finalizacion antes que fecha inicio' in rv.data
         
+    def agregarTipoItem(self, nombreTipoItem, estado, descripcion, atributos, idProyecto, idFase):
+      return self.app.post('/agregarTipoItem/', data=dict(
+          nombreTipoItem=nombreTipoItem,
+          estado=estado,
+          descripcion=descripcion,
+          atributos=atributos,
+          idProyecto=idProyecto,
+          idFase=idFase
+      ), follow_redirects=True)    
+        
+    #===========================================================================
+    # def test_agregarTipoItem_OK(self):
+    #     """Se prueba agregar un Tipo de item con nombre valido(no existente)"""
+    #     rera=str(random.randint(-9999999999,9999999999))
+    #     rv=self.agregarTipoItem(rera,
+    #                          'Activo',
+    #                          'juego, web, editor',
+    #                          '[{u\'tipoPrimario\': u\'Texto\', u\'longitudCadena\': u\'20\', u\'idAtributosRemoto\': u\'0\', u\'nombreAtributo\': u\'jeje\', u\'idAtributosLocal\': u\'2\'}]',
+    #                          '2',
+    #                          '2')
+    #     assert 'Tipo de item guardado correctamente' in rv.data
+    #===========================================================================
 if __name__ == '__main__':
     unittest.main()

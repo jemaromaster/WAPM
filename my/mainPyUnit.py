@@ -108,4 +108,4 @@ app.add_url_rule('/tipoItemManager/',
                  methods=["GET", "POST"])
 
 app.debug = True
-app.run()
+#app.run()

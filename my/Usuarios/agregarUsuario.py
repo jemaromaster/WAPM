@@ -22,6 +22,7 @@ class AgregarUsuario(flask.views.MethodView):
     @login_required
     def post(self):
         rolSistemaJSON=flask.request.form['rolSistema']
+        print rolSistemaJSON
         nombreUsuario=flask.request.form['nombreUsuario']
         passwd=flask.request.form['password']
         ci=flask.request.form['ci']
@@ -34,6 +35,7 @@ class AgregarUsuario(flask.views.MethodView):
         activo=flask.request.form['activo']
         sesion=Session()
         rolSistema=json.loads(rolSistemaJSON)
+        
         rs=[]
         if rolSistema[0]=="1":
             rolSis=sesion.query(RolSistema).filter(RolSistema.nombre=="Project Leader").first()
