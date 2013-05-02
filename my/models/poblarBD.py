@@ -3,7 +3,7 @@ from proyectoModelo import Proyecto
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
 import md5
-
+from tipoPrimarioModelo import TipoPrimario
 def poblar():
     sesion=Session()
     m=md5.new()
@@ -41,8 +41,12 @@ def cargaEstatica():
         sesion.add(rs1)
         sesion.add(rs2)
         sesion.add(rs3)
-        
-    
+
+    sesion.add(TipoPrimario('Texto','String'))
+    sesion.add(TipoPrimario('Numerico','float'))
+    sesion.add(TipoPrimario('Entero','int'))
+    sesion.add(TipoPrimario('Fecha','Date'))
+  
     cargaValores=sesion.query(Usuario).count()
     if cargarValores <= 0:
         u=Usuario('super',str(md5.new('super').hexdigest()),'super','super','super@super.super','666'

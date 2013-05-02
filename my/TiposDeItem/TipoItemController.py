@@ -35,10 +35,10 @@ class TipoItemControllerClass(flask.views.MethodView):
         tipit=sesion.query(TipoItem).filter(TipoItem.fase_id==idFase).filter(TipoItem.nombreTipoItem==ti.nombreTipoItem).first()
         if(idIT==0):
             if(tipit is not None):
-                return make_response('t,Ya existe el tipo de item en esa fase')
+                return make_response('t,Ya existe el tipo de item con ese nombre en esa fase')
         else:
             if( tipit is not None and str(tipit.idTipoItem) != idIT):
-                return make_response('t,Ya existe el tipo de item en esa fase al intentar modificar')
+                return make_response('t,Ya existe el tipo de item con ese nombre en esa fase al intentar modificar')
         
         """Se crean objeto Atributo y agregan a una lista para su posterior control"""
         lista=[]

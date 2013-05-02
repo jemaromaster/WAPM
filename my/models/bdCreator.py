@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 #engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
-engine = create_engine('postgresql://postgres:pm@localhost:5432/wapm')
+engine = create_engine('postgresql://postgres:postgres@localhost:5432/wapm')
 
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
