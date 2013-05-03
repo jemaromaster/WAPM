@@ -79,7 +79,7 @@
 	</div>
 	
 	<script>
-		var valorenSesion=0;
+		var valorenSesion={{session['idProyecto']}};
 		$.getJSON("http://localhost:5000/listarProyectosComboBox", function(atribs) {
 		  
 			var select = $('#proyectosUsuario');
@@ -87,12 +87,14 @@
 			//alert ('hola')
 			
 			$('option', select).remove();
-			options[options.length] = new Option('Seleccione Proyecto',0);
-			$.each(atribs, function(index,atrib) { //val,text
-			    options[options.length] = new Option(atrib.nombreProyecto,atrib.idProyecto);
-			});
+			if(valorenSesion==0){
+				options[options.length] = new Option('Seleccione Proyecto',0);
+			}
+				$.each(atribs, function(index,atrib) { //val,text
+				    options[options.length] = new Option(atrib.nombreProyecto,atrib.idProyecto);
+				});
 			//valorEnSesion={{session['idProyecto']}};
-			//select.val(valorEnSesion);
+			select.val(valorenSesion);
 			elegirSesionProyecto(select.val())
 			
 		 });
@@ -121,6 +123,7 @@
 							var pathname = window.location.pathname;
 							switch (pathname){
 								case '/faseManager/':
+									
 									$("#listaFases").trigger("reloadGrid");
 									break;
 								case '/usuarioManager/':

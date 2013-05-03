@@ -57,7 +57,7 @@
 								name : 'idFase',
 								index : 'idFase',
 								hidden : true
-
+								
 							}, {
 								name : 'idProyecto',
 								index : 'idProyecto',
@@ -164,10 +164,10 @@
 					<td><label for="nombreTipoItem" style="display: block">*Nombre
 							del Tipo de Item</label> <input type="text" name="nombreTipoItem"
 						id="nombreTipoItem" class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" /></td>
-					<td><br></br> <input title="20 caracteres max" readonly
-						tabIndex="-1" type="text" name="EnombreTipoItem"
-						id="EnombreTipoItem" float="left"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						<input title="20 caracteres max" readonly tabIndex="-1"
+						type="text" name="EnombreTipoItem" id="EnombreTipoItem"
+						float="left"
 						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
@@ -177,9 +177,8 @@
 						<textarea id="descripcion"
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
-						</textarea></td>
-					<td><br></br> <input title="20 caracteres max" readonly
-						tabIndex="-1" type="text" name="Edescripcion" id="Edescripcion"
+						</textarea> <input title="20 caracteres max" readonly tabIndex="-1"
+						type="text" name="Edescripcion" id="Edescripcion"
 						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 					<td><label for="estado" style="display: block">*Estado</label>
@@ -214,16 +213,17 @@
 			<fieldset class="fieldset">
 				<td><input type="hidden" name="idAtributoRemoto"
 					id="idAtributoRemoto" /> <input type="hidden"
-					name="idAtributoLocal" id="idAtributoLocal" /> <label
-					for="nombreAtributo" style="display: block">Nombre Atributo</label>
+					name="idAtributoLocal" id="idAtributoLocal" /> 
+					<label
+					for="nombreAtributo" style="display: block">Nombre Atributo
+					</label>
 					<input type="text" name="nombreAtributo" id="nombreAtributo"
 					class="text ui-widget-content ui-corner-all"
 					style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-					<td><br></br> <input title="20 caracteres max" readonly
-						tabIndex="-1" type="text" name="EnombreAtributo"
-						id="EnombreAtributo"
-						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
-				</td> <label for="Tipo" style="display: block">Tipo</label>
+					<input title="20 caracteres max" readonly tabIndex="-1" type="text"
+					name="EnombreAtributo" id="EnombreAtributo"
+					style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					<label for="Tipo" style="display: block">Tipo</label>
 				<td><select id='listBoxTipoPrimario' style='width: 100px;'>
 						<option value="Texto">Texto</option>
 						<option value="Numerico">Numerico</option>
@@ -231,12 +231,15 @@
 						<option value="Fecha">Fecha</option>
 				</select>
 					<div id='inputAtributosSector'>
-						<label for="nombreAtributo" style="display: block">Longitud
-							del Texto</label> 
-							<input type="text" name="cadenaLongitudAtributo"
+						<label for="cadenaLongitudAtributo" style="display: block">Longitud
+							del Texto</label> <input type="text" name="cadenaLongitudAtributo"
 							id="cadenaLongitudAtributo"
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+							
+							<input title="20 caracteres max" readonly tabIndex="-1" type="text"
+							name="EcadenaLongitudAtributo" id="EcadenaLongitudAtributo"
+							style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</div></td>
 				</td>
 
@@ -428,14 +431,21 @@
 	function setSkyBlueAtributos() {
 		$("#nombreAtributo").css('border-color', 'skyblue');
 		$("#cadenaLongitudAtributo").css('border-color', 'skyblue');
-		
+
+		$("#nombreAtributo").css('margin-bottom', 12 + 'px');
+		$("#cadenaLongitudAtributo").css('margin-bottom', 12 + 'px');
+
 		$("#EnombreAtributo").hide()
 		$("#EcadenaLongitudAtributo").hide()
 	}
 	function setSkyBlueTipoItem() {
 		$("#nombreTipoItem").css('border-color', 'skyblue');
 		$("#descripcion").css('border-color', 'skyblue');
-		
+
+		//s establece bien el margen, para que quede bie el formulario
+		$("#nombreTipoItem").css('margin-bottom', 12 + 'px');
+		$("#descripcion").css('margin-bottom', 12 + 'px');
+
 		$("#EnombreTipoItem").hide();
 		$("#Edescripcion").hide();
 	}
@@ -449,14 +459,20 @@
 
 		if (len > 20 || len <= 0) {
 			$("#nombreAtributo").css('border-color', 'red');
-
+			$("#nombreAtributo").css('margin-bottom', 1 + 'px');
+			$("#EnombreAtributo").val("Campo Obligario. Long. max 20").css(
+					'color', 'red').show();
 			error = 1;
 		}
 		if (esString == true) {
 			var cl = $("#cadenaLongitudAtributo").val().trim().length;
 			valor = $("#cadenaLongitudAtributo").val();
-			if (cl > 255 || cl <= 0 || valor == 0) {
+			if (cl > 255 || cl <= 0 || valor < 0 || valor > 1000) {
 				$("#cadenaLongitudAtributo").css('border-color', 'red');
+				$("#cadenaLongitudAtributo").css('margin-bottom', 1 + 'px');
+				$("#EcadenaLongitudAtributo").val(
+						"Ingrese entero en rango [1-1000]").css('color', 'red')
+						.show();
 				error = 1;
 			}
 
@@ -521,6 +537,10 @@
 
 										
 
+																				
+
+										
+
 									}
 									indice = indice + 1;
 									//var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length + 1 
@@ -567,6 +587,10 @@
 										mostrarMensaje('Error',
 												"Se debe completar correctamente el formulario ")
 										return 
+
+										
+
+																				
 
 										
 
@@ -815,7 +839,9 @@
 		len = $("#nombreTipoItem").val().trim().length;
 		if (len > 20 || len <= 0) {
 			$("#nombreTipoItem").css('border-color', 'red');
-			$("#EnombreTipoItem").val("Campo Obligario. Long. max 20").css('color', 'red').show();	
+			$("#nombreTipoItem").css('margin-bottom', 1 + 'px');
+			$("#EnombreTipoItem").val("Campo Obligario. Long. max 20").css(
+					'color', 'red').show();
 			error = 1;
 		}
 
@@ -823,13 +849,14 @@
 		//len=$("#observacion").val().trim().length;
 		if (len > 50 || len <= 0) {
 			$("#descripcion").css('border-color', 'red');
-			$("#Edescripcion").val("Campo Obligario. Long. max 50").css('color', 'red').show();	
+			$("#descripcion").css('margin-bottom', 1 + 'px');
+			$("#Edescripcion").val("Campo Obligario. Long. max 50").css(
+					'color', 'red').show();
 			error = 1;
 		}
-		
+
 		return error;
 	}
-	
 
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
@@ -952,7 +979,7 @@
 <div id='msgbox' title='' style='display: none'></div>
 
 {% endblock %} {% block body %}
-<td><select id="comboBoxFases"
+<td><label>Fase:</label><select id="comboBoxFases"
 	style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
 	class="ui-widget-content ui-corner-all">
 		<option value="0">(Ninguna)</option>
@@ -979,7 +1006,9 @@
 </tr>
 
 <script>
-	cargarFasesEnComboBox();
+	if(retornaValorenSesion()!=0){
+		cargarFasesEnComboBox();
+	}
 	function cargarFasesEnComboBox() {
 
 		$.getJSON("http://localhost:5000/listarFasesComboBox",
@@ -1011,6 +1040,7 @@
 					delete myPostData.idFase;
 					$('#listaTipoItem').setGridParam({
 						postData : {
+							search: true,
 							idFase : retornaValorComboBoxFases()
 						}
 					});

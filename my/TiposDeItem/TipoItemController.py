@@ -12,6 +12,8 @@ from models.tipoPrimarioModelo import TipoPrimario
 
 
 class TipoItemControllerClass(flask.views.MethodView):
+    """Clase controladora del tipo de item, su funcion principal es validar los campos completados por el usuario\
+    y mandado por el navegador. \Si existe algun error le responde con un mensaje, sino llama a la clase TipoItemManejador.py"""
    
     def controlarTI(self, ti, idIT, atributos, idProyecto, idFase):
         
@@ -90,7 +92,7 @@ class TipoItemControllerClass(flask.views.MethodView):
                except:
                    return make_response('t,no es valido el numero ' + atrib.longitudCadena + 'en atributo '+ atrib.nombreAtributo)
                
-               if not(1<=atrib.longitudCadena<=500):
+               if not(1<=atrib.longitudCadena<=1000):
                         return make_response('t,Numeros valido para longitud cadena para atributo:' + atrib.nombreAtributo\
                                              + 'debe ser entre 1 y 500')
             else:

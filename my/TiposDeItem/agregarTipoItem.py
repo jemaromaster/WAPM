@@ -10,9 +10,9 @@ import json
 
 class AgregarTipoItem(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de creacion de 
-    usuario al servidor. Los metodos get y post indican como
-    debe comportarse la clase segun el tipo de peticion que 
+    Clase utilizada al realizar una peticion de creacion de Tipo de Items.\
+    Los metodos get y post indican como\
+    debe comportarse la clase segun el tipo de peticion que \
     se realizo 
     """
     @login_required
@@ -30,6 +30,7 @@ class AgregarTipoItem(flask.views.MethodView):
         idFase=flask.request.form['idFase']
         
         
+             
         #  [{"idAtributos":"1","nombreAtributo":"sada","tipoPrimario":"Texto","longitudCadena":"12"},
         #   {"idAtributos":"2","nombreAtributo":"wad","tipoPrimario":"Texto","longitudCadena":"2"}]
         ti=TipoItem(nombreTI,descripcion, estado)

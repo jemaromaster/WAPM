@@ -14,88 +14,88 @@
 	jQuery(document)
 			.ready(
 					function() {
-						
-						var grid = jQuery("#listaFases")
-								.jqGrid(
-										{
-
-											// datatype : "local",
-											// data:mydata,
-											url : 'http://localhost:5000/listarFases',
-											datatype : "json",
-											mtype : "get",
-											postData:{idProyecto:valorenSesion},
-											colNames : [ 'ID Fases',
-													'Nombre Fase', 'Fecha Inicio', 'Fecha Finalizacion',
-													'Descripcion', 'Estado', 'Id de Proyecto' ],
-											colModel : [
-													{
-														name : 'idFase',
-														index : 'idFase',
-														hidden : true
-													},
-													
-													{
-														name : 'nombreFase',
-														index : 'nombreFase',
-														width : 200
-													},
-													{
-														name : 'fechaInicio',
-														index : 'fechaInicio',
-														formatter: 'date',
-											            sorttype: 'date',
-											            datefmt: 'd/m/Y',
-											            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
-														search:false
-													},{
-														name : 'fechaFinalizacion',
-														index : 'fechaFinalizacion',
-														formatter: 'date',
-											            sorttype: 'date',
-											            datefmt: 'd/m/Y',
-											            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
-														search:false
-													},
-													{
-														name : 'descripcion',
-														index : 'descripcion',
-														hidden : true
-													},
-													{
-														name : 'estado',
-														index : 'estado',
+							
+							var grid = jQuery("#listaFases")
+									.jqGrid(
+											{
+	
+												// datatype : "local",
+												// data:mydata,
+												url : 'http://localhost:5000/listarFases/',
+												datatype : "json",
+												mtype : "get",
+												postData:{idProyecto: retornaValorenSesion()},
+												colNames : [ 'ID Fases',
+														'Nombre Fase', 'Fecha Inicio', 'Fecha Finalizacion',
+														'Descripcion', 'Estado', 'Id de Proyecto' ],
+												colModel : [
+														{
+															name : 'idFase',
+															index : 'idFase',
+															hidden : true
+														},
 														
-													},
-													{
-														name : 'idProyecto',
-														index : 'idProyecto',
-														hidden : true
-													}
-
-											],
-											sortname : 'nombreFase',
-											viewrecords : true,
-											rownumbers : true,
-											sortorder : "desc",
-											ignoreCase : true,
-											pager : '#pager',
-											caption : "Fases",
-											jsonReader : {
-												root : "invdata",
-												page : "currpage",
-												total : "totalpages",
-												records : "totalrecords",
-												repeatitems : false,
-												id : "idUsuario"
-											}
-
-										}).jqGrid('navGrid', '#pager', {
-									edit : false,
-									add : false,
-									del : false,
-									search : false,
-									refresh : true
+														{
+															name : 'nombreFase',
+															index : 'nombreFase',
+															width : 200
+														},
+														{
+															name : 'fechaInicio',
+															index : 'fechaInicio',
+															formatter: 'date',
+												            sorttype: 'date',
+												            datefmt: 'd/m/Y',
+												            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+															search:false
+														},{
+															name : 'fechaFinalizacion',
+															index : 'fechaFinalizacion',
+															formatter: 'date',
+												            sorttype: 'date',
+												            datefmt: 'd/m/Y',
+												            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+															search:false
+														},
+														{
+															name : 'descripcion',
+															index : 'descripcion',
+															hidden : true
+														},
+														{
+															name : 'estado',
+															index : 'estado',
+															
+														},
+														{
+															name : 'idProyecto',
+															index : 'idProyecto',
+															hidden : true
+														}
+	
+												],
+												sortname : 'nombreFase',
+												viewrecords : true,
+												rownumbers : true,
+												sortorder : "desc",
+												ignoreCase : true,
+												pager : '#pager',
+												caption : "Fases",
+												jsonReader : {
+													root : "invdata",
+													page : "currpage",
+													total : "totalpages",
+													records : "totalrecords",
+													repeatitems : false,
+													id : "idUsuario"
+												}
+	
+											}).jqGrid('navGrid', '#pager', {
+										edit : false,
+										add : false,
+										del : false,
+										search : false,
+										refresh : true
 								});
 						grid.jqGrid('filterToolbar', {
 							stringResult : true,
@@ -117,6 +117,10 @@
 </style>
 
 <script type="text/javascript">
+function retornaValorenSesion() {
+	//alert('valor en sesion' + valorenSesion)
+	return valorenSesion
+}
 	var gridDelMomento=jQuery("#listaFases");
 	jQuery(function($) {
 		$.datepicker.regional['es'] = {
@@ -158,29 +162,28 @@
 			<input type="hidden" name="idFase" id="idFase" />
 			<table>
 				<tr>
-					<td><label for="nombreFase" style="display: block">*Nombre Fase</label> 
-						<input type="text" name="nombreFase"
-						id="nombreFase" class="text ui-widget-content ui-corner-all"
+					<td><label for="nombreFase" style="display: block">*Nombre
+							Fase</label> <input type="text" name="nombreFase" id="nombreFase"
+						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
 				</tr>
-				
+
 				<tr>
-					<td>
-						<label for="fechaInicio" style="display: block">*Fecha de Inicio</label>
-						 <input type="text" name="datepicker" id="datepicker" readonly="readonly"
-						class="text ui-widget-content ui-corner-all"
+					<td><label for="fechaInicio" style="display: block">*Fecha
+							de Inicio</label> <input type="text" name="datepicker" id="datepicker"
+						readonly="readonly" class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<label for="fechaFinalizacion" style="display: block">*Fecha de Finalizacion</label> 
-						<input type="text" name="datepicker2" id="datepicker2" readonly="readonly"
+					<td><label for="fechaFinalizacion" style="display: block">*Fecha
+							de Finalizacion</label> <input type="text" name="datepicker2"
+						id="datepicker2" readonly="readonly"
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 					</td>
-						
+
 				</tr>
 				<tr>
 					<td><label for="descripcion" style="display: block">*Descripcion</label>
@@ -244,7 +247,7 @@
 												estado : $("#estado")
 														.val(),
 												
-												idProyecto :valorenSesion
+												idProyecto :retornaValorenSesion()
 														},
 														function(data, status) {
 															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
@@ -303,9 +306,7 @@
 															.val(),
 													estado : $("#estado")
 															.val(),
-													idProyecto : $(
-															"#idProyecto")
-															.val()
+													idProyecto :retornaValorenSesion()
 														},
 														function(data, status) {
 
@@ -495,20 +496,18 @@
 			<div id="pager"></div>
 		</div></td>
 	<td><div>
-			<br></br>
-			<input id="btAgregar" type="button" name="nuevo" value="Nueva Fase" onclick='agregar()' />
-			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
-				value="Modificar" /> 
-			<input id="btConsultar" type="button" name="consultar"
-				value="Consultar" onclick='consultar()' />
-			<br></br>
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nueva Fase" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> <input id="btConsultar" type="button"
+				name="consultar" value="Consultar" onclick='consultar()' /> <br></br>
 			<script>
 			$("#btAgregar").button();
 			$("#btModificar").button();
 			$("#btConsultar").button();
 			</script>
 		</div></td>
-		
+
 </tr>
 
 

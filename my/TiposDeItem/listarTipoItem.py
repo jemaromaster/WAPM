@@ -12,10 +12,10 @@ sesion=Session()
 
 class Respuesta():
     """
-    Clase utilizada cuando se hace una peticion de listado de 
-    proyectos al servidor. Se obtienen de la bd las filas a 
-    devolver dentro de la lista y se convierte a un formato
-    json para que pueda ser interpretado por el navegador 
+    Clase utilizada cuando se hace una peticion de listado de \
+    tipos de item al servidor. \Se obtienen de la bd las filas a \
+    devolver dentro de la lista y se convierte a un formato\
+    json para que pueda ser interpretado por el navegador \
     """
     totalPages=1
     currPage=1
@@ -52,12 +52,20 @@ class ListarTipoItem(flask.views.MethodView):
     @login_required
     def get(self): 
         #se obtiene los datos de post del server
+        
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
         idProyecto=flask.request.args.get('idProyecto', '')
-        idFase=flask.request.args.get('idFase', '')
         
+        '''if( idFase== '' ):
+            return "Error, no se ha proporcionado idFase"'''
+        if(search=='true'):
+            idFase=flask.session['idFaseActualTipoItem']
+        else:
+            idFase=flask.request.args.get('idFase', '')
+            flask.session['idFaseActualTipoItem']=idFase
+            
         #caluclo de paginacion 
         page=long(param1)
         rows=long(param2)
@@ -84,6 +92,7 @@ class ListarTipoItem(flask.views.MethodView):
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
         print filtrarPor
         if (search=='true'):
+            
             filters=flask.request.args.get('filters', '')
             obj = json.loads(filters)
             vector=obj['rules']
@@ -95,7 +104,7 @@ class ListarTipoItem(flask.views.MethodView):
             
             while(field!='estado'):
                 if(field=='nombreTipoItem'):
-                    nombreProyecto=vector[i]['data'].strip() + '%'
+                    nombreTipoItem=vector[i]['data'].strip() + '%'
                     i=i+1
                     field=vector[i]['field']
                     continue
@@ -119,14 +128,14 @@ class ListarTipoItem(flask.views.MethodView):
             listaTipoItem=sesion.query(TipoItem).order_by(filtrarPor)\
                                                     .filter(TipoItem.fase_id==idFase)\
                                                     .filter(TipoItem.nombreTipoItem.like(nombreTipoItem) &\
-                                                           Tipoitem.descripcion.like(descripcion) &\
-                                                           Tipoitem.estado==estado)[desde:hasta]
+                                                           TipoItem.descripcion.like(descripcion))\
+                                                    .filter(TipoItem.estado==estado)[desde:hasta]
            
             total=sesion.query(TipoItem).order_by(filtrarPor)\
                                                     .filter(TipoItem.fase_id==int(idFase))\
                                                     .filter(TipoItem.nombreTipoItem.like(nombreTipoItem) &\
-                                                           Tipoitem.descripcion.like(descripcion) &\
-                                                           Tipoitem.estado==estado).count()
+                                                           TipoItem.descripcion.like(descripcion))\
+                                                    .filter(TipoItem.estado==estado).count()
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos

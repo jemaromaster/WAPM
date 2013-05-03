@@ -10,8 +10,8 @@ import json
 
 class ModificarTipoItem(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de creacion de 
-    usuario al servidor. Los metodos get y post indican como
+    Clase utilizada cuando se hace una peticion de modificacion de 
+    Tipo de Item al servidor. \Los metodos get y post indican como
     debe comportarse la clase segun el tipo de peticion que 
     se realizo 
     """
@@ -31,8 +31,6 @@ class ModificarTipoItem(flask.views.MethodView):
         idFase=flask.request.form['idFase']
         
         
-        #  [{"idAtributos":"1","nombreAtributo":"sada","tipoPrimario":"Texto","longitudCadena":"12"},
-        #   {"idAtributos":"2","nombreAtributo":"wad","tipoPrimario":"Texto","longitudCadena":"2"}]
         ti=TipoItem(nombreTI,descripcion, estado)
         tic=TipoItemControllerClass();
         return tic.controlarTI(ti, idTipoItem, atributos, idProyecto, idFase)

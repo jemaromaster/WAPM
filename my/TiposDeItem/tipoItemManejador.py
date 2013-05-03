@@ -5,6 +5,7 @@ from models.atributosModelo import Atributos
 #from models.tipoItemModelo  import Atributos
 from models.faseModelo import Fase
 class TipoItemManejador:
+    """Clase encarga de almacenar los tipo de item en la base de datos"""
     def guardarTipoItem(self, t_item, idT_Item, listaAtributos, idProyecto, idFase):
         sesion=Session()
         ti=t_item;

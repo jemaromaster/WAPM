@@ -12,10 +12,10 @@ sesion=Session()
 
 class Respuesta():
     """
-    Clase utilizada cuando se hace una peticion de listado de 
-    proyectos al servidor. Se obtienen de la bd las filas a 
+    Clase utilizada cuando se hace una peticion de listado de \
+    listado de Atributos correspondientes a un Tipo de Item. \Se obtienen de la bd las filas a \
     devolver dentro de la lista y se convierte a un formato
-    json para que pueda ser interpretado por el navegador 
+    json para que pueda ser interpretado por el javascript
     """
     totalPages=1
     currPage=1
@@ -49,6 +49,7 @@ class Respuesta():
         return p 
         
 class ListarAtributo(flask.views.MethodView):
+    """Clase utilizada para listar todos los atributos correspondiente a un tipo de item determinado"""
     def jsonizarListaAtributos (self, listaAtributos):
         
         cad="["
@@ -57,10 +58,7 @@ class ListarAtributo(flask.views.MethodView):
                         "longitudCadena":atrib.longitudCadena}, separators=(',',':'))
             cad=cad + ","
         resp=cad[0:len(cad)-1]+"]"
-        
-        '''resp= json.dumps([{"idAtributos": "83123a", "nombreAtributo": "Name 1", "tipoPrimario": "Texto" },\
-        { "idAtributos": "83432a", "nombreAtributo": "Name 3", "tipoPrimario": "Numerico" },\
-        { "idAtributos": "83566a", "nombreAtributo": "Name 2", "tipoPrimario": "Numerico" }], separators=(',',':'))'''
+       
         #print resp
         return resp
     
