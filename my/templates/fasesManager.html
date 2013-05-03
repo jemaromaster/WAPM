@@ -24,7 +24,7 @@
 											url : 'http://localhost:5000/listarFases',
 											datatype : "json",
 											mtype : "get",
-											postData:{idProyecto:'1'},
+											postData:{idProyecto:valorenSesion},
 											colNames : [ 'ID Fases',
 													'Nombre Fase', 'Fecha Inicio', 'Fecha Finalizacion',
 													'Descripcion', 'Estado', 'Id de Proyecto' ],
@@ -117,6 +117,7 @@
 </style>
 
 <script type="text/javascript">
+	var gridDelMomento=jQuery("#listaFases");
 	jQuery(function($) {
 		$.datepicker.regional['es'] = {
 			closeText : 'Cerrar',
@@ -243,7 +244,7 @@
 												estado : $("#estado")
 														.val(),
 												
-												idProyecto :'1'
+												idProyecto :valorenSesion
 														},
 														function(data, status) {
 															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
@@ -355,7 +356,7 @@
 		$("#datepicker2").val(rowdata.fechaFinalizacion);
 		$("#descripcion").val(rowdata.descripcion);
 		$("#estado").val(rowdata.estado);
-		$("#idProyecto").val(rowdata.idProyecto);
+		$("#idProyecto").val(valorenSesion);
 		
 
 	}
@@ -487,6 +488,7 @@
 
 {% endblock %} {% block body %}
 
+</td>
 <tr>
 	<td><div>
 			<table id="listaFases"></table>
@@ -508,6 +510,7 @@
 		</div></td>
 		
 </tr>
+
 
 
 {% endblock %}

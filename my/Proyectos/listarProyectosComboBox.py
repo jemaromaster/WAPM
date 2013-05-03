@@ -57,11 +57,11 @@ class ListarProyectosComboBox(flask.views.MethodView):
                                                 .filter(Usuario.id==usuarioId).all()
                                                 #
                                                 
-        cuanto=sesion.query(Proyecto)\
+        '''cuanto=sesion.query(Proyecto)\
                                                 .join((Usuario,Proyecto.usuariosMiembros))\
                                                 .filter(Proyecto.estado=='activo') \
-                                                .filter(Usuario.id==usuarioId).count()
-        print "cantidad:"+ str(cuanto)
+                                                .filter(Usuario.id==usuarioId).count()'''
+        #print "cantidad:"+ str(cuanto)
         """proyectoLista=sesion.query(Proyecto).order_by("nombreProyecto")\
                                                 .filter(Proyecto.estado=='activo') \
                                                 .join((Usuario,Proyecto.usuariosMiembros))\

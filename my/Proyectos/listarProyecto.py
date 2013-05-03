@@ -75,8 +75,8 @@ class ListarProyectos(flask.views.MethodView):
             filtrarPor='nombre_proyecto'
         elif(sidx=='fechaInicio'):
             filtrarPor='fecha_inicio'
-        elif(sidx=='fechaFinal'):
-            filtrarPor='fecha_final'
+        elif(sidx=='fechaFinalizacion'):
+            filtrarPor='fecha_finalizacion'
         elif(sidx=='presupuesto'):
             filtrarPor='presupuesto'
         elif(sidx=='estado'):
@@ -140,9 +140,9 @@ class ListarProyectos(flask.views.MethodView):
                                                     #Proyecto.fechaInicio.like(fechaInicio)&  \
                                                     #Proyecto.fechaFinalizacion.like(fechaFinalizacion)& \
                                                     #Proyecto.presupuesto.like (presupuesto) & \
-                                                    ).filter(Proyecto.estado==estado)\
-                                                    .filter(Proyecto.projectLeaderId==projectLeaderId)\
-                                                    .count();
+                                                    .filter(Proyecto.estado==estado)\
+                                                    .filter(Proyecto.projectLeaderId==projectLeaderId))\
+                                                    .count()
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos

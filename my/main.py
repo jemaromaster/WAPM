@@ -16,11 +16,13 @@ from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
 
 from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
+from Proyectos.seleccionarProyectoSesion import SeleccionarProyectoSesion
 
 from Fases.faseManager import FaseManager
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
+from Fases.listarFasesComboBox import ListarFasesComboBox
 
 from TiposDeItem.tipoItemManager import TipoItemManager
 from TiposDeItem.agregarTipoItem import AgregarTipoItem
@@ -119,6 +121,14 @@ app.add_url_rule('/modificarTipoItem/',
 
 app.add_url_rule('/listarProyectosComboBox/',
                  view_func=ListarProyectosComboBox.as_view('listarProyectosComboBox'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/seleccionarProyectoSesion/',
+                 view_func=SeleccionarProyectoSesion.as_view('seleccionarProyectoSesion'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/listarFasesComboBox/',
+                 view_func=ListarFasesComboBox.as_view('listarFasesComboBox'),
                  methods=["GET", "POST"])
 
 

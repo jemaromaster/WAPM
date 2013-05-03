@@ -71,8 +71,8 @@ class ListarTipoItem(flask.views.MethodView):
         
         #se establece el campo de filtro proveniente del server para hacer coincidir con el nombre de la tabla
         filtrarPor='estado'
-        if(sidx=='nombreItem'):
-            filtrarPor='nombreItem'
+        if(sidx=='nombreTipoItem'):
+            filtrarPor='nombre'
         elif(sidx=='descripcion'):
             filtrarPor='descripcion'
         elif(sidx=='estado'):
@@ -89,28 +89,24 @@ class ListarTipoItem(flask.views.MethodView):
             vector=obj['rules']
             i=0
             field=vector[0]['field']
-            nombreProyecto='%'; f_proyectoechaInicio='%'; 
-            fechaFinalizacion='%'; presupuesto='%';
+            nombreTipoItem='%'
+            descripcion='%'
             estado='%'
             
             while(field!='estado'):
-                if(field=='nombreProyecto'):
+                if(field=='nombreTipoItem'):
                     nombreProyecto=vector[i]['data'].strip() + '%'
                     i=i+1
                     field=vector[i]['field']
                     continue
-                if field=='fechaInicio':
-                    fechaInicio=vector[i]['data'].strip()+'%'
+               
+                if field=='descripcion':
+                    descripcion=vector[i]['data'].strip()+'%'
                     i=i+1
                     field=vector[i]['field']
                     continue
-                if field=='fechaFinalizacion':
-                    fechaFinalizacion=vector[i]['data'].strip()+'%'
-                    i=i+1
-                    field=vector[i]['field']
-                    continue
-                if field=='presupuesto':
-                    presupuesto=vector[i]['data'].strip()+'%'
+                if field=='estado':
+                    estado=vector[i]['data'].strip()+'%'
                     i=i+1
                     field=vector[i]['field']
                     continue
@@ -120,32 +116,24 @@ class ListarTipoItem(flask.views.MethodView):
                   
            
             projectLeaderId=flask.session['idUsuario']
-            listaUsuario=sesion.query(TipoItem).order_by(filtrarPor).\
-                                                    filter(TipoItem.nombreTipoItem.like(nombreTipoItem) \
-                                                    #Proyecto.fechaInicio==date('2013-04-15') &  \
-                                                    #Proyecto.fechaFinalizacion.like(fechaFinalizacion)& \
-                                                    #Proyecto.presupuesto.like (presupuesto) & \
-                                                    #Proyecto.estado.like(estado)) \
-                                                    #Proyecto.fechaInicio.like('2013-04-15'))
-                                                    ).filter(Proyecto.estado==estado)\
-                                                    .filter(Proyecto.projectLeaderId==projectLeaderId)[desde:hasta] 
-                                                    #Proyecto.projectLeaderId.like(projectLeaderId)&  \
-            total=sesion.query(Proyecto).filter(Proyecto.nombreProyecto.like(nombreProyecto) \
-                                                    
-                                                    #Proyecto.projectLeaderId.like(projectLeaderId)&  \
-                                                    #Proyecto.fechaInicio.like(fechaInicio)&  \
-                                                    #Proyecto.fechaFinalizacion.like(fechaFinalizacion)& \
-                                                    #Proyecto.presupuesto.like (presupuesto) & \
-                                                    ).filter(Proyecto.estado==estado)\
-                                                    .filter(Proyecto.projectLeaderId==projectLeaderId)\
-                                                    .count();
+            listaTipoItem=sesion.query(TipoItem).order_by(filtrarPor)\
+                                                    .filter(TipoItem.fase_id==idFase)\
+                                                    .filter(TipoItem.nombreTipoItem.like(nombreTipoItem) &\
+                                                           Tipoitem.descripcion.like(descripcion) &\
+                                                           Tipoitem.estado==estado)[desde:hasta]
+           
+            total=sesion.query(TipoItem).order_by(filtrarPor)\
+                                                    .filter(TipoItem.fase_id==int(idFase))\
+                                                    .filter(TipoItem.nombreTipoItem.like(nombreTipoItem) &\
+                                                           Tipoitem.descripcion.like(descripcion) &\
+                                                           Tipoitem.estado==estado).count()
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
             
             #print 'el id proyeceeecto es' + str(idProyecto)
             listaTipoItem=sesion.query(TipoItem).order_by(filtrarPor)\
-                                                    .filter(TipoItem.fase_id==int(idFase))[desde:hasta]
+                                                    .filter((TipoItem.fase_id)==(idFase))[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
             total=sesion.query(TipoItem).order_by(filtrarPor)\
                                                     .filter(TipoItem.fase_id==int(idFase)).count()

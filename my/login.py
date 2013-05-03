@@ -12,6 +12,7 @@ class Login(flask.views.MethodView):
     del sistema, se concede el acceso
     """
     def get(self):
+        
         if 'username' in flask.session:
             return flask.render_template('main.html')
         return flask.render_template('index.html')
@@ -39,6 +40,7 @@ class Login(flask.views.MethodView):
         if c==1:
             flask.session['username'] = username
             flask.session['idUsuario']= idUsuarioSession
+            flask.session['idProyecto']=0
             self.includeRolSistemaSesion(usuarioSesion)
         else:
             responde=make_response("t,Usuario no existe o el passaword es incorrecto")   

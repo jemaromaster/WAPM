@@ -1,5 +1,6 @@
 from usuarioModelo import Usuario
 from proyectoModelo import Proyecto
+
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
 import md5
@@ -18,6 +19,12 @@ def poblar():
     
     p=Proyecto('miProyecto','1','12/07/15', '12/12/13', '12000','ninguna',5, 'activo')
     sesion.add(u)
+    
+    from tipoPrimarioModelo import TipoPrimario
+    sesion.add(TipoPrimario('Texto','String'))
+    sesion.add(TipoPrimario('Numerico','float'))
+    sesion.add(TipoPrimario('Entero','int'))
+    sesion.add(TipoPrimario('Fecha','Date'))
     #sesion.add(p)
     sesion.commit()
     sesion.close()

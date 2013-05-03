@@ -11,93 +11,89 @@
 
 <script type="text/javascript">
 	//<![CDATA[
-	jQuery(document)
-			.ready(
-					function() {
-						
-						var grid = jQuery("#listaTipoItem")
-								.jqGrid(
-										{
+	jQuery(document).ready(
+			function() {
 
-											// datatype : "local",
-											// data:mydata,
-											url : 'http://localhost:5000/listarTipoItem',
-											datatype : "json",
-											mtype : "get",
-											postData:{idProyecto:'1', idFase:'1'},
-											colNames : [ 'ID Tipo de Item',
-													'Nombre Tipo de Item', 'Descripcion', 'Estado',
-													'idFase', 'idProyecto'],
-											colModel : [
-													{
-														name : 'idTipoItem',
-														index : 'idTipoItem',
-														hidden : true
-													},
-													
-													{
-														name : 'nombreTipoItem',
-														index : 'nombreTipoItem',
-														width : 200
-													},
-													{
-														name : 'descripcion',
-														index : 'descripcion',
-														width : 200
-													},
-													{
-														name : 'estado',
-														index : 'estado',
-														width : 200,
-														formatter : 'select',
-														stype : 'select',
-														editoptions : {
-															value : "activo:Activo;inactivo:Inactivo"
-														},
-														hidden : false
-													},{
-														name : 'idFase',
-														index : 'idFase',
-														hidden: true
-														
-													},
-													{
-														name : 'idProyecto',
-														index : 'idProyecto',
-														hidden : true
-													}
+				var grid = jQuery("#listaTipoItem").jqGrid(
+						{
 
+							// datatype : "local",
+							// data:mydata,
+							url : 'http://localhost:5000/listarTipoItem',
+							datatype : "json",
+							mtype : "get",
+							postData : {
+								idProyecto : retornaValorenSesion(),
+								idFase : retornaValorComboBoxFases()
+							},
+							colNames : [ 'ID Tipo de Item',
+									'Nombre Tipo de Item', 'Descripcion',
+									'Estado', 'idFase', 'idProyecto' ],
+							colModel : [ {
+								name : 'idTipoItem',
+								index : 'idTipoItem',
+								hidden : true
+							},
 
-											],
-											sortname : 'nombreTipoItem',
-											viewrecords : true,
-											rownumbers : true,
-											sortorder : "desc",
-											ignoreCase : true,
-											pager : '#pager',
-											caption : "Tipos de Item",
-											jsonReader : {
-												root : "invdata",
-												page : "currpage",
-												total : "totalpages",
-												records : "totalrecords",
-												repeatitems : false,
-												//id : "idUsuario"
-											}
+							{
+								name : 'nombreTipoItem',
+								index : 'nombreTipoItem',
+								width : 200
+							}, {
+								name : 'descripcion',
+								index : 'descripcion',
+								width : 200
+							}, {
+								name : 'estado',
+								index : 'estado',
+								width : 200,
+								formatter : 'select',
+								stype : 'select',
+								editoptions : {
+									value : "activo:Activo;inactivo:Inactivo"
+								},
+								hidden : false
+							}, {
+								name : 'idFase',
+								index : 'idFase',
+								hidden : true
 
-										}).jqGrid('navGrid', '#pager', {
-									edit : false,
-									add : false,
-									del : false,
-									search : false,
-									refresh : true
-								});
-						grid.jqGrid('filterToolbar', {
-							stringResult : true,
-							searchOnEnter : false,
-							defaultSearch : "cn"
-						});
-					});
+							}, {
+								name : 'idProyecto',
+								index : 'idProyecto',
+								hidden : true
+							}
+
+							],
+							sortname : 'nombreTipoItem',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "desc",
+							ignoreCase : true,
+							pager : '#pager',
+							caption : "Tipos de Item",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+							//id : "idUsuario"
+							}
+
+						}).jqGrid('navGrid', '#pager', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : false
+				});
+				grid.jqGrid('filterToolbar', {
+					stringResult : true,
+					searchOnEnter : false,
+					defaultSearch : "cn"
+				});
+			});
 	//]]>
 </script>
 
@@ -112,6 +108,17 @@
 </style>
 
 <script type="text/javascript">
+	function retornaValorenSesion() {
+		//alert('valor en sesion' + valorenSesion)
+		return valorenSesion
+	}
+
+	function retornaValorComboBoxFases() {
+
+		var r = $("#comboBoxFases").val()
+		//alert('valor combo box fases' + r)
+		return r;
+	}
 	jQuery(function($) {
 		$.datepicker.regional['es'] = {
 			closeText : 'Cerrar',
@@ -141,7 +148,7 @@
 	$(document).ready(function() {
 		$("#datepicker").datepicker();
 	});
-	
+
 	$(document).ready(function() {
 		$("#datepicker2").datepicker();
 	});
@@ -149,24 +156,32 @@
 <div id="dialogo-datos-tipoItem" title="Datos de Tipo de Item">
 	<form title="(*) campos obligatorios">
 		<fieldset class="fieldset">
-			<input type="hidden" name="idTipoItem" id="idTipoItem" />
-			<input type="hidden" name="idFase" id="idFase" />
-			<input type="hidden" name="idProyecto" id="idProyecto" />
+			<input type="hidden" name="idTipoItem" id="idTipoItem" /> <input
+				type="hidden" name="idFase" id="idFase" /> <input type="hidden"
+				name="idProyecto" id="idProyecto" />
 			<table>
 				<tr>
-					<td><label for="nombreTipoItem" style="display: block">*Nombre del Tipo de Item</label> 
-						<input type="text" name="nombreTipoItem"
+					<td><label for="nombreTipoItem" style="display: block">*Nombre
+							del Tipo de Item</label> <input type="text" name="nombreTipoItem"
 						id="nombreTipoItem" class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" /></td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="EnombreTipoItem"
+						id="EnombreTipoItem" float="left"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td><label for="descripcion" style="display: block">*Descripcion</label>
 						<textarea id="descripcion"
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
 						</textarea></td>
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="Edescripcion" id="Edescripcion"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
 					<td><label for="estado" style="display: block">*Estado</label>
 						<select id="estado"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
@@ -176,21 +191,18 @@
 					</select></td>
 					<input type="hidden" name="idProyecto" id="idProyecto" />
 				</tr>
-					<td>
-						
-							<table id="listaAtributos"></table>
-							<div id="atributosPager"></div>
-					</td>
-					<td>
-						<input id="btAgregarAtributo" type="button" name="Agregar>>" onclick='agregarAtributo();'
-							value="Agregar" /> <br/>
-						<input id="btModificarAtributo" type="button" name="Modificar>>" onclick='modificarAtributo();'
-							value="Modificar" /> <br/>
-						<input id="btEliminarAtributo" type="button" name="Eliminar>>" onclick='eliminarAtributo();'
-							value="Eliminar" /> 
-					</td>
-					
-			
+				<td>
+
+					<table id="listaAtributos"></table>
+					<div id="atributosPager"></div>
+				</td>
+				<td><input id="btAgregarAtributo" type="button"
+					name="Agregar>>" onclick='agregarAtributo();' value="Agregar" /> <br />
+					<input id="btModificarAtributo" type="button" name="Modificar>>"
+					onclick='modificarAtributo();' value="Modificar" /> <br /> <input
+					id="btEliminarAtributo" type="button" name="Eliminar>>"
+					onclick='eliminarAtributo();' value="Eliminar" /></td>
+
 			</table>
 		</fieldset>
 	</form>
@@ -200,32 +212,34 @@
 	<form title="(*) campos obligatorios">
 		<tr>
 			<fieldset class="fieldset">
-					<td>
-						<input type="hidden" name="idAtributoRemoto" id="idAtributoRemoto" />
-						<input type="hidden" name="idAtributoLocal" id="idAtributoLocal" />
-						<label for="nombreAtributo" style="display: block">Nombre Atributo</label> 
-						<input type="text" name="nombreAtributo"
-							id="nombreAtributo" class="text ui-widget-content ui-corner-all"
-							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-							
-						<label for="Tipo" style="display: block">Tipo</label> 
-						<td>
-							<select id='listBoxTipoPrimario' style='width:100px;'>
-									 	<option value="Texto">Texto</option>
-									 	<option value="Numerico">Numerico</option>
-									 	<option value="Entero">Entero</option>
-									 	<option value="Fecha">Fecha</option>
-							</select>
-							<div id='inputAtributosSector'>
-							<label for="nombreAtributo" style="display: block">Longitud del Texto</label> 
+				<td><input type="hidden" name="idAtributoRemoto"
+					id="idAtributoRemoto" /> <input type="hidden"
+					name="idAtributoLocal" id="idAtributoLocal" /> <label
+					for="nombreAtributo" style="display: block">Nombre Atributo</label>
+					<input type="text" name="nombreAtributo" id="nombreAtributo"
+					class="text ui-widget-content ui-corner-all"
+					style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					<td><br></br> <input title="20 caracteres max" readonly
+						tabIndex="-1" type="text" name="EnombreAtributo"
+						id="EnombreAtributo"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+				</td> <label for="Tipo" style="display: block">Tipo</label>
+				<td><select id='listBoxTipoPrimario' style='width: 100px;'>
+						<option value="Texto">Texto</option>
+						<option value="Numerico">Numerico</option>
+						<option value="Entero">Entero</option>
+						<option value="Fecha">Fecha</option>
+				</select>
+					<div id='inputAtributosSector'>
+						<label for="nombreAtributo" style="display: block">Longitud
+							del Texto</label> 
 							<input type="text" name="cadenaLongitudAtributo"
-								id="cadenaLongitudAtributo" class="text ui-widget-content ui-corner-all"
-								style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
-							</div>
-							
-						</td>
-					</td>
-						
+							id="cadenaLongitudAtributo"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+					</div></td>
+				</td>
+
 			</fieldset>
 		</tr>
 	</form>
@@ -234,13 +248,12 @@
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
 	var banderaAtributo;
-	var indice=0;
+	var indice = 0;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 	///////////////////////////////////////////////////////////////////
 	//Tunear lista tipo atributo 
-	
 	/////////////////////////////////////////////////////////////////
-	function eliminarAtributo(){
+	function eliminarAtributo() {
 		var row = $('#listaAtributos').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione el atributo a eliminar");
@@ -249,20 +262,19 @@
 		var rowdata;
 		rowdata = $("#listaAtributos").getRowData(row);
 		//alert(rowdata.idAtributosLocal)
-		idAEliminar=rowdata.idAtributosLocal;
+		idAEliminar = rowdata.idAtributosLocal;
 		jQuery("#listaAtributos").delRowData(idAEliminar);
 		//$("#3"/*+idAEliminar*/,"#listaAtributos").css({display:"none"})
-		
+
 		/*var a={ "idAtributosLocal": -1, "idAtributosRemoto": rowdata.idAtributosRemoto,"nombreAtributo":rowdata.nombreAtributo, 
 				"tipoPrimario": "", "longitudCadena":"" }
 		
 		jQuery("#listaAtributos").setRowData(idAEliminar,a,false); */
 		$("#listaAtributos").trigger("reloadGrid");
-		
-		
+
 	}
-	function modificarAtributo(){
-		banderaAtributo=2;
+	function modificarAtributo() {
+		banderaAtributo = 2;
 		var row = $('#listaAtributos').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
@@ -275,173 +287,185 @@
 		$("#nombreAtributo").val(rowdata.nombreAtributo);
 		$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
 		$("#listBoxTipoPrimario").val(rowdata.tipoPrimario);
-		if ($("#listBoxTipoPrimario").val()!='Texto'){
+		if ($("#listBoxTipoPrimario").val() != 'Texto') {
 			$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
 			$("#inputAtributosSector").hide();
-		}else{
+		} else {
 			$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
 			$("#inputAtributosSector").show();
-			$.enmascarar(); 
+			$.enmascarar();
 		}
-		$("#listBoxTipoPrimario").change(function() { 
-		//alert($("#listBoxTipoPrimario").val())
-			if ($("#listBoxTipoPrimario").val()!='Texto'){
+		$("#listBoxTipoPrimario").change(function() {
+			//alert($("#listBoxTipoPrimario").val())
+			if ($("#listBoxTipoPrimario").val() != 'Texto') {
 				$("#cadenaLongitudAtributo").val(rowdata.cadenaLongitud);
 				$("#inputAtributosSector").hide();
-			}else{
+			} else {
 				$("#cadenaLongitudAtributo").val(rowdata.cadenaLongitud);
 				$("#inputAtributosSector").show();
-				$.enmascarar(); 
+				$.enmascarar();
 			}
 		});
 		$("#dialogo-Atributos").dialog("open")
-		
+
 	}
-	
-	function agregarAtributo(){
-		banderaAtributo=1;
+
+	function agregarAtributo() {
+		banderaAtributo = 1;
 		//data.rows.push({ "idAtributos": "835685a", "nombreAtributo": "Name 5", "tipo{"idTipoItem": "1","nombreTipoItem": "sda","estado": "activo", "descripcion": "asda", "atributos":[{"idAtributos":"83123a","tipoPrimario":"Texto","nombreAtributo":"Name 1"},{"idAtributos":"83432a","tipoPrimario":"Numerico","nombreAtributo":"Name 3"},{"idAtributos":"83566a","tipoPrimario":"Numerico","nombreAtributo":"Name 2"}]}Primario": "83566a" })
 		//data.records="4"
 		//alert (data.rows[0].nombreAtributo)
+		setSkyBlueAtributos();
 		$("#nombreAtributo").val("");
 		$("#cadenaLongitudAtributo").val("");
-		$("#listBoxTipoPrimario").change(function() { 
-		//alert($("#listBoxTipoPrimario").val())
-			if ($("#listBoxTipoPrimario").val()!='Texto'){
+		$("#listBoxTipoPrimario").change(function() {
+			//alert($("#listBoxTipoPrimario").val())
+			if ($("#listBoxTipoPrimario").val() != 'Texto') {
 				$("#cadenaLongitudAtributo").val("");
 				$("#inputAtributosSector").hide();
-			}else{
+			} else {
 				$("#cadenaLongitudAtributo").val("");
 				$("#inputAtributosSector").show();
-				$.enmascarar(); 
+				$.enmascarar();
 			}
 		});
 		$("#dialogo-Atributos").dialog("open")
-		
-		
+
 	}
-	
+
 	var data = {
-            "page": "1",
-            "records": "0",
-            "rows": [
-               // { "idAtributos": "83123a", "nombreAtributo": "Name 1", "tipoPrimario": "Texto" },
-               // { "idAtributos": "83432a", "nombreAtributo": "Name 3", "tipoPrimario": "83432a" },
-                //{ "idAtributos": "83566a", "nombreAtributo": "Name 2", "tipoPrimario": "83566a" }
-            ]
-        }
-	
-	
-	
-	var gridAtributos=jQuery("#listaAtributos")
-			.jqGrid(
-					{
-						datatype : "local",
-						data: data.rows,
-						show: {effect: 'fade', duration: 400},
-						hide: {effect: 'fade', duration: 350},
-						colNames : [ 'idAtributoLocal','idAtributoRemoto','Nombre Atributo',
-								'Tipo Primario', 'Longitud'],
-						colModel : [
-								{
-									name : 'idAtributosLocal',
-									index : 'idAtributosLocal',
-									width : 50,
-									key:true,
-									hidden : true
-									
-								},{
-									name : 'idAtributosRemoto',
-									index : 'idAtributosRemoto',
-									width : 50,
-									hidden : true
-									
-								},
-								{
-									name : 'nombreAtributo',
-									index : 'nombreAtributo',
-									width : 180,
-									search:true
-								},
-								{
-									name : 'tipoPrimario',
-									index : 'tipoPrimario',
-									width : 120,
-									search:true
-								}, 
-								{
-									name : 'longitudCadena',
-									index : 'longitudCadena',
-									width : 100
-								}
-		
-						],
-						
-						sortname : 'nombreAtributo',
-						viewrecords : true,
-						rownumbers : true,
-						sortorder : "desc",
-						ignoreCase : true,
-						pager : '#atributosPager',
-						caption : "Atributos",
-						jsonReader : {
-							root : "invdata",
-							page : "currpage",
-							total : "totalpages",
-							records : "totalrecords",
-							repeatitems : false,
-							//id : "idUsuario"
-						}
+		"page" : "1",
+		"records" : "0",
+		"rows" : [
+		// { "idAtributos": "83123a", "nombreAtributo": "Name 1", "tipoPrimario": "Texto" },
+		// { "idAtributos": "83432a", "nombreAtributo": "Name 3", "tipoPrimario": "83432a" },
+		//{ "idAtributos": "83566a", "nombreAtributo": "Name 2", "tipoPrimario": "83566a" }
+		]
+	}
 
-					}).jqGrid('navGrid', '#atributosPager', {
-				edit : false,
-				add : false,
-				del : false,
-				search : false,
-				refresh : true
-			});
-		gridAtributos.jqGrid('filterToolbar', {
-			stringResult : true,
-			searchOnEnter : false,
-			defaultSearch : "cn"
-		
+	var gridAtributos = jQuery("#listaAtributos").jqGrid(
+			{
+				datatype : "local",
+				data : data.rows,
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				colNames : [ 'idAtributoLocal', 'idAtributoRemoto',
+						'Nombre Atributo', 'Tipo Primario', 'Longitud' ],
+				colModel : [ {
+					name : 'idAtributosLocal',
+					index : 'idAtributosLocal',
+					width : 50,
+					key : true,
+					hidden : true
+
+				}, {
+					name : 'idAtributosRemoto',
+					index : 'idAtributosRemoto',
+					width : 50,
+					hidden : true
+
+				}, {
+					name : 'nombreAtributo',
+					index : 'nombreAtributo',
+					width : 180,
+					search : true
+				}, {
+					name : 'tipoPrimario',
+					index : 'tipoPrimario',
+					width : 120,
+					search : true
+				}, {
+					name : 'longitudCadena',
+					index : 'longitudCadena',
+					width : 100
+				}
+
+				],
+
+				sortname : 'nombreAtributo',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#atributosPager',
+				caption : "Atributos",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+				//id : "idUsuario"
+				}
+
+			}).jqGrid('navGrid', '#atributosPager', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
 	});
-						
-		$.enmascarar = function() {
-			$("#cadenaLongitudAtributo").mask("?9999999999", {
-				placeholder : " "
-			});
-			
-		}
-		$.enmascarar(); 
-	function controlAtributos(esString){
-			
-			$("#nombreAtributo").css('border-color', 'skyblue');
-			$("#cadenaLongitudAtributo").css('border-color', 'skyblue');
-			var error = 0
-			var len;
+	gridAtributos.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
 
-			len = $("#nombreAtributo").val().trim().length;
-			
-			
-			if (len > 20 || len <= 0) {
-				$("#nombreAtributo").css('border-color', 'red');	
+	});
+
+	$.enmascarar = function() {
+		$("#cadenaLongitudAtributo").mask("?9999999999", {
+			placeholder : " "
+		});
+
+	}
+	$.enmascarar();
+	function setSkyBlueAtributos() {
+		$("#nombreAtributo").css('border-color', 'skyblue');
+		$("#cadenaLongitudAtributo").css('border-color', 'skyblue');
+		
+		$("#EnombreAtributo").hide()
+		$("#EcadenaLongitudAtributo").hide()
+	}
+	function setSkyBlueTipoItem() {
+		$("#nombreTipoItem").css('border-color', 'skyblue');
+		$("#descripcion").css('border-color', 'skyblue');
+		
+		$("#EnombreTipoItem").hide();
+		$("#Edescripcion").hide();
+	}
+	function controlAtributos(esString) {
+
+		setSkyBlueAtributos();
+		var error = 0
+		var len;
+
+		len = $("#nombreAtributo").val().trim().length;
+
+		if (len > 20 || len <= 0) {
+			$("#nombreAtributo").css('border-color', 'red');
+
+			error = 1;
+		}
+		if (esString == true) {
+			var cl = $("#cadenaLongitudAtributo").val().trim().length;
+			valor = $("#cadenaLongitudAtributo").val();
+			if (cl > 255 || cl <= 0 || valor == 0) {
+				$("#cadenaLongitudAtributo").css('border-color', 'red');
 				error = 1;
 			}
-			if(esString==true){
-				var cl=$("#cadenaLongitudAtributo").val().trim().length;
-				valor=$("#cadenaLongitudAtributo").val();
-				if (cl > 255 || cl <= 0  || valor==0) {
-					$("#cadenaLongitudAtributo").css('border-color', 'red');
-					error = 1;
-				}
-				
-			}
 
-			return error;
-		
-	}		
-	
+		}
+
+		return error;
+
+	}
+
 	/*function controlarExistenNombreAtributo(nombreAtributo){
 		var datos=$('#listaAtributos').jqGrid('getRowData')
 		var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length
@@ -454,95 +478,125 @@
 		}
 		return false;
 	}*/
-	
-	$("#dialogo-Atributos")
-	.dialog(
-			{
-				autoOpen : false,
-				modal : true,
-				resizable : false,
-				width : 550,
-				show: {effect: 'fade', duration: 400},
-				hide: {effect: 'fade', duration: 350},
-				buttons : {
-					
-					"Aceptar" : function() {
-						if(banderaAtributo==1){
-							var longCad=0;
-							idAtributoRemoto=0;
-							nombreAtributo=$('#nombreAtributo').val();
-							tipoPrimario=$('#listBoxTipoPrimario').val();
-			
-							longCad='N/A'
-							
-							
-							/*si es texto se extrae la longCadena*/
-							esString=false
-							if(tipoPrimario=='Texto'){
-								esString=true;
-								longCad=$('#cadenaLongitudAtributo').val();
-							}
-							
-							if(controlAtributos(esString)==1){
-								mostrarMensaje('Error', "Se debe completar correctamente el formulario ")
-								return 
-							}
-							indice=indice+1;
-							//var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length + 1 
-							//alert(cuantosDatos)
-							/*if(controlarExistenNombreAtributo(nombreAtributo)){
-								mostrarMensaje('Error', "Ya existe atributo con el nombre " + nombreAtributo)
-								return 
-							}*/ 
-							var a={ "idAtributosLocal": indice,"idAtributosRemoto": idAtributoRemoto,"nombreAtributo":nombreAtributo, "tipoPrimario": tipoPrimario, "longitudCadena":longCad }
-							mygrid=jQuery("#listaAtributos")
-							
-							//se agregan los datos al jqgrid
-							 //este indice es una variable global 
-							mygrid.addRowData(indice,a,1,0); 
-							$(this).dialog("close");
-							$("#listaAtributos").trigger("reloadGrid");
-						}else if(banderaAtributo==2){
-							var longCad=0;
-							idAtributoRemoto=$('#idAtributoRemoto').val();
-							idAtributoLocal=$('#idAtributoLocal').val();
-							nombreAtributo=$('#nombreAtributo').val();
-							tipoPrimario=$('#listBoxTipoPrimario').val();
-			
-							longCad='N/A'
-							
-							
-							/*si es texto se extrae la longCadena*/
-							esString=false
-							if(tipoPrimario=='Texto'){
-								esString=true;
-								longCad=$('#cadenaLongitudAtributo').val();
-							}
-							
-							if(controlAtributos(esString)==1){
-								mostrarMensaje('Error', "Se debe completar correctamente el formulario ")
-								return 
-							}
-							var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length + 1 
-							//alert(cuantosDatos)
-							var a={ "idAtributosLocal": idAtributoLocal, "idAtributosRemoto": idAtributoRemoto,"nombreAtributo":nombreAtributo, "tipoPrimario": tipoPrimario, "longitudCadena":longCad }
-							mygrid=jQuery("#listaAtributos")
-							
-							//se agregan los datos al jqgrid
-							mygrid.setRowData(idAtributoLocal,a,false); 
-							$(this).dialog("close");
-							$("#listaAtributos").trigger("reloadGrid");
-						}
-						
-						
-						
-					},
-					"Cancelar" : function() {
-						$(this).dialog("close");
-					}
-				}
-			});
 
+	$("#dialogo-Atributos")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width : 550,
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
+						buttons : {
+
+							"Aceptar" : function() {
+								if (banderaAtributo == 1) {
+									var longCad = 0;
+									idAtributoRemoto = 0;
+									nombreAtributo = $('#nombreAtributo').val();
+									tipoPrimario = $('#listBoxTipoPrimario')
+											.val();
+
+									longCad = 'N/A'
+
+									/*si es texto se extrae la longCadena*/
+									esString = false
+									if (tipoPrimario == 'Texto') {
+										esString = true;
+										longCad = $('#cadenaLongitudAtributo')
+												.val();
+									}
+
+									if (controlAtributos(esString) == 1) {
+										mostrarMensaje('Error',
+												"Se debe completar correctamente el formulario ")
+										return 
+
+										
+
+									}
+									indice = indice + 1;
+									//var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length + 1 
+									//alert(cuantosDatos)
+									/*if(controlarExistenNombreAtributo(nombreAtributo)){
+										mostrarMensaje('Error', "Ya existe atributo con el nombre " + nombreAtributo)
+										return 
+									}*/
+									var a = {
+										"idAtributosLocal" : indice,
+										"idAtributosRemoto" : idAtributoRemoto,
+										"nombreAtributo" : nombreAtributo,
+										"tipoPrimario" : tipoPrimario,
+										"longitudCadena" : longCad
+									}
+									mygrid = jQuery("#listaAtributos")
+
+									//se agregan los datos al jqgrid
+									//este indice es una variable global 
+									mygrid.addRowData(indice, a, 1, 0);
+									$(this).dialog("close");
+									$("#listaAtributos").trigger("reloadGrid");
+								} else if (banderaAtributo == 2) {
+									var longCad = 0;
+									idAtributoRemoto = $('#idAtributoRemoto')
+											.val();
+									idAtributoLocal = $('#idAtributoLocal')
+											.val();
+									nombreAtributo = $('#nombreAtributo').val();
+									tipoPrimario = $('#listBoxTipoPrimario')
+											.val();
+
+									longCad = 'N/A'
+
+									/*si es texto se extrae la longCadena*/
+									esString = false
+									if (tipoPrimario == 'Texto') {
+										esString = true;
+										longCad = $('#cadenaLongitudAtributo')
+												.val();
+									}
+
+									if (controlAtributos(esString) == 1) {
+										mostrarMensaje('Error',
+												"Se debe completar correctamente el formulario ")
+										return 
+
+										
+
+									}
+									var cuantosDatos = $('#listaAtributos')
+											.jqGrid('getRowData').length + 1
+									//alert(cuantosDatos)
+									var a = {
+										"idAtributosLocal" : idAtributoLocal,
+										"idAtributosRemoto" : idAtributoRemoto,
+										"nombreAtributo" : nombreAtributo,
+										"tipoPrimario" : tipoPrimario,
+										"longitudCadena" : longCad
+									}
+									mygrid = jQuery("#listaAtributos")
+
+									//se agregan los datos al jqgrid
+									mygrid
+											.setRowData(idAtributoLocal, a,
+													false);
+									$(this).dialog("close");
+									$("#listaAtributos").trigger("reloadGrid");
+								}
+
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
 
 	$("#dialogo-datos-tipoItem")
 			.dialog(
@@ -551,8 +605,14 @@
 						modal : true,
 						resizable : false,
 						width : 550,
-						show: {effect: 'fade', duration: 400},
-						hide: {effect: 'fade', duration: 350},
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
 						buttons : {
 							/* funcion asociado al boton aceptar */
 							"Aceptar" : function() {
@@ -563,25 +623,32 @@
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
-										
-										$.post('/agregarTipoItem/',{ 
-											/* se indican los parametros*/
-												nombreTipoItem : $(
-														"#nombreTipoItem")
-														.val(),
-												descripcion: $("#descripcion")
-														.val(),
-												estado : $("#estado")
-														.val(),
-												idProyecto: /*$("#idProyecto")
-														.val(),*/'1',
-												//aca se debe obtener los datos del grid anterior
-												//se jasoniza la lista y se envia por el post
-												idFase: /*$("#idFase")
-														.val(),*/'1',
-												atributos: JSON.stringify($('#listaAtributos').jqGrid('getRowData'))
-														
-												},
+
+										$
+												.post(
+														'/agregarTipoItem/',
+														{
+															/* se indican los parametros*/
+															nombreTipoItem : $(
+																	"#nombreTipoItem")
+																	.val(),
+															descripcion : $(
+																	"#descripcion")
+																	.val(),
+															estado : $(
+																	"#estado")
+																	.val(),
+															idProyecto : retornaValorenSesion(),
+															//aca se debe obtener los datos del grid anterior
+															//se jasoniza la lista y se envia por el post
+															idFase : retornaValorComboBoxFases(),
+															atributos : JSON
+																	.stringify($(
+																			'#listaAtributos')
+																			.jqGrid(
+																					'getRowData'))
+
+														},
 														function(data, status) {
 															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
 
@@ -624,22 +691,26 @@
 														'/modificarTipoItem/',
 														{
 															idTipoItem : $(
-																"#idTipoItem")
-																.val(),
+																	"#idTipoItem")
+																	.val(),
 															nombreTipoItem : $(
 																	"#nombreTipoItem")
 																	.val(),
-															descripcion: $("#descripcion")
+															descripcion : $(
+																	"#descripcion")
 																	.val(),
-															estado : $("#estado")
+															estado : $(
+																	"#estado")
 																	.val(),
-															idProyecto: $("#idProyecto")
-																	.val(),
+															idProyecto : retornaValorenSesion(),
 															//aca se debe obtener los datos del grid dentro del form 
 															//se jasoniza la lista y se envia por el post
-															idFase: /*$("#idFase")
-																	.val()*/'1',
-															atributos: JSON.stringify($('#listaAtributos').jqGrid('getRowData'))
+															idFase : retornaValorComboBoxFases(),
+															atributos : JSON
+																	.stringify($(
+																			'#listaAtributos')
+																			.jqGrid(
+																					'getRowData'))
 														},
 														function(data, status) {
 
@@ -674,76 +745,77 @@
 						}
 					});
 
-	
-	function cargarGridAtributosBox(row, idTipoItemA, idFaseA){
+	function cargarGridAtributosBox(row, idTipoItemA, idFaseA) {
 		//primero se obtienen los Atributos del tipo de item con un get
-		
-		
-		$.getJSON("http://localhost:5000/listarAtributo",{idFase: idFaseA, idTipoItem: idTipoItemA }, function(atribs) {
-			  mygrid=jQuery("#listaAtributos");
-			  //var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length;
-			 
-			  mygrid.jqGrid("clearGridData", true)//.trigger("reloadGrid")
-			  //$('option', mygrid).remove(); 
-			  //$("#listaAtributos").trigger("reloadGrid");
-			  $.each(atribs, function(index,atrib) { 
-				    indice=indice+1
-				    LC=atrib.longitudCadena;
-				    if(atrib.tipoPrimario!='Texto'){
-				    	LC='N/A';
-				    }
-				    var a={ "idAtributosLocal":indice, "idAtributosRemoto":atrib.idAtributos, 
-				    	"nombreAtributo":atrib.nombreAtributo, "tipoPrimario": atrib.tipoPrimario, "longitudCadena":LC }
-				    mygrid.addRowData(indice,a,1,0); 
-				    
-			  } 
-			  );
-			  $("#listaAtributos").trigger("reloadGrid");
-			 });
-		
-		
+
+		$.getJSON("http://localhost:5000/listarAtributo", {
+			idFase : idFaseA,
+			idTipoItem : idTipoItemA
+		}, function(atribs) {
+			mygrid = jQuery("#listaAtributos");
+			//var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length;
+
+			mygrid.jqGrid("clearGridData", true)//.trigger("reloadGrid")
+			//$('option', mygrid).remove(); 
+			//$("#listaAtributos").trigger("reloadGrid");
+			$.each(atribs, function(index, atrib) {
+				indice = indice + 1
+				LC = atrib.longitudCadena;
+				if (atrib.tipoPrimario != 'Texto') {
+					LC = 'N/A';
+				}
+				var a = {
+					"idAtributosLocal" : indice,
+					"idAtributosRemoto" : atrib.idAtributos,
+					"nombreAtributo" : atrib.nombreAtributo,
+					"tipoPrimario" : atrib.tipoPrimario,
+					"longitudCadena" : LC
+				}
+				mygrid.addRowData(indice, a, 1, 0);
+
+			});
+			$("#listaAtributos").trigger("reloadGrid");
+		});
+
 		//aca se debe cargar los atributos del item en el listBoxAtributo
-		
+
 	}
 	function cargarForm(rowdata, row) {
-		
-		$("#nombreTipoItem").css('border-color', 'skyblue');
-		$("#descripcion").css('border-color', 'skyblue');
-		
+
+		setSkyBlueTipoItem()
+
 		rowdata = $('#listaTipoItem').getRowData(row);
 		$("#idTipoItem").val(rowdata.idTipoItem);
 		$("#nombreTipoItem").val(rowdata.nombreTipoItem);
 		$("#descripcion").val(rowdata.descripcion);
 		$("#estado").val(rowdata.estado);
 		$("#idFase").val(rowdata.idFase);
-		$("#idProyecto").val(rowdata.idProyecto);
+		$("#idProyecto").val(valorenSesion);
 		cargarGridAtributosBox(row, rowdata.idTipoItem, rowdata.idFase)
-		
+
 	}
 
 	function setCamposDisabled(habilitar) {
-		
+
 		$("#nombreTipoItem").attr('disabled', habilitar);
 		$("#descripcion").attr('disabled', habilitar);
 		$("#estado").attr('disabled', habilitar);
-		
+
 		//aca se debe cargar los atributos del item en el grid
 		//se deshabilita
 	}
 
 	function control(esNuevo) {
-		
-		$("#nombreTipoItem").css('border-color', 'skyblue');
-		$("#descripcion").css('border-color', 'skyblue');
-		$("#estado").css('border-color', 'skyblue');
-		
-		
+
+		setSkyBlueTipoItem()
+
 		var error = 0
 		var len;
 
 		len = $("#nombreTipoItem").val().trim().length;
 		if (len > 20 || len <= 0) {
 			$("#nombreTipoItem").css('border-color', 'red');
+			$("#EnombreTipoItem").val("Campo Obligario. Long. max 20").css('color', 'red').show();	
 			error = 1;
 		}
 
@@ -751,15 +823,25 @@
 		//len=$("#observacion").val().trim().length;
 		if (len > 50 || len <= 0) {
 			$("#descripcion").css('border-color', 'red');
+			$("#Edescripcion").val("Campo Obligario. Long. max 50").css('color', 'red').show();	
 			error = 1;
 		}
+		
 		return error;
 	}
-
 	
+
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
-		bandera = 1; 
+		bandera = 1;
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idTipoItem").val("");
 		$("#nombreTipoItem").val("");
@@ -769,21 +851,33 @@
 		$("#idProyecto").val(""); //esto se envia en el post el valor real, no se carga de este input 
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
+		setSkyBlueTipoItem()
 		//$.enmascarar();
 		//var select = $('#listBoxAtributo');
-		jQuery("#listaAtributos").jqGrid("clearGridData", true).trigger("reloadGrid")
+		jQuery("#listaAtributos").jqGrid("clearGridData", true).trigger(
+				"reloadGrid")
 		//$('option', select).remove(); //se limpia el listbox de atributos 
 		$("#btAgregarAtributo").show()
 		$("#btModificarAtributo").show()
 		$("#btEliminarAtributo").show()
 		$("#dialogo-datos-tipoItem").dialog("open");
-		
+
 	}
 
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
 		/* se indica que el dato no es nuevo */
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
+
 		bandera = 2;
+
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#listaTipoItem').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -800,11 +894,19 @@
 		$("#btAgregarAtributo").show()
 		$("#btModificarAtributo").show()
 		$("#btEliminarAtributo").show()
-		
+
 		$("#dialogo-datos-tipoItem").dialog("open");
 	}
 
 	function consultar() {
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
 		/* se comprueba que hay un dato seleccionado para consultar */
@@ -825,14 +927,20 @@
 		$("#dialogo-datos-tipoItem").dialog("open");
 	}
 	/* funcion que maneja la accion de desactivar un cliente*/
-	
+
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
-			show: {effect: 'fade', duration: 250},
-			hide: {effect: 'fade', duration: 250},
+			show : {
+				effect : 'fade',
+				duration : 250
+			},
+			hide : {
+				effect : 'fade',
+				duration : 250
+			},
 			buttons : {
 				"Ok" : function() {
 					$(this).dialog("close");
@@ -844,28 +952,89 @@
 <div id='msgbox' title='' style='display: none'></div>
 
 {% endblock %} {% block body %}
+<td><select id="comboBoxFases"
+	style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+	class="ui-widget-content ui-corner-all">
+		<option value="0">(Ninguna)</option>
 
+</select></td>
 <tr>
 	<td><div>
 			<table id="listaTipoItem"></table>
 			<div id="pager"></div>
 		</div></td>
 	<td><div>
-			<br></br>
-			<input id="btAgregar" type="button" name="nuevo" value="Nuevo" onclick='agregar()' />
-			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
-				value="Modificar" /> 
-			<input id="btConsultar" type="button" name="consultar"
-				value="Consultar" onclick='consultar()' />
-			<br></br>
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> <input id="btConsultar" type="button"
+				name="consultar" value="Consultar" onclick='consultar()' /> <br></br>
 			<script>
-			$("#btAgregar").button();
-			$("#btModificar").button();
-			$("#btConsultar").button();
+				$("#btAgregar").button();
+				$("#btModificar").button();
+				$("#btConsultar").button();
 			</script>
 		</div></td>
-		
+
 </tr>
+
+<script>
+	cargarFasesEnComboBox();
+	function cargarFasesEnComboBox() {
+
+		$.getJSON("http://localhost:5000/listarFasesComboBox",
+				function(atribs) {
+
+					var select = $('#comboBoxFases');
+					var options = select.prop('options');
+					//alert ('hola')
+
+					$('option', select).remove();
+
+					var index = 0
+					bandera = false
+					options[options.length] = new Option("Seleccione Fase...",
+							0);
+					$.each(atribs, function(index, atrib) { //val,text
+						index = index + 1;
+						options[options.length] = new Option(index + " : "
+								+ atrib.nombreFase, atrib.idFase);
+						bandera = true
+					});
+
+					if (bandera == false) {
+
+					}
+					//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
+					var myPostData = $('#listaTipoItem').jqGrid("getGridParam",
+							"postData");
+					delete myPostData.idFase;
+					$('#listaTipoItem').setGridParam({
+						postData : {
+							idFase : retornaValorComboBoxFases()
+						}
+					});
+
+					$('#listaTipoItem').trigger("reloadGrid");
+
+				});
+
+	}
+
+	$('#comboBoxFases').change(
+			function() {
+				$("#comboBoxFases option[value='0']").remove();
+				var myPostData = $('#listaTipoItem').jqGrid("getGridParam",
+						"postData");
+				delete myPostData.idFase;
+				$('#listaTipoItem').setGridParam({
+					postData : {
+						idFase : retornaValorComboBoxFases()
+					}
+				});
+				$('#listaTipoItem').trigger("reloadGrid");
+			});
+</script>
 
 
 {% endblock %}

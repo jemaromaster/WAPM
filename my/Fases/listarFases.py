@@ -147,10 +147,10 @@ class ListarFases(flask.views.MethodView):
             
             print 'el id proyeceeecto es' + str(idProyecto)
             listaFase=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==int(idProyecto))[desde:hasta]
+                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
             total=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==int(idProyecto)).count()
+                                                    .filter(Fase.idProyecto==flask.session['idProyecto']).count()
         print total
         print desde
         print hasta 
