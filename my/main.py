@@ -25,6 +25,9 @@ from rol_proyecto.rolProyectoManager import RolProyectoManager
 from rol_proyecto.listarRolProyecto import ListarRolProyecto
 from rol_proyecto.agregarRolProyecto import AgregarRolProyecto
 from rol_proyecto.modificarRolProyecto import ModificarRolProyecto
+from rol_proyecto.listarPermiso_Rol import ListarPermisosRol
+from rol_proyecto.agregarPermisoRol import AgregarPermisoRol
+from rol_proyecto.quitarPermisoRol import QuitarPermisoRol
 
 from login import Login
 
@@ -101,6 +104,7 @@ app.add_url_rule('/listarFases/',
 app.add_url_rule('/modificarFase/',
                  view_func=ModificarFase.as_view('modificarFase'),
                  methods=["GET", "POST"])
+
 #roles de proyecto
 app.add_url_rule('/rolProyectoManager/',
                  view_func=RolProyectoManager.as_view('rolProyectoManager'),
@@ -108,13 +112,21 @@ app.add_url_rule('/rolProyectoManager/',
 app.add_url_rule('/listarRolProyecto/',
                  view_func= ListarRolProyecto.as_view('listarRolProyecto'),
                  methods=["GET", "POST"])
+app.add_url_rule('/listarPermisosRol/',
+                 view_func= ListarPermisosRol.as_view('listarPermisosRol'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarRolProyecto/',
                  view_func=AgregarRolProyecto.as_view('agregarRolProyecto'),
                  methods=["GET", "POST"])
 app.add_url_rule('/modificarRolProyecto/',
                  view_func=ModificarRolProyecto.as_view('modificarRolProyecto'),
                  methods=["GET", "POST"])
-
+app.add_url_rule('/agregarPermisoRol/',
+                 view_func=AgregarPermisoRol.as_view('agregarPermisoRol'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/quitarPermisoRol/',
+                 view_func=QuitarPermisoRol.as_view('quitarPermisoRol'),
+                 methods=["GET", "POST"])
 
 app.add_url_rule('/miembroManager/',
                  view_func=MiembroManager.as_view('miembroManager'),

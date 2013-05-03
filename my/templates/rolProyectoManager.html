@@ -89,8 +89,6 @@
 
 <div id="dialogo-rolProyecto" title="Roles de proyecto">
 	<form title="(*) campos obligatorios">
-		<textarea tabIndex="-1" rows="5" readonly id="paraConsulta"
-			style="width: 100%; overflow: hidden; border: none; resize: none; font-size: 15px"></textarea>
 		<fieldset class="fieldset">
 
 			<input type="hidden" name="idRol" id="idRol" />
@@ -120,12 +118,233 @@
 				
 			</table>
 		</fieldset>
+		
 	</form>
 </div>
-
+<div id="dialogo-permisos">
+<table id="listPermisos"></table>
+<div id="pagerPermisos"></div>
+</div>
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
+	
+	/* ################################################################################## */
+	
+	function abrirDialogoPermisos() {
+
+		var rowRol = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowRol == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el Rol a cual administrar permisos ");
+			return;
+		}
+		var rowdata = $('#list').getRowData(rowRol);
+		agregarPermisos(rowdata);
+		$('#dialogo-permisos').dialog("open");
+	}
+	$('#dialogo-permisos')
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : true,
+						width : 'auto',
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Agregar" : function() {
+								/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+								var rowPermisos = $('#listPermisos').jqGrid(
+										'getGridParam', 'selrow');
+								var rowRol = $('#list').jqGrid(
+										'getGridParam', 'selrow');
+								if (rowPermisos == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el Usuario a agregar");
+									return;
+								}
+								if (rowRol == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el Rol");
+									return;
+								}
+
+								var rowdata = $('#list')
+										.getRowData(rowRol);
+								var rowdataPermisos = $('#listPermisos')
+										.getRowData(rowPermisos);
+								/* se indica la URL */
+								$.post('/agregarPermisoRol/',
+												{ /* se indican los parametros*/
+													idRol : rowdata.id,
+													idPermiso : rowdataPermisos.id
+
+												},
+												function(data, status) {
+													/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+													/* si hay error se muestra el mensaje*/
+													if (data.substring(0, 1) == 't') {
+														mostrarMensaje(
+																"Error",
+																"Los datos no se han podido guardar:\n"
+																		+ data
+																				.substring(2));
+														/* se indica que no hubieron errores */
+													} else {
+														mostrarMensaje(
+																"Exito",
+																data
+																		.substring(2));
+													}
+													/* se indicar la recarga de la tabla */
+													$('#listPermisos').trigger(
+															"reloadGrid");
+												});
+							},
+							"Quitar" : function() {
+								var rowPermisos = $('#listPermisos').jqGrid(
+										'getGridParam', 'selrow');
+								if (rowPermisos == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el Permiso a eliminar");
+									return;
+								}
+								var rowRol = $('#list').jqGrid(
+										'getGridParam', 'selrow');
+								if (rowRol == null) {
+									mostrarMensaje("Atencion",
+											"Seleccione el Rol");
+									return;
+								}
+
+								var rowdata = $('#list')
+										.getRowData(rowRol);
+								var rowdataPermisos = $('#listPermisos')
+										.getRowData(rowPermisos);
+								/* se indica la url */
+								$.post('/quitarPermisoRol',
+												{
+													idRol : rowdata.id,
+													idPermiso : rowdataPermisos.id
+												},
+												function(data, status) {
+
+													if (data.substring(0, 1) == 't') {
+														mostrarMensaje(
+																"Error",
+																"Permiso no se ha podido quitar:\n"
+																		+ data
+																				.substring(2));
+													} else {
+														mostrarMensaje("Exito",
+																"Permiso ha sido quitado del Rol");
+													}
+													$('#listPermisos').trigger(
+															"reloadGrid");
+												});
+							},
+							"Salir" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+
+	
+	
+	
+	function agregarPermisos(rowdata) {
+		//var rowMiembros = $('#listMiembros').jqGrid('getGridParam', 'selrow');
+
+		//var rowdataMiembros = $('#listMiembros').getRowData(rowMiembros);
+		var grid = jQuery("#listPermisos").jqGrid(
+				{
+
+					// datatype : "local",
+					// data:mydata,
+					url : 'http://localhost:5000/listarPermisosRol',
+					datatype : "json",
+					width : 'auto',
+					mtype : "get",
+					postData : {
+						idRol : rowdata.idRol
+					},
+					show : {
+						effect : 'fade',
+						duration : 400
+					},
+					hide : {
+						effect : 'fade',
+						duration : 350
+					},
+					colNames : [ 'idPermiso','Nombre ', 'Descripcion', 'Asignado a Rol'],
+					colModel : [ {
+						name : 'idPermiso',
+						index : 'idPermiso',
+						
+						hidden : true
+					}, {
+						name : 'nombre',
+						index : 'nombre',
+						
+					}, {
+						name : 'descripcion',
+						index : 'descripcion',
+						width : '260%',
+					}, {
+						name : 'enRol',
+						index : 'enRol',
+						align : "center",
+						
+						formatter : 'select',
+						stype : 'select',
+						
+						editoptions : {
+							value : "Todos:Todos;Si:Si;No:No"
+						},
+					}],
+					sortname : 'nombre',
+					viewrecords : true,
+					rownumbers : true,
+					sortorder : "desc",
+					ignoreCase : true,
+					pager : '#pagerPermisos',
+					caption : "Lista de Permisos",
+					jsonReader : {
+						root : "invdata",
+						page : "currpage",
+						total : "totalpages",
+						records : "totalrecords",
+						repeatitems : false,
+						id : "idPermiso"
+					}
+
+				}).jqGrid('navGrid', '#pagerPermisos', {
+			edit : false,
+			add : false,
+			del : false,
+			search : false,
+			refresh : false
+		});
+		grid.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+	};
+
+	
+	/* ################################################################################## */
+	
+	
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 		$("#dialogo-rolProyecto")
 			.dialog(
@@ -378,11 +597,15 @@
 				type="button" name="detalle" onclick='modificar();'
 				value="Modificar" /> 
 			<input id="btConsultar" type="button" name="consultar"
-				value="Consultar" onclick='consultar()' /> <br></br>
+				value="Consultar" onclick='consultar()' />
+			<input id="btAdminPermisos" type="button" name="btAdminPermisos"
+				value="Administrar Permisos" onclick='abrirDialogoPermisos()' />	
+				 <br></br>
 			<script>
 				$("#btAgregar").button();
 				$("#btModificar").button();
 				$("#btConsultar").button();
+				$("#btAdminPermisos").button();
 			</script>
 		</div></td>
 
