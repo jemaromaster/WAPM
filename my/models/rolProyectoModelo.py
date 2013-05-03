@@ -23,6 +23,7 @@ class RolProyecto(Base):
     id = Column("id",Integer, primary_key=True)
     nombre =  Column("nombre",String(20))
     descripcion=Column("descripcion", String(50))
+    idFase = Column(Integer, ForeignKey('fase.id'))
     
     permisos = relationship("Permiso", secondary=rolProyecto_permiso, backref=backref('roles_proyecto'))
     

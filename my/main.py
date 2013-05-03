@@ -20,6 +20,7 @@ from Fases.faseManager import FaseManager
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
+from Fases.listarFases import ListarComboFases
 
 from rol_proyecto.rolProyectoManager import RolProyectoManager
 from rol_proyecto.listarRolProyecto import ListarRolProyecto
@@ -100,6 +101,9 @@ app.add_url_rule('/faseManager/',
                  methods=["GET", "POST"])
 app.add_url_rule('/listarFases/',
                  view_func=ListarFases.as_view('listaFases'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarComboFases/',
+                 view_func=ListarComboFases.as_view('listarComboFases'),
                  methods=["GET", "POST"])
 app.add_url_rule('/modificarFase/',
                  view_func=ModificarFase.as_view('modificarFase'),

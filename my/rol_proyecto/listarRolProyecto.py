@@ -50,7 +50,9 @@ class ListarRolProyecto(flask.views.MethodView):
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
-        
+        idFase=flask.request.args.get('idFase', '') 
+        if(idFase == '' or idFase == '0'):
+            return "fase no valida"
         #caluclo de paginacion 
         page=long(param1)
         rows=long(param2)
@@ -92,7 +94,8 @@ class ListarRolProyecto(flask.views.MethodView):
 
             listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).\
                                                     filter((RolProyecto.nombre.like(nombre )& \
-                                                    RolProyecto.descripcion.like(descripcion)))[desde:hasta] 
+                                                    RolProyecto.descripcion.like(descripcion)&\
+                                                    RolProyecto.idFase==int(idFase)))[desde:hasta] 
                                                     
             total==sesion.query(RolProyecto).order_by(filtrarPor).\
                                                     filter((RolProyecto.nombre.like(nombre )& \
@@ -100,7 +103,7 @@ class ListarRolProyecto(flask.views.MethodView):
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
-            listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).all()[desde:hasta]
+            listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).filter(RolProyecto.idFase==int(idFase))[desde:hasta]
             total=sesion.query(RolProyecto).order_by(filtrarPor).count()
         print total 
         print desde

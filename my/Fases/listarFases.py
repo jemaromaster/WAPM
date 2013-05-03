@@ -50,6 +50,25 @@ class Respuesta():
         p=pre+p
         return p 
         
+class ListarComboFases(flask.views.MethodView):        
+    @login_required
+    def post(self):
+        idProyecto=flask.request.form['idProyecto']
+        print "id proyecto en listar combo fases:  " + idProyecto
+        if(idProyecto=='' or idProyecto=='0'):
+            return "[]"
+        
+        lf=sesion.query(Fase).filter(Fase.idProyecto==int(idProyecto))
+        prejsonF='['
+        jsonF=''
+        for fase in lf:
+            jsonF=jsonF+"{\"idFase\":\""+str(fase.idFase)+"\",\"nombreFase\":\""+fase.nombreFase+"\"},"
+        jsonF=jsonF[0:len(jsonF)-1]    
+        jsonF=prejsonF+jsonF+"]"        
+        return jsonF
+        
+        
+
 class ListarFases(flask.views.MethodView):
     @login_required
     def get(self): 
