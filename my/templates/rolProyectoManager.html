@@ -139,6 +139,9 @@
 					"Seleccione el Rol a cual administrar permisos ");
 			return;
 		}
+		$("#listPermisos").GridUnload();
+		$('#listPermisos').trigger(
+		"reloadGrid");
 		var rowdata = $('#list').getRowData(rowRol);
 		agregarPermisos(rowdata);
 		$('#dialogo-permisos').dialog("open");
@@ -166,6 +169,7 @@
 										'getGridParam', 'selrow');
 								var rowRol = $('#list').jqGrid(
 										'getGridParam', 'selrow');
+								
 								if (rowPermisos == null) {
 									mostrarMensaje("Atencion",
 											"Seleccione el Usuario a agregar");
@@ -179,13 +183,15 @@
 
 								var rowdata = $('#list')
 										.getRowData(rowRol);
+								
 								var rowdataPermisos = $('#listPermisos')
 										.getRowData(rowPermisos);
 								/* se indica la URL */
+								
 								$.post('/agregarPermisoRol/',
 												{ /* se indican los parametros*/
-													idRol : rowdata.id,
-													idPermiso : rowdataPermisos.id
+													idRol : rowdata.idRol,
+													idPermiso : rowdataPermisos.idPermiso
 
 												},
 												function(data, status) {
@@ -231,10 +237,10 @@
 								var rowdataPermisos = $('#listPermisos')
 										.getRowData(rowPermisos);
 								/* se indica la url */
-								$.post('/quitarPermisoRol',
+								$.post('/quitarPermisoRol/',
 												{
-													idRol : rowdata.id,
-													idPermiso : rowdataPermisos.id
+													idRol : rowdata.idRol,
+													idPermiso : rowdataPermisos.idPermiso
 												},
 												function(data, status) {
 
