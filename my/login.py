@@ -39,6 +39,7 @@ class Login(flask.views.MethodView):
         if c==1:
             flask.session['username'] = username
             flask.session['idUsuario']= idUsuarioSession
+            flask.session['idProyecto']=0
             self.includeRolSistemaSesion(usuarioSesion)
         else:
             responde=make_response("t,Usuario no existe o el passaword es incorrecto")   

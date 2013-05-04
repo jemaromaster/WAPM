@@ -12,9 +12,10 @@ class RolProyectoControllerClass(flask.views.MethodView):
             return make_response("f,Nombre del Rol incorrecto")
         if len(rol.descripcion) <= 0 or len(rol.descripcion) > 50:
             return make_response("f,Descripcion del Rol incorrecto")
-        if rol.idFase == '' or rol.idFase=='0':
-            return make_response("f,Fase no valida. No se pudo crear el rol")
-        rol.idFase=int(rol.idFase)
+        if idRol==0:    
+            if rol.idFase == '' or rol.idFase=='0':
+                return make_response("f,Fase no valida. No se pudo crear el rol")
+            rol.idFase=int(rol.idFase)
         rm=RolProyectoManejador()    
         return rm.guardarRolProyecto(rol, idRol)
             

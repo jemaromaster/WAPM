@@ -16,11 +16,20 @@ from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
 from Proyectos.miembroManager import MiembroManager
 
+from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
+from Proyectos.seleccionarProyectoSesion import SeleccionarProyectoSesion
+
 from Fases.faseManager import FaseManager
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
 from Fases.listarFases import ListarComboFases
+from Fases.listarFasesComboBox import ListarFasesComboBox
+
+from TiposDeItem.tipoItemManager import TipoItemManager
+from TiposDeItem.agregarTipoItem import AgregarTipoItem
+from TiposDeItem.listarTipoItem import ListarTipoItem
+from TiposDeItem.modificarTipoItem import ModificarTipoItem
 
 from rol_proyecto.rolProyectoManager import RolProyectoManager
 from rol_proyecto.listarRolProyecto import ListarRolProyecto
@@ -32,6 +41,7 @@ from rol_proyecto.quitarPermisoRol import QuitarPermisoRol
 
 from login import Login
 
+from TiposDeItem.listarAtributo import ListarAtributo
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
@@ -107,6 +117,34 @@ app.add_url_rule('/listarComboFases/',
                  methods=["GET", "POST"])
 app.add_url_rule('/modificarFase/',
                  view_func=ModificarFase.as_view('modificarFase'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/tipoItemManager/',
+                 view_func=TipoItemManager.as_view('tipoItemManager'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/agregarTipoItem/',
+                 view_func=AgregarTipoItem.as_view('agregarTipoItem'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarTipoItem/',
+                 view_func=ListarTipoItem.as_view('listarTipoItem'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarAtributo/',
+                 view_func=ListarAtributo.as_view('listarAtributo'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/modificarTipoItem/',
+                 view_func=ModificarTipoItem.as_view('modificarTipoItem'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/listarProyectosComboBox/',
+                 view_func=ListarProyectosComboBox.as_view('listarProyectosComboBox'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/seleccionarProyectoSesion/',
+                 view_func=SeleccionarProyectoSesion.as_view('seleccionarProyectoSesion'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/listarFasesComboBox/',
+                 view_func=ListarFasesComboBox.as_view('listarFasesComboBox'),
                  methods=["GET", "POST"])
 
 #roles de proyecto

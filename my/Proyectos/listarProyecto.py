@@ -85,8 +85,8 @@ class ListarProyectos(flask.views.MethodView):
             filtrarPor='nombre_proyecto'
         elif(sidx=='fechaInicio'):
             filtrarPor='fecha_inicio'
-        elif(sidx=='fechaFinal'):
-            filtrarPor='fecha_final'
+        elif(sidx=='fechaFinalizacion'):
+            filtrarPor='fecha_finalizacion'
         elif(sidx=='presupuesto'):
             filtrarPor='presupuesto'
         elif(sidx=='estado'):

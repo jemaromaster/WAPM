@@ -99,77 +99,59 @@ class ListarFases(flask.views.MethodView):
         elif(sidx=='estado'):
             filtrarPor='estado'
         
+             
         #se extrae el id de la session cookie
         #projectLeaderId=flask.session['idUsuario']
         
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
-        print filtrarPor
+        
         if (search=='true'):
             filters=flask.request.args.get('filters', '')
             obj = json.loads(filters)
             vector=obj['rules']
             i=0
-            field=vector[0]['field']
-            nombreProyecto='%'; f_proyectoechaInicio='%'; 
-            fechaFinalizacion='%'; presupuesto='%';
+            #field=vector[0]['field']
+            nombreFase='%';  
+            fechaInicio='%'; fechaFinalizacion='%';
             estado='%'
             
-            while(field!='estado'):
-                if(field=='nombreProyecto'):
-                    nombreProyecto=vector[i]['data'].strip() + '%'
+            for comp in vector:
+                if(comp['field']=='nombreFase'):
+                    nombreFase=vector[i]['data'].strip() + '%'
                     i=i+1
-                    field=vector[i]['field']
+                    #field=vector[i]['field']
                     continue
-                if field=='fechaInicio':
-                    fechaInicio=vector[i]['data'].strip()+'%'
+                if comp['field']=='estado':
+                    estado=vector[i]['data'].strip()+'%'
                     i=i+1
-                    field=vector[i]['field']
-                    continue
-                if field=='fechaFinalizacion':
-                    fechaFinalizacion=vector[i]['data'].strip()+'%'
-                    i=i+1
-                    field=vector[i]['field']
-                    continue
-                if field=='presupuesto':
-                    presupuesto=vector[i]['data'].strip()+'%'
-                    i=i+1
-                    field=vector[i]['field']
+                    #field=vector[i]['field']
                     continue
             
-            estado=vector[i]['data']
-            
+            #estado=vector[i]['data']
+            print (nombreFase + estado)
                   
            
             projectLeaderId=flask.session['idUsuario']
-            listaUsuario=sesion.query(Proyecto).order_by(filtrarPor).\
-                                                    filter(Proyecto.nombreProyecto.like(nombreProyecto) \
-                                                    #Proyecto.fechaInicio==date('2013-04-15') &  \
-                                                    #Proyecto.fechaFinalizacion.like(fechaFinalizacion)& \
-                                                    #Proyecto.presupuesto.like (presupuesto) & \
-                                                    #Proyecto.estado.like(estado)) \
-                                                    #Proyecto.fechaInicio.like('2013-04-15'))
-                                                    ).filter(Proyecto.estado==estado)\
-                                                    .filter(Proyecto.projectLeaderId==projectLeaderId)[desde:hasta] 
-                                                    #Proyecto.projectLeaderId.like(projectLeaderId)&  \
-            total=sesion.query(Proyecto).filter(Proyecto.nombreProyecto.like(nombreProyecto) \
-                                                    
-                                                    #Proyecto.projectLeaderId.like(projectLeaderId)&  \
-                                                    #Proyecto.fechaInicio.like(fechaInicio)&  \
-                                                    #Proyecto.fechaFinalizacion.like(fechaFinalizacion)& \
-                                                    #Proyecto.presupuesto.like (presupuesto) & \
-                                                    ).filter(Proyecto.estado==estado)\
-                                                    .filter(Proyecto.projectLeaderId==projectLeaderId)\
-                                                    .count();
-            
+         
+            listaFase=sesion.query(Fase).order_by(filtrarPor)\
+                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])\
+                                                    .filter(Fase.nombreFase.like(nombreFase))\
+                                                    .filter(Fase.estado.like(estado))[desde:hasta]
+                                                    #.filter(Proyecto.projectLeaderId==projectLeaderId)
+            total=sesion.query(Fase).order_by(filtrarPor)\
+                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])\
+                                                    .filter(Fase.nombreFase.like(nombreFase))\
+                                                    .filter(Fase.estado.like(estado)).count()
+                
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
             
-            print 'el id proyeceeecto es' + str(idProyecto)
-            listaFase=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==int(idProyecto))[desde:hasta]
+             print 'el id proyeceeecto es' + str(idProyecto)
+             listaFase=sesion.query(Fase).order_by(filtrarPor)\
+                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
-            total=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==int(idProyecto)).count()
+             total=sesion.query(Fase).order_by(filtrarPor)\
+                                                    .filter(Fase.idProyecto==flask.session['idProyecto']).count()
         print total
         print desde
         print hasta 

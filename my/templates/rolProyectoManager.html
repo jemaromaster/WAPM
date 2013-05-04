@@ -23,7 +23,7 @@
 			
 			})		
 	})}
-
+	
 	function reloadGridRol(){
 		
 		$("#comboFase option[value='0']").remove();
@@ -436,7 +436,7 @@
 	
 	/* ################################################################################## */
 	
-	
+		
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 		$("#dialogo-rolProyecto")
 			.dialog(
@@ -473,7 +473,8 @@
 																.val(),
 														idFase : $(
 														"#comboFase").val(),		
-														descripcion : $("#descripcion").val()
+														descripcion : $("#descripcion").val(), 
+														idRol: "0"
 														},
 														function(data, status) {
 															/* funcion que maneja el resulado de la invocación */
