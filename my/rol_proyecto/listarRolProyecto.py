@@ -93,9 +93,9 @@ class ListarRolProyecto(flask.views.MethodView):
                     continue
 
             listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).\
-                                                    filter((RolProyecto.nombre.like(nombre )& \
-                                                    RolProyecto.descripcion.like(descripcion)&\
-                                                    RolProyecto.idFase==int(idFase)))[desde:hasta] 
+                                                    filter(RolProyecto.nombre.like(nombre )&\
+                                                    RolProyecto.descripcion.like(descripcion))\
+                                                    .filter(RolProyecto.idFase==int(idFase))[desde:hasta] 
                                                     
             total==sesion.query(RolProyecto).order_by(filtrarPor).\
                                                     filter((RolProyecto.nombre.like(nombre )& \

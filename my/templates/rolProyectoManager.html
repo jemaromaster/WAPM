@@ -41,6 +41,7 @@
 		
 		$("#comboProyecto option[value='0']").remove();
 		cargaComboFase();
+		$('#list').clearGridData(true);
 	}
 	
 	function cargaComboFase(){
@@ -472,7 +473,8 @@
 																"#nombre")
 																.val(),
 														idFase : $(
-														"#comboFase").val(),		
+														"#comboFase").val(),
+														idRol: '0',
 														descripcion : $("#descripcion").val()
 														},
 														function(data, status) {
@@ -517,6 +519,7 @@
 														'/modificarRolProyecto/',
 														{
 															idRol: $("#idRol").val(),
+															idFase : '0',
 															nombre : $("#nombre").val(),
 															descripcion : $("#descripcion").val()
 														},

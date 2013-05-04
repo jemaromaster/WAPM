@@ -32,6 +32,8 @@ from rol_proyecto.agregarPermisoRol import AgregarPermisoRol
 from rol_proyecto.quitarPermisoRol import QuitarPermisoRol
 from rol_proyecto.rolUsuarioManager import RolUsuario
 from rol_proyecto.listarRolUsuario import ListarRolUsuario
+from rol_proyecto.agregarRolUsuario import AgregarRolUsuario
+from rol_proyecto.quitarRolUsuario import QuitarRolUsuario
 
 from login import Login
 
@@ -142,6 +144,12 @@ app.add_url_rule('/rolUsuarioManager/',
                  methods=["GET", "POST"])
 app.add_url_rule('/listarRolUsuario/',
                  view_func=ListarRolUsuario.as_view('listarRolUsuario'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/agregarRolUsuario/',
+                 view_func=AgregarRolUsuario.as_view('agregarRolUsuario'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/quitarRolUsuario/',
+                 view_func=QuitarRolUsuario.as_view('quitarRolUsuario'),
                  methods=["GET", "POST"])
 
 app.add_url_rule('/miembroManager/',

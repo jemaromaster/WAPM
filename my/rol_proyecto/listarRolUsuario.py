@@ -29,7 +29,7 @@ class Respuesta():
         self.totalRecords=totalRecords
         self.rows=rows
     
-    def jasonizar(self, listaRolProyecto,enUsuario):
+    def jasonizar(self, listaRolEnUsuario,listaRolProyecto,enUsuario):
         """
         modulo que jasoniza la respuesta
         """
@@ -37,10 +37,24 @@ class Respuesta():
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
         pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
         
+        SIoNO='No'
+        if enUsuario =='Todos':
+            for rol in listaRolProyecto:
+                if rol in listaRolEnUsuario:
+                    SIoNO='Si'
+                else:
+                    SIoNO='No'
+                p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\",\"enUsuario\":\""+SIoNO+"\"},"    
+        elif enUsuario=='Si':
+            SIoNO='Si'
+            for rol in listaRolEnUsuario:
+                p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\",\"enUsuario\":\""+SIoNO+"\"},"
+        elif enUsuario=='No':
+            SIoNO='No'
+            for rol in listaRolProyecto:
+                if rol not in listaRolEnUsuario:
+                    p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\",\"enUsuario\":\""+SIoNO+"\"},"
         
-        for rol in listaRolProyecto:
-            p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\"},"
-            # {"nombre":"nombre","idRol":"rol","descripcion":"descripciones"},
         p=p[0:len(p)-1]    
         p=p+"]}"    
         p=pre+p
@@ -104,17 +118,20 @@ class ListarRolUsuario(flask.views.MethodView):
                     i=i+1
                     continue    
             listaRolProyecto=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).\
-                                                    filter((nombre.like(nombre )& \
-                                                    descripcion.like(descripcion)))[desde:hasta] 
+                                                    filter((RolProyecto.nombre.like(nombre )& \
+                                                    RolProyecto.descripcion.like(descripcion)))[desde:hasta] 
                                                     
             total==sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).\
-                                                    filter((nombre.like(nombre )& \
-                                                    descripcion.like(descripcion))).count();
+                                                    filter((RolProyecto.nombre.like(nombre )& \
+                                                    RolProyecto.descripcion.like(descripcion))).count();
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
             listaRolProyecto=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto))[desde:hasta]
             total=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).count()
+        
+        listaRolEnUsuario=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).join(RolProyecto.usuarios).filter(Usuario.id==int(idUsuario))
+            
         print total 
         print desde
         print hasta 
@@ -124,7 +141,7 @@ class ListarRolUsuario(flask.views.MethodView):
         else:
             totalPages=total/rows +1
         r=Respuesta(totalPages,page,total,rows);
-        respuesta=r.jasonizar(listaRolProyecto,enUsuario)
+        respuesta=r.jasonizar(listaRolEnUsuario,listaRolProyecto,enUsuario)
         return respuesta
         
       
