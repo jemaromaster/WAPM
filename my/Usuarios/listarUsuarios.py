@@ -48,6 +48,20 @@ class Respuesta():
         
         
         return p 
+class ListarComboUsuarios(flask.views.MethodView):
+    @login_required
+    def post(self):
+        idProyecto=flask.request.form['idProyecto']
+        listaUsuario=sesion.query(Usuario).join(Proyecto.usuariosMiembros).filter(Proyecto.idProyecto==int(idProyecto))
+        pre='['
+        p=''
+        for usuario in listaUsuario:
+            print " el usuario es! " + usuario.username
+            p=p+"{\"nombreUsuario\":\""+usuario.username+"\", \"idUsuario\" : \" "+str(usuario.id)+"\"},"
+        p=p[0:len(p)-1]
+        suf=']'
+        respuesta=pre+p+suf
+        return respuesta
         
 class ListarUsuarios(flask.views.MethodView):
     @login_required

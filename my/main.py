@@ -6,6 +6,8 @@ from Usuarios.usuarioManager import UsuarioManager
 from Usuarios.agregarUsuario import AgregarUsuario
 from Usuarios.modificarUsuario import ModificarUsuario
 from Usuarios.listarUsuarios import ListarUsuarios
+from Usuarios.listarUsuarios import ListarComboUsuarios
+
 
 from Proyectos.proyectoManager import ProyectoManager
 from Proyectos.modificarProyecto import ModificarProyecto
@@ -38,6 +40,10 @@ from rol_proyecto.modificarRolProyecto import ModificarRolProyecto
 from rol_proyecto.listarPermiso_Rol import ListarPermisosRol
 from rol_proyecto.agregarPermisoRol import AgregarPermisoRol
 from rol_proyecto.quitarPermisoRol import QuitarPermisoRol
+from rol_proyecto.rolUsuarioManager import RolUsuario
+from rol_proyecto.listarRolUsuario import ListarRolUsuario
+from rol_proyecto.agregarRolUsuario import AgregarRolUsuario
+from rol_proyecto.quitarRolUsuario import QuitarRolUsuario
 
 from login import Login
 
@@ -69,6 +75,9 @@ app.add_url_rule('/proyectoManager/',
                  methods=["GET", "POST"])
 app.add_url_rule('/listarUsuarios/',
                  view_func=ListarUsuarios.as_view('listarUsuarios'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarComboUsuario/',
+                 view_func=ListarComboUsuarios.as_view('listarComboUsuario'),
                  methods=["GET", "POST"])
 app.add_url_rule('/agregarUsuario/',
                  view_func=AgregarUsuario.as_view('agregarUsuario'),
@@ -169,6 +178,19 @@ app.add_url_rule('/agregarPermisoRol/',
 app.add_url_rule('/quitarPermisoRol/',
                  view_func=QuitarPermisoRol.as_view('quitarPermisoRol'),
                  methods=["GET", "POST"])
+app.add_url_rule('/rolUsuarioManager/',
+                 view_func=RolUsuario.as_view('rolUsuarioManager'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarRolUsuario/',
+                 view_func=ListarRolUsuario.as_view('listarRolUsuario'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/agregarRolUsuario/',
+                 view_func=AgregarRolUsuario.as_view('agregarRolUsuario'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/quitarRolUsuario/',
+                 view_func=QuitarRolUsuario.as_view('quitarRolUsuario'),
+                 methods=["GET", "POST"])
+
 
 app.add_url_rule('/miembroManager/',
                  view_func=MiembroManager.as_view('miembroManager'),
