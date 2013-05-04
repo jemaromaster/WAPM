@@ -427,9 +427,11 @@ function retornaValorenSesion() {
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
 		//$.enmascarar();
-
-		$("#dialogo-datos-fase").dialog("open");
-		
+		if(retornaValorenSesion()!=0){
+			$("#dialogo-datos-fase").dialog("open");
+		}else{
+			mostrarMensaje("Error", "Debe seleccionar un proyecto para agregar una fase")
+		}
 	}
 
 	/* funcion para llamar al formulario para la modificación de datos */

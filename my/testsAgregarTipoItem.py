@@ -67,6 +67,7 @@ class WAPMTestCase(unittest.TestCase):
                              '[{"idAtributosLocal":"4","idAtributosRemoto":"0","nombreAtributo":"erew","tipoPrimario":"Texto","longitudCadena":"4"},{"idAtributosLocal":"3","idAtributosRemoto":"0","nombreAtributo":"asdf","tipoPrimario":"Texto","longitudCadena":"24"}]',
                              '2',
                              '1')
+        print rv.data
         assert 'Ya existe el tipo de item con ese nombre en esa fase' in rv.data
 
 

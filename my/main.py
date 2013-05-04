@@ -55,12 +55,15 @@ from models import poblarBD
  
 app = flask.Flask(__name__)
 """
+template_folder='/home/jesus/git/WAPM_rolProyectoiter3/my/templates/'
 Se realizan las redirecciones de las peticiones de manera conveniente. Cada peticion
 entrante debe estar asociada a una URL, con dicha URL la peticion es canalizada a travez
 de las reglas de URL a las funciones que se haran cargo de senrvirlas
 """
+
 initDB() 
-poblarBD.cargaEstatica()
+#poblarBD.cargaEstatica()
+#poblarBD.cargarProyecto()
 # Don't do this
 app.secret_key = "bacon"
 app.add_url_rule('/',
@@ -76,6 +79,7 @@ app.add_url_rule('/proyectoManager/',
 app.add_url_rule('/listarUsuarios/',
                  view_func=ListarUsuarios.as_view('listarUsuarios'),
                  methods=["GET", "POST"])
+
 app.add_url_rule('/listarComboUsuario/',
                  view_func=ListarComboUsuarios.as_view('listarComboUsuario'),
                  methods=["GET", "POST"])
@@ -197,4 +201,5 @@ app.add_url_rule('/miembroManager/',
                  methods=["GET", "POST"])
 
 app.debug = True
-app.run()
+if __name__ == '__main__':
+    app.run()

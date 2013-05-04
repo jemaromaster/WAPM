@@ -4,7 +4,8 @@ from permisoModelo import Permiso
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
 import md5
-
+import random
+from Proyectos.proyectoController import ProyectoControllerClass
 def poblar():
     sesion=Session()
     m=md5.new()
@@ -15,7 +16,6 @@ def poblar():
         sesion.add(u)
         
         
-        
     
     p=Proyecto('miProyecto','1','12/07/15', '12/12/13', '12000','ninguna',5, 'activo')
     sesion.add(u)
@@ -23,6 +23,23 @@ def poblar():
     sesion.commit()
     sesion.close()
 
+def cargarProyecto():
+     sesion=Session()
+     pc=ProyectoControllerClass()
+     estate=["activo", "inactivo"]
+     for i in range(0,100):
+         for j in range(1,10):
+              dia=random.randint(1, 28)
+              mes=random.randint(1, 12)
+              anho=random.randint(1990, 2020)
+              u=Proyecto("Proyecto"+str(i)+"_"+str(j), i, str(mes)+"/"+str(dia)+"/"+str(anho), \
+                   str(mes)+"/"+str(dia)+"/"+str(anho), \
+                   random.randint(1000, 100000),"observacion"+str(random.randint(1990, 2020)), random.randint(1, 12),estate[random.randint(0, 1)])
+              
+              pc.controlarProyecto(u,i)
+     sesion.commit()
+     sesion.close()
+     
 def cargaEstatica():
     """
     Metodo para cargar los valores estaticos que deben estar presentes en ciertas tablas para poder utilizarlas
