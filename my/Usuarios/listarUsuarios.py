@@ -3,6 +3,7 @@ import flask.views
 from flask import jsonify,json
 from models.bdCreator import Session
 from models.usuarioModelo import Usuario 
+from models.proyectoModelo import Proyecto
 from models.rolSistemaModelo import RolSistema
 sesion=Session()
 

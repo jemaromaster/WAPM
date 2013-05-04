@@ -54,8 +54,10 @@
 	<img src="/static/images/blue-23957_640.png" width="200px"/>
 	<h6>Web Aplication Project Manager</h6>
 	<div style="float: center; background-color: #FFFFFF;">
+			{% set urls = ['/proyectoManager/', '/miembroManager/', '/rolUsuarioManager/','/rolProyectoManager/','/usuarioManager/'] %}
+				{% if request.path not in urls %}
 			<table width="30%" style="float: right;">
-				<tr>
+				<tr>	
 					<div id="sectorProyectoComboBox"><td>
 						<h6 align="right" >Proyecto:</h6>
 					</td>
@@ -67,6 +69,7 @@
 					</select></td></div>
 				</tr>
 			</table>
+			{% endif %}
 		</div>
 	
 	
@@ -74,7 +77,7 @@
 	<HR style="color:#659EC7 ;width: 100%; margin: 0; padding: 0;"></hr>
 	<script>
 		var valorenSesion={{session['idProyecto']}};
-		$.getJSON("http://localhost:5000/listarProyectosComboBox", function(atribs) {
+		$.getJSON("http://localhost:5000/listarProyectoCombo", function(atribs) {
 		  
 			var select = $('#proyectosUsuario');
 			var options = select.prop('options');

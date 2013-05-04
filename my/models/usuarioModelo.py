@@ -8,6 +8,7 @@ class Usuario(Base):
     Atributos de la clase: id, username, passwd, nombres, apellidos, email,
     ci, telefono, observacion,activo,direccion
     """
+    
     #Nombre de la tabla
     __tablename__ = 'usuario'
     
