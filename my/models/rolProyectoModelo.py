@@ -2,10 +2,15 @@ from sqlalchemy import Column,Table, Integer, String,ForeignKey
 from bdCreator import Base
 from sqlalchemy.orm import relationship, backref
 from permisoModelo import Permiso
-
+from usuarioModelo import Usuario
 
 rolProyecto_permiso = Table('rol_proyecto#permiso', Base.metadata,
     Column('permiso_id', Integer, ForeignKey('permiso.id')),
+    Column('rol_proyecto_id', Integer, ForeignKey('rol_proyecto.id'))
+)
+
+rolProyecto_usuario = Table('rol_proyecto#usuario', Base.metadata,
+    Column('usuario_id', Integer, ForeignKey('usuario.id')),
     Column('rol_proyecto_id', Integer, ForeignKey('rol_proyecto.id'))
 )
 
@@ -26,6 +31,7 @@ class RolProyecto(Base):
     idFase = Column(Integer, ForeignKey('fase.id'))
     
     permisos = relationship("Permiso", secondary=rolProyecto_permiso, backref=backref('roles_proyecto'))
+    usuarios = relationship("Usuario", secondary=rolProyecto_usuario, backref=backref('roles_proyecto'))
     
     def __init__(self,nombre, descripcion):
         """
