@@ -611,9 +611,16 @@
 		
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
-
-		$("#dialogo-rolProyecto").dialog("open");
+		if($("#comboProyecto").val()==0){
+			 mostrarMensaje("Error", "Se debe seleccionar Proyecto para agregar nuevo Rol ")
+		}else if($("#comboFase").val()==0){
+			mostrarMensaje("Error", "Se debe seleccionar fase para agregar nuevo Rol")
+		}
+		else{
+			$("#dialogo-rolProyecto").dialog("open");
+		}
 	}
+	
 
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
