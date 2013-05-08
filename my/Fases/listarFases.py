@@ -76,7 +76,7 @@ class ListarFases(flask.views.MethodView):
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
-        idProyecto=flask.request.args.get('idProyecto', '')
+        idProyecto=flask.request.args.get('idProyectoPD', '')
         
         #caluclo de paginacion 
         page=long(param1)
@@ -134,12 +134,12 @@ class ListarFases(flask.views.MethodView):
             projectLeaderId=flask.session['idUsuario']
          
             listaFase=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])\
+                                                    .filter(Fase.idProyecto==int(idProyecto))\
                                                     .filter(Fase.nombreFase.like(nombreFase))\
                                                     .filter(Fase.estado.like(estado))[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
             total=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])\
+                                                    .filter(Fase.idProyecto==int(idProyecto))\
                                                     .filter(Fase.nombreFase.like(nombreFase))\
                                                     .filter(Fase.estado.like(estado)).count()
                 
@@ -148,10 +148,10 @@ class ListarFases(flask.views.MethodView):
             
              print 'el id proyeceeecto es' + str(idProyecto)
              listaFase=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==flask.session['idProyecto'])[desde:hasta]
+                                                    .filter(Fase.idProyecto==int(idProyecto))[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
              total=sesion.query(Fase).order_by(filtrarPor)\
-                                                    .filter(Fase.idProyecto==flask.session['idProyecto']).count()
+                                                    .filter(Fase.idProyecto==int(idProyecto)).count()
         print total
         print desde
         print hasta 

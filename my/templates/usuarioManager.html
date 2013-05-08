@@ -16,7 +16,7 @@
 
 				var grid = jQuery("#list").jqGrid(
 						{
-
+							
 							// datatype : "local",
 							// data:mydata,
 							url : 'http://localhost:5000/listarUsuarios',
@@ -130,7 +130,6 @@
 					defaultSearch : "cn"
 				});
 			});
-	//]]>
 </script>
 
 <!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
@@ -866,12 +865,14 @@
 
 {% endblock %} {% block body %}
 
-<tr>
-	<td><div>
-			<table id="list"></table>
+	
+	<div  style="margin-left:auto;
+margin-right:auto;
+width:60%;">
+			<h2>Administracion de Usuarios</h2>
+			<table id="list" ></table>
 			<div id="pager"></div>
-		</div></td>
-	<td><div>
+	
 			<br></br> <input id="btAgregar" type="button" name="nuevo"
 				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
 				type="button" name="detalle" onclick='modificar();'
@@ -879,15 +880,18 @@
 				name="cambiarPass" value="Cambiar Pass" onclick='cambiarPass()' />
 			<input id="btConsultar" type="button" name="consultar"
 				value="Consultar" onclick='consultar()' /> <br></br>
+	
+		</div>
+				
 			<script>
 				$("#btAgregar").button();
 				$("#btModificar").button();
 				$("#btCambiarPass").button();
 				$("#btConsultar").button();
 			</script>
-		</div></td>
+		
 
-</tr>
+
 
 
 {% endblock %}

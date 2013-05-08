@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<header>
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" 
+		href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="/static/css/ui.jqgrid.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="/static/css/stylem.css" />-->
+	
+	<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.number.js"></script>
+	<script type="text/javascript"
+		src="/static/js/jquery-ui-1.9.2.custom.js"></script>
+	<script type="text/javascript" src="/static/js/i18n/grid.locale-en.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.jqGrid.min.js"></script>
+	<script type="text/javascript" src="/static/js/WebToolKit.MD5.js"></script>
+		<title>WAPM</title>
+		
+	 <script>
+		$(function() {
+		$( "#menu" ).menu();
+		});
+	</script>
+	<style>
+		.ui-menu {  float:left;  z-index: 5; }
+	</style>
+	{% block header %}{% endblock %}
+</header>
+<body>
+
+	<div  style="float:right; background-color:#FFFFFF; ">
+	<iframe width="50px"style="border-style:none"> </iframe>
+	</div>
+	<div id="header" style=" background-color:#FFFFFF " >
+	<h6 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
+	
+	Bienvenido:{{session['username']}}!   
+	<br></br>
+	 <script> document.write( new Date().toLocaleString())</script>
+	<br></br> 
+	 <form action="{{url_for('index')}}" method="post">
+            <input id="btSubmit" type="submit" name="logout" value="logout" />
+        </form>
+     <script>
+			$("#btSubmit").button();
+    </script>
+	 </h6>
+	 <div  style="float:left; background-color:#FFFFFF; ">
+	<iframe width="50px"style="border-style:none"> </iframe>
+	</div>
+	<img src="/static/images/blue-23957_640.png" width="200px"/>
+	<h6>Web Aplication Project Manager</h6>
+	<div style="float: center; background-color: #FFFFFF;">
+			{% set urls = ['/proyectoManager/', '/miembroManager/', '/rolUsuarioManager/','/rolProyectoManager/','/usuarioManager/'] %}
+				{% if request.path not in urls %}
+			<table width="30%" style="float: right;">
+				<tr>	
+					<div id="sectorProyectoComboBox"><td>
+						<h6 align="right" >Proyecto:</h6>
+					</td>
+					<td><select id="proyectosUsuario"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+						class="ui-widget-content ui-corner-all">
+							<option value="activo">Ninguno</option>
+							
+					</select></td></div>
+				</tr>
+			</table>
+			{% endif %}
+		</div>
+	
+	
+	</div>
+	<HR style="color:#659EC7 ;width: 100%; margin: 0; padding: 0;"></hr>
+	<script>
+		var valorenSesion={{session['idProyecto']}};
+		$.getJSON("http://localhost:5000/listarProyectoCombo", function(atribs) {
+		  
+			var select = $('#proyectosUsuario');
+			var options = select.prop('options');
+			//alert ('hola')
+			
+			$('option', select).remove();
+			if(valorenSesion==0){
+				options[options.length] = new Option('Seleccione Proyecto',0);
+			}
+				$.each(atribs, function(index,atrib) { //val,text
+				    options[options.length] = new Option(atrib.nombreProyecto,atrib.idProyecto);
+				});
+			//valorEnSesion={{session['idProyecto']}};
+			select.val(valorenSesion);
+			elegirSesionProyecto(select.val())
+			
+		 });
+		function elegirSesionProyecto(idProyecto){
+				valorelegido=$('#proyectosUsuario').val();
+				//alert('valor elegido' + valorelegido)
+				//alert('valor en sesion '+ valorenSesion)
+				if(valorenSesion!=valorelegido){ //si es que el valor del combo actual es diferente  
+													//del seleccionado, se hace el post y reload de la pagina, la primera vez el de la sesion es 0
+				valorenSesion=valorelegido;
+				$.post('/seleccionarProyectoSesion/',
+						{ /* se indican los parametros*/
+							idProyecto : idProyecto
+						},
+						function(data, status) {
+							/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+		
+							/* si hay error se muestra el mensaje*/
+							if (data.substring(0, 1) == 't') {
+								mostrarMensaje(
+										"Error",data.substring(2));
+								/* se indica que no hubieron errores */
+							}
+							/* se indicar la recarga de la tabla */
+							//location.reload();
+							var pathname = window.location.pathname;
+							switch (pathname){
+								case '/faseManager/':
+									
+									$("#listaFases").trigger("reloadGrid");
+									break;
+								case '/usuarioManager/':
+									$('#list').trigger("reloadGrid");
+									break;
+								case'/proyectoManager/':
+									$('#list').trigger("reloadGrid");
+									break;
+								case'/tipoItemManager/':
+									cargarFasesEnComboBox();
+									break;
+								default:
+									alert('no te olvides agregar para que actualice el jqgrid en el if de base')
+							}
+							
+						});
+				
+				}
+		}
+		$('#proyectosUsuario').change(function() {
+			    $("#proyectosUsuario option[value='0']").remove();
+			  elegirSesionProyecto($('#proyectosUsuario').val())
+		});
+		//var selectedOption = 'green';
+
+		
+	</script>
+	<div id="menuBarr" css=".ui-menu">
+			<ul id="menu">
+			<h2>Menu</h2>
+				{% if 'username' in session %}
+				{% if 'rolAdmin' in session %}
+					<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
+					</li>
+				{% endif %}
+				{% if 'rolPL' in session %}
+				<li><a href="#">Proyecto Manager</a>
+					<ul>
+						<li><a href="{{url_for('proyectoManager')}}">Administrar Proyectos</a>
+						<li><a href="{{url_for('faseManager')}}">Administrar Fases</a>
+						<li><a href="{{url_for('miembroManager')}}">Administrar Miembros</a>
+						<li><a href="#">Administrar Comite</a>
+						<li><a href="{{url_for('rolProyectoManager')}}">Administrar Roles</a>
+						<li><a href="{{url_for('rolUsuarioManager')}}">Administrar Usuario Roles</a>
+					</ul>
+				
+				</li>
+				{% endif %}
+				<li><a href="#">Desarrollo</a>
+					<ul>
+						<li><a href="#">Item Manager</a>
+						<li><a href="#">Crear Solicitud de cambior</a>
+						<li><a href="#">Calculo de costos Manager</a>
+					</ul></li>
+				<li><a href="#">Gestion de Cambios</a>
+					<ul>
+						<li><a href="#">Linea Base Manager</a>
+						<li><a href="{{url_for('tipoItemManager')}}">Tipo Item Manager</a>
+					</ul></li> {% else %} {% endif %}
+			</ul>
+	</div>
+	<div id="relleno"  style="float:left; background-color:#FFFFFF; ">
+	<iframe width="100px"style="border-style:none"> </iframe>
+	</div>
+	<div id="content" style="float:left; background-color:#FFFFFF; ">
+	{% block body %}{% endblock %}</div>
+	
+	<div id="footer" style="clear:both;text-align:center; background-color: #659EC7">
+	Copyright © WAPM</div>
+	
+	</div>
+	
+
+</body>
+</html>

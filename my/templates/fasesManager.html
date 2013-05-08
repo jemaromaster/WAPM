@@ -15,7 +15,7 @@
 			.ready(
 					function() {
 						
-						var grid = jQuery("#listaFases")
+						var gridFase = jQuery("#listaFases")
 								.jqGrid(
 										{
 
@@ -97,7 +97,7 @@
 									search : false,
 									refresh : true
 								});
-						grid.jqGrid('filterToolbar', {
+						gridFase.jqGrid('filterToolbar', {
 							stringResult : true,
 							searchOnEnter : false,
 							defaultSearch : "cn"
@@ -121,7 +121,7 @@ function retornaValorenSesion() {
 	//alert('valor en sesion' + valorenSesion)
 	return valorenSesion
 }
-	var gridDelMomento=jQuery("#listaFases");
+	
 	jQuery(function($) {
 		$.datepicker.regional['es'] = {
 			closeText : 'Cerrar',
@@ -148,13 +148,7 @@ function retornaValorenSesion() {
 		$.datepicker.setDefaults($.datepicker.regional['es']);
 	});
 
-	$(document).ready(function() {
-		$("#datepicker").datepicker();
-	});
 	
-	$(document).ready(function() {
-		$("#datepicker2").datepicker();
-	});
 </script>
 <div id="dialogo-datos-fase" title="Datos de Fase">
 	<form title="(*) campos obligatorios">
