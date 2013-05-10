@@ -10,6 +10,114 @@
 jQuery(document).ready(
 function() {
 	 
+	$("#dialogo-rolUsuario")
+	.dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				overflow : scroll,
+				resizable : false,
+				width: 'auto',
+				heigth: 'auto',
+				
+				
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					/* funcion asociado al boton aceptar */
+					"Asignar" : function( ) {agregarRolUser()},
+					"Quitar" : function() {quitarRolUser()}
+				}
+			});
+
+	
+	
+	var gridRolUser = jQuery("#listRolUser").jqGrid(
+			{
+
+				// datatype : "local",
+				// data:mydata,
+				url : 'http://localhost:5000/listarRolUsuario',
+				datatype : "json",
+				mtype : "get",
+				postData: { idProyecto: '0', idUsuario: '0'},
+				show : {
+					effect : 'fade',
+					duration : 200
+				},
+				
+				hide : {
+					effect : 'fade',
+					duration : 200
+				},
+				colNames : [ 'ID rol ', 'Nombre',
+						'Descripcion','listaPermisos', 'Posee Rol' ],
+				colModel : [ {
+					name : 'idRol',
+					index : 'idRol',
+					hidden : true
+				}, {
+					name : 'nombre',
+					index : 'nombre',
+				}, {
+					name : 'descripcion',
+					index : 'descripcion',
+					width: '250'
+				}							
+				, {
+					name : 'listaPermisos',
+					index : 'listaPermisos',
+					hidden : true
+				},
+				{
+					name : 'enUsuario',
+					index : 'enUsuario',
+					width : 90,
+					align : "center",
+					formatter : 'select',
+					stype : 'select',
+					
+					editoptions : {
+						value : "Todos:Todos;Si:Si;No:No"
+					}
+				}
+
+				],
+				sortname : 'nombre',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerRolUser',
+				caption : "Lista de Roles en el Proyecto",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idUsuario"
+				}
+
+			}).jqGrid('navGrid', '#pagerRolUser', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
+	});
+	gridRolUser.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
+
 	
 	$("#dialogo-rolProyecto")
 	.dialog(
@@ -18,9 +126,8 @@ function() {
 				modal : true,
 				overflow : scroll,
 				resizable : false,
-				
 				width : 'auto',
-				
+				heigth: 'auto',
 				show : {
 					effect : 'fade',
 					duration : 400
@@ -164,7 +271,7 @@ function() {
 				}, {
 					name : 'descripcion',
 					index : 'descripcion',
-					width : '260%',
+					width: '250'
 				}, {
 					name : 'enRol',
 					index : 'enRol',
@@ -214,6 +321,7 @@ function() {
 				modal : true,
 				resizable : true,
 				width : 'auto',
+				heigth: 'auto',
 				show : {
 					effect : 'fade',
 					duration : 400
@@ -358,7 +466,7 @@ function() {
 				}, {
 					name : 'descripcion',
 					index : 'descripcion',
-
+					width: '250'
 				}							
 				, {
 					name : 'listaPermisos',
@@ -405,7 +513,7 @@ function() {
 			{
 				autoOpen : false,
 				width : 'auto',
-				height : '500',
+				heigth: 'auto',
 				overflow : scroll,
 				modal : true,
 				show : {
@@ -490,7 +598,7 @@ function() {
 				rownumbers : true,
 				sortorder : "desc",
 				ignoreCase : true,
-				pager : '#pager',
+				pager : '#pagerFases',
 				caption : "Fases",
 				jsonReader : {
 					root : "invdata",
@@ -521,7 +629,7 @@ function() {
 			{
 				autoOpen : false,
 				width : 'auto',
-				height : '500',
+				height : 'auto',
 				overflow : scroll,
 				modal : true,
 				show : {
@@ -1116,7 +1224,8 @@ $('#dialogo-agregar-miembros')
 		.dialog(
 				{
 					autoOpen : false,
-					width : 1000,
+					width : 'auto',
+					heigth: 'auto',
 					modal : true,
 					resizable : true,
 					show : {
@@ -1432,6 +1541,154 @@ $('#dialogo-agregar-miembros')
 
 <script>
 
+function cargaComboUsuario(){
+	$.post('/listarComboUsuario/',
+			{ /* se indican los parametros*/
+				idProyecto : valorProyectoSeleccion()
+			},
+			function(data, status) {
+				var select = $('#comboUsuario');
+				var options = select.prop('options');
+				
+				$('option', select).remove();
+				options[0] = new Option("--Seleccione un Usuario--","0");
+				var index=0
+				
+				data = $.parseJSON( data );
+				//var jsonData = JSON.stringify(eval("(" + data + ")"));
+				$.each(data, function(index,usuario) {
+					index=index+1;
+					options[options.length] = new Option(index+" : "+usuario.nombreUsuario,usuario.idUsuario);
+				})
+			}
+		);
+	$('#listRolUser').clearGridData(true);
+	$('#dialogo-rolUsuario').dialog("open");
+	
+}
+
+function comboUsuarioSeleccion()
+{
+	return $('#comboUsuario').val()
+	
+}
+
+function reloadGridRolProyecto(){
+	
+	$("#comboUsuario option[value='0']").remove();
+	var myPostData = $('#listRolUser').jqGrid("getGridParam", "postData");
+	delete myPostData.idProyecto;
+	delete myPostData.idUsuario;
+	//eso borra el idFase actual
+	$('#listRolUser').setGridParam({
+	postData: { idProyecto: valorProyectoSeleccion(), idUsuario: comboUsuarioSeleccion() } });
+	//eso se setea el nuevo valor
+	$('#listRolUser').trigger("reloadGrid");
+
+	
+}
+
+function agregarRolUser (){
+	/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+	var rowRol = $('#listRolUser').jqGrid(
+			'getGridParam', 'selrow');
+	if (rowRol == null) {
+		mostrarMensaje("Atencion",
+				"Seleccione el Rol a agregar");
+		return;
+	}
+	var rowdataRoles = $('#listRolUser')
+			.getRowData(rowRol);
+
+	if (rowdataRoles.enUsuario == 'Si') {
+		mostrarMensaje("Atencion",
+				"No se puede asignar el Rol. Ya se encuentra asignado");
+	}
+	/* se indica la URL */
+	$
+			.post(
+					'/agregarRolUsuario/',
+					{ /* se indican los parametros*/
+						idRol : rowdataRoles.idRol,
+						idUsuario : $('#comboUsuario').val()
+
+					},
+					function(data, status) {
+						/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+						/* si hay error se muestra el mensaje*/
+						if (data.substring(0, 1) == 't') {
+							mostrarMensaje(
+									"Error",
+									"Los datos no se han podido guardar:\n"
+											+ data
+													.substring(2));
+							/* se indica que no hubieron errores */
+						} else {
+							mostrarMensaje(
+									"Exito",
+									data
+											.substring(2));
+						}
+						/* se indicar la recarga de la tabla */
+						$('#listRolUser').trigger(
+								"reloadGrid");
+					});
+	
+	
+}
+
+function quitarRolUser (){
+	/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+	var rowRol = $('#listRolUser').jqGrid(
+			'getGridParam', 'selrow');
+	if (rowRol == null) {
+		mostrarMensaje("Atencion",
+				"Seleccione el Rol a agregar");
+		return;
+	}
+	var rowdataRoles = $('#listRolUser')
+			.getRowData(rowRol);
+
+	if (rowdataRoles.enUsuario == 'No') {
+		mostrarMensaje("Atencion",
+				"El rol no pertenece al Usuario");
+	}
+	/* se indica la URL */
+	$
+			.post(
+					'/quitarRolUsuario/',
+					{ /* se indican los parametros*/
+						idRol : rowdataRoles.idRol,
+						idUsuario : $('#comboUsuario').val()
+
+					},
+					function(data, status) {
+						/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+						/* si hay error se muestra el mensaje*/
+						if (data.substring(0, 1) == 't') {
+							mostrarMensaje(
+									"Error",
+									"Los datos no se han podido guardar:\n"
+											+ data
+													.substring(2));
+							/* se indica que no hubieron errores */
+						} else {
+							mostrarMensaje(
+									"Exito",
+									data
+											.substring(2));
+						}
+						/* se indicar la recarga de la tabla */
+						$('#listRolUser').trigger(
+								"reloadGrid");
+					});
+	
+}
+
+
+
 var banderaRol;
 	function abrirDialogoPermisos() {
 	
@@ -1586,6 +1843,7 @@ var banderaRol;
 					})
 				}
 			);
+		$('#listRoles').clearGridData(true);
 		$('#dialogo-roles').dialog("open");
 	}
 	
@@ -2058,7 +2316,10 @@ var banderaRol;
 		value="Administrar Fases" onclick='abrirDialogoFases()' />
 		<input
 		id="btRoles" type="button" name="btRoles"
-		value="Administrar Roles" onclick='cargaComboFase()' /> <br></br>
+		value="Administrar Roles" onclick='cargaComboFase()' />
+		<input
+		id="btRolUser" type="button" name="btRolUser"
+		value="Asignar roles a Usuario" onclick='cargaComboUsuario()' /> <br></br>
 	<script>
 		$("#btAgregar").button();
 		$("#btModificar").button();
@@ -2066,10 +2327,22 @@ var banderaRol;
 		$("#btAgregarMiembros").button();
 		$("#btFases").button();
 		$("#btRoles").button();
+		$("#btRolUser").button();
 	</script>
 </div>
 
-<div id="dialogo-roles">
+
+<div id="dialogo-rolUsuario" title="Asignar Roles a Usuario">
+<label for="comboUsuario" style="display: block ; padding: 0.4em; float:left ">Asignar roles a: </label> 
+<select id="comboUsuario" onchange="reloadGridRolProyecto()"
+style="display: block; margin-bottom: 12px; padding: 0.4em;"
+class="ui-widget-content ui-corner-all">
+</select>
+<table id="listRolUser"></table>
+<div id="pagerRolUser"></div>
+</div>
+
+<div id="dialogo-roles" title="Administrar Roles del Proyecto">
 
 <label for="comboFase" style="display: block ; padding: 0.4em; float:left ">Fase a administrar</label> 
 <select id="comboFase" onchange="reloadGridRol()"
