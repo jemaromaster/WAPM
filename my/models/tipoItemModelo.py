@@ -4,7 +4,7 @@ from bdCreator import Base
 import flask.views
 from atributosModelo import Atributos
 from faseModelo import Fase
-
+from itemModelo import Item
 
 
 

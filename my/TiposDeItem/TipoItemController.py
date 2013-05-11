@@ -78,14 +78,14 @@ class TipoItemControllerClass(flask.views.MethodView):
         
         '''se controla cada uno de los atributos de la lista'''
         for atrib in lista:
-           #print 'lalalalal el id de T atrib es'+str(atrib.tipoPrimarioId)
+           
             '''controla el tamano de los strings'''
             if not(1<=len(atrib.nombreAtributo)<=20):
                 return ('t,Se supera caracteres para el nombre de tributo'+atrib.nombreAtributo)
             
             '''si es que es una cadena se controla el campo longitud, si no,se le coloca 0 como longitud'''
             
-            #if(atrib.tipoPrimario.nombre=='Texto'): 
+            
             if(atrib.tipoPrimarioId==1): #si esl atributo es String
                try:
                    atrib.longitudCadena=int(atrib.longitudCadena)
@@ -97,7 +97,7 @@ class TipoItemControllerClass(flask.views.MethodView):
                                              + 'debe ser entre 1 y 500')
             else:
                 atrib.longitudCadena=int(0); 
-                #print 'numerico su longitud cadena es ' + str(atrib.longitudCadena)
+                
             '''se controla que no exista un atributo con ese nombre en el tipo de item'''
             if(idIT!=0): 
                 consulta=sesion.query(Atributos).filter(Atributos.tipoItemId==idIT)\

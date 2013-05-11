@@ -14,7 +14,7 @@ class TipoItemManejador:
             ti=sesion.query(TipoItem).filter(TipoItem.idTipoItem==idT_Item).first()
             ti.setValues(t_item.nombreTipoItem,t_item.descripcion, t_item.estado)
             
-            #se traen todos los atributos de la BD correspondiente a ese item
+            #se traen todos los atributos de la BD correspondiente a ese tipoitem
             atribListaBD=sesion.query(Atributos).filter(Atributos.tipoItemId==idT_Item).all();
             print(atribListaBD)
             ids=[]

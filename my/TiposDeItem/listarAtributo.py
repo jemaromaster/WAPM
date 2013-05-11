@@ -52,12 +52,13 @@ class ListarAtributo(flask.views.MethodView):
     """Clase utilizada para listar todos los atributos correspondiente a un tipo de item determinado"""
     def jsonizarListaAtributos (self, listaAtributos):
         
-        cad="["
+        
+        cad=""
         for atrib in listaAtributos:
             cad=cad+json.dumps({"idAtributos": atrib.idAtributo, "nombreAtributo": atrib.nombreAtributo, "tipoPrimario": atrib.tipoPrimario.nombre,\
                         "longitudCadena":atrib.longitudCadena}, separators=(',',':'))
             cad=cad + ","
-        resp=cad[0:len(cad)-1]+"]"
+        resp="[" + cad[0:len(cad)-1]+"]"
        
         #print resp
         return resp

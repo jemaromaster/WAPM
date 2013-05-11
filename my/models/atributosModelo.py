@@ -5,6 +5,8 @@ import flask.views
 #from models.tipoItemModelo import TipoItem
 from tipoPrimarioModelo import TipoPrimario
 
+from instanciaAtributos import InstanciaFecha, InstanciaCadena, InstanciaNumerico, InstanciaEntero
+
 
 '''tipoItemTabla= Table('atributos_2', Base.metadata,
     Column('TIPO_ATRIBUTO', Integer, ForeignKey('tipo_atributo.id')),
@@ -35,11 +37,13 @@ class Atributos(Base):
     
     tipoItemId = Column("tipo_item_id",Integer, ForeignKey('tipo_item.id'))
     
+   
     def setValues(self,idAtributo,mbreAtributo,tipoPrimarioId, longitudCadena):
         """
         Metodo para establecer valores de atributos de la clase. 
         Parametros: self,nombreTipoItem, faseId
         """
+        
         self.idAtributo=idAtributo;
         self.nombreAtributo=nombreAtributo;
         self.tipoPrimarioId=tipoPrimarioId;

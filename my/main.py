@@ -45,6 +45,11 @@ from rol_proyecto.listarRolUsuario import ListarRolUsuario
 from rol_proyecto.agregarRolUsuario import AgregarRolUsuario
 from rol_proyecto.quitarRolUsuario import QuitarRolUsuario
 
+from Items.listarTipoItemComboBox import ListarTipoItemComboBox
+from Items.itemManager import ItemManager
+from Items.agregarItem import AgregarItem
+from Items.listarItems import ListarItems
+from Items.listarAtributosResultado import ListarAtributosResultado
 from login import Login
 
 from TiposDeItem.listarAtributo import ListarAtributo
@@ -200,6 +205,25 @@ app.add_url_rule('/miembroManager/',
                  view_func=MiembroManager.as_view('miembroManager'),
                  methods=["GET", "POST"])
 
+app.add_url_rule('/listarTipoItemComboBox/',
+                 view_func=ListarTipoItemComboBox.as_view('listarTipoItemComboBox'),
+                 methods=["GET"])
+
+app.add_url_rule('/itemManager/',
+                 view_func=ItemManager.as_view('itemManager'),
+                 methods=["GET"])
+
+app.add_url_rule('/agregarItem/',
+                 view_func=AgregarItem.as_view('agregarItem'),
+                 methods=["POST"])
+
+app.add_url_rule('/listarItems/',
+                 view_func=ListarItems.as_view('listarItems'),
+                 methods=["GET"])
+
+app.add_url_rule('/listarAtributosResultado/',
+                 view_func=ListarAtributosResultado.as_view('listarAtributosResultado'),
+                 methods=["GET"])
 app.debug = True
 if __name__ == '__main__':
     app.run()

@@ -5,11 +5,11 @@ import flask
 from models.bdCreator import Session
 from datetime import date
 
-from models.faseModelo import Fase
-from models.proyectoModelo import Proyecto
+from models.tipoItemModelo import TipoItem
+
 sesion=Session()
 
-class ListarFasesComboBox(flask.views.MethodView):
+class ListarTipoItemComboBox(flask.views.MethodView):
     
     def jasonizar(self, fl):
         """
@@ -17,25 +17,23 @@ class ListarFasesComboBox(flask.views.MethodView):
         """
         cad=''
         pre="["
-        print('fl is'+ str(fl))
+        #print('fl is'+ str(fl))
         if(fl is not None):
             for f in fl:
-                cad=cad+ json.dumps({"idFase":f.idFase , "nombreFase":f.nombreFase}, separators=(',',':'));
+                cad=cad+ json.dumps({"idTipoItem":f.idTipoItem , "nombreTipoItem":f.nombreTipoItem}, separators=(',',':'));
                 cad=cad + ","
             cad=cad[0:len(cad)-1] 
         else:
-            cad=cad+ json.dumps({"idFase":0 , "nombreFase":'ninguna'}, separators=(',',':'));
+            cad=cad+ json.dumps({"idTipoItem":0 , "nombreItem":'ninguno'}, separators=(',',':'));
         cad=pre + cad+"]"    
         return cad 
     
     @login_required
-    def get(self): 
-        
+    def get(self):
         #se obtiene los datos de post del server
-      
-        fasesLista=sesion.query(Fase).filter(Fase.idProyecto==flask.session['idProyecto'])
+        idTI=flask.request.args.get('idFase', '')
+        tipoItemLista=sesion.query(TipoItem).filter(TipoItem.fase_id==idTI)
        
-        
-        respuesta=self.jasonizar(fasesLista)
+        respuesta=self.jasonizar(tipoItemLista)
         return respuesta
         
