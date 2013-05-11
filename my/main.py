@@ -46,6 +46,7 @@ from rol_proyecto.agregarRolUsuario import AgregarRolUsuario
 from rol_proyecto.quitarRolUsuario import QuitarRolUsuario
 
 from login import Login
+from miembros import Miembros
 
 from TiposDeItem.listarAtributo import ListarAtributo
 from sqlalchemy import create_engine
@@ -68,6 +69,10 @@ initDB()
 app.secret_key = "bacon"
 app.add_url_rule('/',
                  view_func=Login.as_view('index'),
+                 methods=["GET", "POST"])
+
+app.add_url_rule('/miembros/',
+                 view_func=Miembros.as_view('miembros'),
                  methods=["GET", "POST"])
 
 app.add_url_rule('/usuarioManager/',

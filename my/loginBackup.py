@@ -13,10 +13,7 @@ class Login(flask.views.MethodView):
     """
     def get(self):
         if 'username' in flask.session:
-            if 'rolPL' in flask.session or 'rolAdmin' in flask.session:
-                 return flask.render_template('main.html')
-            else:
-                return flask.render_template('mainMiembro.html')
+            return flask.render_template('main.html')
         return flask.render_template('index.html')
     
     def post(self):

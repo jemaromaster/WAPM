@@ -34,8 +34,10 @@
 	<div  style="float:right; background-color:#FFFFFF; ">
 	<iframe width="50px"style="border-style:none"> </iframe>
 	</div>
-	<div id="header" style=" background-color:#FFFFFF " >
-	<h6 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
+	
+<div id="header" style=" background-color:#FFFFFF " >
+	<div>
+	<h4 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
 	
 	Bienvenido:{{session['username']}}!   
 	<br></br>
@@ -46,35 +48,37 @@
         </form>
      <script>
 			$("#btSubmit").button();
+			//style="margin-left:auto; margin-right:auto; " 
     </script>
-	 </h6>
+	 </h4>
+	 </div>
 	 <div  style="float:left; background-color:#FFFFFF; ">
 	<iframe width="50px"style="border-style:none"> </iframe>
 	</div>
-	<img src="/static/images/blue-23957_640.png" width="200px"/>
+	<img src="/static/images/blue-23957_640.png" width="150px" title="Volver a Pagina Principal" onclick="location.href='/'" style="cursor:pointer"/>
 	<h6>Web Aplication Project Manager</h6>
-	<div style="float: center; background-color: #FFFFFF;">
-			{% set urls = ['/proyectoManager/', '/miembroManager/', '/rolUsuarioManager/','/rolProyectoManager/','/usuarioManager/'] %}
-				{% if request.path not in urls %}
-			<table width="30%" style="float: right;">
-				<tr>	
-					<div id="sectorProyectoComboBox"><td>
-						<h6 align="right" >Proyecto:</h6>
-					</td>
-					<td><select id="proyectosUsuario"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
-						class="ui-widget-content ui-corner-all">
-							<option value="activo">Ninguno</option>
-							
-					</select></td></div>
-				</tr>
-			</table>
-			{% endif %}
-		</div>
+					
+	<div id="sectorProyectoComboBox"   >
+			<table style="margin-left:auto; margin-right:auto;"  >
+			<tr >
+			<td >
+			<h4 >Seleccione un Proyecto:</h4>
+			</td>
+			<td >
+			<select id="proyectosUsuario" 
+					style="display: block; margin-bottom: 12px; padding: 0.4em; "
+					class="ui-widget-content ui-corner-all"
+					onchange="proyChange()"	>
+					<option value="activo">Ninguno</option>
+			</select>
+			</td>
+			</tr>
+			</table>	
+	</div>
 	
 	
 	</div>
-	<HR style="color:#659EC7 ;width: 100%; margin: 0; padding: 0;"></hr>
+	<div id="footer" style="clear:both;text-align:center; background-color: #659EC7"/> WAPM. Version 1.0.1</div>
 	<script>
 		var valorenSesion={{session['idProyecto']}};
 		$.getJSON("http://localhost:5000/listarProyectoCombo", function(atribs) {
@@ -140,10 +144,14 @@
 				
 				}
 		}
-		$('#proyectosUsuario').change(function() {
-			    $("#proyectosUsuario option[value='0']").remove();
-			  elegirSesionProyecto($('#proyectosUsuario').val())
-		});
+		
+		
+		function proyChange() {
+			    
+			$("#proyectosUsuario option[value='0']").remove();
+			  	elegirSesionProyecto($('#proyectosUsuario').val())
+			  	
+		};
 		//var selectedOption = 'green';
 
 		
@@ -152,23 +160,6 @@
 			<ul id="menu">
 			<h2>Menu</h2>
 				{% if 'username' in session %}
-				{% if 'rolAdmin' in session %}
-					<li><a href="{{url_for('usuarioManager')}}">Usuario Manager</a>
-					</li>
-				{% endif %}
-				{% if 'rolPL' in session %}
-				<li><a href="#">Proyecto Manager</a>
-					<ul>
-						<li><a href="{{url_for('proyectoManager')}}">Administrar Proyectos</a>
-						<li><a href="{{url_for('faseManager')}}">Administrar Fases</a>
-						<li><a href="{{url_for('miembroManager')}}">Administrar Miembros</a>
-						<li><a href="#">Administrar Comite</a>
-						<li><a href="{{url_for('rolProyectoManager')}}">Administrar Roles</a>
-						<li><a href="{{url_for('rolUsuarioManager')}}">Administrar Usuario Roles</a>
-					</ul>
-				
-				</li>
-				{% endif %}
 				<li><a href="#">Desarrollo</a>
 					<ul>
 						<li><a href="#">Item Manager</a>
