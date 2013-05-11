@@ -252,6 +252,7 @@
 	var bandera;
 	var banderaAtributo;
 	var indice = 0;
+	var valorenSesion={{session['idProyecto']}};
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 	///////////////////////////////////////////////////////////////////
 	//Tunear lista tipo atributo 
@@ -979,8 +980,9 @@
 <div id='msgbox' title='' style='display: none'></div>
 
 {% endblock %} {% block body %}
+<h2>Administracion Tipo de Item</h2>
 <td><label>Fase:</label><select id="comboBoxFases"
-	style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+	style="display: block; margin-bottom: 12px; padding: 0.4em; width: auto;"
 	class="ui-widget-content ui-corner-all">
 		<option value="0">(Ninguna)</option>
 

@@ -31,62 +31,38 @@
 </header>
 <body>
 
-		<div style="position:fixed;left:220px">
-			
-			<img src="/static/images/blue-23957_640.png" width="150px" title="Volver a Pagina Principal" onclick="location.href='/'" 
-			style="cursor:pointer; position:fixed;left:90"/>
-			<br></br>
-			<br></br>
-			<h6 style="position:fixed;"> Web Aplication Project Manager</h6>
-			
-	</div>
-	<div  style="position:fixed;right:220px">
-		<h4 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
-			
-			Bienvenido:{{session['username']}}!   
-			<br></br>
-			 <script> document.write( new Date().toLocaleString())</script>
-			<br></br> 
-			 <form action="{{url_for('index')}}" method="post">
-		            <input id="btLogOut" type="submit" name="logout" value="logout" />
-		        </form>
-		     <script>
-					$("#btLogOut").button();
-		    </script>
-			 </h4>
-	</div>
-			
-			
-	
-	<div id="barraHeader" style="clear:both;width:75%;text-align:center; 
-	top:160px;left:200px;position:fixed;	 background-color: #659EC7;"> WAPM. Version 1.0.1
+	<div  style="float:right; background-color:#FFFFFF; ">
+	<iframe width="200px" height="auto" style="border-style:none"> </iframe>
 	</div>
 	
-	 <div id="content" style="top:180px;position:fixed;left:250px;bottom:120px;overflow:auto; width:100%">
-	{% block body %}{% endblock %}
-	</div>
-	<div
-	style="float:left; background-color:#E6E6E6; height: 900px;position:fixed;top:0;left:0 ">
-	<iframe width="200px" height="auto" style="border-style:none;"> </iframe>
+<div id="header" style=" background-color:#FFFFFF " >
+	<div>
+	<h4 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
 	
+	Bienvenido:{{session['username']}}!   
+	<br></br>
+	 <script> document.write( new Date().toLocaleString())</script>
+	<br></br> 
+	 <form action="{{url_for('index')}}" method="post">
+            <input id="btSubmit" type="submit" name="logout" value="logout" />
+        </form>
+     <script>
+			$("#btSubmit").button();
+			//style="margin-left:auto; margin-right:auto; " 
+    </script>
+	 </h4>
+	 </div>
+	 <div  style="float:left; background-color:#FFFFFF; ">
+	<iframe width="200px" height="auto" style="border-style:none"> </iframe>
 	</div>
-	
-	 <div  style="float:right; background-color:#E6E6E6;position:fixed;top:0;height:900px;right:0 ">
-			<iframe width="200px" height="100%" style="border-style:none;"> </iframe>
-	</div> 
-	<div id="barraFooter" style="clear:both;text-align:center; background-color: #0B3861;height: 70px;width:100%;
-	  position: fixed; bottom: 0 ;left:0;right:0">
-	Copyright © WAPM <br></br> Desarrollado por: PRASS    email: prass@software.prass.py
-	
-	</div>
-		
+	<img src="/static/images/blue-23957_640.png" width="150px" title="Volver a Pagina Principal" onclick="location.href='/'" style="cursor:pointer"/>
+	<h6>Web Aplication Project Manager</h6>
 					
-	<div id="sectorProyectoComboBox"  >
-			<br></br>
+	<div id="sectorProyectoComboBox"   >
 			<table style="margin-left:auto; margin-right:auto;"  >
 			<tr >
 			<td >
-			<h4 >Seleccionar Proyecto:</h4>
+			<h4 >Seleccione un Proyecto:</h4>
 			</td>
 			<td >
 			<select id="proyectosUsuario" 
@@ -101,7 +77,8 @@
 	</div>
 	
 	
-	
+	</div>
+	<div id="barraHeader" style="clear:both;width:75%;text-align:center; margin-left:auto;margin-right:auto; background-color: #659EC7;"/> WAPM. Version 1.0.1</div>
 	<script>
 		var valorenSesion={{session['idProyecto']}};
 		$.getJSON("http://localhost:5000/listarProyectoCombo", function(atribs) {
@@ -179,25 +156,38 @@
 
 		
 	</script>
-	
-	<div id="menuBarr" css=".ui-menu" style="position:fixed; top:220px;left:50px">
+	<br></br>
+	<iframe width="200px" height="auto" style="border-style:none;float:left"> </iframe>
+	<div id="menuBarr" css=".ui-menu" style="float:left">
 			<ul id="menu">
 			<h2>Menu</h2>
 				{% if 'username' in session %}
 				<li><a href="#">Desarrollo</a>
-					<ul  style="width:180px">
+					<ul>
 						<li><a href="#">Item Manager</a>
 						<li><a href="#">Crear Solicitud de cambior</a>
 						<li><a href="#">Calculo de costos Manager</a>
 					</ul></li>
 				<li><a href="#">Gestion de Cambios</a>
-					<ul style="width:210px">
+					<ul>
 						<li><a href="#">Linea Base Manager</a>
 						<li><a href="{{url_for('tipoItemManager')}}">Tipo Item Manager</a>
 					</ul></li> {% else %} {% endif %}
 			</ul>
 	</div>
+	<div id="relleno"  style="float:left; background-color:#FFFFFF; ">
+	<iframe width="100px"style="border-style:none"> </iframe>
+	</div>
+	<div id="content" style="float:left; background-color:#FFFFFF; ">
+	{% block body %}{% endblock %}</div>
 	
+	<div id="barraFooter" style="clear:both;text-align:center; background-color: #0B3861;height: 100px;width:100%;  position: fixed; bottom: 0 ;">
+	Copyright © WAPM <br></br> Desarrollado por: PRASS    email: prass@software.prass.py
+	<br></br>
+	Telefono: 0971-990666 0981-990666
+	</div>
+	
+	</div>
 	
 
 </body>
