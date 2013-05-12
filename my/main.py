@@ -50,7 +50,11 @@ from Items.itemManager import ItemManager
 from Items.agregarItem import AgregarItem
 from Items.listarItems import ListarItems
 from Items.listarAtributosResultado import ListarAtributosResultado
+from Items.modificarItem import ModificarItem
+from Items.listarDatosItemVersion import ListarDatosItemVersion
 from login import Login
+
+
 
 from TiposDeItem.listarAtributo import ListarAtributo
 from sqlalchemy import create_engine
@@ -223,6 +227,14 @@ app.add_url_rule('/listarItems/',
 
 app.add_url_rule('/listarAtributosResultado/',
                  view_func=ListarAtributosResultado.as_view('listarAtributosResultado'),
+                 methods=["GET"])
+
+app.add_url_rule('/modificarItem/',
+                 view_func=ModificarItem.as_view('modificarItem'),
+                 methods=["POST"])
+
+app.add_url_rule('/listarDatosItemVersion/',
+                 view_func=ListarDatosItemVersion.as_view('listarDatosItemVersion'),
                  methods=["GET"])
 app.debug = True
 if __name__ == '__main__':

@@ -27,6 +27,8 @@ def initDB():
     from itemModelo import Item
     from instanciaAtributos import InstanciaTipoItem,InstanciaFecha, InstanciaCadena, InstanciaNumerico, InstanciaEntero
     from atributosModelo import Atributos
-   
+    from historialModelo import HistorialItem 
+    #,HistorialInstanciaFecha, HistorialInstanciaEntero,HistorialInstanciaNumerico, HistorialInstanciaCadena
+
 
     Base.metadata.create_all(engine)

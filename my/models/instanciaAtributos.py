@@ -46,6 +46,7 @@ class InstanciaFecha(Base):
     idInstanciaFecha=Column("id",Integer, primary_key=True)
     fecha=Column("fecha", Date)
     instanciaTipoItem_id=Column(Integer, ForeignKey('instancia_tipo_item.id'))
+    version=Column("version", Integer)
     #instanciaTipoItem = relationship("InstanciaTipoItem", backref=backref("instancia_fecha", uselist=False))
     
     def setValues(self,fecha):
@@ -61,6 +62,7 @@ class InstanciaCadena(Base):
     idInstanciaCadena=Column("id", Integer, primary_key=True)
     cadena=Column("cadena", String(500))
     instanciaTipoItem_id=Column(Integer, ForeignKey('instancia_tipo_item.id'))
+    version=Column("version", Integer)
     #instanciaTipoItem = relationship("InstanciaTipoItem", backref=backref("instanciaCad", uselist=False))
     def setValues(self,cadena):
         self.cadena=cadena;
@@ -75,6 +77,7 @@ class InstanciaNumerico(Base):
     idInstanciaNumerico=Column("id", Integer, primary_key=True)
     numerico=Column("numero", Numeric(100))
     instanciaTipoItem_id=Column(Integer, ForeignKey('instancia_tipo_item.id'))
+    version=Column("version", Integer)
     #instanciaTipoItem = relationship("InstanciaTipoItem", backref=backref("instanciaNum", uselist=False))
     
     def setValues(self,num):
@@ -90,6 +93,7 @@ class InstanciaEntero(Base):
     idInstanciaEntero=Column("id", Integer, primary_key=True)
     entero=Column("entero", Integer(100))
     instanciaTipoItem_id=Column(Integer, ForeignKey('instancia_tipo_item.id'))
+    version=Column("version", Integer)
     #instanciaTipoItem = relationship("InstanciaTipoItem", backref=backref("instanciaEntero", uselist=False))
     def setValues(self,entero):
         self.entero=entero;

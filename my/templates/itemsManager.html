@@ -198,7 +198,14 @@
 							Item</label> <input type="text" name="nombreItem" id="nombreItem"
 						class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						<label for="versionComboBox" style="display: block">*Version</label>
+						<select id="versionComboBox"
+						style="display: block; margin-bottom: 12px; float: right; padding: 0.4em; width: 80%;"
+						class="ui-widget-content ui-corner-all">
+						<option value='0'>Ninguno</option>
+						</select>
 					</td>
+					
 				</tr>
 				
 
@@ -508,9 +515,6 @@
 											idFase : $(
 													"#idFase")
 													.val(),
-											tipoItemId : $(
-													"#tipoItemId")
-													.val(),
 											atributos:jsonizarAtributos()
 												
 														},
@@ -539,7 +543,77 @@
 									}
 								} else if (bandera == 3) {/*consultar*/
 									$(this).dialog("close");
-								}
+								}else if (bandera == 4) {
+									var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+									rowdata = $('#listaItems').getRowData(row);
+									if (control(false) == 1 | controlTI()==1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									}else if($("#versionComboBox").val()==rowdata.version){
+										mostrarMensaje("Atencion",
+										"No se puede revertir un item a la misma version actual: version   " + rowdata.version);
+									} else {
+
+										/* se indica la url */
+										$.post('/modificarItem/',
+														{
+															idItem:rowdata.idItem,
+															nombreItem : $(
+																	"#nombreItem")
+																	.val(),
+															prioridad : $(
+																	"#prioridad")
+																	.val(),
+															costo : $(
+																	"#costo")
+																	.val(),
+															complejidad : $(
+																	"#complejidad")
+																	.val(),
+															fechaInicio : $(
+																	"#datepicker")
+																	.val(),
+															fechaFinal : $(
+																	"#datepicker2")
+																	.val(),
+															descripcion : $(
+																	"#descripcion")
+																	.val(),
+															estado : $(
+																	"#estado")
+																	.val(),
+															tipoItemId : rowdata.tipoItem_id,
+															idFase : rowdata.idFase,
+															atributos: jsonizarAtributos()
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"No se ha podido revertir el item:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-datos-item")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Se reversiono    el item "+
+																		$(
+																		"#nombreItem").val() + "a la version "+ 
+																		$(
+																		"#versionComboBox").val());
+															}
+															$('#listaItems')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} 
 							},
 							"Cancelar" : function() {
 								$(this).dialog("close");
@@ -555,35 +629,64 @@
 			placeholder : " "
 		});
 	}*/
-	function cargarForm(rowdata, row) {
+	function cargarForm(rowdata, row, version) {
 		rowdata = $('#listaItems').getRowData(row);
 		
-		$("#idItem").val(rowdata.idItem);
-		$("#nombreItem").val(rowdata.nombreItem);
-		$("#costo").val(rowdata.costo);
-		$("#complejidad").val(rowdata.complejidad);
-		$("#prioridad").val(rowdata.prioridad);
-		$("#datepicker").val(rowdata.fechaInicio);
-		$("#datepicker2").val(rowdata.fechaFinalizacion);
-		$("#descripcion").val(rowdata.descripcion);
-		$("#estado").val(rowdata.estado);
-		$("#idFase").val(rowdata.idFase);
+		if(version==0 || version==rowdata.version){ //cuando es 0 le pide la version actal nada mas, es decir, la que esta en jqgrid
+			$("#idItem").val(rowdata.idItem);
+			$("#nombreItem").val(rowdata.nombreItem);
+			$("#costo").val(rowdata.costo);
+			$("#complejidad").val(rowdata.complejidad);
+			$("#prioridad").val(rowdata.prioridad);
+			$("#datepicker").val(rowdata.fechaInicio);
+			$("#datepicker2").val(rowdata.fechaFinalizacion);
+			$("#descripcion").val(rowdata.descripcion);
+			$("#estado").val(rowdata.estado);
+			$("#idFase").val(rowdata.idFase);
+			
+			$('#atributosTipodeItem').empty();
+			getJSONListarAtributos(rowdata.tipoItem_id);
+			
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version);
+		}else{
+			//pedir datos de la verison
+			//alert("entro")
+			$.getJSON("http://localhost:5000/listarDatosItemVersion/", {
+				idItem : rowdata.idItem,
+				version : version
+			}, function(atribs) {
+				$("#idItem").val(atribs.idItem);
+				$("#nombreItem").val(atribs.nombreItem);
+				$("#costo").val(atribs.costo);
+				$("#complejidad").val(atribs.complejidad);
+				$("#prioridad").val(atribs.prioridad);
+				$("#datepicker").val(atribs.fechaInicio);
+				$("#datepicker2").val(atribs.fechaFinalizacion);
+				$("#descripcion").val(atribs.descripcion);
+				$("#estado").val(atribs.estado);
+				$("#idFase").val(atribs.idFase);
+				
+				
+			});
+			$('#atributosTipodeItem').empty();
+			getJSONListarAtributos(rowdata.tipoItem_id);
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version);
+		}
 		
-		$('#atributosTipodeItem').empty();
-		getJSONListarAtributos(rowdata.tipoItem_id);
 		
 		
-		cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem);
+		
 		
 		//alert("laall"+$('#input_fecha').val())
 	}
 	
 	
-	function cargarInputAtributos(idTipoItem,idItem){
-		$.getJSON("http://localhost:5000/listarAtributosResultado", {
+	function cargarInputAtributos(idTipoItem,idItem,version){
+		$.getJSON("http://localhost:5000/listarAtributosResultado/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem,
-			idItem : idItem
+			idItem : idItem,
+			version : version
 		}, function(atribs) {
 			$.each(atribs, function(index, atrib) { //val,text
 				$("#input_"+atrib["nombreInput"]).val(atrib["valor"]);
@@ -603,7 +706,11 @@
 		$("#descripcion").attr('disabled', habilitar);
 		$("#estado").attr('disabled', habilitar);
 		$("#idFase").attr('disabled', habilitar);
-		
+		if(bandera==1){
+			$('#tipoItemIdComboBox').attr('disabled', false);
+		}else{
+			$('#tipoItemIdComboBox').attr('disabled', true);
+		}
 		//childs=$('#atributosTipodeItem').toArray
 		//$('#atributosTipodeItem').find("input[name^='input_']").css('border-color', 'red');
 		
@@ -612,7 +719,7 @@
 		}*/
 		alert("hola")
 		if(atributosTI!=null){
-			alert("entro al for")
+			//alert("entro al for")
 			for(var i=0; i<atributosTI.length;i++){
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
 				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
@@ -684,6 +791,7 @@
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
 		bandera = 1;
+		$('#versionComboBox').hide();
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idItem").val("");
 		$("#nombreItem").val("");
@@ -696,6 +804,8 @@
 		$("#estado").val("");
 		$("#idFase").val(retornaValorComboBoxFases());
 		
+		
+		
 		$('#atributosTipodeItem').empty();
 
 		cargarTipoItemEnComboBox(retornaValorComboBoxFases());
@@ -704,12 +814,14 @@
 		setearFormularioSkyBlue();
 		//$.enmascarar();
 		$("#dialogo-datos-item").dialog("open");
+		
 	}
 
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 2;
+		$('#versionComboBox').hide();
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -719,7 +831,7 @@
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		//$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row);
+		cargarForm(rowdata, row, 0);
 		/*se habilita la edicion*/
 		setCamposDisabled(false);
 		setearFormularioSkyBlue();
@@ -728,10 +840,11 @@
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-item").dialog("open");
 	}
-
+	
 	function consultar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
+		$('#versionComboBox').hide();
 		/* se comprueba que hay un dato seleccionado para consultar */
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -740,11 +853,60 @@
 		}
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		cargarForm(rowdata, row);
+		cargarForm(rowdata, row, 0);
 		/*se inhabilita la edicion*/
 		setCamposDisabled(true);
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-item").dialog("open");
+	}
+	function reversionar() {
+		/* se indica que el dato no es nuevo */
+		bandera = 4;
+		/* se comprueba que hay un dato seleccionado para consultar */
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila del item a reversionar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		
+		cargarComboBoxVersiones(row);
+		$('#atributosTipodeItem').empty();
+		cargarForm(rowdata, row, $('#versionComboBox').val());
+		$('#versionComboBox').change(function() {
+			//$('#atributosTipodeItem').empty();
+			cargarForm(rowdata, row, $('#versionComboBox').val());
+		});
+		
+		
+		
+		/*se inhabilita la edicion*/
+		setCamposDisabled(true);
+		$('#versionComboBox').show();
+		/* se llama al dialogo para modificar los datos */
+		
+		$("#dialogo-datos-item").dialog("open");
+	}
+	function cargarComboBoxVersiones(row){
+		rowdata=$('#listaItems').getRowData(row);
+		version=rowdata.version
+		var select = $('#versionComboBox');
+		var options = select.prop('options');
+		
+		$('option', select).remove();
+        //alert(version)
+		
+		for (var i=0; i<version-1; i++){
+			aux=i+1
+			options[options.length] = new Option(
+					aux, aux);
+		}
+		options[options.length] = new Option(
+				version + " (version actual) ", version);
+        select.val(version)
+        
+		
 	}
 	/* funcion que maneja la accion de desactivar un cliente*/
 
@@ -865,11 +1027,14 @@
 				value="Nuevo Item" onclick='agregar()' /> <input id="btModificar"
 				type="button" name="detalle" onclick='modificar();'
 				value="Modificar" /> <input id="btConsultar" type="button"
-				name="consultar" value="Consultar" onclick='consultar()' /> <br></br>
+				name="consultar" value="Consultar" onclick='consultar()' /> 
+				<input id="btReversionar" type="button" name="nuevo"
+				value="Reversionar" onclick='reversionar()' /><br></br>
 			<script>
 				$("#btAgregar").button();
 				$("#btModificar").button();
 				$("#btConsultar").button();
+				$("#btReversionar").button();
 			</script>
 		</div></td>
 
@@ -909,7 +1074,7 @@
 	}
 
 	function getJSONListarAtributos(idTipoItem){
-		$.getJSON("http://localhost:5000/listarAtributo", {
+		$.getJSON("http://localhost:5000/listarAtributo/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem
 		}, function(atribs) {

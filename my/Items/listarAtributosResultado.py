@@ -19,7 +19,7 @@ class ListarAtributosResultado(flask.views.MethodView):
         
         r=(fecha[8:10]+"/"+fecha[5:7]+"/"+fecha[0:4])
         return r
-    def jasonizar(self, i):
+    def jasonizar(self, i,version):
         """
         modulo que jasoniza la respuesta
         """
@@ -32,17 +32,20 @@ class ListarAtributosResultado(flask.views.MethodView):
                 id=s.tipoPrimario
                 
                 if(id=='Texto'):
-                    aux=sesion.query(InstanciaCadena).filter(InstanciaCadena.instanciaTipoItem_id==int(s.idInstanciaTipoItem)).first()
+                    aux=sesion.query(InstanciaCadena).filter(InstanciaCadena.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
+                                                     .filter(InstanciaCadena.version==version).first()
                     cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":aux.cadena}, separators=(',',':'));
                 elif(id=='Numerico'):
-                    aux=sesion.query(InstanciaNumerico).filter(InstanciaNumerico.instanciaTipoItem_id==int(s.idInstanciaTipoItem)).first()
+                    aux=sesion.query(InstanciaNumerico).filter(InstanciaNumerico.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
+                                                     .filter(InstanciaNumerico.version==version).first()
                     cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":aux.numerico}, separators=(',',':'));
                 elif(id=='Entero'):
-                    aux=sesion.query(InstanciaEntero).filter(InstanciaEntero.instanciaTipoItem_id==int(s.idInstanciaTipoItem)).first()
+                    aux=sesion.query(InstanciaEntero).filter(InstanciaEntero.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
+                                                     .filter(InstanciaEntero.version==version).first()
                     cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":aux.entero}, separators=(',',':'));
                 elif(id=='Fecha'):
-                    aux=sesion.query(InstanciaFecha).filter(InstanciaFecha.instanciaTipoItem_id==int(s.idInstanciaTipoItem)).first()
-                    
+                    aux=sesion.query(InstanciaFecha).filter(InstanciaFecha.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
+                                                    .filter(InstanciaFecha.version==version).first()
                     fecha_formateada=self.format_fecha(str(aux.fecha))
                     cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":fecha_formateada}, separators=(',',':'));
                     
@@ -57,11 +60,12 @@ class ListarAtributosResultado(flask.views.MethodView):
         idFase=flask.request.args.get('idFase', '')
         idTI=flask.request.args.get('idTipoItem', '')
         idItem=flask.request.args.get('idItem', '')
+        version=flask.request.args.get('version', '')
         i=sesion.query(InstanciaTipoItem)\
                                 .filter(InstanciaTipoItem.idItem==idItem).all();
         for s in i:
             print str(s.idInstanciaTipoItem)+","+str(s.nombreCampo)+","+ str(s.tipoPrimario)
         
-        respuesta=self.jasonizar(i)
+        respuesta=self.jasonizar(i,version)
         return respuesta
         

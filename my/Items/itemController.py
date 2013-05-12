@@ -33,7 +33,7 @@ class ItemControllerClass(flask.views.MethodView):
             return make_response('t,id Fase invalido no int ')
         
        
-        '''consulta si es que existe ya usuario con ese nombre'''
+        '''consulta si es que existe ya item con ese nombre'''
         
         sesion=Session()
         qr=sesion.query(Item).filter(Item.idFase==f.idFase).filter(Item.nombreItem==f.nombreItem).first()

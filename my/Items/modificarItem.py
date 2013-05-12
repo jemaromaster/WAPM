@@ -1,8 +1,8 @@
-import flask
+import flask, json, datetime
 import flask.views
 from utils import login_required
-from models.faseModelo import Fase 
-from faseController import FaseControllerClass
+from models.itemModelo import Item
+from itemController import ItemControllerClass
 from models.bdCreator import Session
 
 class ModificarItem(flask.views.MethodView):
@@ -29,7 +29,7 @@ class ModificarItem(flask.views.MethodView):
         prioridad=flask.request.form['prioridad']
         fechaInicio=flask.request.form['fechaInicio']
         fechaFinalizacion=flask.request.form['fechaFinal']
-        tipoItemId=flask.request.form['tipoItemId']
+        tipoItemId=0; #aca le paso 0 ya que el tipo item no cambia y es el mismo de la version anterior
         complejidad=flask.request.form['complejidad']
         costo=flask.request.form['costo']
         estado=flask.request.form['estado']
