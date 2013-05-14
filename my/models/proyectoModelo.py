@@ -29,14 +29,13 @@ class Proyecto(Base):
     fechaFinalizacion=Column("fecha_finalizacion" ,Date)
     presupuesto=Column("presupuesto",Float)
     observacion=Column("observacion",String(50))
-    nroFases=Column("nro_fases", Integer)
     estado=Column("estado",String(15))
     usuariosMiembros=relationship('Usuario',
                                   secondary=miembrosProyectoTabla,
                                   backref='proyectos')
     
     def setValues(self,nombreProyecto,projectLeaderId,fechaInicio,fechaFinalizacion,presupuesto, \
-                  observacion,nroFases,estado):
+                  observacion,estado):
         """
         Metodo para establecer valores de atributos de la clase. 
         Parametros: self,nombreProyecto,projectLeaderId,fechaInicio,
@@ -47,17 +46,15 @@ class Proyecto(Base):
         self.fechaInicio=fechaInicio;
         self.fechaFinalizacion=fechaFinalizacion;
         self.observacion=observacion;
-        self.nroFases=nroFases;
         self.presupuesto=presupuesto;
         self.estado=estado
         
     def __init__(self,nombreProyecto,projectLeaderId,fechaInicio,fechaFinalizacion, \
-                  presupuesto,observacion,nroFases,estado):
+                  presupuesto,observacion,estado):
         self.nombreProyecto=nombreProyecto;
         self.projectLeaderId=projectLeaderId;
         self.fechaInicio=fechaInicio;
         self.fechaFinalizacion=fechaFinalizacion;
         self.observacion=observacion;
-        self.nroFases=nroFases;
         self.presupuesto=presupuesto;
         self.estado=estado;

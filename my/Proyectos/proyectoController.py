@@ -16,7 +16,6 @@ class ProyectoControllerClass(flask.views.MethodView):
         p.observacion=p.observacion.strip()
         try:
             p.presupuesto=float(p.presupuesto)
-            p.nroFases=int(p.nroFases)
             p.projectLeaderId=int(p.projectLeaderId)
         except:
             return make_response('t, presupuesto invalido o nro de fases invalido o \
@@ -34,9 +33,6 @@ class ProyectoControllerClass(flask.views.MethodView):
         
         if not(isinstance(p.presupuesto, float) and p.presupuesto>=float(0.0)):
             return make_response('t,PRESUPUESTO invalido')
-       
-        if not(isinstance(p.nroFases, int) and p.nroFases>0):
-            return make_response('t,numero de Fases invalido ')
         
         
         '''consulta si es que existe ya proyecto con ese nombre si es nuevo proyecto a crear'''

@@ -38,6 +38,9 @@ class Login(flask.views.MethodView):
         if usuarioSesion == None:
             responde=make_response("t,Usuario no existe o el password es incorrecto")
             return responde
+        if usuarioSesion.activo=='false':
+            responde=make_response("t, no se encuentra activo")
+            return responde
         idUsuarioSession=usuarioSesion.id;
         if c==1:
             flask.session['username'] = username

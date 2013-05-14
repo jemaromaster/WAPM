@@ -7,6 +7,7 @@ from datetime import date
 
 from models.proyectoModelo import Proyecto
 from models.usuarioModelo import Usuario
+from models.faseModelo import Fase
 sesion=Session()
 
 
@@ -39,12 +40,13 @@ class Respuesta():
         
         
         for proy in listaProyecto:
+            nroFases=sesion.query(Proyecto).join(Fase).filter(Proyecto.idProyecto==proy.idProyecto).count()
             p=p+"{\"idProyecto\": \""+str(proy.idProyecto)+"\",\"nombreProyecto\": \""+ \
                 proy.nombreProyecto+"\", \"idProjectLeader\": \""+str(proy.projectLeaderId)+ \
                 "\",\"fechaInicio\": \""+str(proy.fechaInicio)+"\", \"fechaFinalizacion\": \""+ \
                 str(proy.fechaFinalizacion) +"\", \"presupuesto\": \""+str(int(proy.presupuesto))+ \
                 "\", \"observacion\": \""+proy.observacion+"\", \"nroFases\": \""+ \
-                str(proy.nroFases)+"\", \"estado\":\"" + proy.estado +\
+                str(nroFases)+"\", \"estado\":\"" + proy.estado +\
                 "\",\"nombreProjectLeader\":\"" + nombreProjectLeader + "\"},"
         p=p[0:len(p)-1]    
         p=p+"]}"    
@@ -157,9 +159,9 @@ class ListarProyectos(flask.views.MethodView):
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
             listaUsuario=sesion.query(Proyecto).order_by(filtrarPor)\
-                                                    .filter(Proyecto.estado=='activo') \
+                                                    .filter(Proyecto.estado=='desarrollo') \
                                                     .filter(Proyecto.projectLeaderId==projectLeaderId)[desde:hasta]
-            total=sesion.query(Proyecto).filter(Proyecto.estado=='activo')\
+            total=sesion.query(Proyecto).filter(Proyecto.estado=='desarrollo')\
                                         .filter(Proyecto.projectLeaderId==projectLeaderId).count()
         print total
         print desde

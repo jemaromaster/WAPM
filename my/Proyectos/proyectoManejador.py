@@ -13,7 +13,7 @@ class ProyectoManejador:
             p.setValues(proyect.nombreProyecto,proyect.projectLeaderId, \
                         proyect.fechaInicio, proyect.fechaFinalizacion,\
                         proyect.presupuesto,\
-                        proyect.observacion,proyect.nroFases,proyect.estado)
+                        proyect.observacion,proyect.estado)
         
         sesion.add(p)
         sesion.commit()

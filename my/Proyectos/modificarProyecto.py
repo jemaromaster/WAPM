@@ -24,7 +24,6 @@ class ModificarProyecto(flask.views.MethodView):
         idProyecto=flask.request.form['idProyecto']
         nombreProyecto=flask.request.form['nombreProyecto']
         idProjectLeader=flask.request.form['idProjectLeader']
-        nroFases=flask.request.form['nroFases']
         observacion=flask.request.form['observacion']
         presupuesto=flask.request.form['presupuesto']
         fechaInicio=flask.request.form['fechaInicio']
@@ -41,7 +40,7 @@ class ModificarProyecto(flask.views.MethodView):
        
         u=Proyecto(nombreProyecto, idProjectLeader, fechaInicio, \
                    fechaFinalizacion, \
-                   presupuesto, observacion, nroFases, estado)
+                   presupuesto, observacion, estado)
         
         
         # cu=UsuarioControllerClass()

@@ -22,7 +22,6 @@ class AgregarProyecto(flask.views.MethodView):
     
         nombreProyecto=flask.request.form['nombreProyecto']
         idProjectLeader=flask.session['idUsuario']
-        nroFases=flask.request.form['nroFases']
         observacion=flask.request.form['observacion']
         presupuesto=flask.request.form['presupuesto']
         fechaInicio=flask.request.form['fechaInicio']
@@ -35,7 +34,7 @@ class AgregarProyecto(flask.views.MethodView):
         '''
         u=Proyecto(nombreProyecto, idProjectLeader, fechaInicio, \
                    fechaFinalizacion, \
-                   presupuesto, observacion, nroFases,estado)
+                   presupuesto, observacion, estado)
         
         # cu=UsuarioControllerClass()
         #retorno=cu.controlarUsuario(u)
