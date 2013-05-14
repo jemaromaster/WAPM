@@ -52,6 +52,12 @@ from Items.listarItems import ListarItems
 from Items.listarAtributosResultado import ListarAtributosResultado
 from Items.modificarItem import ModificarItem
 from Items.listarDatosItemVersion import ListarDatosItemVersion
+from Items.eliminarItem import EliminarItem
+from Items.listarItemsRelacionarMiniDialogoComboBox import ListarItemsRelacionarMiniDialogoComboBox
+from Items.agregarRelacion import AgregarRelacion
+from Items.listarRelaciones import ListarRelaciones
+from Items.eliminarRelacion import EliminarRelacion
+from Items.adjuntarArchivo import AdjuntarArchivo
 from login import Login
 
 
@@ -233,9 +239,34 @@ app.add_url_rule('/modificarItem/',
                  view_func=ModificarItem.as_view('modificarItem'),
                  methods=["POST"])
 
+
+app.add_url_rule('/eliminarItem/',
+                 view_func=EliminarItem.as_view('eliminarItem'),
+                 methods=["POST"])
+
 app.add_url_rule('/listarDatosItemVersion/',
                  view_func=ListarDatosItemVersion.as_view('listarDatosItemVersion'),
                  methods=["GET"])
+
+app.add_url_rule('/itemsRelacionarMiniDialogoComboBox/',
+                 view_func=ListarItemsRelacionarMiniDialogoComboBox.as_view('listarItemsRelacionarMiniDialogoComboBox'),
+                 methods=["GET"])
+
+app.add_url_rule('/agregarRelacion/',
+                 view_func=AgregarRelacion.as_view('agregarRelacion'),
+                 methods=["POST"])
+
+app.add_url_rule('/listarRelaciones/',
+                 view_func=ListarRelaciones.as_view('listarRelaciones'),
+                 methods=["GET"])
+
+app.add_url_rule('/eliminarRelacion/',
+                 view_func=EliminarRelacion.as_view('eliminarRelacion'),
+                 methods=["POST"])
+
+app.add_url_rule('/adjuntarArchivo/',
+                 view_func=AdjuntarArchivo.as_view('adjuntarArchivo'),
+                 methods=["GET","POST"])
 app.debug = True
 if __name__ == '__main__':
     app.run()

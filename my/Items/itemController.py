@@ -9,7 +9,7 @@ from itemManejador import ItemManejador
 from datetime import datetime
 class ItemControllerClass(flask.views.MethodView):
             
-    def controlarItem(self, f, idF, atributos):
+    def controlarItem(self, f, idF, atributos, esReversion):
         f.nombreItem=f.nombreItem.strip()
         f.estado=f.estado.strip()
         f.descripcion=f.descripcion.strip()
@@ -19,6 +19,7 @@ class ItemControllerClass(flask.views.MethodView):
             f.prioridad=int(f.prioridad)
             f.complejidad=int(f.complejidad)
             f.idFase=int(f.idFase)
+            esReversion=int(esReversion)
         except:
             return make_response ('t, no se pudo castear a entero')
         
@@ -36,16 +37,21 @@ class ItemControllerClass(flask.views.MethodView):
         '''consulta si es que existe ya item con ese nombre'''
         
         sesion=Session()
+        
         qr=sesion.query(Item).filter(Item.idFase==f.idFase).filter(Item.nombreItem==f.nombreItem).first()
         
-        
-        if(idF==0):
-            if(qr is not None):
-                return make_response('t,Ya existe un item con el nombre indicado en la fase')
+        '''se consulta primeramente si corresponde a un reversion'''
+        if(esReversion==0): 
+            if(idF==0):
+                if(qr is not None):
+                    return make_response('t,Ya existe un item con el nombre indicado en la fase')
+            else:
+                if( qr is not None and str(qr.idItem) != idF ):
+                    return make_response('t,Ya existe un item con el nombre indicado en la fase')
         else:
-            if( qr is not None and str(qr.idItem) != idF ):
-                return make_response('t,Ya existe un item con el nombre indicado en la fase')
-        
+            if(qr is not None):
+                    return make_response('t,Existe item que cuenta con el mismo nombre que la version a la cual desea\
+                                            reversionar. Modifique el nombre del item "'+ qr.nombreItem + '" para poder reversionar' )
         
         
         #se valida la fecha 

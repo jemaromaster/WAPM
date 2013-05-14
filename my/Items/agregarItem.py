@@ -55,7 +55,7 @@ class AgregarItem(flask.views.MethodView):
         ic=ItemControllerClass()
         
         
-        return ic.controlarItem(i, 0, atributos)
+        return ic.controlarItem(i, 0, atributos, 0)
     
         
             

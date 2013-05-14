@@ -22,24 +22,35 @@ class ModificarItem(flask.views.MethodView):
     
     @login_required
     def post(self):
-        
+                
         atributos=json.loads(flask.request.form['atributos'])
+        complejidad=flask.request.form['complejidad']
+        costo=flask.request.form['costo']
+        descripcion=flask.request.form['descripcion']
+        esReversion=flask.request.form['esReversion']
+        estado=flask.request.form['estado'] 
+        
+        fechaInicio=flask.request.form['fechaInicio']
+        fechaFinalizacion=flask.request.form['fechaFinal']
+        
+        idFase=flask.request.form['idFase']
         idItem=flask.request.form['idItem']
         nombreItem=flask.request.form['nombreItem']
         prioridad=flask.request.form['prioridad']
-        fechaInicio=flask.request.form['fechaInicio']
-        fechaFinalizacion=flask.request.form['fechaFinal']
+        
         tipoItemId=0; #aca le paso 0 ya que el tipo item no cambia y es el mismo de la version anterior
-        complejidad=flask.request.form['complejidad']
-        costo=flask.request.form['costo']
-        estado=flask.request.form['estado']
-        descripcion=flask.request.form['descripcion']
+        
+        
+        
+        
         fechaCreacion= datetime.date.today()
         #este autorVersion se extrae del idUsuario de la sesion
         autorVersion_id=flask.session['idUsuario']
         
-        idFase=flask.request.form['idFase']
+        
        
+       
+      
         fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
         fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
         #ver fechaCreacion TIMESTAMP
@@ -52,5 +63,5 @@ class ModificarItem(flask.views.MethodView):
         ic=ItemControllerClass()
         
         
-        return ic.controlarItem(i, idItem, atributos)
+        return ic.controlarItem(i, idItem, atributos, esReversion)
     

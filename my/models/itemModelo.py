@@ -4,6 +4,23 @@ from bdCreator import Base
 import flask.views
 from faseModelo import Fase
 #from usuarioModelo import Usuario
+
+class Relacion(Base):
+    __tablename__='relacion'
+    idRelacion=Column("id",Integer, primary_key=True)
+    padre_id = Column(Integer, ForeignKey('item.id'))
+    hijo_id = Column(Integer, ForeignKey('item.id'))
+    
+    padres=relationship("Item", primaryjoin="Relacion.padre_id==Item.idItem")
+    hijos=relationship("Item", primaryjoin="Relacion.hijo_id==Item.idItem")
+    
+    def setValues (self, padre_id, hijo_id):
+        self.padre_id=padre_id;
+        self.hijo_id=hijo_id;
+    
+    def __init__(self, padre_id, hijo_id):
+        self.padre_id=padre_id;
+        self.hijo_id=hijo_id;
 class Item(Base):
     #Nombre de la tabla
     __tablename__ = 'item'

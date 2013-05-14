@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
+<script type="text/javascript" src="http://www.phpletter.com/contents/ajaxfileupload/ajaxfileupload.js"></script>
+<script type="text/javascript" src="http://www.phpletter.com/javascript/general.js"></script>
 {% block header %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -88,8 +89,14 @@
 								index : 'complejidad',
 								hidden : true
 							}, {
-								name : 'estado',
-								index : 'estado'
+									name : 'estado',
+									index : 'estado',
+									formatter : 'select',
+									stype : 'select',
+									editoptions : {
+										value : "todos:(Todos-Excep. Inactivos);desarrollo:Desarrollo;aprobado:Aprobado;bloqueado:Bloqueado;activo:Activo;inactivo:Inactivo"
+									},
+									hidden : false
 							}, {
 								name : 'autorVersion_id',
 								index : 'autorVersion_id',
@@ -270,12 +277,68 @@
 				</tr>
 				
 				<input type="hidden" name="idFase" id="idFase" />
-
+				
 			</table>
 		</fieldset>
 		<hr width="100%">
 		<div id="atributosTipodeItem"></div>
 	</form>
+</div>
+
+<div id="dialogo-archivos" title="Archivos">
+
+		<form name="form" action="" method="POST" enctype="multipart/form-data">
+		<table cellpadding="0" cellspacing="0" class="tableForm">
+
+		<thead>
+			<tr>
+				<th>Ajax File Upload</th>
+			</tr>
+		</thead>
+		<tbody>	
+			<tr>
+				<td><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></td>	
+			</tr>
+			<tr>
+				<td>Seleccione un archivo para agregar al item</td>
+			</tr>
+		</tbody>
+			<tfoot>
+				<tr>
+					<td><button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button></td>
+				</tr>
+			</tfoot>
+	
+	</table>
+		</form>
+</div>
+<div id="dialogo-relacionarManager" title="Relaciones">
+	<td>
+		<div><label for="Item" style="display: block">Nombre Item:</label><input type="text" name="nombreItemDialogo" id="nombreItemDialogo"
+						class="text ui-widget-content ui-corner-all" readonly="readonly"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+		</div>
+		<div style="margin-left:auto; margin-right:auto;">
+			<table id="listaRelaciones"></table>
+				<div id="pagerRelaciones"></div>
+		</div>
+	</td>
+</div>
+
+<div id="minidialogo-relacion" title="Relacionar con Padre">
+	<td>
+		<div><label for="Item" style="display: block">Relacionar Item:</label>
+			 <input type="text" name="nombreItemMiniDialogo" id="nombreItemMiniDialogo"
+						class="text ui-widget-content ui-corner-all" readonly="readonly"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+			<label for="Item" style="display: block">con Padre</label>
+			<select id="comboItemsMiniDialogo"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+						class="ui-widget-content ui-corner-all">
+			</select>
+			
+		</div>
+	</td>
 </div>
 
 <script>
@@ -515,6 +578,7 @@
 											idFase : $(
 													"#idFase")
 													.val(),
+											esReversion : '0',
 											atributos:jsonizarAtributos()
 												
 														},
@@ -584,6 +648,7 @@
 																	.val(),
 															tipoItemId : rowdata.tipoItem_id,
 															idFase : rowdata.idFase,
+															esReversion : 1,
 															atributos: jsonizarAtributos()
 														},
 														function(data, status) {
@@ -888,6 +953,75 @@
 		
 		$("#dialogo-datos-item").dialog("open");
 	}
+	
+	function eliminarRevivir(){
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		rowdata = $('#listaItems').getRowData(row);
+		
+		if(rowdata.estado=="inactivo"){
+			titulo="Atencion"
+			mensaje="Esta seguro que desea revivir el item "+ rowdata.nombreItem + "?"
+			accion="revivir"
+		}else{
+			titulo="Atencion"
+			mensaje="Esta seguro que desea eliminar el item "+ rowdata.nombreItem + "?"
+			accion="eliminar"
+		}
+		
+		
+		
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					postEliminarRevivirItem(accion);
+					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
+				}
+			}
+		});
+	}
+	function postEliminarRevivirItem(a){
+		
+		$.post('/eliminarItem/',
+				{
+					idItem : rowdata.idItem,
+					idFase: rowdata.idFase,
+					accion: a
+						
+				},
+				function(data, status) {
+					/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+					/* si hay error se muestra el mensaje*/
+					if (data.substring(
+							0, 1) == 't') {
+						mostrarMensaje(
+								"Error",
+								data.substring(2));
+						/* se indica que no hubieron errores */
+					} else {
+						$("#dialogo-datos-item")
+								.dialog(
+										"close");
+						mostrarMensaje(
+								"Exito",
+								data
+										.substring(2));
+					}
+					/* se indicar la recarga de la tabla */
+					$('#listaItems')
+							.trigger(
+									"reloadGrid");
+				});
+		
+		
+	}
 	function cargarComboBoxVersiones(row){
 		rowdata=$('#listaItems').getRowData(row);
 		version=rowdata.version
@@ -920,6 +1054,21 @@
 					$(this).dialog("close");
 				}
 			}
+		});
+	}
+	function mostrarMensajeEliminar(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					$(this).dialog("close");
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+				}
+			}
+			
 		});
 	}
 
@@ -1029,12 +1178,21 @@
 				value="Modificar" /> <input id="btConsultar" type="button"
 				name="consultar" value="Consultar" onclick='consultar()' /> 
 				<input id="btReversionar" type="button" name="nuevo"
-				value="Reversionar" onclick='reversionar()' /><br></br>
+				value="Reversionar" onclick='reversionar()' />
+				<input id="btEliminar" type="button" name="nuevo"
+				value="Eliminar/Revivir" onclick='eliminarRevivir()' />
+				<input id="btRelacionar" type="button" name="nuevo"
+				value="Relacionar/Desrelacionar" onclick='abrirDialogoRelacionar()' />
+				<input id="btArchivos" type="button" name="nuevo"
+				value="Archivos" onclick='abrirDialogoArchivos()' /><br></br>
 			<script>
 				$("#btAgregar").button();
 				$("#btModificar").button();
 				$("#btConsultar").button();
 				$("#btReversionar").button();
+				$("#btEliminar").button();
+				$("#btRelacionar").button();
+				$("#btArchivos").button();
 			</script>
 		</div></td>
 
@@ -1088,6 +1246,331 @@
 		 getJSONListarAtributos($('#tipoItemIdComboBox').val())
 
 	});
+	
+	function retornaItem_seleccionado_para_consultar_relacion(){
+		var row_g= $('#listaItems').jqGrid('getGridParam', 'selrow');
+		rowdata_g = $('#listaItems').getRowData(row_g);
+		return rowdata_g.idItem
+	}
+	
+	
+	var gridRelaciones = jQuery("#listaRelaciones").jqGrid(
+			{
+				url : 'http://localhost:5000/listarRelaciones/',
+				datatype : "json",
+				width: 300,
+				mtype : "get",
+				postData : {
+					idP : retornaValorenSesion(),
+					idF : retornaValorComboBoxFases(),
+					idIt: retornaItem_seleccionado_para_consultar_relacion()
+				},
+				//aca se pone el proyecto el cual selecciono 
+				//y la fase al cual pertenece el proyecto
+				colNames : [ 'ID Relacion', 'idItemRelacionado','Nombre Item ', 'Estado','Relacion'],
+				colModel : [ {
+					name : 'idRelacion',
+					index : 'idRelacion',
+					hidden : true
+				},{
+					name : 'idItemRelacionado',
+					index : 'idItemRelacionado',
+					hidden : true
+				},
+				 {
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 120
+				},{
+					name : 'estado',
+					index : 'estado',
+					width : 120
+				},{
+					name : 'relacion',
+					index : 'relacion',
+					align: 'center'
+				}
+				],
+				sortname : 'relacion',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerRelaciones',
+				caption : "Relacion",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idRelacion"
+				}
+
+			});
+function abrirDialogoRelacionar(){
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	
+	if(row == null){
+		mostrarMensaje("Atencion", "Seleccione item a relacionar/desrelacionar")
+		return;
+	}
+	
+	rowdata= $('#listaItems').getRowData(row);
+	//alert(rowdata.nombreItem)
+	$("#nombreItemDialogo").val(rowdata.nombreItem)
+	reloadListaRelaciones()
+	$("#dialogo-relacionarManager").dialog("open");
+}
+
+function reloadListaRelaciones(){
+	var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
+	rowdata = $('#listaItems').getRowData(row);
+	
+	var myPostData = $('#listaRelaciones').jqGrid("getGridParam",
+	"postData");
+	delete myPostData.idP;
+	delete myPostData.idF;
+	delete myPostData.idIt;
+	$('#listaRelaciones').setGridParam({
+		postData : {
+			idP : retornaValorenSesion(),
+			idF : retornaValorComboBoxFases(),
+			idIt: rowdata.idItem
+		}
+	});
+
+$('#listaRelaciones').trigger("reloadGrid")
+}
+function abrirMiniDialogoRelacion(){
+	
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	rowdata = $('#listaItems').getRowData(row);
+	//aca se carga el combobox de los items con los cuales no esta relacionado aun
+	
+	$('#nombreItemMiniDialogo').val("F"+rowdata.idFase+"."+rowdata.nombreItem)
+	var select = $('#comboItemsMiniDialogo');
+	var options = select.prop('options');
+	
+	$('option', select).remove();
+    //alert(version)
+	
+    options[options.length] = new Option(
+			"Seleccione Item Padre", 0);
+	
+	
+	$.getJSON("http://localhost:5000/itemsRelacionarMiniDialogoComboBox/", {
+		idItem : rowdata.idItem,
+		idFase: rowdata.idFase
+	}, function(atribs) {
+		$.each(atribs, function(index, atrib) { //val,text
+			//$("#input_"+atrib["nombreInput"]).val(atrib["valor"]);
+			//alert($("#input_"+atrib["nombreAtributo"]).val())
+			options[options.length] = new Option(
+					atrib["nombreItem"], atrib["idItem"]);
+		});
+	});
+	select.val(0)
+	
+	$("#minidialogo-relacion").dialog("open")
+}
+
+$("#dialogo-relacionarManager")
+.dialog(
+		{
+			autoOpen : false,
+			modal : true,
+			resizable : false,
+			width : 350,
+			buttons : {
+				/* funcion asociado al boton aceptar */
+				"Agregar" : function() {
+					
+					abrirMiniDialogoRelacion();
+					
+				},"Eliminar" : function() {
+					
+					var row= $('#listaRelaciones').jqGrid('getGridParam', 'selrow');
+					if(row==null){
+						mostrarMensaje("Atencion", "Seleccione relacion a eliminar")
+						return;
+					}
+					rowdata= $('#listaRelaciones').getRowData(row);
+					//se llama a eliminar Relaciona
+					eliminarRelacion(rowdata.idRelacion)
+				},
+				"Salir" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+		
+function eliminarRelacion(idRelacion){
+	$.post('/eliminarRelacion/',
+			{
+				idRelacion: idRelacion
+			},
+			function(data, status) {
+				/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+				/* si hay error se muestra el mensaje*/
+				if (data.substring(0, 1) == 't') {
+					mostrarMensaje(
+							"Error",
+							data.substring(2));
+					/* se indica que no hubieron errores */
+				} else {
+					$("#minidialogo-relacion")
+							.dialog(
+									"close");
+					/*mostrarMensaje(
+							"Exito",
+							data
+									.substring(2));*/
+					$('#listaRelaciones')
+					.trigger(
+							"reloadGrid");
+				}
+				/* se indicar la recarga de la tabla */
+				
+			});
+
+}
+$("#minidialogo-relacion")
+.dialog(
+		{
+			autoOpen : false,
+			modal : true,
+			resizable : false,
+			width : 550,
+			buttons : {
+				/* funcion asociado al boton aceptar */
+				"Crear Relacion" : function() {
+					var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
+					rowdata= $('#listaItems').getRowData(row);
+					
+					if($("#comboItemsMiniDialogo").val()==0){
+						mostrarMensaje("Atencion","Debe seleccionar un item padre")
+					}else{
+					$.post('/agregarRelacion/',
+							{
+								padre_id: $("#comboItemsMiniDialogo").val(),
+								hijo_id: rowdata.idItem,
+								id_Fase: rowdata.idFase
+							},
+							function(data, status) {
+								/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+								/* si hay error se muestra el mensaje*/
+								if (data.substring(
+										0, 1) == 't') {
+									mostrarMensaje(
+											"Error",
+											"Los datos no se han podido guardar:\n"
+													+ data
+															.substring(2));
+									/* se indica que no hubieron errores */
+								} else {
+									$(
+											"#minidialogo-relacion")
+											.dialog(
+													"close");
+									/*mostrarMensaje(
+											"Exito",
+											data
+													.substring(2));*/
+									$('#listaRelaciones')
+									.trigger(
+											"reloadGrid");
+								}
+								/* se indicar la recarga de la tabla */
+								
+							});}
+				
+				},
+				"Cancelar" : function() {
+					$(this).dialog("close");
+				}
+				
+			}
+		});
+
+$("#dialogo-archivos")
+.dialog(
+		{
+			autoOpen : false,
+			modal : true,
+			resizable : false,
+			width : 550,
+			buttons : {
+				/* funcion asociado al boton aceptar */
+				
+				"Salir" : function() {
+					$(this).dialog("close");
+				}
+				
+			}
+		});
+		
+function abrirDialogoArchivos(){
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	if(row == null){
+		mostrarMensaje("Atencion", "Seleccione item a administrar Archivos")
+		return;
+	}
+	rowdata= $('#listaItems').getRowData(row);
+	
+	$("#dialogo-archivos")
+	.dialog("open")
+}
+function ajaxFileUpload()
+{
+/*		$("#loading")
+	.ajaxStart(function(){
+		$(this).show();
+	})
+	.ajaxComplete(function(){
+		$(this).hide();
+	});*/
+
+	$.ajaxFileUpload
+	(
+		{
+			url:'{{url_for('adjuntarArchivo')}}',
+			secureuri:false,
+			fileElementId:'fileToUpload',
+			dataType: 'json',
+			beforeSend:function()
+			{
+				$("#loading").show();
+			},
+			complete:function()
+			{
+				$("#loading").hide();
+			},				
+			success: function (data, status)
+			{
+				if(typeof(data.error) != 'undefined')
+				{
+					if(data.error != '')
+					{
+						alert(data.error);
+					}else
+					{
+						alert(data.msg);
+					}
+				}
+			},
+			error: function (data, status, e)
+			{
+				alert(e);
+			}
+		}
+	)
+	
+	return false;
+
+}
 </script>
 
 {% endblock %}

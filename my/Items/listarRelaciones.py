@@ -1,14 +1,18 @@
 from utils import login_required
 import flask.views
-from flask import jsonify,json, g
+from flask import jsonify,json, g, make_response
 import flask
 from models.bdCreator import Session
 from datetime import date
-from models.usuarioModelo import Usuario
-from models.itemModelo import Item
-from models.proyectoModelo import Proyecto
-sesion=Session()
 
+from models.tipoItemModelo import TipoItem
+from models.itemModelo import Item
+from models.itemModelo import Relacion
+from models.usuarioModelo import Usuario
+
+from sqlalchemy import or_
+
+sesion=Session()
 
 class Respuesta():
     """
@@ -28,7 +32,7 @@ class Respuesta():
         self.totalRecords=totalRecords
         self.rows=rows
     
-    def jasonizar(self, listaItems):
+    def jasonizar(self, listaRel, idItem):
         """
         modulo que jasoniza la respuesta
         """
@@ -38,12 +42,23 @@ class Respuesta():
        
         
         
-        for f in listaItems:
-            name=sesion.query(Usuario.username).filter(Usuario.id==f.autorVersion_id).first()
-            p=p+json.dumps({"idItem":f.idItem , "nombreItem":f.nombreItem, "version": f.version, "prioridad":f.prioridad, 
-                        "fechaInicio": str(f.fechaInicio), "fechaFinalizacion": str(f.fechaFinalizacion), "tipoItem_id": f.tipoItem_id, 
-                        "costo": f.costo, "complejidad": f.complejidad, "estado": f.estado, "autorVersion_id":f.autorVersion_id,
-                        "nombreAutorVersion": name, "descripcion":f.descripcion, "idFase":f.idFase}, separators=(',',':'))+",";
+        for f in listaRel:
+            r_descripcion=''
+            i=None
+            if(f.padre_id==idItem):
+                r_descripcion='Hijo'
+                id_item_relacionado=f.hijo_id;
+                i=sesion.query(Item).filter(Item.idItem==f.hijo_id).first()
+            elif(f.hijo_id==idItem):
+                r_descripcion='Padre'
+                id_item_relacionado=f.padre_id;
+                i=sesion.query(Item).filter(Item.idItem==f.padre_id).first()
+                
+                
+            if(i is None):
+                    return make_response ('t,No existe item con ese id')    
+            p=p+json.dumps({"idRelacion": f.idRelacion,"relacion":r_descripcion , "idItemRelacionado":id_item_relacionado,  \
+                            "nombreItem": "F"+ str(i.idFase)+ "."+i.nombreItem, "estado": i.estado}, separators=(',',':'))+",";
            
         p=p[0:len(p)-1]    
         p=p+"]}"    
@@ -52,7 +67,7 @@ class Respuesta():
         
 
 
-class ListarItems(flask.views.MethodView):
+class ListarRelaciones(flask.views.MethodView):
     @login_required
     def get(self): 
         #se obtiene los datos de post del server
@@ -61,6 +76,7 @@ class ListarItems(flask.views.MethodView):
         param2=flask.request.args.get('rows', '')
         idProyecto=flask.request.args.get('idP', '')
         idFase=flask.request.args.get('idF', '')
+        idItem=int(flask.request.args.get('idIt', ''))
         
         #caluclo de paginacion 
         page=long(param1)
@@ -74,16 +90,8 @@ class ListarItems(flask.views.MethodView):
         sord=flask.request.args.get('sord', '')
         
         #se establece el campo de filtro proveniente del server para hacer coincidir con el nombre de la tabla
-        if(sidx=='nombreItem'):
-            filtrarPor='nombre'
-        elif(sidx=='version'):
-            filtrarPor='version'
-        elif(sidx=='costo'):
-            filtrarPor='costo'
-        elif(sidx=='fechaFinalizacion'):
-            filtrarPor='fecha_finalizacion'
-        elif(sidx=='fechaInicio'):
-            filtrarPor='fecha_inicio'
+        if(sidx=='relacion'):
+            filtrarPor='relacion'
         elif(sidx=='estado'):
             filtrarPor='estado'
         elif(sidx=='nombreAutorVersion'):
@@ -164,13 +172,16 @@ class ListarItems(flask.views.MethodView):
         else:
             #si no hubo filtro entonces se envian los datos de items activos
             
-             listaItem=sesion.query(Item).order_by(filtrarPor)\
+            '''listaItem=sesion.query(Item).order_by(filtrarPor)\
                                                     .filter(Item.idFase==idFase).\
                                                     filter(Item.estado!='inactivo')[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
-             total=sesion.query(Item).order_by(filtrarPor)\
+            total=sesion.query(Item).order_by(filtrarPor)\
                                                     .filter(Item.idFase==idFase)\
-                                                    .filter(Item.estado!='inactivo').count()
+                                                    .filter(Item.estado!='inactivo').count()'''
+            print (filtrarPor);
+            listaRel=sesion.query(Relacion).order_by(filtrarPor)\
+                                                    .filter(or_(Relacion.hijo_id==idItem, Relacion.padre_id==idItem)).all()
         print total
         print desde
         print hasta 
@@ -183,10 +194,7 @@ class ListarItems(flask.views.MethodView):
         
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
-        respuesta=r.jasonizar(listaItem)
+        respuesta=r.jasonizar(listaRel, idItem)
         return respuesta
         
         
-    @login_required
-    def post(self):
-        return "{\"totalpages\": \"1\", \"currpage\": \"1\",\"totalrecords\": \"1\",\"invdata\" : [{\"NombreUsuario\": \"lafddadsdsalaal\",\"Nombre\": \"lalal\", \"idUsuario\": \"1000\",\"email\": \"lalalalal\", \"Apellido\": \"prerez\"}]}"
