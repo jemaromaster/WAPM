@@ -1903,6 +1903,10 @@ var banderaRol;
 			return;
 		}
 		var rowdata = $('#list').getRowData(rowProyecto);
+		if (rowdata.estado!="desarrollo"){
+			mostrarMensaje("Atencion","Ya no se pueden realizar cambios a las fases del proyecto");
+			return;
+		}
 		setGridFase(rowdata); 
 		$('#dialogo-fases').dialog("open");
 		
@@ -2094,18 +2098,27 @@ var banderaRol;
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
 		/* se indica que el dato no es nuevo */
-		bandera = 2;
-		$.enmascarar();
-		setBordeNormal();
-		setCampoErrores();
-		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#list').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
 			return;
 		}
-		/* se cargan los elementos HTML segun la fila seleccionada*/
+		
 		var rowdata = $('#list').getRowData(row);
+		
+		if (rowdata.estado!="desarollo"){
+			mostrarMensaje("Atencion", "El proyecto ya no puede ser modificado");
+			return 
+		}
+		
+		bandera = 2;
+		$.enmascarar();
+		setBordeNormal();
+		setCampoErrores();
+		/* se comprueba que hay un dato seleccionado para modificar */
+		
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		
 		/*alert(rowdata.idProjectLeader)*/
 		$("#idProyecto").val(rowdata.idProyecto).attr('disabled', false);
 		$("#nombreProyecto").val(rowdata.nombreProyecto)
@@ -2169,25 +2182,18 @@ var banderaRol;
 			if(rowdata.estado!="desarrollo"){
 				mostrarMensaje("Error", "Este proyecto ya ha sido activado anteriormente")
 			}else{
-				/*
+				
 					$.post('/activarProyecto/',{
 												
 												idProyecto: rowdata.idProyecto
 												},
 												function(data, status) {
-													if (data.substring(
-															0, 1) == 't') {
+													if (data.substring(0, 1) == 't') {
 														mostrarMensaje(
-																"Error",
-																"Los datos no se han podido guardar:\n"
-																		+ data
-																				.substring(2));
+																"Error","Los datos no se han podido guardar:\n"
+																		+ data.substring(2));
 												
 													} else {
-														$(
-																"#dialogo-rolProyecto")
-																.dialog(
-																		"close");
 														mostrarMensaje(
 																"Exito",
 																data
@@ -2197,13 +2203,7 @@ var banderaRol;
 													$('#listRoles')
 															.trigger(
 																	"reloadGrid");
-												});
-	
-				*/
-				
-				
-				
-				
+												});	
 			}
 			
 		}
@@ -2380,10 +2380,10 @@ var banderaRol;
 	<h2>Administracion de Proyectos</h2>
 	<table id="list"></table>
 	<div id="pager"></div>
-	<input id="btActivarPy" type="button" name="btActivarPy"
-		value="Activar Proyecto" onclick='activarProyecto()' style="float:right;" />
 		<input id="btFinalizarPy" type="button" name="btFinalizarPy"
 		value="Finalizar Proyecto" onclick='finalizarProyecto()' style="float:right;" />
+		<input id="btActivarPy" type="button" name="btActivarPy"
+		value="Activar Proyecto" onclick='activarProyecto()' style="float:right;" />
 
 	<br></br> <input id="btAgregar" type="button" name="nuevo"
 		value="Nuevo" onclick='agregar()' /> <input id="btModificar"

@@ -17,6 +17,7 @@ from Proyectos.agregarMiembrosProyecto import AgregarMiembrosProyecto
 from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
 from Proyectos.miembroManager import MiembroManager
+from Proyectos.activarProyecto import ActivarProyecto
 
 from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
 from Proyectos.seleccionarProyectoSesion import SeleccionarProyectoSesion
@@ -108,6 +109,9 @@ app.add_url_rule('/listarProyectos/',
 app.add_url_rule('/listarProyectoCombo/',
                  view_func=ListarProyectosCombo.as_view('listarProyectoCombo'),
                  methods=["GET", "POST"])
+app.add_url_rule('/activarProyecto/',
+                 view_func=ActivarProyecto.as_view('activarProyecto'),
+                 methods=["POST"])
 
 #Corresponde a agregar Miembro de proyecto
 app.add_url_rule('/agregarMiembrosProyecto/',
