@@ -8,7 +8,7 @@ class RolProyectoManejador:
         r=rol
         if idRol != 0:
             r=sesion.query(RolProyecto).filter(RolProyecto.id==idRol).first()
-            r.nombre=rol.nombre;r.descripcion=rol.descripcion
+            r.nombre=rol.nombre;r.descripcion=rol.descripcion;r.estado=rol.estado
             
             
         sesion.add(r)

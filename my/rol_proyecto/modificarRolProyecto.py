@@ -18,10 +18,12 @@ class ModificarRolProyecto(flask.views.MethodView):
         idRol=flask.request.form['idRol']
         nombre=flask.request.form['nombre']
         descripcion=flask.request.form['descripcion']
-        rol=RolProyecto(nombre,descripcion)
+        estado=flask.request.form['estado']
+        rol=RolProyecto(nombre,descripcion,estado)
        
         rol.nombre=rol.nombre.strip()
         rol.descripcion=rol.descripcion.strip()
+        rol.estado=rol.estado.strip()
         idRol=idRol.strip()
         rpc=RolProyectoControllerClass()
         

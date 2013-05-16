@@ -8,6 +8,8 @@ from rolProyectoManejador import RolProyectoManejador
 class RolProyectoControllerClass(flask.views.MethodView):
     
     def controlarRolProyecto(self,rol,idRol):
+        if len(rol.estado) <= 0 or len(rol.estado) > 15:
+            return make_response("f,Estado del Rol incorrecto")
         if len(rol.nombre) <= 0 or len(rol.nombre) > 20:
             return make_response("f,Nombre del Rol incorrecto")
         if len(rol.descripcion) <= 0 or len(rol.descripcion) > 50:

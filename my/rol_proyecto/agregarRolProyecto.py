@@ -18,12 +18,15 @@ class AgregarRolProyecto(flask.views.MethodView):
         nombre=flask.request.form['nombre']
         descripcion=flask.request.form['descripcion']
         idFase=flask.request.form['idFase']
-        rol=RolProyecto(nombre,descripcion)
+        estado="inactivo"
+        rol=RolProyecto(nombre,descripcion,estado)
         rol.idFase=idFase
+        
        
         rol.nombre=rol.nombre.strip()
         rol.descripcion=rol.descripcion.strip()
         rol.idFase=rol.idFase.strip()
+        
         rpc=RolProyectoControllerClass()
         
         return rpc.controlarRolProyecto(rol, 0)

@@ -34,11 +34,12 @@ class RolProyecto(Base):
     permisos = relationship("Permiso", secondary=rolProyecto_permiso, backref=backref('roles_proyecto'))
     usuarios = relationship("Usuario", secondary=rolProyecto_usuario, backref=backref('roles_proyecto'))
     
-    def __init__(self,nombre, descripcion):
+    def __init__(self,nombre, descripcion,estado):
         """
         Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
         componen. 
         Parametros: self,id, nombre, descripcion 
         """
         self.nombre=nombre;self.descripcion=descripcion
+        self.estado=estado
         

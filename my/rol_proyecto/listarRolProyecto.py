@@ -35,7 +35,7 @@ class Respuesta():
         
         
         for rol in listaRolProyecto:
-            p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\"},"
+            p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\",\"estado\": \""+rol.estado+"\"},"
             # {"nombre":"nombre","idRol":"rol","descripcion":"descripciones"},
         p=p[0:len(p)-1]    
         p=p+"]}"    
@@ -69,6 +69,8 @@ class ListarRolProyecto(flask.views.MethodView):
             filtrarPor='nombre'
         elif(sidx=='descripcion'):
             filtrarPor='descripcion'
+        elif(sidx=='estado'):
+            filtrarPor='estado'
         
         filtrarPor= "\""+ filtrarPor + '\" ' + sord #establece el si filtrar por asc o desc 
         
@@ -80,7 +82,7 @@ class ListarRolProyecto(flask.views.MethodView):
             cantidad=len(vector)
            
             nombre='%'; descripcion='%'; 
-            
+            estado='%'
             while(i<cantidad):
                 field=vector[i]['field']
                 if(field=='nombre'):
@@ -91,15 +93,27 @@ class ListarRolProyecto(flask.views.MethodView):
                     descripcion=vector[i]['data']+'%'
                     i=i+1
                     continue
-
+                if field =='estado':
+                    elEstado=vector[i]['data']
+                    print "el estado:   " + elEstado
+                    if elEstado != "todos":
+                        estado=elEstado+'%'
+                    i=i+1
+                    continue
+                
+            
             listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).\
                                                     filter(RolProyecto.nombre.like(nombre )&\
-                                                    RolProyecto.descripcion.like(descripcion))\
-                                                    .filter(RolProyecto.idFase==int(idFase))[desde:hasta] 
+                                                    RolProyecto.descripcion.like(descripcion)&\
+                                                    RolProyecto.estado.like(estado)) \
+                                                    .filter(RolProyecto.idFase==int(idFase)) [desde:hasta] 
                                                     
-            total==sesion.query(RolProyecto).order_by(filtrarPor).\
-                                                    filter((RolProyecto.nombre.like(nombre )& \
-                                                    RolProyecto.descripcion.like(descripcion))).count();
+            total=sesion.query(RolProyecto).order_by(filtrarPor).\
+                                                    filter( \
+                                                    RolProyecto.nombre.like(nombre ) & \
+                                                    RolProyecto.descripcion.like(descripcion) &\
+                                                    RolProyecto.estado.like(estado)) \
+                                                    .filter(RolProyecto.idFase==int(idFase)).count()
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos

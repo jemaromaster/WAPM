@@ -152,7 +152,7 @@ function() {
 														"#nombreRol")
 														.val(),
 												idFase : $(
-												"#comboFase").val(),		
+												"#comboFase").val(),
 												descripcion : $("#descripcionRol").val(), 
 												idRol: "0"
 												},
@@ -191,15 +191,16 @@ function() {
 								mostrarMensaje("Error",
 										"Campos completados incorrectamente");
 							} else {
-
+								var row = $('#listRoles').jqGrid('getGridParam', 'selrow');
+								rowdata = $('#listRoles').getRowData(row);
+								
 								/* se indica la url */
-								$
-										.post(
-												'/modificarRolProyecto/',
+								$.post('/modificarRolProyecto/',
 												{
 													idRol: $("#idRol").val(),
 													nombre : $("#nombreRol").val(),
-													descripcion : $("#descripcionRol").val()
+													descripcion : $("#descripcionRol").val(),
+													estado: rowdata.estado
 												},
 												function(data, status) {
 
@@ -444,7 +445,8 @@ function() {
 				url : 'http://localhost:5000/listarRolProyecto',
 				datatype : "json",
 				mtype : "get",
-				postData: { idFase : comboFaseSeleccion()},
+				
+				postData: { idFase : '0'},
 				show : {
 					effect : 'fade',
 					duration : 200
@@ -455,7 +457,7 @@ function() {
 					duration : 200
 				},
 				colNames : [ 'ID rol ', 'Nombre',
-						'Descripcion', 'listaPermisos' ],
+						'Descripcion', 'Estado','listaPermisos' ],
 				colModel : [ {
 					name : 'idRol',
 					index : 'idRol',
@@ -468,7 +470,20 @@ function() {
 					index : 'descripcion',
 					width: '250'
 				}							
-				, {
+				, 
+				{
+					name : 'estado',
+					index : 'estado',
+					align : "center",
+					
+					formatter : 'select',
+					stype : 'select',
+					
+					editoptions : {
+						value : "todos:Todos;activo:Activo;inactivo:Inactivo"
+					}
+				},
+				{
 					name : 'listaPermisos',
 					index : 'listaPermisos',
 					hidden : true
@@ -1715,6 +1730,7 @@ var banderaRol;
 		$("#idRol").val(rowdata.idRol);
 		$("#nombreRol").val(rowdata.nombre);
 		$("#descripcionRol").val(rowdata.descripcion);
+		
 		}
 
 	function setCamposDisabledRol(habilitar) {
@@ -1848,6 +1864,7 @@ var banderaRol;
 						})
 					}
 				);
+			reloadPostData();
 			$('#listRoles').clearGridData(true);
 			$('#dialogo-roles').dialog("open");
 		}else{
@@ -1858,6 +1875,15 @@ var banderaRol;
 	function comboFaseSeleccion()
 	{
 		return $('#comboFase').val()
+		
+	}
+	function reloadPostData(){
+		var myPostData = $('#listRoles').jqGrid("getGridParam", "postData");
+		delete myPostData.idFase;
+		//eso borra el idFase actual
+		$('#listRoles').setGridParam({
+		postData: { idFase: '0' } });
+		//eso se setea el nuevo valor
 		
 	}
 	
