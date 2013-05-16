@@ -16,6 +16,9 @@ from Proyectos.listarProyecto import ListarProyectos, ListarProyectosCombo
 from Proyectos.agregarMiembrosProyecto import AgregarMiembrosProyecto
 from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
+from Proyectos.agregarMiembrosComite import AgregarMiembrosComite
+from Proyectos.listarMiembrosComite import ListarMiembrosComite
+from Proyectos.quitarMiembrosComite import QuitarMiembrosComite
 from Proyectos.miembroManager import MiembroManager
 from Proyectos.activarProyecto import ActivarProyecto
 
@@ -123,6 +126,17 @@ app.add_url_rule('/listarMiembrosProyecto/',
                  methods=["GET", "POST"])
 app.add_url_rule('/QuitarMiembrosProyecto',
                  view_func=QuitarMiembrosProyecto.as_view('quitarMiembrosProyecto'),
+                 methods=["GET", "POST"])
+
+#Corresponde a agregar Miembro Comite
+app.add_url_rule('/agregarMiembrosComite/',
+                 view_func=AgregarMiembrosComite.as_view('agregarMiembrosComite'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarMiembrosComite/',
+                 view_func=ListarMiembrosComite.as_view('listarMiembrosComite'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/quitarMiembrosComite',
+                 view_func=QuitarMiembrosComite.as_view('quitarMiembrosComite'),
                  methods=["GET", "POST"])
 
 #fases

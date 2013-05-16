@@ -1,7 +1,9 @@
 from flask import views, make_response
 import flask.views
 
-from models.usuarioModelo import Usuario 
+from models.usuarioModelo import Usuario
+from models.proyectoModelo import Proyecto
+ 
 from models.bdCreator import Session
 
 from usuarioManejador import UsuarioManejador
@@ -57,7 +59,11 @@ class UsuarioControllerClass(flask.views.MethodView):
             usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
             if( usr is not None and str(usr.id) != idU ):
                 return make_response('t,Ya existe el usuario')
-                   
+            
+            PLproyectos=sesion.query(Proyecto).join(Usuario).filter(Usuario.id==idU).filter(Proyecto.estado=="activo").count()
+            print "Soy project leader de  " + str(PLproyectos) + " Proyectos activos"
+            if  u.activo=="false" and PLproyectos>0:
+                return make_response('t,El usuario no puede ser inactivado. Es Projec Leader de Proyectos en curso')
         um=UsuarioManejador()
         
         return um.guardarUsuario(u, idU)

@@ -9,6 +9,10 @@ miembrosProyectoTabla= Table('miembros_proyecto', Base.metadata,
     Column('proyecto', Integer, ForeignKey('proyecto.id_proyecto')),
     Column('usuario', Integer, ForeignKey('usuario.id'))
 )
+comiteProyectoTabla= Table('comite_proyecto', Base.metadata,
+    Column('proyecto', Integer, ForeignKey('proyecto.id_proyecto')),
+    Column('usuario', Integer, ForeignKey('usuario.id'))
+)
 
 class Proyecto(Base):
     """
@@ -30,9 +34,13 @@ class Proyecto(Base):
     presupuesto=Column("presupuesto",Float)
     observacion=Column("observacion",String(50))
     estado=Column("estado",String(15))
+    
     usuariosMiembros=relationship('Usuario',
                                   secondary=miembrosProyectoTabla,
                                   backref='proyectos')
+    usuariosComite=relationship('Usuario',
+                                  secondary=comiteProyectoTabla,
+                                  backref='proyectosComite')
     
     def setValues(self,nombreProyecto,projectLeaderId,fechaInicio,fechaFinalizacion,presupuesto, \
                   observacion,estado):

@@ -1096,7 +1096,286 @@ function() {
 							}
 						}
 });
+//#################################################################################### 
+	var gridComite = jQuery("#listComite")
+	.jqGrid(
+			{
 
+				url : 'http://localhost:5000/listarMiembrosComite',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					idProyecto : '2'
+				},
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				colNames : [ 'ID Usuario ',
+						'Cedula',
+						'Nombre de Usuario',
+						'Nombre', 'Apellido',
+						'Password', 'Email',
+						'Direccion', 'Telefono',
+						'Observacion',
+						'Es del Comite' ],
+				colModel : [
+						{
+							name : 'idUsuario',
+							index : 'idUsuario',
+							width : 200,
+							hidden : true
+						},
+						{
+							name : 'ci',
+							index : 'ci',
+							width : 200,
+							hidden : true
+						},
+						{
+							name : 'nombreUsuario',
+							index : 'nombreUsuario',
+							width : 200
+						},
+						{
+							name : 'nombre',
+							index : 'nombre',
+							width : 180
+						},
+						{
+							name : 'apellido',
+							index : 'apellido',
+							width : 180
+						},
+						{
+							name : 'pass',
+							index : 'pass',
+							width : 200,
+							hidden : true
+						},
+						{
+							name : 'email',
+							index : 'email',
+							width : 180
+						},
+						{
+							name : 'direccion',
+							index : 'direccion',
+							width : 200,
+							hidden : true
+						},
+						{
+							name : 'telefono',
+							index : 'telefono',
+							width : 200,
+							hidden : true
+						},
+						{
+							name : 'observacion',
+							index : 'observacion',
+							width : 200,
+							hidden : true
+						},
+						{
+							name : 'enComite',
+							index : 'enComite',
+							width : 90,
+							align : "center",
+							formatter : 'select',
+							stype : 'select',
+
+							editoptions : {
+								value : "todos:Todos;si:Si;no:No"
+							},
+						}
+
+				],
+				sortname : 'nombreUsuario',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerComite',
+				caption : "Usuarios miembros del Proyecto",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idUsuario"
+				}
+
+			}).jqGrid('navGrid', '#pagerComite',
+			{
+				edit : false,
+				add : false,
+				del : false,
+				search : false,
+				refresh : false
+			});
+gridComite.jqGrid('filterToolbar', {
+stringResult : true,
+searchOnEnter : false,
+defaultSearch : "cn"
+});
+
+$('#dialogo-agregar-miembros-comite')
+	.dialog(
+			{
+				autoOpen : false,
+				width : 'auto',
+				heigth: 'auto',
+				modal : true,
+				resizable : true,
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					/* funcion asociado al boton aceptar */
+					"Agregar" : function() {
+						/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
+						var rowComite = $(
+								'#listComite')
+								.jqGrid(
+										'getGridParam',
+										'selrow');
+
+						if (rowComite == null) {
+							mostrarMensaje(
+									"Atencion",
+									"Seleccione el Usuario a agregar");
+							return;
+						}
+						var rowProyecto = $('#list')
+						.jqGrid(
+								'getGridParam',
+								'selrow');
+						
+						if (rowProyecto == null) {
+							mostrarMensaje(
+									"Atencion",
+									"Seleccione el proyecto");
+							return;
+						}
+
+						var rowdata = $('#list')
+								.getRowData(
+										rowProyecto);
+						var rowdataComite = $(
+								'#listComite')
+								.getRowData(
+										rowComite);
+
+						/* se indica la URL */
+						$.post(
+										'/agregarMiembrosComite/',
+										{ /* se indican los parametros*/
+											idProyecto : rowdata.idProyecto,
+											idUsuario : rowdataComite.idUsuario
+
+										},
+										function(
+												data,
+												status) {
+											/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+											/* si hay error se muestra el mensaje*/
+											if (data
+													.substring(
+															0,
+															1) == 't') {
+												mostrarMensaje(
+														"Error",
+														"Los datos no se han podido guardar:\n"
+																+ data
+																		.substring(2));
+												/* se indica que no hubieron errores */
+											} else {
+												mostrarMensaje(
+														"Exito",
+														data
+																.substring(2));
+											}
+											/* se indicar la recarga de la tabla */
+											$(
+													'#listComite')
+													.trigger(
+															"reloadGrid");
+										});
+
+						/* si el dato se modifica se llama a la url para modificar*/
+					},
+					"Quitar" : function() {
+						var rowComite = $(
+								'#listComite')
+								.jqGrid(
+										'getGridParam',
+										'selrow');
+						if (rowComite == null) {
+							mostrarMensaje(
+									"Atencion",
+									"Seleccione el Usuario a agregar");
+							return;
+						}
+						var rowProyecto = $('#list')
+								.jqGrid(
+										'getGridParam',
+										'selrow');
+						if (rowProyecto == null) {
+							mostrarMensaje(
+									"Atencion",
+									"Seleccione el proyecyo");
+							return;
+						}
+
+						var rowdata = $('#list')
+								.getRowData(
+										rowProyecto);
+						var rowdataComite = $(
+								'#listComite')
+								.getRowData(
+										rowComite);
+						/* se indica la url */
+						$.post('/quitarMiembrosComite',
+										{
+											idUsuario : rowdataComite.idUsuario,				
+											idProyecto : rowdata.idProyecto
+											
+										},
+										function(data,status) {
+
+											if (data.substring(0,1) == 't') {
+												mostrarMensaje(
+														"Error",
+														"Usuario no se ha podido quitar:\n"
+																+ data.substring(2));
+											} else {
+												mostrarMensaje(
+														"Exito",
+														"Usuario ha sido quitado del proyecto");
+											}
+											$('#listComite').trigger("reloadGrid");
+										});
+					},
+					"Salir" : function() {
+						$(this).dialog("close");
+					}
+				}
+			});
+
+
+//############################################################################################################3 
+	
 var gridMiembros = jQuery("#listMiembros")
 		.jqGrid(
 				{
@@ -1973,10 +2252,7 @@ var banderaRol;
 			return;
 		}
 		var rowdata = $('#list').getRowData(rowProyecto);
-		if (rowdata.estado!="desarrollo"){
-			mostrarMensaje("Atencion","Ya no se pueden realizar cambios a las fases del proyecto");
-			return;
-		}
+		
 		setGridFase(rowdata); 
 		$('#dialogo-fases').dialog("open");
 		
@@ -1995,6 +2271,20 @@ var banderaRol;
 	}
 	
 	function agregarFase() {
+		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowProyecto == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el proyecto a cual administrar Fases ");
+			return;
+		}
+		var rowdata = $('#list').getRowData(rowProyecto);
+		
+		
+		if (rowdata.estado!="desarrollo"){
+			mostrarMensaje("Atencion","Ya no se pueden realizar cambios a las fases del proyecto");
+			return;
+		}
+		
 		banderaFase=1;
 		$("#idFase").val("");
 		$("#nombreFase").val("");
@@ -2014,6 +2304,20 @@ var banderaRol;
 		
 	}
 	function modificarFase() {
+		
+		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowProyecto == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el proyecto a cual administrar Fases ");
+			return;
+		}
+		var rowdata = $('#list').getRowData(rowProyecto);
+		
+		if (rowdata.estado!="desarrollo"){
+			mostrarMensaje("Atencion","Ya no se pueden realizar cambios a las fases del proyecto");
+			return;
+		}
+		
 		banderaFase=2;
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#listaFases').jqGrid('getGridParam', 'selrow');
@@ -2108,7 +2412,34 @@ var banderaRol;
 		
 
 	}
+	
+	function abrirDialogoMiembrosComite() {
 
+		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowProyecto == null) {
+			mostrarMensaje("Atencion",
+					"Seleccione el proyecto a cual administrar Comite ");
+			return;
+		}
+		var rowdata = $('#list').getRowData(rowProyecto);
+		setAgregarMiembrosComite(rowdata);
+		$('#dialogo-agregar-miembros-comite').dialog("open");
+	}
+	
+	function setAgregarMiembrosComite(rowdata) {
+		
+		var myPostData = $('#listComite').jqGrid("getGridParam", "postData");
+		delete myPostData.idProyecto;
+		//eso borra el idFase actual
+		$('#listComite').setGridParam({
+		postData: { idProyecto: rowdata.idProyecto  } });
+		//eso se setea el nuevo valor
+		$('#listComite').trigger("reloadGrid");
+
+	}
+
+
+	
 	function abrirDialogoMiembros() {
 
 		var rowProyecto = $('#list').jqGrid('getGridParam', 'selrow');
@@ -2441,9 +2772,9 @@ var banderaRol;
 </div>
 
 
-<div id="dialogo-agregar-miembros" title="Agregar Miembros a Proyecto">
-	<table id="listMiembros"></table>
-	<div id="pagerMiembros"></div>
+<div id="dialogo-agregar-miembros-comite" title="Agregar Miembros a Proyecto">
+	<table id="listComite"></table>
+	<div id="pagerComite"></div>
 </div>
 
 <div style="margin-left: auto; margin-right: auto; width: 100%;">
@@ -2455,21 +2786,22 @@ var banderaRol;
 		<input id="btActivarPy" type="button" name="btActivarPy"
 		value="Activar Proyecto" onclick='activarProyecto()' style="float:right;" />
 
-	<br></br> <input id="btAgregar" type="button" name="nuevo"
-		value="Nuevo" onclick='agregar()' /> <input id="btModificar"
-		type="button" name="detalle" onclick='modificar();' value="Modificar" />
-	<input id="btConsultar" type="button" name="consultar"
-		value="Consultar" onclick='consultar()' /> <input
-		id="btAgregarMiembros" type="button" name="agregarMiembros"
-		value="Agregar Miembros" onclick='abrirDialogoMiembros()' />
-		<input
-		id="btFases" type="button" name="btFases"
-		value="Administrar Fases" onclick='abrirDialogoFases()' />
-		<input
-		id="btRoles" type="button" name="btRoles"
-		value="Administrar Roles" onclick='cargaComboFase()' />
-		<input
-		id="btRolUser" type="button" name="btRolUser"
+	<br></br> 
+		<input id="btAgregar" type="button" name="nuevo"
+		value="Nuevo" onclick='agregar()' /> 
+		<input id="btModificar" type="button" name="detalle" 
+		onclick='modificar();' value="Modificar" />
+		<input id="btConsultar" type="button" name="consultar"
+		value="Consultar" onclick='consultar()' /> 
+		<input id="btFases" type="button" name="btFases"
+		value="Fases" onclick='abrirDialogoFases()' />
+		<input id="btAgregarMiembros" type="button" name="agregarMiembros"
+		value="Miembros" onclick='abrirDialogoMiembros()' />
+		<input id="btAgregarMiembrosComite" type="button" name="agregarMiembrosComite"
+		value="Comite de Cambios" onclick='abrirDialogoMiembrosComite()' />
+		<input id="btRoles" type="button" name="btRoles"
+		value="Roles" onclick='cargaComboFase()' />
+		<input id="btRolUser" type="button" name="btRolUser"
 		value="Asignar roles a Usuario" onclick='cargaComboUsuario()' /> <br></br>
 	<script>
 		$("#btFinalizarPy").button();
@@ -2478,6 +2810,7 @@ var banderaRol;
 		$("#btModificar").button();
 		$("#btConsultar").button();
 		$("#btAgregarMiembros").button();
+		$("#btAgregarMiembrosComite").button();
 		$("#btFases").button();
 		$("#btRoles").button();
 		$("#btRolUser").button();
