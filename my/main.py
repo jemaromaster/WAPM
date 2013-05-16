@@ -13,6 +13,7 @@ from Proyectos.proyectoManager import ProyectoManager
 from Proyectos.modificarProyecto import ModificarProyecto
 from Proyectos.agregarProyecto import AgregarProyecto
 from Proyectos.listarProyecto import ListarProyectos, ListarProyectosCombo
+from Proyectos.listarProyecto import ListarProyectos, ListarProyectosComboBase
 from Proyectos.agregarMiembrosProyecto import AgregarMiembrosProyecto
 from Proyectos.listarMiembrosProyecto import ListarMiembrosProyecto
 from Proyectos.quitarMiembrosProyecto import QuitarMiembrosProyecto
@@ -112,6 +113,9 @@ app.add_url_rule('/listarProyectos/',
                  methods=["GET", "POST"])
 app.add_url_rule('/listarProyectoCombo/',
                  view_func=ListarProyectosCombo.as_view('listarProyectoCombo'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarProyectoComboBase/',
+                 view_func=ListarProyectosComboBase.as_view('listarProyectoComboBase'),
                  methods=["GET", "POST"])
 app.add_url_rule('/activarProyecto/',
                  view_func=ActivarProyecto.as_view('activarProyecto'),

@@ -62,6 +62,17 @@ class ListarProyectosCombo(flask.views.MethodView):
         jsonP=jsonP[0:len(jsonP)-1]    
         jsonP=jsonP+"]"        
         return jsonP
+    
+class ListarProyectosComboBase(flask.views.MethodView):
+    @login_required
+    def get(self):
+        lp=sesion.query(Proyecto).join(Proyecto.usuariosMiembros).filter(Usuario.id==flask.session['idUsuario'])
+        jsonP='['
+        for proyecto in lp:
+            jsonP=jsonP+"{\"idProyecto\":\""+str(proyecto.idProyecto)+"\",\"nombreProyecto\":\""+proyecto.nombreProyecto+"\"},"
+        jsonP=jsonP[0:len(jsonP)-1]    
+        jsonP=jsonP+"]"        
+        return jsonP
             
 class ListarProyectos(flask.views.MethodView):
     @login_required
