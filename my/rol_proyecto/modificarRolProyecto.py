@@ -19,6 +19,8 @@ class ModificarRolProyecto(flask.views.MethodView):
         nombre=flask.request.form['nombre']
         descripcion=flask.request.form['descripcion']
         estado=flask.request.form['estado']
+        if estado=="activo":
+            return "t,El rol esta activo. No puede modificarse"
         rol=RolProyecto(nombre,descripcion,estado)
        
         rol.nombre=rol.nombre.strip()

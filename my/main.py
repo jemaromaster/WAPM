@@ -45,6 +45,7 @@ from rol_proyecto.rolUsuarioManager import RolUsuario
 from rol_proyecto.listarRolUsuario import ListarRolUsuario
 from rol_proyecto.agregarRolUsuario import AgregarRolUsuario
 from rol_proyecto.quitarRolUsuario import QuitarRolUsuario
+from rol_proyecto.estadoRol import EstadoRol
 
 from login import Login
 from miembros import Miembros
@@ -202,6 +203,9 @@ app.add_url_rule('/agregarRolUsuario/',
                  methods=["GET", "POST"])
 app.add_url_rule('/quitarRolUsuario/',
                  view_func=QuitarRolUsuario.as_view('quitarRolUsuario'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/estadoRol/',
+                 view_func=EstadoRol.as_view('estadoRol'),
                  methods=["GET", "POST"])
 
 

@@ -546,6 +546,7 @@ function() {
 					"Modificar" : function(){modificarRol()},
 					"Consultar" : function(){consultarRol()},
 					"Administrar Permisos" : function(){abrirDialogoPermisos()},
+					"Activar/Inactivar": function(){activarInactivarRol()},
 				}
 	});
 		
@@ -1807,13 +1808,56 @@ var banderaRol;
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarFormRol(rowdata, row);
+		rowdata = $('#listRoles').getRowData(row);
+		
+		if (rowdata.estado == "activo")
+		{
+			mostrarMensaje("Atencion", "El rol no puede modificarse. Ya se encuentra Activo");
+			return;
+			
+		}else{	
 		/*se habilita la edicion*/
 		setCamposDisabledRol(false);
 		
 		$("#dialogo-rolProyecto").dialog("open");
-
+		}
 	}
 
+	function activarInactivarRol() {
+		var row = $('#listRoles').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione un Rol");
+			return;
+		}
+		var rowdata;
+		rowdata = $('#listRoles').getRowData(row);
+		
+		$.post('/estadoRol/',{
+			
+			idRol: rowdata.idRol,
+			estado: rowdata.estado,
+			},
+			function(data, status) {
+				if (data.substring(0, 1) == 't') {
+					mostrarMensaje(
+							"Error","Los datos no se han podido guardar:\n"
+									+ data.substring(2));
+			
+				} else {
+					mostrarMensaje(
+							"Exito",
+							data
+									.substring(2));
+				}
+			
+				$('#listRoles')
+						.trigger(
+								"reloadGrid");
+			});	
+}
+		
+	
+	
 	function consultarRol() {
 		setBordeNormalRol();
 		setCampoErroresRol();
