@@ -97,45 +97,42 @@ class ListarTipoItem(flask.views.MethodView):
             obj = json.loads(filters)
             vector=obj['rules']
             i=0
-            field=vector[0]['field']
+            cantidad=len(vector)
+            
             nombreTipoItem='%'
             descripcion='%'
             estado='%'
             
-            while(field!='estado'):
+            while(i<cantidad):
+                field=vector[i]['field']
                 if(field=='nombreTipoItem'):
                     nombreTipoItem=vector[i]['data'].strip() + '%'
                     i=i+1
-                    field=vector[i]['field']
                     continue
                
                 if field=='descripcion':
                     descripcion=vector[i]['data'].strip()+'%'
                     i=i+1
-                    field=vector[i]['field']
                     continue
                 if field=='estado':
-                    estado=vector[i]['data'].strip()+'%'
+                    elEstado=vector[i]['data'].strip()
+                    if elEstado!="todos":
+                        estado=elEstado+'%'
                     i=i+1
-                    field=vector[i]['field']
                     continue
-            
-            estado=vector[i]['data']
-            
-                  
-           
+
             projectLeaderId=flask.session['idUsuario']
             listaTipoItem=sesion.query(TipoItem).order_by(filtrarPor)\
                                                     .filter(TipoItem.fase_id==idFase)\
                                                     .filter(TipoItem.nombreTipoItem.like(nombreTipoItem) &\
-                                                           TipoItem.descripcion.like(descripcion))\
-                                                    .filter(TipoItem.estado==estado)[desde:hasta]
+                                                           TipoItem.descripcion.like(descripcion)&\
+                                                    TipoItem.estado.like(estado))[desde:hasta]
            
             total=sesion.query(TipoItem).order_by(filtrarPor)\
                                                     .filter(TipoItem.fase_id==int(idFase))\
                                                     .filter(TipoItem.nombreTipoItem.like(nombreTipoItem) &\
-                                                           TipoItem.descripcion.like(descripcion))\
-                                                    .filter(TipoItem.estado==estado).count()
+                                                           TipoItem.descripcion.like(descripcion)&\
+                                                    TipoItem.estado.like(estado)).count()
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos

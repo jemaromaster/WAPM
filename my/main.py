@@ -68,7 +68,7 @@ de las reglas de URL a las funciones que se haran cargo de senrvirlas
 """
 
 initDB() 
-#poblarBD.cargaEstatica()
+poblarBD.cargaEstatica()
 #poblarBD.cargarProyecto()
 # Don't do this
 app.secret_key = "bacon"

@@ -3,6 +3,7 @@ from proyectoModelo import Proyecto
 from permisoModelo import Permiso
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
+from tipoPrimarioModelo import TipoPrimario
 import md5
 import random
 from Proyectos.proyectoController import ProyectoControllerClass
@@ -90,6 +91,19 @@ def cargaEstatica():
         p.append(Permiso('Edicion Tipo Item','04-011','Crea tipo de item y edita atributos de TI'))
         for permiso in p:
             sesion.add(permiso)
+    
+    cargaValores=sesion.query(TipoPrimario).count()
+    if cargaValores <= 0:
+        
+        t1=TipoPrimario('Texto', 'String')
+        t2=TipoPrimario('Numerico', 'Numeric')
+        t3=TipoPrimario('Entero', 'int')
+        t4=TipoPrimario('Fecha', 'Date')
+        
+        sesion.add(t1)
+        sesion.add(t2)
+        sesion.add(t3)
+        sesion.add(t4)
         
     sesion.commit()
     sesion.close()
