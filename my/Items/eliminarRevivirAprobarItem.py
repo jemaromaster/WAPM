@@ -11,7 +11,7 @@ from models.itemModelo import Item
 from models.bdCreator import Session
 
 sesion=Session()
-class EliminarItem(flask.views.MethodView):
+class EliminarRevivirAprobarItem(flask.views.MethodView):
     """
     Clase utilizada cuando se hace una peticion de creacion de \
     usuario al servidor. \Los metodos get y post indican como\
@@ -48,6 +48,18 @@ class EliminarItem(flask.views.MethodView):
                 sesion.commit()
                 sesion.close()
                 msg='f,Se ha revivido correctamente al item'
+        elif(accion=="aprobar"):
+            q.estado='aprobado'
+            sesion.merge(q)
+            sesion.commit()
+            sesion.close()
+            msg='f,Se ha aprobado correctamente al item'
+        elif(accion=="pendiente"):
+            q.estado='pendiente'
+            sesion.merge(q)
+            sesion.commit()
+            sesion.close()
+            msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
         else:
             return make_response('t,accion invalida ')
         return make_response(msg)

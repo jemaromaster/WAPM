@@ -94,7 +94,7 @@
 									formatter : 'select',
 									stype : 'select',
 									editoptions : {
-										value : "todos:(Todos-Excep. Inactivos);desarrollo:Desarrollo;aprobado:Aprobado;bloqueado:Bloqueado;activo:Activo;inactivo:Inactivo"
+										value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo"
 									},
 									hidden : false
 							}, {
@@ -197,20 +197,25 @@
 </script>
 <div id="dialogo-datos-item" title="Datos de Item">
 	<form title="(*) campos obligatorios">
-		<fieldset class="fieldset">
+		<fieldset class="ui-widget-content ui-corner-all"  style="border: 1px solid inherit; ">
+			<legend>Datos de Item</legend>
 			<input type="hidden" name="idItem" id="idItem" />
 			<table>
 				<tr>
 					<td><label for="nombreItem" style="display: block">*Nombre
 							Item</label> <input type="text" name="nombreItem" id="nombreItem"
 						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+					</td>
+					<td>
+						<div id="versionDiv" style="margin-left: 50px">
 						<label for="versionComboBox" style="display: block">*Version</label>
 						<select id="versionComboBox"
-						style="display: block; margin-bottom: 12px; float: right; padding: 0.4em; width: 80%;"
+						style="display: block; margin-bottom: 12px; float: right; padding: 0.4em; width: 100%;"
 						class="ui-widget-content ui-corner-all">
 						<option value='0'>Ninguno</option>
 						</select>
+						</div>
 					</td>
 					
 				</tr>
@@ -228,7 +233,7 @@
 							de Finalizacion</label> <input type="text" name="datepicker2"
 						id="datepicker2" readonly="readonly"
 						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
 
 				</tr>
@@ -239,49 +244,64 @@
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
 						</textarea></td>
 					<td><label for="estado" style="display: block">*Estado</label>
-						<select id="estado"
+						<!-- <select id="estado"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
 						class="ui-widget-content ui-corner-all">
-							<option value="desarrollo">Desarrollo</option>
+						
 							<option value="activo">Activo</option>
-							<option value="finalizado">Finalizado</option>
-					</select></td>
+							<option value="pendiente">Pendiente</option>
+					</select>-->
+					 <input type="text" name="estado" 
+						id="estado" readonly="readonly"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td><label for="prioridad" style="display: block">*Prioridad</label>
+					<select id="prioridad"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"
+						class="ui-widget-content ui-corner-all">
+					</select>
+					</td>
 				</tr>
 				<tr>
-					<label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
+					<td><label for="costo" style="display: block">*Costo</label>
+					<input type="text" name="costo" id="costo"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="complejidad" style="display: block">*Complejidad</label>
+					<select id="complejidad"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"
+						class="ui-widget-content ui-corner-all">
+					</select>
+					</td>
+				</tr>
+				<tr><td>
+				<input type="hidden" name="idFase" id="idFase" />
+				</td></tr>
+				<tr>
+					<td> <label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
 					<select id="tipoItemIdComboBox"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
 						class="ui-widget-content ui-corner-all">
 						<option value='0'>Ninguno</option>
 					</select>
+					</td>
 				</tr>
-				<tr>
-					<label for="prioridad" style="display: block">*Prioridad</label>
-					<select id="prioridad"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"
-						class="ui-widget-content ui-corner-all">
-					</select>
-				</tr>
-				<tr>
-					<label for="costo" style="display: block">*Costo</label>
-					<input type="text" name="costo" id="costo"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-				</tr>
-				<tr>
-					<label for="complejidad" style="display: block">*Complejidad</label>
-					<select id="complejidad"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"
-						class="ui-widget-content ui-corner-all">
-					</select>
-				</tr>
-				
-				<input type="hidden" name="idFase" id="idFase" />
 				
 			</table>
 		</fieldset>
-		<hr width="100%">
+		
+		<fieldset id="fieldsetTipoItem" class="ui-widget-content ui-corner-all"  style="border: 1px solid inherit; margin-top: 12px ">
+		<legend>Datos Tipo de Item</legend>
+		
 		<div id="atributosTipodeItem"></div>
+		</fieldset>
 	</form>
 </div>
 
@@ -345,7 +365,7 @@
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
-    var atributosTI=null;
+    var atributosTI;
 	
 	function controlTI(){
 		var error=0;
@@ -382,7 +402,8 @@
 		var form = ['<form id="formTI" action=\'\'>']//[ '<form method="POST" action="', url, '">' ];
 		var input_que_son_fecha=['']
 		var lista_input_numerico=['']
-		atributosTI=params_vec;
+		//window.atributosTI=params_vec;
+		
 		for(var i=0; i<params_vec.length;i++){
 					form.push('<td>');
 					form.push('<tr><label style="display: block">',params_vec[i]["nombreAtributo"],'</label>');
@@ -413,6 +434,7 @@
 					}else{
 						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
 								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
+						lista_input_numerico.push("#"+"input_"+params_vec[i]["nombreAtributo"])
 					}
 					form.push('</td>')
 					
@@ -439,7 +461,7 @@
 	function jsonizarAtributos(){
 		
 		json=[]
-		alert(atributosTI[0]["nombreAtributo"])
+		//alert(atributosTI[0]["nombreAtributo"])
 		for (var a=0; a<atributosTI.length;a++){
 			
 			t='{"idAtributos":'+atributosTI[a]["idAtributos"]+', "nombreAtributo":"'+
@@ -764,6 +786,7 @@
 		$("#idItem").attr('disabled', habilitar);
 		$("#nombreItem").attr('disabled', habilitar);
 		$("#costo").attr('disabled', habilitar);
+		$("#versionComboBox").attr('disabled', false);
 		$("#complejidad").attr('disabled', habilitar);
 		$("#prioridad").attr('disabled', habilitar);
 		$("#datepicker").attr('disabled', habilitar);
@@ -782,9 +805,18 @@
 		/*for (a in childs){
 			alert(a)
 		}*/
-		alert("hola")
+		//$('#fieldsetTipoItem').refresh()
+		
+		//alert("hola")
+		alert(window.atributosTI)
+		
+		/*$('#fieldsetTipoItem').find('.text').each(function(){
+		    jQuery(this).attr('disabled', habilitar);
+		    alert(jQuery(this).val())
+		    
+		});*/
 		if(atributosTI!=null){
-			//alert("entro al for")
+			alert("entro al for")
 			for(var i=0; i<atributosTI.length;i++){
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
 				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
@@ -855,8 +887,13 @@
 
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
+		
+		if(retornaValorComboBoxFases()==0){
+			mostrarMensaje("Atencion", "Se debe seleccionar una fase para agregar un item")
+			return;
+		}
 		bandera = 1;
-		$('#versionComboBox').hide();
+		$("#versionDiv").hide()
 		/* se vacian los elementos HTML de captura de datos */
 		$("#idItem").val("");
 		$("#nombreItem").val("");
@@ -866,7 +903,7 @@
 		$("#datepicker").val("");
 		$("#datepicker2").val("");
 		$("#descripcion").val("");
-		$("#estado").val("");
+		$("#estado").val("activo");
 		$("#idFase").val(retornaValorComboBoxFases());
 		
 		
@@ -886,14 +923,25 @@
 	function modificar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 2;
-		$('#versionComboBox').hide();
+		if(retornaValorComboBoxFases()==0){
+			mostrarMensaje("Atencion", "Se debe seleccionar una fase para modificar un item")
+			return;
+		}
+		//$('#versionComboBox').hide();
+		$("#versionDiv").hide();
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
 			return;
 		}
-		var rowdata;
+		
+		var rowdata=$('#listaItems').getRowData(row);
+		if(rowdata.estado!='activo')
+		{
+			mostrarMensaje("Atencion", "Solo puede modificarse Item en estado: activo.")
+			return;
+		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		//$('#atributosTipodeItem').empty();
 		cargarForm(rowdata, row, 0);
@@ -909,7 +957,12 @@
 	function consultar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
-		$('#versionComboBox').hide();
+		if(retornaValorComboBoxFases()==0){
+			mostrarMensaje("Atencion", "Se debe seleccionar una fase para consultar un item")
+			return;
+		}
+		//$('#versionComboBox').show();
+		$("#versionDiv").hide()
 		/* se comprueba que hay un dato seleccionado para consultar */
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -920,7 +973,9 @@
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarForm(rowdata, row, 0);
 		/*se inhabilita la edicion*/
+		//alert(window.atributosTI)
 		setCamposDisabled(true);
+		
 		/* se llama al dialogo para modificar los datos */
 		$("#dialogo-datos-item").dialog("open");
 	}
@@ -948,14 +1003,96 @@
 		
 		/*se inhabilita la edicion*/
 		setCamposDisabled(true);
+		
+		$("#versionDiv").show();
 		$('#versionComboBox').show();
 		/* se llama al dialogo para modificar los datos */
 		
 		$("#dialogo-datos-item").dialog("open");
 	}
 	
-	function eliminarRevivir(){
+	function aprobarItem(){
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a aprobar");
+			return;
+		}
+		rowdata = $('#listaItems').getRowData(row);
+		
+		if(rowdata.estado=="activo"){
+			titulo="Atencion"
+			mensaje="No se puede aprobarItem en estado activo, primero debe pasar al estado \"Pendiente\""
+			mostrarMensaje(titulo, mensaje)
+			return;
+		}else if(rowdata.estado!="pendiente"){
+			titulo="Atencion"
+			mensaje="No se puede aprobarItem en estado "+ rowdata.estado
+			mostrarMensaje(titulo, mensaje)
+			return;
+		}else{
+			titulo="Atencion"
+			mensaje="Esta seguro que desea aprobar el item "+ rowdata.nombreItem + "?"
+			accion="aprobar"
+		}
+		
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					postCambiarEstadoItem(accion);
+					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
+				}
+			}
+		});
+	}
+	function setPendiente(){
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a pasar de estado activo a pendiente");
+			return;
+		}
+		rowdata = $('#listaItems').getRowData(row);
+		
+		if(rowdata.estado!="activo"){
+			titulo="Atencion"
+			mensaje="No se puede setear a Pendiente un item en estado "+ rowdata.estado
+			mostrarMensaje(titulo, mensaje)
+			return;
+		}else{
+			titulo="Atencion"
+			mensaje="Esta seguro que desea setear a pendiente el estado del item "+ rowdata.nombreItem + "?"
+			accion="pendiente"
+		}
+		
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					postCambiarEstadoItem(accion);
+					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
+				}
+			}
+		});
+	}
+	function eliminarRevivir(){
+		
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a eliminar");
+			return;
+		}
 		rowdata = $('#listaItems').getRowData(row);
 		
 		if(rowdata.estado=="inactivo"){
@@ -976,7 +1113,7 @@
 			modal : true,
 			buttons : {
 				"Aceptar" : function() {
-					postEliminarRevivirItem(accion);
+					postCambiarEstadoItem(accion);
 					$(this).dialog("close");
 					return;
 				},"Cancelar" : function() {
@@ -986,9 +1123,9 @@
 			}
 		});
 	}
-	function postEliminarRevivirItem(a){
+	function postCambiarEstadoItem(a){
 		
-		$.post('/eliminarItem/',
+		$.post('/eliminarRevivirAprobarItem/',
 				{
 					idItem : rowdata.idItem,
 					idFase: rowdata.idFase,
@@ -1184,7 +1321,12 @@
 				<input id="btRelacionar" type="button" name="nuevo"
 				value="Relacionar/Desrelacionar" onclick='abrirDialogoRelacionar()' />
 				<input id="btArchivos" type="button" name="nuevo"
-				value="Archivos" onclick='abrirDialogoArchivos()' /><br></br>
+				value="Archivos" onclick='abrirDialogoArchivos()' />
+				<input id="btPendiente" type="button" name="nuevo"
+				value="Pendiente" onclick='setPendiente()' />
+				<br></br>
+				<input id="btAprobar" type="button" name="nuevo"
+				value="Aprobar" onclick='aprobarItem()' /><br></br>
 			<script>
 				$("#btAgregar").button();
 				$("#btModificar").button();
@@ -1236,6 +1378,8 @@
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem
 		}, function(atribs) {
+			//window.atributosTI=atribs;
+			window['atributosTI'] = atribs; 
 			submitValues("#", atribs);
 		});
 	}
@@ -1386,6 +1530,13 @@ $("#dialogo-relacionarManager")
 				/* funcion asociado al boton aceptar */
 				"Agregar" : function() {
 					
+					var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
+					rowdata= $('#listaItems').getRowData(row);
+					
+					if(rowdata.estado!='activo'){
+						mostrarMensaje("Atencion", "El item tiene estado "+ rowdata.estado+", solo pueden relacionarse items con estado \"activo\"")
+						return;
+					}
 					abrirMiniDialogoRelacion();
 					
 				},"Eliminar" : function() {

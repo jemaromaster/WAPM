@@ -131,9 +131,11 @@
 									break;
 								case'/tipoItemManager/':
 									cargarFasesEnComboBox();
+									
 									break;
 								case'/itemManager/':
-									cargarFasesEnComboBox();
+									//cargarFasesEnComboBox();
+									$('#listaItems').trigger("reloadGrid");
 									break;
 								default:
 									alert('no te olvides agregar para que actualice el jqgrid en el if de base')

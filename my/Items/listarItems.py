@@ -172,7 +172,7 @@ class ListarItems(flask.views.MethodView):
                                                     .filter(Item.idFase==idFase)\
                                                     .filter(Item.estado!='inactivo').count()
         print total
-        print desde
+        print desde 
         print hasta 
         resto=total%rows
         if resto == 0:

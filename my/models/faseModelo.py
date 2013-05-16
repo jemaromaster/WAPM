@@ -19,6 +19,7 @@ class Fase(Base):
     fechaInicio=Column("fecha_inicio", Date)
     fechaFinalizacion=Column("fecha_finalizacion", Date)
     idProyecto = Column(Integer, ForeignKey('proyecto.id_proyecto'))
+   
     #item=
     '''para obtener el one to many desde proyecto (un proyecto, muchas fases se utiliza una foreignkey 
     como en este caso mas arriba idProyecto

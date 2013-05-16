@@ -52,7 +52,7 @@ from Items.listarItems import ListarItems
 from Items.listarAtributosResultado import ListarAtributosResultado
 from Items.modificarItem import ModificarItem
 from Items.listarDatosItemVersion import ListarDatosItemVersion
-from Items.eliminarItem import EliminarItem
+from Items.eliminarRevivirAprobarItem import EliminarRevivirAprobarItem
 from Items.listarItemsRelacionarMiniDialogoComboBox import ListarItemsRelacionarMiniDialogoComboBox
 from Items.agregarRelacion import AgregarRelacion
 from Items.listarRelaciones import ListarRelaciones
@@ -240,8 +240,8 @@ app.add_url_rule('/modificarItem/',
                  methods=["POST"])
 
 
-app.add_url_rule('/eliminarItem/',
-                 view_func=EliminarItem.as_view('eliminarItem'),
+app.add_url_rule('/eliminarRevivirAprobarItem/',
+                 view_func=EliminarRevivirAprobarItem.as_view('eliminarRevivirAprobarItem'),
                  methods=["POST"])
 
 app.add_url_rule('/listarDatosItemVersion/',

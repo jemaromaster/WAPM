@@ -6,6 +6,7 @@ from bdCreator import Session
 import md5
 import random
 from Proyectos.proyectoController import ProyectoControllerClass
+from tipoPrimarioModelo import TipoPrimario
 def poblar():
     sesion=Session()
     m=md5.new()
@@ -23,6 +24,20 @@ def poblar():
     sesion.commit()
     sesion.close()
 
+def cargarTipoPrimario():
+    sesion=Session()
+    
+    t1=TipoPrimario('Texto', 'String')
+    t2=TipoPrimario('Numerico', 'Numeric')
+    t3=TipoPrimario('Entero', 'int')
+    t4=TipoPrimario('Fecha', 'Date')
+    
+    sesion.add(t1)
+    sesion.add(t2)
+    sesion.add(t3)
+    sesion.add(t4)
+    
+    sesion.commit()
 def cargarProyecto():
      sesion=Session()
      pc=ProyectoControllerClass()
