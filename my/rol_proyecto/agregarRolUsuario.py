@@ -20,9 +20,12 @@ class AgregarRolUsuario(flask.views.MethodView):
         
         sesion=Session()
         rol=sesion.query(RolProyecto).filter(RolProyecto.id==idRol).first()
-       
+        if rol is None:
+            return "t,Rol no existe"
         if(idUsuario!=0):
             p=sesion.query(Usuario).filter(Usuario.id==int(idUsuario)).first()
+            if p is None:
+                return "t,Usuario no existe"
             if(rol in p.roles_proyecto):
                 return "t,Rol ya esta asigando al Usuario" 
             else:
