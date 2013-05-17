@@ -52,6 +52,8 @@ class Item(Base):
     idFase= Column(Integer, ForeignKey('fase.id'))
     fases= relationship("Fase", backref="items")
     
+    tag=Column("tag", String(30))
+    
     '''para obtener el one to many desde proyecto (un proyecto, muchas fases se utiliza una foreignkey 
     como en este caso mas arriba idProyecto
     '''

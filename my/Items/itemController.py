@@ -5,6 +5,8 @@ from models.itemModelo import Item
 from models.atributosModelo import Atributos
 from models.bdCreator import Session
 
+from models.faseModelo import Fase
+
 from itemManejador import ItemManejador
 from datetime import datetime
 class ItemControllerClass(flask.views.MethodView):
@@ -53,7 +55,10 @@ class ItemControllerClass(flask.views.MethodView):
                     return make_response('t,Existe item que cuenta con el mismo nombre que la version a la cual desea\
                                             reversionar. Modifique el nombre del item "'+ qr.nombreItem + '" para poder reversionar' )
         
-        
+        if(esReversion==0):#cuando no es reversion
+            if(idF==0):
+                laFase=sesion.query(Fase).filter(Fase.idFase==f.idFase).first()
+                f.tag=laFase.tag+ "."+ f.nombreItem
         #se valida la fecha 
        
         try:

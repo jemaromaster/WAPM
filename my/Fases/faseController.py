@@ -56,8 +56,12 @@ class FaseControllerClass(flask.views.MethodView):
             if( qr is not None and str(qr.idFase) != idF ):
                 return make_response('t,Ya existe una fase con el nombre indicado')
         
-        
-        
+        '''cuando la fase es nueva se le setea su tag'''
+        if(idF==0):
+            nroFasesActuales=sesion.query(Fase).filter(Fase.idProyecto==f.idProyecto).count();
+            sum=nroFasesActuales+1
+            f.tag="F"+str(sum);
+            
         #se valida la fecha 
         print 'fecha' + str(f.fechaInicio[6:10])
         try:

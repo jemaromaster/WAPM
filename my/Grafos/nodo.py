@@ -13,9 +13,11 @@ from models.bdCreator import Session'''
 #sesion=Session()
 
 class Nodo:
-    def __init__(self, idItem, idFase):
+    cicloImprimir=dict()
+    def __init__(self, idItem, nombre, idFase):
         self.idItem=idItem;
         self.idFase=idFase;
+        self.nombre=nombre;
         self.lista=[];
         
         
@@ -39,19 +41,21 @@ class Nodo:
 
    
     def probarSiTieneCiclo(self, nodo):
-        r=0;
-        aux=0;
-        if self.idFase==nodo.idFase:
-            print("ahora estoy en "+str(self.idItem))
+        r=0;  
+        aux=0;    
+        if self.idFase==nodo.idFase:                
+            #print("ahora estoy en "+str(self.idItem))
             for n in self.lista:
-                print("me voy al padre  "+str(n.idItem))
+                #print("me voy al padre  "+str(n.idItem))
                 if n.idItem==nodo.idItem:
                     r=1; #hay ciclo
                     print(self.idItem)
+                    self.cicloImprimir[self.idItem]=self.nombre;
                 else:
                     r=n.probarSiTieneCiclo(nodo);
                     if(r==1):
                         print(self.idItem)
+                        self.cicloImprimir[self.idItem]=self.nombre;
                         break;
                     
                     
@@ -69,13 +73,13 @@ class Nodo:
             return 1;
         else:
             return 0;
-n1=Nodo(1,1)
-n2=Nodo(2,1)
-n3=Nodo(3,1)
-n4=Nodo(4,1)
-n5=Nodo(5,1)
-n6=Nodo(6,1)
-n7=Nodo(7,1)
+'''n1=Nodo(1,"nodo1",1)
+n2=Nodo(2,"nodo2",1)
+n3=Nodo(3,"nodo3",1)
+n4=Nodo(4,"nodo4",1)
+n5=Nodo(5,"nodo5",1)
+n6=Nodo(6,"nodo6",1)
+n7=Nodo(7,"nodo7",1)
 
 n1.agregarRelacion(n2)
 n1.agregarRelacion(n3)
@@ -92,7 +96,8 @@ n4.imprimirHijo("n4")
 
 
 print("el ciclo es")
-print("tiene ciclo?"+str(n1.probarSiTieneCiclo(n1)))
+#print("tiene ciclo?"+str(n1.probarSiTieneCiclo(n1)))
 
 #Nodo.imprimirList()
 
+'''

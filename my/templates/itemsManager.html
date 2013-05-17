@@ -383,7 +383,7 @@
 						error = 1;
 					}
 				}else{
-					
+					//alert("#input_"+atributosTI[i]["nombreAtributo"])
 					len = $("#input_"+atributosTI[i]["nombreAtributo"]).val().trim().length;
 					
 					if (len <= 0) {
@@ -402,7 +402,7 @@
 		var form = ['<form id="formTI" action=\'\'>']//[ '<form method="POST" action="', url, '">' ];
 		var input_que_son_fecha=['']
 		var lista_input_numerico=['']
-		//window.atributosTI=params_vec;
+		window.atributosTI=params_vec;
 		
 		for(var i=0; i<params_vec.length;i++){
 					form.push('<td>');
@@ -461,9 +461,8 @@
 	function jsonizarAtributos(){
 		
 		json=[]
-		//alert(atributosTI[0]["nombreAtributo"])
+		
 		for (var a=0; a<atributosTI.length;a++){
-			
 			t='{"idAtributos":'+atributosTI[a]["idAtributos"]+', "nombreAtributo":"'+
 				atributosTI[a]["nombreAtributo"]+'","tipoPrimario":"' + atributosTI[a]["tipoPrimario"]+ '", "valor":"'+
 				$("#input_"+atributosTI[a]["nombreAtributo"]).val()+'"}'
@@ -816,7 +815,7 @@
 		    
 		});*/
 		if(atributosTI!=null){
-			alert("entro al for")
+			//alert("entro al for")
 			for(var i=0; i<atributosTI.length;i++){
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
 				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
