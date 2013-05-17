@@ -127,11 +127,13 @@ class ListarMiembrosComite(flask.views.MethodView):
                     
             listaUsuarioEnProyecto=sesion.query(Usuario).join(Proyecto.usuariosMiembros)\
                                     .filter(Proyecto.idProyecto==idProyecto) \
+                                    .filter(Usuario.activo=="true")\
                                     .filter(Usuario.username.like(nombreUsuario)&\
                                     Usuario.nombres.like(nombre) & Usuario.apellidos.like(apellido) &\
                                     Usuario.email.like(email))         
             total=sesion.query(Usuario).join(Proyecto.usuariosMiembros)\
                                     .filter(Proyecto.idProyecto==idProyecto) \
+                                    .filter(Usuario.activo=="true")\
                                     .filter(Usuario.username.like(nombreUsuario)&\
                                     Usuario.nombres.like(nombre) & Usuario.apellidos.like(apellido) &\
                                     Usuario.email.like(email)).count()                        
@@ -139,9 +141,11 @@ class ListarMiembrosComite(flask.views.MethodView):
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
             listaUsuarioEnProyecto=sesion.query(Usuario).join(Proyecto.usuariosMiembros)\
-                                    .filter(Proyecto.idProyecto==idProyecto)
+                                    .filter(Proyecto.idProyecto==idProyecto)\
+                                    .filter(Usuario.activo=="true")
             total=sesion.query(Usuario).join(Proyecto.usuariosMiembros)\
-                                    .filter(Proyecto.idProyecto==idProyecto).count()
+                                    .filter(Proyecto.idProyecto==idProyecto)\
+                                    .filter(Usuario.activo=="true").count()
            
         resto=total%rows
         if resto == 0:

@@ -66,7 +66,8 @@ class UsuarioControllerClass(flask.views.MethodView):
                 return make_response('t,El usuario no puede ser inactivado. Es Projec Leader de Proyectos en curso')
             
             comiteProyectos=sesion.query(Proyecto).join(Proyecto.usuariosComite).filter(Usuario.id==idU)            
-            if comiteProyectos is not None:
+            countComite=comiteProyectos.count()
+            if countComite > 0:
                 countComiteActivos=comiteProyectos.filter(Proyecto.estado=="activo").count()
                 if countComiteActivos >0:
                     return make_response('t,El usuario no puede ser inactivado. Es Miembro de Comite/s de Proyectos en curso')
