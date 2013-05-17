@@ -38,11 +38,11 @@ class ListarAtributosResultado(flask.views.MethodView):
                 elif(id=='Numerico'):
                     aux=sesion.query(InstanciaNumerico).filter(InstanciaNumerico.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
                                                      .filter(InstanciaNumerico.version==version).first()
-                    cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":aux.numerico}, separators=(',',':'));
+                    cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":str(aux.numerico)}, separators=(',',':'));
                 elif(id=='Entero'):
                     aux=sesion.query(InstanciaEntero).filter(InstanciaEntero.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
                                                      .filter(InstanciaEntero.version==version).first()
-                    cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":aux.entero}, separators=(',',':'));
+                    cad=cad+ json.dumps({"nombreInput":s.nombreCampo , "valor":str(aux.entero)}, separators=(',',':'));
                 elif(id=='Fecha'):
                     aux=sesion.query(InstanciaFecha).filter(InstanciaFecha.instanciaTipoItem_id==int(s.idInstanciaTipoItem))\
                                                     .filter(InstanciaFecha.version==version).first()

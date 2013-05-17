@@ -76,8 +76,13 @@ class ListarRelaciones(flask.views.MethodView):
         param2=flask.request.args.get('rows', '')
         idProyecto=flask.request.args.get('idP', '')
         idFase=flask.request.args.get('idF', '')
-        idItem=int(flask.request.args.get('idIt', ''))
+        idItem=flask.request.args.get('idIt', '')
         
+        print "ide del item es :  "+ idItem
+        if idItem is not None and idItem!='':
+            idItem=int(idItem)
+        else:
+            idItem=0
         #caluclo de paginacion 
         page=long(param1)
         rows=long(param2)

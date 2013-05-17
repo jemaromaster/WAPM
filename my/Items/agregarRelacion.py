@@ -60,7 +60,7 @@ class AgregarRelacion(flask.views.MethodView):
         p=None;
         h=None;
         for i in q:
-            aux=Nodo(i.idItem, i.idFase);
+            aux=Nodo(i.idItem, i.nombreItem,i.idFase);
             if(int(padre_id)==aux.idItem):
                 p=aux;
             elif(int(hijo_id)==aux.idItem):
@@ -90,7 +90,13 @@ class AgregarRelacion(flask.views.MethodView):
             
         
         if(tienec==1):
-            return make_response('t,La relacion tiene ciclos')
+            cad=''
+            for a in Nodo.cicloImprimir:
+                cad=cad+'->'+Nodo.cicloImprimir[a];
+            cicloImprimir=dict()
+            
+            cad=cad[2:len(cad)]  
+            return make_response('t,La relacion que desea agregar genera el siguiente ciclo: '+ cad)
         
         rel=Relacion(padre_id, hijo_id);
         sesion.add(rel)

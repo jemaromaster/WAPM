@@ -67,6 +67,7 @@ class ListarProyectosComboBase(flask.views.MethodView):
     @login_required
     def get(self):
         lp=sesion.query(Proyecto).join(Proyecto.usuariosMiembros).filter(Proyecto.estado=="activo").filter(Usuario.id==flask.session['idUsuario'])
+        print "cantidad de proyectos encontrado para el usuario: "+ str(lp.count())
         jsonP='['
         for proyecto in lp:
             jsonP=jsonP+"{\"idProyecto\":\""+str(proyecto.idProyecto)+"\",\"nombreProyecto\":\""+proyecto.nombreProyecto+"\"},"

@@ -5,6 +5,8 @@ from models.itemModelo import Item
 from models.atributosModelo import Atributos
 from models.bdCreator import Session
 
+from models.faseModelo import Fase
+
 from itemManejador import ItemManejador
 from datetime import datetime
 class ItemControllerClass(flask.views.MethodView):
@@ -49,27 +51,31 @@ class ItemControllerClass(flask.views.MethodView):
                 if( qr is not None and str(qr.idItem) != idF ):
                     return make_response('t,Ya existe un item con el nombre indicado en la fase')
         else:
-            if(qr is not None):
+            if(qr is not None and str(qr.idItem) != idF):
                     return make_response('t,Existe item que cuenta con el mismo nombre que la version a la cual desea\
                                             reversionar. Modifique el nombre del item "'+ qr.nombreItem + '" para poder reversionar' )
         
-        
+        if(esReversion==0):#cuando no es reversion
+            if(idF==0):
+                laFase=sesion.query(Fase).filter(Fase.idFase==f.idFase).first()
+                f.tag=laFase.tag+ "."+ f.nombreItem
         #se valida la fecha 
        
         try:
-            '''fi=datetime(int(f.fechaInicio[6:10]),\
+            fi=datetime(int(f.fechaInicio[6:10]),\
                              int(f.fechaInicio[3:5]),\
                              int(f.fechaInicio[0:2]))
             ff=datetime(int(f.fechaFinalizacion[6:10]),\
                              int(f.fechaFinalizacion[3:5]),\
-                             int(f.fechaFinalizacion[0:2]))'''
+                             int(f.fechaFinalizacion[0:2]))
+            '''
             fi=datetime(int(f.fechaInicio[6:10]),\
                              int(f.fechaInicio[0:2]),\
                              int(f.fechaInicio[3:5]))
             ff=datetime(int(f.fechaFinalizacion[6:10]),\
                              int(f.fechaFinalizacion[0:2]),\
                              int(f.fechaFinalizacion[3:5]))
-            
+            '''
         except:
             return make_response('t,Fecha invalida') 
         
