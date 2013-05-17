@@ -1243,6 +1243,22 @@ $('#dialogo-agregar-miembros-comite')
 				buttons : {
 					/* funcion asociado al boton aceptar */
 					"Agregar" : function() {
+						
+						var row = $('#list').jqGrid('getGridParam', 'selrow');
+						if (row == null) {
+							mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+							return;
+						}
+						
+						var rowdata = $('#list').getRowData(row);
+						
+						if (rowdata.estado!="desarrollo"){
+							mostrarMensaje("Atencion", "El proyecto ya no puede ser modificado");
+							return 
+						}
+						
+						
+						
 						/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
 						var rowComite = $(
 								'#listComite')
@@ -1316,6 +1332,24 @@ $('#dialogo-agregar-miembros-comite')
 						/* si el dato se modifica se llama a la url para modificar*/
 					},
 					"Quitar" : function() {
+						
+						
+						var row = $('#list').jqGrid('getGridParam', 'selrow');
+						if (row == null) {
+							mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+							return;
+						}
+						
+						var rowdata = $('#list').getRowData(row);
+						
+						if (rowdata.estado!="desarrollo"){
+							mostrarMensaje("Atencion", "El proyecto ya no puede ser modificado");
+							return 
+						}
+						
+						
+						
+						
 						var rowComite = $(
 								'#listComite')
 								.jqGrid(
@@ -2449,20 +2483,20 @@ var banderaRol;
 			return;
 		}
 		var rowdata = $('#list').getRowData(rowProyecto);
-		setAgregarMiembros(rowdata);
+		setAgregarMiembros(rowdata); 
 		$('#dialogo-agregar-miembros').dialog("open");
 	}
 
 	function setAgregarMiembros(rowdata) {
 		
-		var myPostData = $('#listMiembros').jqGrid("getGridParam", "postData");
+		myPostData = $('#listMiembros').jqGrid("getGridParam", "postData");
 		delete myPostData.idProyecto;
-		//eso borra el idFase actual
+		//eso borra el idFase actual 
 		$('#listMiembros').setGridParam({
 		postData: { idProyecto: rowdata.idProyecto  } });
 		//eso se setea el nuevo valor
 		$('#listMiembros').trigger("reloadGrid");
-
+		return
 	}
 	
 	$.enmascarar = function() {
@@ -2507,7 +2541,7 @@ var banderaRol;
 		
 		var rowdata = $('#list').getRowData(row);
 		
-		if (rowdata.estado!="desarollo"){
+		if (rowdata.estado!="desarrollo"){
 			mostrarMensaje("Atencion", "El proyecto ya no puede ser modificado");
 			return 
 		}
@@ -2775,6 +2809,10 @@ var banderaRol;
 <div id="dialogo-agregar-miembros-comite" title="Agregar Miembros a Proyecto">
 	<table id="listComite"></table>
 	<div id="pagerComite"></div>
+</div>
+<div id="dialogo-agregar-miembros" title="Agregar Miembros a Proyecto">
+	<table id="listMiembros"></table>
+	<div id="pagerMiembros"></div>
 </div>
 
 <div style="margin-left: auto; margin-right: auto; width: 100%;">

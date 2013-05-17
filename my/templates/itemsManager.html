@@ -1,110 +1,152 @@
-{% extends "base.html" %}
+{% extends "baseMiembro.html" %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
+<script type="text/javascript" src="http://www.phpletter.com/contents/ajaxfileupload/ajaxfileupload.js"></script>
+<script type="text/javascript" src="http://www.phpletter.com/javascript/general.js"></script>
 {% block header %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 
-
-
 <script type="text/javascript">
 	//<![CDATA[
-	jQuery(document)
-			.ready(
-					function() {
-						
-						var grid = jQuery("#listaItems")
-								.jqGrid(
-										{
+	jQuery(document).ready(
+			function() {
 
-											// datatype : "local",
-											// data:mydata,
-											url : 'http://localhost:5000/listarItems',
-											datatype : "json",
-											mtype : "get",
-											postData:{idProyecto:'1', idFase:'1'},
-											//aca se pone el proyecto el cual selecciono 
-											//y la fase al cual pertenece el proyecto
-											colNames : [ 'ID Items',
-													'Nombre Item', 'Version', 'Fecha Finalizacion',
-													'Descripcion', 'Estado', 'Id de Proyecto' ],
-											colModel : [
-													{
-														name : 'idItem',
-														index : 'idItem',
-														hidden : true
-													},
-													
-													{
-														name : 'nombreFase',
-														index : 'nombreFase',
-														width : 200
-													},
-													{
-														name : 'fechaInicio',
-														index : 'fechaInicio',
-														formatter: 'date',
-											            sorttype: 'date',
-											            datefmt: 'd/m/Y',
-											            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
-														search:false
-													},{
-														name : 'fechaFinalizacion',
-														index : 'fechaFinalizacion',
-														formatter: 'date',
-											            sorttype: 'date',
-											            datefmt: 'd/m/Y',
-											            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
-														search:false
-													},
-													{
-														name : 'descripcion',
-														index : 'descripcion',
-														hidden : true
-													},
-													{
-														name : 'estado',
-														index : 'estado',
-														
-													},
-													{
-														name : 'idProyecto',
-														index : 'idProyecto',
-														hidden : true
-													}
+				var grid = jQuery("#listaItems").jqGrid(
+						{
 
-											],
-											sortname : 'nombreFase',
-											viewrecords : true,
-											rownumbers : true,
-											sortorder : "desc",
-											ignoreCase : true,
-											pager : '#pager',
-											caption : "Fases",
-											jsonReader : {
-												root : "invdata",
-												page : "currpage",
-												total : "totalpages",
-												records : "totalrecords",
-												repeatitems : false,
-												id : "idUsuario"
-											}
+							// datatype : "local",
+							// data:mydata,
+							url : 'http://localhost:5000/listarItems',
+							datatype : "json",
+							mtype : "get",
+							postData : {
+								idP : retornaValorenSesion(),
+								idF : retornaValorComboBoxFases()
+							},
+							//aca se pone el proyecto el cual selecciono 
+							//y la fase al cual pertenece el proyecto
+							colNames : [ 'ID Item', 'Nombre Item', 'Version',
+									'prioridad', 'Fecha Inicio', 'Fecha Fin.',
+									'tipo Item id', 'Costo','complejidad', 'Estado',
+									'autorVersion_id', 'Autor', 'Descripcion',
+									'Id de Proyecto' ],
+							colModel : [ {
+								name : 'idItem',
+								index : 'idItem',
+								hidden : true
+							},
 
-										}).jqGrid('navGrid', '#pager', {
-									edit : false,
-									add : false,
-									del : false,
-									search : false,
-									refresh : true
-								});
-						grid.jqGrid('filterToolbar', {
-							stringResult : true,
-							searchOnEnter : false,
-							defaultSearch : "cn"
-						});
-					});
+							{
+								name : 'nombreItem',
+								index : 'nombreItem',
+								width : 150
+							}, {
+								name : 'version',
+								index : 'version',
+								width : 50,search : false
+							}, {
+								name : 'prioridad',
+								index : 'prioridad',
+								width : 200,
+								hidden : true
+							}, {
+								name : 'fechaInicio',
+								index : 'fechaInicio',
+								width : 100,
+								formatter : 'date',
+								sorttype : 'date',
+								datefmt : 'd/m/Y',
+								formatoptions : {
+									srcformat : 'Y-m-d',
+									newformat : 'd/m/Y'
+								},
+								search : false
+							}, {
+								name : 'fechaFinalizacion',
+								index : 'fechaFinalizacion',
+								width : 100,
+								formatter : 'date',
+								sorttype : 'date',
+								datefmt : 'd/m/Y',
+								formatoptions : {
+									srcformat : 'Y-m-d',
+									newformat : 'd/m/Y'
+								},
+								search : false
+							}, {
+								name : 'tipoItem_id',
+								index : 'tipoItem_id',
+								width : 200,
+								hidden : true
+							}, {
+								name : 'costo',
+								index : 'costo',
+								width : 100,search : false
+							}, {
+								name : 'complejidad',
+								index : 'complejidad',
+								hidden : true
+							}, {
+									name : 'estado',
+									index : 'estado',
+									formatter : 'select',
+									stype : 'select',
+									editoptions : {
+										value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo"
+									},
+									hidden : false
+							}, {
+								name : 'autorVersion_id',
+								index : 'autorVersion_id',
+								hidden : true,
+								search:false
+							}, {
+								name : 'nombreAutorVersion',
+								index : 'nombreAutorVersion'
+							}, {
+								name : 'descripcion',
+								index : 'descripcion',
+								hidden : true
+							},
+
+							{
+								name : 'idFase',
+								index : 'idFase',
+								hidden : true
+							}
+
+							],
+							sortname : 'nombreItem',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "desc",
+							ignoreCase : true,
+							pager : '#pager',
+							caption : "Items",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+								id : "idItem"
+							}
+
+						}).jqGrid('navGrid', '#pager', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : true
+				});
+				grid.jqGrid('filterToolbar', {
+					stringResult : true,
+					searchOnEnter : false,
+					defaultSearch : "cn"
+				});
+			});
 	//]]>
 </script>
 
@@ -148,40 +190,52 @@
 	$(document).ready(function() {
 		$("#datepicker").datepicker();
 	});
-	
+
 	$(document).ready(function() {
 		$("#datepicker2").datepicker();
 	});
 </script>
-<div id="dialogo-datos-fase" title="Datos de Fase">
+<div id="dialogo-datos-item" title="Datos de Item">
 	<form title="(*) campos obligatorios">
-		<fieldset class="fieldset">
-			<input type="hidden" name="idFase" id="idFase" />
+		<fieldset class="ui-widget-content ui-corner-all"  style="border: 1px solid inherit; ">
+			<legend>Datos de Item</legend>
+			<input type="hidden" name="idItem" id="idItem" />
 			<table>
 				<tr>
-					<td><label for="nombreFase" style="display: block">*Nombre Fase</label> 
-						<input type="text" name="nombreFase"
-						id="nombreFase" class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					<td><label for="nombreItem" style="display: block">*Nombre
+							Item</label> <input type="text" name="nombreItem" id="nombreItem"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 					</td>
+					<td>
+						<div id="versionDiv" style="margin-left: 50px">
+						<label for="versionComboBox" style="display: block">*Version</label>
+						<select id="versionComboBox"
+						style="display: block; margin-bottom: 12px; float: right; padding: 0.4em; width: 100%;"
+						class="ui-widget-content ui-corner-all">
+						<option value='0'>Ninguno</option>
+						</select>
+						</div>
+					</td>
+					
 				</tr>
 				
+
 				<tr>
-					<td>
-						<label for="fechaInicio" style="display: block">*Fecha de Inicio</label>
-						 <input type="text" name="datepicker" id="datepicker" readonly="readonly"
-						class="text ui-widget-content ui-corner-all"
+					<td><label for="fechaInicio" style="display: block">*Fecha
+							de Inicio</label> <input type="text" name="datepicker" id="datepicker"
+						readonly="readonly" class="text ui-widget-content ui-corner-all"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<label for="fechaFinalizacion" style="display: block">*Fecha de Finalizacion</label> 
-						<input type="text" name="datepicker2" id="datepicker2" readonly="readonly"
+					<td><label for="fechaFinalizacion" style="display: block">*Fecha
+							de Finalizacion</label> <input type="text" name="datepicker2"
+						id="datepicker2" readonly="readonly"
 						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
 					</td>
-						
+
 				</tr>
 				<tr>
 					<td><label for="descripcion" style="display: block">*Descripcion</label>
@@ -190,26 +244,236 @@
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
 						</textarea></td>
 					<td><label for="estado" style="display: block">*Estado</label>
-						<select id="estado"
+						<!-- <select id="estado"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
 						class="ui-widget-content ui-corner-all">
-							<option value="desarrollo">Desarrollo</option>
+						
 							<option value="activo">Activo</option>
-							<option value="finalizado">Finalizado</option>
-					</select></td>
-					<input type="hidden" name="idProyecto" id="idProyecto" />
+							<option value="pendiente">Pendiente</option>
+					</select>-->
+					 <input type="text" name="estado" 
+						id="estado" readonly="readonly"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
 				</tr>
+				
+				<tr>
+					<td><label for="prioridad" style="display: block">*Prioridad</label>
+					<select id="prioridad"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"
+						class="ui-widget-content ui-corner-all">
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="costo" style="display: block">*Costo</label>
+					<input type="text" name="costo" id="costo"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				<tr>
+					<td><label for="complejidad" style="display: block">*Complejidad</label>
+					<select id="complejidad"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"
+						class="ui-widget-content ui-corner-all">
+					</select>
+					</td>
+				</tr>
+				<tr><td>
+				<input type="hidden" name="idFase" id="idFase" />
+				</td></tr>
+				<tr>
+					<td> <label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
+					<select id="tipoItemIdComboBox"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
+						class="ui-widget-content ui-corner-all">
+						<option value='0'>Ninguno</option>
+					</select>
+					</td>
+				</tr>
+				
 			</table>
 		</fieldset>
+		
+		<fieldset id="fieldsetTipoItem" class="ui-widget-content ui-corner-all"  style="border: 1px solid inherit; margin-top: 12px ">
+		<legend>Datos Tipo de Item</legend>
+		
+		<div id="atributosTipodeItem"></div>
+		</fieldset>
 	</form>
+</div>
+
+<div id="dialogo-archivos" title="Archivos">
+
+		<form name="form" action="" method="POST" enctype="multipart/form-data">
+		<table cellpadding="0" cellspacing="0" class="tableForm">
+
+		<thead>
+			<tr>
+				<th>Ajax File Upload</th>
+			</tr>
+		</thead>
+		<tbody>	
+			<tr>
+				<td><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></td>	
+			</tr>
+			<tr>
+				<td>Seleccione un archivo para agregar al item</td>
+			</tr>
+		</tbody>
+			<tfoot>
+				<tr>
+					<td><button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button></td>
+				</tr>
+			</tfoot>
+	
+	</table>
+		</form>
+</div>
+<div id="dialogo-relacionarManager" title="Relaciones">
+	<td>
+		<div><label for="Item" style="display: block">Nombre Item:</label><input type="text" name="nombreItemDialogo" id="nombreItemDialogo"
+						class="text ui-widget-content ui-corner-all" readonly="readonly"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+		</div>
+		<div style="margin-left:auto; margin-right:auto;">
+			<table id="listaRelaciones"></table>
+				<div id="pagerRelaciones"></div>
+		</div>
+	</td>
+</div>
+
+<div id="minidialogo-relacion" title="Relacionar con Padre">
+	<td>
+		<div><label for="Item" style="display: block">Relacionar Item:</label>
+			 <input type="text" name="nombreItemMiniDialogo" id="nombreItemMiniDialogo"
+						class="text ui-widget-content ui-corner-all" readonly="readonly"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+			<label for="Item" style="display: block">con Padre</label>
+			<select id="comboItemsMiniDialogo"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+						class="ui-widget-content ui-corner-all">
+			</select>
+			
+		</div>
+	</td>
 </div>
 
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+    var atributosTI;
 	
-	$("#dialogo-datos-fase")
+	function controlTI(){
+		var error=0;
+		if (atributosTI!=null){
+			var len;
+			for(var i=0; i<atributosTI.length;i++){
+				//alert("#input_"+atributosTI[i]["nombreAtributo"])
+				$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'skyblue');
+				if(atributosTI[i]["tipoPrimario"]=="Texto"){
+					
+					len = $("#input_"+atributosTI[i]["nombreAtributo"]).val().trim().length;
+					
+					if (len > atributosTI[i]["longitudCadena"] || len <= 0) {
+						$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'red');
+						error = 1;
+					}
+				}else{
+					
+					len = $("#input_"+atributosTI[i]["nombreAtributo"]).val().trim().length;
+					
+					if (len <= 0) {
+						$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'red');
+						error = 1;
+					}
+				
+			}
+		}
+		return error;
+
+		
+		}
+	  }
+	function submitValues(url, params_vec) {
+		var form = ['<form id="formTI" action=\'\'>']//[ '<form method="POST" action="', url, '">' ];
+		var input_que_son_fecha=['']
+		var lista_input_numerico=['']
+		//window.atributosTI=params_vec;
+		
+		for(var i=0; i<params_vec.length;i++){
+					form.push('<td>');
+					form.push('<tr><label style="display: block">',params_vec[i]["nombreAtributo"],'</label>');
+					if(params_vec[i]["tipoPrimario"]=="Texto"){
+						
+						if(params_vec[i]["longitudCadena"]<100){
+							form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+									'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 40%;"','/></tr>');
+						}else{
+							form.push('<textarea type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+									'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 40%;"','/></tr>');
+						}
+					}else if(params_vec[i]["tipoPrimario"]=="Numerico"){
+						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
+						
+						lista_input_numerico.push("#"+"input_"+params_vec[i]["nombreAtributo"])
+					}else if(params_vec[i]["tipoPrimario"]=="Fecha"){
+						
+						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" readonly="readonly"',
+								'" class="text ui-widget-content ui-corner-all"',
+								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
+						
+								//para que pueda indicarse que el input es una fecha, primero debe agregarse al formulario con .appendTo()
+								//mas abajo se indica que todos los inputs que van en esta lista input_que_son_fecha sean tipo datepicker
+						input_que_son_fecha.push("#"+"input_"+params_vec[i]["nombreAtributo"])
+						
+					}else{
+						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
+						lista_input_numerico.push("#"+"input_"+params_vec[i]["nombreAtributo"])
+					}
+					form.push('</td>')
+					
+		}
+		form.push('</form>');
+
+		
+		jQuery(form.join('')).appendTo($('#atributosTipodeItem'));
+		
+		
+		//aca se recorre los inputs_que_son_fecha y se le indica que son calendarios respectivamente
+		for (var a=0; a<input_que_son_fecha.length;a++){
+			$(input_que_son_fecha[a]).datepicker();
+		}
+		
+		//enmascar los inputs que son numericos
+		for (var b=0; b<lista_input_numerico.length;b++){
+			$(lista_input_numerico[b]).mask("?9999999999", {
+				placeholder : " "
+			});
+		}
+		
+	}
+	function jsonizarAtributos(){
+		
+		json=[]
+		//alert(atributosTI[0]["nombreAtributo"])
+		for (var a=0; a<atributosTI.length;a++){
+			
+			t='{"idAtributos":'+atributosTI[a]["idAtributos"]+', "nombreAtributo":"'+
+				atributosTI[a]["nombreAtributo"]+'","tipoPrimario":"' + atributosTI[a]["tipoPrimario"]+ '", "valor":"'+
+				$("#input_"+atributosTI[a]["nombreAtributo"]).val()+'"}'
+			
+			json.push(t)
+		}
+		json='['+json+']'
+		return json;
+	}
+	$("#dialogo-datos-item")
 			.dialog(
 					{
 						autoOpen : false,
@@ -220,30 +484,52 @@
 							/* funcion asociado al boton aceptar */
 							"Aceptar" : function() {
 								/* si el dato es nuevo se llamar a la url para agregar */
+								
+								//alert($('#atributosTiposdeItem'));
+								//alert(JSON.stringify($("#formTI").serializeArray()))
+								//a=JSON.stringify($('#form').serializeArray())
+								//alert(a)
+								//alert(jsonizarAtributos())
 								if (bandera == 1) {
 									/* se indica la URL */
-									if (control(true) == 1) {
+									if (control(true) == 1 | controlTI()==1) { //aca se usa cortocircuito
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
 										
-										$.post('/agregarFase/',{ 
-											/* se indican los parametros*/
-												nombreFase : $(
-														"#nombreFase")
-														.val(),
-												fechaInicio : $(
-														"#datepicker")
-														.val(),
-												fechaFinal : $(
-														"#datepicker2")
-														.val(),
-												descripcion: $("#descripcion")
-														.val(),
-												estado : $("#estado")
-														.val(),
-												
-												idProyecto :'1'
+										$.post('/agregarItem/',
+														{
+															/* se indican los parametros*/
+															nombreItem : $(
+																	"#nombreItem")
+																	.val(),
+															prioridad : $(
+																	"#prioridad")
+																	.val(),
+															costo : $(
+																	"#costo")
+																	.val(),
+															complejidad : $(
+																	"#complejidad")
+																	.val(),
+															fechaInicio : $(
+																	"#datepicker")
+																	.val(),
+															fechaFinal : $(
+																	"#datepicker2")
+																	.val(),
+															descripcion : $(
+																	"#descripcion")
+																	.val(),
+															estado : $(
+																	"#estado")
+																	.val(),
+															tipoItemId : $("#tipoItemIdComboBox")
+																			.val(),
+															idFase : $("#idFase")
+																	.val(),
+															atributos: jsonizarAtributos()
+																
 														},
 														function(data, status) {
 															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
@@ -259,7 +545,7 @@
 																/* se indica que no hubieron errores */
 															} else {
 																$(
-																		"#dialogo-datos-fase")
+																		"#dialogo-datos-item")
 																		.dialog(
 																				"close");
 																mostrarMensaje(
@@ -276,35 +562,47 @@
 
 									/* si el dato se modifica se llama a la url para modificar*/
 								} else if (bandera == 2) {
-									if (control(false) == 1) {
+									if (control(false) == 1 | controlTI()==1) {
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
 
 										/* se indica la url */
-										$
-												.post(
-														'/modificarFase/',
+										$.post('/modificarItem/',
 														{
-													idFase:$(
-															"#idFase")
-															.val(),
-													nombreFase : $(
-															"#nombreFase")
-															.val(),
-													fechaInicio : $(
-															"#datepicker")
-															.val(),
-													fechaFinal : $(
-															"#datepicker2")
-															.val(),
-													descripcion: $("#descripcion")
-															.val(),
-													estado : $("#estado")
-															.val(),
-													idProyecto : $(
-															"#idProyecto")
-															.val()
+											idItem:$(
+												"#idItem")
+												.val(),
+											nombreItem : $(
+												"#nombreItem")
+												.val(),
+											prioridad : $(
+													"#prioridad")
+													.val(),
+											costo : $(
+													"#costo")
+													.val(),
+											complejidad : $(
+													"#complejidad")
+													.val(),
+											fechaInicio : $(
+													"#datepicker")
+													.val(),
+											fechaFinal : $(
+													"#datepicker2")
+													.val(),
+											descripcion : $(
+													"#descripcion")
+													.val(),
+											estado : $(
+													"#estado")
+													.val(),
+											idFase : $(
+													"#idFase")
+													.val(),
+											esReversion : '0',
+											atributos:jsonizarAtributos()
+												
 														},
 														function(data, status) {
 
@@ -317,7 +615,7 @@
 																						.substring(2));
 															} else {
 																$(
-																		"#dialogo-datos-fase")
+																		"#dialogo-datos-item")
 																		.dialog(
 																				"close");
 																mostrarMensaje(
@@ -331,7 +629,78 @@
 									}
 								} else if (bandera == 3) {/*consultar*/
 									$(this).dialog("close");
-								}
+								}else if (bandera == 4) {
+									var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+									rowdata = $('#listaItems').getRowData(row);
+									if (control(false) == 1 | controlTI()==1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									}else if($("#versionComboBox").val()==rowdata.version){
+										mostrarMensaje("Atencion",
+										"No se puede revertir un item a la misma version actual: version   " + rowdata.version);
+									} else {
+
+										/* se indica la url */
+										$.post('/modificarItem/',
+														{
+															idItem:rowdata.idItem,
+															nombreItem : $(
+																	"#nombreItem")
+																	.val(),
+															prioridad : $(
+																	"#prioridad")
+																	.val(),
+															costo : $(
+																	"#costo")
+																	.val(),
+															complejidad : $(
+																	"#complejidad")
+																	.val(),
+															fechaInicio : $(
+																	"#datepicker")
+																	.val(),
+															fechaFinal : $(
+																	"#datepicker2")
+																	.val(),
+															descripcion : $(
+																	"#descripcion")
+																	.val(),
+															estado : $(
+																	"#estado")
+																	.val(),
+															tipoItemId : rowdata.tipoItem_id,
+															idFase : rowdata.idFase,
+															esReversion : 1,
+															atributos: jsonizarAtributos()
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"No se ha podido revertir el item:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-datos-item")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Se reversiono    el item "+
+																		$(
+																		"#nombreItem").val() + "a la version "+ 
+																		$(
+																		"#versionComboBox").val());
+															}
+															$('#listaItems')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} 
 							},
 							"Cancelar" : function() {
 								$(this).dialog("close");
@@ -347,43 +716,150 @@
 			placeholder : " "
 		});
 	}*/
-	function cargarForm(rowdata, row) {
+	function cargarForm(rowdata, row, version) {
 		rowdata = $('#listaItems').getRowData(row);
-		$("#idFase").val(rowdata.idFase);
-		$("#nombreFase").val(rowdata.nombreFase);
-		$("#datepicker").val(rowdata.fechaInicio);
-		$("#datepicker2").val(rowdata.fechaFinalizacion);
-		$("#descripcion").val(rowdata.descripcion);
-		$("#estado").val(rowdata.estado);
-		$("#idProyecto").val(rowdata.idProyecto);
 		
-
-	}
-
-	function setCamposDisabled(habilitar) {
+		if(version==0 || version==rowdata.version){ //cuando es 0 le pide la version actal nada mas, es decir, la que esta en jqgrid
+			$("#idItem").val(rowdata.idItem);
+			$("#nombreItem").val(rowdata.nombreItem);
+			$("#costo").val(rowdata.costo);
+			$("#complejidad").val(rowdata.complejidad);
+			$("#prioridad").val(rowdata.prioridad);
+			$("#datepicker").val(rowdata.fechaInicio);
+			$("#datepicker2").val(rowdata.fechaFinalizacion);
+			$("#descripcion").val(rowdata.descripcion);
+			$("#estado").val(rowdata.estado);
+			$("#idFase").val(rowdata.idFase);
 			
-		$("#idFase").attr('disabled', habilitar);
-		$("#nombreFase").attr('disabled', habilitar);
+			$('#atributosTipodeItem').empty();
+			getJSONListarAtributos(rowdata.tipoItem_id);
+			
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version);
+		}else{
+			//pedir datos de la verison
+			//alert("entro")
+			$.getJSON("http://localhost:5000/listarDatosItemVersion/", {
+				idItem : rowdata.idItem,
+				version : version
+			}, function(atribs) {
+				$("#idItem").val(atribs.idItem);
+				$("#nombreItem").val(atribs.nombreItem);
+				$("#costo").val(atribs.costo);
+				$("#complejidad").val(atribs.complejidad);
+				$("#prioridad").val(atribs.prioridad);
+				$("#datepicker").val(atribs.fechaInicio);
+				$("#datepicker2").val(atribs.fechaFinalizacion);
+				$("#descripcion").val(atribs.descripcion);
+				$("#estado").val(atribs.estado);
+				$("#idFase").val(atribs.idFase);
+				
+				
+			});
+			$('#atributosTipodeItem').empty();
+			getJSONListarAtributos(rowdata.tipoItem_id);
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version);
+		}
+		
+		
+		
+		
+		
+		//alert("laall"+$('#input_fecha').val())
+	}
+	
+	
+	function cargarInputAtributos(idTipoItem,idItem,version){
+		$.getJSON("http://localhost:5000/listarAtributosResultado/", {
+			idFase : retornaValorComboBoxFases(),
+			idTipoItem : idTipoItem,
+			idItem : idItem,
+			version : version
+		}, function(atribs) {
+			$.each(atribs, function(index, atrib) { //val,text
+				$("#input_"+atrib["nombreInput"]).val(atrib["valor"]);
+				//alert($("#input_"+atrib["nombreAtributo"]).val())
+			});
+		});
+		
+	}
+	function setCamposDisabled(habilitar) {
+		$("#idItem").attr('disabled', habilitar);
+		$("#nombreItem").attr('disabled', habilitar);
+		$("#costo").attr('disabled', habilitar);
+		$("#versionComboBox").attr('disabled', false);
+		$("#complejidad").attr('disabled', habilitar);
+		$("#prioridad").attr('disabled', habilitar);
 		$("#datepicker").attr('disabled', habilitar);
 		$("#datepicker2").attr('disabled', habilitar);
 		$("#descripcion").attr('disabled', habilitar);
 		$("#estado").attr('disabled', habilitar);
-		$("#idProyecto").attr('disabled', habilitar);
+		$("#idFase").attr('disabled', habilitar);
+		if(bandera==1){
+			$('#tipoItemIdComboBox').attr('disabled', false);
+		}else{
+			$('#tipoItemIdComboBox').attr('disabled', true);
+		}
+		//childs=$('#atributosTipodeItem').toArray
+		//$('#atributosTipodeItem').find("input[name^='input_']").css('border-color', 'red');
+		
+		/*for (a in childs){
+			alert(a)
+		}*/
+		//$('#fieldsetTipoItem').refresh()
+		
+		//alert("hola")
+		alert(window.atributosTI)
+		
+		/*$('#fieldsetTipoItem').find('.text').each(function(){
+		    jQuery(this).attr('disabled', habilitar);
+		    alert(jQuery(this).val())
+		    
+		});*/
+		if(atributosTI!=null){
+			alert("entro al for")
+			for(var i=0; i<atributosTI.length;i++){
+				//alert("#input_"+atributosTI[i]["nombreAtributo"])
+				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
+			}
+			
+		}
+		
 	}
 
-	function control(esNuevo) {
-		$("#nombreFase").css('border-color', 'skyblue');
+	function setearFormularioSkyBlue(){
+		$("#idItem").css('border-color', 'skyblue');
+		$("#nombreItem").css('border-color', 'skyblue');
+		$("#costo").css('border-color', 'skyblue');
+		$("#complejidad").css('border-color', 'skyblue');
+		$("#prioridad").css('border-color', 'skyblue');
 		$("#datepicker").css('border-color', 'skyblue');
 		$("#datepicker2").css('border-color', 'skyblue');
 		$("#descripcion").css('border-color', 'skyblue');
 		$("#estado").css('border-color', 'skyblue');
+		$("#idFase").css('border-color', 'skyblue');
+		if(atributosTI!=null){
+			for(var i=0; i<atributosTI.length;i++){
+				$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'skyblue');
+			}
+			
+		}
+	}
+	function control(esNuevo) {
+		setearFormularioSkyBlue();
 		
 		var error = 0
 		var len;
 
-		len = $("#nombreFase").val().trim().length;
+		len = $("#nombreItem").val().trim().length;
 		if (len > 20 || len <= 0) {
-			$("#nombreFase").css('border-color', 'red');
+			$("#nombreItem").css('border-color', 'red');
+			error = 1;
+		}
+		
+
+		len = $("#costo").val().trim().length;
+		if (len <= 0) {
+			$("#costo").css('border-color', 'red');
 			error = 1;
 		}
 
@@ -399,7 +875,7 @@
 			$("#datepicker").css('border-color', 'red');
 			error = 1;
 		}
-		
+
 		len = document.getElementById("datepicker2").value.trim().length;
 		//len=$("#observacion").val().trim().length;
 		if (len <= 0) {
@@ -409,48 +885,84 @@
 		return error;
 	}
 
-	
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
-		bandera = 1; 
+		
+		if(retornaValorComboBoxFases()==0){
+			mostrarMensaje("Atencion", "Se debe seleccionar una fase para agregar un item")
+			return;
+		}
+		bandera = 1;
+		$("#versionDiv").hide()
 		/* se vacian los elementos HTML de captura de datos */
-		$("#idFase").val("");
-		$("#nombreFase").val("");
+		$("#idItem").val("");
+		$("#nombreItem").val("");
+		$("#costo").val("");
+		
+		$("#prioridad").val("");
 		$("#datepicker").val("");
 		$("#datepicker2").val("");
 		$("#descripcion").val("");
-		$("#estado").val("");
-		$("#idProyecto").val("");
+		$("#estado").val("activo");
+		$("#idFase").val(retornaValorComboBoxFases());
+		
+		
+		
+		$('#atributosTipodeItem').empty();
+
+		cargarTipoItemEnComboBox(retornaValorComboBoxFases());
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabled(false);
+		setearFormularioSkyBlue();
 		//$.enmascarar();
-
-		$("#dialogo-datos-fase").dialog("open");
+		$("#dialogo-datos-item").dialog("open");
+		
 	}
 
 	/* funcion para llamar al formulario para la modificación de datos */
 	function modificar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 2;
+		if(retornaValorComboBoxFases()==0){
+			mostrarMensaje("Atencion", "Se debe seleccionar una fase para modificar un item")
+			return;
+		}
+		//$('#versionComboBox').hide();
+		$("#versionDiv").hide();
 		/* se comprueba que hay un dato seleccionado para modificar */
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
 			return;
 		}
-		var rowdata;
+		
+		var rowdata=$('#listaItems').getRowData(row);
+		if(rowdata.estado!='activo')
+		{
+			mostrarMensaje("Atencion", "Solo puede modificarse Item en estado: activo.")
+			return;
+		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		cargarForm(rowdata, row);
+		//$('#atributosTipodeItem').empty();
+		cargarForm(rowdata, row, 0);
 		/*se habilita la edicion*/
 		setCamposDisabled(false);
+		setearFormularioSkyBlue();
+		
 		//$.enmascarar();
 		/* se llama al dialogo para modificar los datos */
-		$("#dialogo-datos-fase").dialog("open");
+		$("#dialogo-datos-item").dialog("open");
 	}
-
+	
 	function consultar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
+		if(retornaValorComboBoxFases()==0){
+			mostrarMensaje("Atencion", "Se debe seleccionar una fase para consultar un item")
+			return;
+		}
+		//$('#versionComboBox').show();
+		$("#versionDiv").hide()
 		/* se comprueba que hay un dato seleccionado para consultar */
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		if (row == null) {
@@ -459,14 +971,216 @@
 		}
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		cargarForm(rowdata, row);
+		cargarForm(rowdata, row, 0);
+		/*se inhabilita la edicion*/
+		//alert(window.atributosTI)
+		setCamposDisabled(true);
+		
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-datos-item").dialog("open");
+	}
+	function reversionar() {
+		/* se indica que el dato no es nuevo */
+		bandera = 4;
+		/* se comprueba que hay un dato seleccionado para consultar */
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila del item a reversionar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		
+		cargarComboBoxVersiones(row);
+		$('#atributosTipodeItem').empty();
+		cargarForm(rowdata, row, $('#versionComboBox').val());
+		$('#versionComboBox').change(function() {
+			//$('#atributosTipodeItem').empty();
+			cargarForm(rowdata, row, $('#versionComboBox').val());
+		});
+		
+		
+		
 		/*se inhabilita la edicion*/
 		setCamposDisabled(true);
+		
+		$("#versionDiv").show();
+		$('#versionComboBox').show();
 		/* se llama al dialogo para modificar los datos */
-		$("#dialogo-datos-fase").dialog("open");
+		
+		$("#dialogo-datos-item").dialog("open");
+	}
+	
+	function aprobarItem(){
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a aprobar");
+			return;
+		}
+		rowdata = $('#listaItems').getRowData(row);
+		
+		if(rowdata.estado=="activo"){
+			titulo="Atencion"
+			mensaje="No se puede aprobarItem en estado activo, primero debe pasar al estado \"Pendiente\""
+			mostrarMensaje(titulo, mensaje)
+			return;
+		}else if(rowdata.estado!="pendiente"){
+			titulo="Atencion"
+			mensaje="No se puede aprobarItem en estado "+ rowdata.estado
+			mostrarMensaje(titulo, mensaje)
+			return;
+		}else{
+			titulo="Atencion"
+			mensaje="Esta seguro que desea aprobar el item "+ rowdata.nombreItem + "?"
+			accion="aprobar"
+		}
+		
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					postCambiarEstadoItem(accion);
+					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
+				}
+			}
+		});
+	}
+	function setPendiente(){
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a pasar de estado activo a pendiente");
+			return;
+		}
+		rowdata = $('#listaItems').getRowData(row);
+		
+		if(rowdata.estado!="activo"){
+			titulo="Atencion"
+			mensaje="No se puede setear a Pendiente un item en estado "+ rowdata.estado
+			mostrarMensaje(titulo, mensaje)
+			return;
+		}else{
+			titulo="Atencion"
+			mensaje="Esta seguro que desea setear a pendiente el estado del item "+ rowdata.nombreItem + "?"
+			accion="pendiente"
+		}
+		
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					postCambiarEstadoItem(accion);
+					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
+				}
+			}
+		});
+	}
+	function eliminarRevivir(){
+		
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a eliminar");
+			return;
+		}
+		rowdata = $('#listaItems').getRowData(row);
+		
+		if(rowdata.estado=="inactivo"){
+			titulo="Atencion"
+			mensaje="Esta seguro que desea revivir el item "+ rowdata.nombreItem + "?"
+			accion="revivir"
+		}else{
+			titulo="Atencion"
+			mensaje="Esta seguro que desea eliminar el item "+ rowdata.nombreItem + "?"
+			accion="eliminar"
+		}
+		
+		
+		
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					postCambiarEstadoItem(accion);
+					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
+				}
+			}
+		});
+	}
+	function postCambiarEstadoItem(a){
+		
+		$.post('/eliminarRevivirAprobarItem/',
+				{
+					idItem : rowdata.idItem,
+					idFase: rowdata.idFase,
+					accion: a
+						
+				},
+				function(data, status) {
+					/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+					/* si hay error se muestra el mensaje*/
+					if (data.substring(
+							0, 1) == 't') {
+						mostrarMensaje(
+								"Error",
+								data.substring(2));
+						/* se indica que no hubieron errores */
+					} else {
+						$("#dialogo-datos-item")
+								.dialog(
+										"close");
+						mostrarMensaje(
+								"Exito",
+								data
+										.substring(2));
+					}
+					/* se indicar la recarga de la tabla */
+					$('#listaItems')
+							.trigger(
+									"reloadGrid");
+				});
+		
+		
+	}
+	function cargarComboBoxVersiones(row){
+		rowdata=$('#listaItems').getRowData(row);
+		version=rowdata.version
+		var select = $('#versionComboBox');
+		var options = select.prop('options');
+		
+		$('option', select).remove();
+        //alert(version)
+		
+		for (var i=0; i<version-1; i++){
+			aux=i+1
+			options[options.length] = new Option(
+					aux, aux);
+		}
+		options[options.length] = new Option(
+				version + " (version actual) ", version);
+        select.val(version)
+        
+		
 	}
 	/* funcion que maneja la accion de desactivar un cliente*/
-	
+
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);
 		$('#msgbox').dialog({
@@ -479,33 +1193,536 @@
 			}
 		});
 	}
+	function mostrarMensajeEliminar(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			buttons : {
+				"Aceptar" : function() {
+					$(this).dialog("close");
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+				}
+			}
+			
+		});
+	}
+
+	
+	function cargarTipoItemEnComboBox(idFaseA) {
+
+		$.getJSON("http://localhost:5000/listarTipoItemComboBox", {
+			idFase : idFaseA
+		}, function(atribs) {
+
+			var select = $('#tipoItemIdComboBox');
+			var options = select.prop('options');
+			//alert ('hola')
+
+			$('option', select).remove();
+
+			var index = 0
+			bandera = false
+			options[options.length] = new Option("Seleccione Tipo Item...", 0);
+			$.each(atribs, function(index, atrib) { //val,text
+				index = index + 1;
+				options[options.length] = new Option(index + " : "
+						+ atrib.nombreTipoItem, atrib.idTipoItem);
+				bandera = true
+			});
+
+			//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
+			/*var myPostData = $('#tipoItemIdComboBox').jqGrid("getGridParam",
+					"postData");
+			delete myPostData.idFase;
+			$('#listaTipoItem').setGridParam({
+				postData : {
+					search: true,
+					idFase : retornaValorComboBoxFases()
+				}
+			});
+
+			$('#listaTipoItem').trigger("reloadGrid");*/
+
+		});
+
+	}
+	
+	
+	function cargarFasesEnComboBox() {
+
+		$.getJSON("http://localhost:5000/listarFasesComboBox",
+				function(atribs) {
+
+					var select = $('#comboBoxFases');
+					var options = select.prop('options');
+					//alert ('hola')
+
+					$('option', select).remove();
+
+					var index = 0
+					bandera = false
+					options[options.length] = new Option("Seleccione Fase...",
+							0);
+					$.each(atribs, function(index, atrib) { //val,text
+						index = index + 1;
+						options[options.length] = new Option(index + " : "
+								+ atrib.nombreFase, atrib.idFase);
+						bandera = true
+					});
+
+					$('#listaItems').trigger("reloadGrid");
+					/*//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
+					var myPostData = $('#listaItems').jqGrid("getGridParam",
+							"postData");
+					delete myPostData.idFase;
+					$('#listaItems').setGridParam({
+						postData : {
+							search: true,
+							idFase : retornaValorComboBoxFases()
+						}
+					});*/
+
+				});
+
+	}
+	function retornaValorComboBoxFases() {
+
+		var r = $("#comboBoxFases").val();
+		//alert('valor combo box fases' + r)
+		return r;
+	}
 </script>
 <div id='msgbox' title='' style='display: none'></div>
 
 {% endblock %} {% block body %}
+<td><label>Fase:</label><select id="comboBoxFases"
+	style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+	class="ui-widget-content ui-corner-all">
+		<option value="0">(Ninguna)</option>
 
+</select></td>
 <tr>
 	<td><div>
 			<table id="listaItems"></table>
 			<div id="pager"></div>
 		</div></td>
 	<td><div>
-			<br></br>
-			<input id="btAgregar" type="button" name="nuevo" value="Nueva Fase" onclick='agregar()' />
-			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
-				value="Modificar" /> 
-			<input id="btConsultar" type="button" name="consultar"
-				value="Consultar" onclick='consultar()' />
-			<br></br>
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nuevo Item" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> <input id="btConsultar" type="button"
+				name="consultar" value="Consultar" onclick='consultar()' /> 
+				<input id="btReversionar" type="button" name="nuevo"
+				value="Reversionar" onclick='reversionar()' />
+				<input id="btEliminar" type="button" name="nuevo"
+				value="Eliminar/Revivir" onclick='eliminarRevivir()' />
+				<input id="btRelacionar" type="button" name="nuevo"
+				value="Relacionar/Desrelacionar" onclick='abrirDialogoRelacionar()' />
+				<input id="btArchivos" type="button" name="nuevo"
+				value="Archivos" onclick='abrirDialogoArchivos()' />
+				<input id="btPendiente" type="button" name="nuevo"
+				value="Pendiente" onclick='setPendiente()' />
+				<br></br>
+				<input id="btAprobar" type="button" name="nuevo"
+				value="Aprobar" onclick='aprobarItem()' /><br></br>
 			<script>
-			$("#btAgregar").button();
-			$("#btModificar").button();
-			$("#btConsultar").button();
+				$("#btAgregar").button();
+				$("#btModificar").button();
+				$("#btConsultar").button();
+				$("#btReversionar").button();
+				$("#btEliminar").button();
+				$("#btRelacionar").button();
+				$("#btArchivos").button();
 			</script>
 		</div></td>
-		
-</tr>
 
+</tr>
+<script>
+	function retornaValorenSesion() {
+		//alert('valor en sesion' + valorenSesion)
+		return valorenSesion;
+	}
+
+
+	if(retornaValorenSesion()!=0){
+		cargarFasesEnComboBox();
+	}
+	$('#comboBoxFases').change(function() {
+		$("#comboBoxFases option[value='0']").remove();
+		var myPostData = $('#listaItems').jqGrid("getGridParam", "postData");
+		delete myPostData.idF;
+		delete myPostData.idP;
+		$('#listaItems').setGridParam({
+			postData : {
+				idF : retornaValorComboBoxFases(),
+				idP : retornaValorenSesion()
+			}
+		});
+		$('#listaItems').trigger("reloadGrid");
+	});
+
+	op = $('#prioridad').prop('options')
+	for ( var i = 1; i < 10; i++) {
+		op[op.length] = new Option(String(i), i);
+	}
+	
+	op = $('#complejidad').prop('options')
+	for ( var i = 0; i < 100; i++) {
+		op[op.length] = new Option(String(i), i);
+	}
+
+	function getJSONListarAtributos(idTipoItem){
+		$.getJSON("http://localhost:5000/listarAtributo/", {
+			idFase : retornaValorComboBoxFases(),
+			idTipoItem : idTipoItem
+		}, function(atribs) {
+			//window.atributosTI=atribs;
+			window['atributosTI'] = atribs; 
+			submitValues("#", atribs);
+		});
+	}
+	
+	$('#tipoItemIdComboBox').change(function() {
+		$("#tipoItemIdComboBox option[value='0']").remove();
+		$('#atributosTipodeItem').empty();
+		 getJSONListarAtributos($('#tipoItemIdComboBox').val())
+
+	});
+	
+	function retornaItem_seleccionado_para_consultar_relacion(){
+		var row_g= $('#listaItems').jqGrid('getGridParam', 'selrow');
+		rowdata_g = $('#listaItems').getRowData(row_g);
+		return rowdata_g.idItem
+	}
+	
+	
+	var gridRelaciones = jQuery("#listaRelaciones").jqGrid(
+			{
+				url : 'http://localhost:5000/listarRelaciones/',
+				datatype : "json",
+				width: 300,
+				mtype : "get",
+				postData : {
+					idP : retornaValorenSesion(),
+					idF : retornaValorComboBoxFases(),
+					idIt: retornaItem_seleccionado_para_consultar_relacion()
+				},
+				//aca se pone el proyecto el cual selecciono 
+				//y la fase al cual pertenece el proyecto
+				colNames : [ 'ID Relacion', 'idItemRelacionado','Nombre Item ', 'Estado','Relacion'],
+				colModel : [ {
+					name : 'idRelacion',
+					index : 'idRelacion',
+					hidden : true
+				},{
+					name : 'idItemRelacionado',
+					index : 'idItemRelacionado',
+					hidden : true
+				},
+				 {
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 120
+				},{
+					name : 'estado',
+					index : 'estado',
+					width : 120
+				},{
+					name : 'relacion',
+					index : 'relacion',
+					align: 'center'
+				}
+				],
+				sortname : 'relacion',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerRelaciones',
+				caption : "Relacion",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idRelacion"
+				}
+
+			});
+function abrirDialogoRelacionar(){
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	
+	if(row == null){
+		mostrarMensaje("Atencion", "Seleccione item a relacionar/desrelacionar")
+		return;
+	}
+	
+	rowdata= $('#listaItems').getRowData(row);
+	//alert(rowdata.nombreItem)
+	$("#nombreItemDialogo").val(rowdata.nombreItem)
+	reloadListaRelaciones()
+	$("#dialogo-relacionarManager").dialog("open");
+}
+
+function reloadListaRelaciones(){
+	var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
+	rowdata = $('#listaItems').getRowData(row);
+	
+	var myPostData = $('#listaRelaciones').jqGrid("getGridParam",
+	"postData");
+	delete myPostData.idP;
+	delete myPostData.idF;
+	delete myPostData.idIt;
+	$('#listaRelaciones').setGridParam({
+		postData : {
+			idP : retornaValorenSesion(),
+			idF : retornaValorComboBoxFases(),
+			idIt: rowdata.idItem
+		}
+	});
+
+$('#listaRelaciones').trigger("reloadGrid")
+}
+function abrirMiniDialogoRelacion(){
+	
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	rowdata = $('#listaItems').getRowData(row);
+	//aca se carga el combobox de los items con los cuales no esta relacionado aun
+	
+	$('#nombreItemMiniDialogo').val("F"+rowdata.idFase+"."+rowdata.nombreItem)
+	var select = $('#comboItemsMiniDialogo');
+	var options = select.prop('options');
+	
+	$('option', select).remove();
+    //alert(version)
+	
+    options[options.length] = new Option(
+			"Seleccione Item Padre", 0);
+	
+	
+	$.getJSON("http://localhost:5000/itemsRelacionarMiniDialogoComboBox/", {
+		idItem : rowdata.idItem,
+		idFase: rowdata.idFase
+	}, function(atribs) {
+		$.each(atribs, function(index, atrib) { //val,text
+			//$("#input_"+atrib["nombreInput"]).val(atrib["valor"]);
+			//alert($("#input_"+atrib["nombreAtributo"]).val())
+			options[options.length] = new Option(
+					atrib["nombreItem"], atrib["idItem"]);
+		});
+	});
+	select.val(0)
+	
+	$("#minidialogo-relacion").dialog("open")
+}
+
+$("#dialogo-relacionarManager")
+.dialog(
+		{
+			autoOpen : false,
+			modal : true,
+			resizable : false,
+			width : 350,
+			buttons : {
+				/* funcion asociado al boton aceptar */
+				"Agregar" : function() {
+					
+					var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
+					rowdata= $('#listaItems').getRowData(row);
+					
+					if(rowdata.estado!='activo'){
+						mostrarMensaje("Atencion", "El item tiene estado "+ rowdata.estado+", solo pueden relacionarse items con estado \"activo\"")
+						return;
+					}
+					abrirMiniDialogoRelacion();
+					
+				},"Eliminar" : function() {
+					
+					var row= $('#listaRelaciones').jqGrid('getGridParam', 'selrow');
+					if(row==null){
+						mostrarMensaje("Atencion", "Seleccione relacion a eliminar")
+						return;
+					}
+					rowdata= $('#listaRelaciones').getRowData(row);
+					//se llama a eliminar Relaciona
+					eliminarRelacion(rowdata.idRelacion)
+				},
+				"Salir" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+		
+function eliminarRelacion(idRelacion){
+	$.post('/eliminarRelacion/',
+			{
+				idRelacion: idRelacion
+			},
+			function(data, status) {
+				/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+				/* si hay error se muestra el mensaje*/
+				if (data.substring(0, 1) == 't') {
+					mostrarMensaje(
+							"Error",
+							data.substring(2));
+					/* se indica que no hubieron errores */
+				} else {
+					$("#minidialogo-relacion")
+							.dialog(
+									"close");
+					/*mostrarMensaje(
+							"Exito",
+							data
+									.substring(2));*/
+					$('#listaRelaciones')
+					.trigger(
+							"reloadGrid");
+				}
+				/* se indicar la recarga de la tabla */
+				
+			});
+
+}
+$("#minidialogo-relacion")
+.dialog(
+		{
+			autoOpen : false,
+			modal : true,
+			resizable : false,
+			width : 550,
+			buttons : {
+				/* funcion asociado al boton aceptar */
+				"Crear Relacion" : function() {
+					var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
+					rowdata= $('#listaItems').getRowData(row);
+					
+					if($("#comboItemsMiniDialogo").val()==0){
+						mostrarMensaje("Atencion","Debe seleccionar un item padre")
+					}else{
+					$.post('/agregarRelacion/',
+							{
+								padre_id: $("#comboItemsMiniDialogo").val(),
+								hijo_id: rowdata.idItem,
+								id_Fase: rowdata.idFase
+							},
+							function(data, status) {
+								/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+								/* si hay error se muestra el mensaje*/
+								if (data.substring(
+										0, 1) == 't') {
+									mostrarMensaje(
+											"Error",
+											"Los datos no se han podido guardar:\n"
+													+ data
+															.substring(2));
+									/* se indica que no hubieron errores */
+								} else {
+									$(
+											"#minidialogo-relacion")
+											.dialog(
+													"close");
+									/*mostrarMensaje(
+											"Exito",
+											data
+													.substring(2));*/
+									$('#listaRelaciones')
+									.trigger(
+											"reloadGrid");
+								}
+								/* se indicar la recarga de la tabla */
+								
+							});}
+				
+				},
+				"Cancelar" : function() {
+					$(this).dialog("close");
+				}
+				
+			}
+		});
+
+$("#dialogo-archivos")
+.dialog(
+		{
+			autoOpen : false,
+			modal : true,
+			resizable : false,
+			width : 550,
+			buttons : {
+				/* funcion asociado al boton aceptar */
+				
+				"Salir" : function() {
+					$(this).dialog("close");
+				}
+				
+			}
+		});
+		
+function abrirDialogoArchivos(){
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	if(row == null){
+		mostrarMensaje("Atencion", "Seleccione item a administrar Archivos")
+		return;
+	}
+	rowdata= $('#listaItems').getRowData(row);
+	
+	$("#dialogo-archivos")
+	.dialog("open")
+}
+function ajaxFileUpload()
+{
+/*		$("#loading")
+	.ajaxStart(function(){
+		$(this).show();
+	})
+	.ajaxComplete(function(){
+		$(this).hide();
+	});*/
+
+	$.ajaxFileUpload
+	(
+		{
+			url:'{{url_for('adjuntarArchivo')}}',
+			secureuri:false,
+			fileElementId:'fileToUpload',
+			dataType: 'json',
+			beforeSend:function()
+			{
+				$("#loading").show();
+			},
+			complete:function()
+			{
+				$("#loading").hide();
+			},				
+			success: function (data, status)
+			{
+				if(typeof(data.error) != 'undefined')
+				{
+					if(data.error != '')
+					{
+						alert(data.error);
+					}else
+					{
+						alert(data.msg);
+					}
+				}
+			},
+			error: function (data, status, e)
+			{
+				alert(e);
+			}
+		}
+	)
+	
+	return false;
+
+}
+</script>
 
 {% endblock %}
 </html>

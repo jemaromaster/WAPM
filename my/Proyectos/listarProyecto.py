@@ -66,7 +66,7 @@ class ListarProyectosCombo(flask.views.MethodView):
 class ListarProyectosComboBase(flask.views.MethodView):
     @login_required
     def get(self):
-        lp=sesion.query(Proyecto).join(Proyecto.usuariosMiembros).filter(Usuario.id==flask.session['idUsuario'])
+        lp=sesion.query(Proyecto).join(Proyecto.usuariosMiembros).filter(Proyecto.estado=="activo").filter(Usuario.id==flask.session['idUsuario'])
         jsonP='['
         for proyecto in lp:
             jsonP=jsonP+"{\"idProyecto\":\""+str(proyecto.idProyecto)+"\",\"nombreProyecto\":\""+proyecto.nombreProyecto+"\"},"

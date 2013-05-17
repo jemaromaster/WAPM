@@ -24,6 +24,8 @@ def initDB():
     from rolProyectoModelo import RolProyecto
     from tipoItemModelo import TipoItem
     from tipoPrimarioModelo import TipoPrimario
+    from itemModelo import Item, Relacion
+    from instanciaAtributos import InstanciaTipoItem,InstanciaFecha, InstanciaCadena, InstanciaNumerico, InstanciaEntero
     from atributosModelo import Atributos
-
+    from historialModelo import HistorialItem    
     Base.metadata.create_all(engine)
