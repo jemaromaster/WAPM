@@ -996,6 +996,7 @@
 		cargarForm(rowdata, row, $('#versionComboBox').val());
 		$('#versionComboBox').change(function() {
 			//$('#atributosTipodeItem').empty();
+			$('#atributosTipodeItem').empty();
 			cargarForm(rowdata, row, $('#versionComboBox').val());
 		});
 		
@@ -1212,7 +1213,7 @@
 	
 	function cargarTipoItemEnComboBox(idFaseA) {
 
-		$.getJSON("/listarTipoItemComboBox", {
+		$.getJSON("/listarTipoItemComboBox/", {
 			idFase : idFaseA
 		}, function(atribs) {
 
@@ -1252,7 +1253,7 @@
 	
 	function cargarFasesEnComboBox() {
 
-		$.getJSON("/listarFasesComboBox",
+		$.getJSON("/listarFasesComboBox/",
 				function(atribs) {
 
 					var select = $('#comboBoxFases');
@@ -1321,11 +1322,12 @@
 				value="Eliminar/Revivir" onclick='eliminarRevivir()' />
 				<input id="btRelacionar" type="button" name="nuevo"
 				value="Relacionar/Desrelacionar" onclick='abrirDialogoRelacionar()' />
+				<br></br>
 				<input id="btArchivos" type="button" name="nuevo"
 				value="Archivos" onclick='abrirDialogoArchivos()' />
 				<input id="btPendiente" type="button" name="nuevo"
 				value="Pendiente" onclick='setPendiente()' />
-				<br></br>
+
 				<input id="btAprobar" type="button" name="nuevo"
 				value="Aprobar" onclick='aprobarItem()' /><br></br>
 			<script>
@@ -1336,6 +1338,8 @@
 				$("#btEliminar").button();
 				$("#btRelacionar").button();
 				$("#btArchivos").button();
+				$("#btPendiente").button();
+				$("#btAprobar").button();
 			</script>
 		</div></td>
 
@@ -1401,7 +1405,7 @@
 	
 	var gridRelaciones = jQuery("#listaRelaciones").jqGrid(
 			{
-				url : 'http://localhost:5000/listarRelaciones/',
+				url : '/listarRelaciones/',
 				datatype : "json",
 				width: 300,
 				mtype : "get",
@@ -1463,6 +1467,13 @@ function abrirDialogoRelacionar(){
 	
 	rowdata= $('#listaItems').getRowData(row);
 	//alert(rowdata.nombreItem)
+	if(rowdata.estado=='inactivo'){
+		mostrarMensaje("Atencion", "No se puede relacionar/desrelacionar un item en estado inactivo ")
+		return;
+	}else if(rowdata.estado!='activo'){
+		mostrarMensaje("Atencion", "No se puede relacionar/desrelacionar un item que no este en estado activo ")
+		return;
+	}
 	$("#nombreItemDialogo").val(rowdata.nombreItem)
 	reloadListaRelaciones()
 	$("#dialogo-relacionarManager").dialog("open");
