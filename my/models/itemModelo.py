@@ -38,6 +38,7 @@ class Item(Base):
     #MANY TO ONE
     tipoItem=relationship('TipoItem', backref='items')
     tipoItem_id= Column(Integer, ForeignKey('tipo_item.id'))
+    
     estado=Column("estado", String(12))
     descripcion=Column("descripcion", String(50))
     #archivoExterno
@@ -47,8 +48,6 @@ class Item(Base):
     #MANY TO ONE
     autorVersion= relationship('Usuario',backref='item')
     autorVersion_id=Column(Integer, ForeignKey('usuario.id'))
-    
-   
     idFase= Column(Integer, ForeignKey('fase.id'))
     fases= relationship("Fase", backref="items")
     

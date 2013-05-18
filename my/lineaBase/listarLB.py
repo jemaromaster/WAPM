@@ -2,8 +2,7 @@ from utils import login_required
 import flask.views
 from flask import jsonify,json
 from models.bdCreator import Session
-from models.rolProyectoModelo import RolProyecto 
-from models.rolSistemaModelo import RolSistema
+from models.lineaBaseModelo import LineaBase 
 sesion=Session()
 
 
@@ -25,7 +24,7 @@ class Respuesta():
         self.totalRecords=totalRecords
         self.rows=rows
     
-    def jasonizar(self, listaRolProyecto):
+    def jasonizar(self, listaLB):
         """
         modulo que jasoniza la respuesta
         """
@@ -34,8 +33,8 @@ class Respuesta():
         pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
         
         
-        for rol in listaRolProyecto:
-            p=p+"{\"idRol\":\""+str(rol.id)+"\",\"nombre\": \""+rol.nombre+"\",\"descripcion\": \""+rol.descripcion +"\",\"estado\": \""+rol.estado+"\"},"
+        for lb in listaLB:
+            p=p+"{\"idLB\":\""+str(lb.id)+"\",\"descripcion\": \""+lb.descripcion +"\",\"estado\": \""+lb.estado+"\"},"
             # {"nombre":"nombre","idRol":"rol","descripcion":"descripciones"},
         p=p[0:len(p)-1]    
         p=p+"]}"    
@@ -43,7 +42,7 @@ class Respuesta():
         
         return p 
         
-class ListarRolProyecto(flask.views.MethodView):
+class ListarLB(flask.views.MethodView):
     @login_required
     def get(self): 
         #se obtiene los datos de post del server
@@ -65,9 +64,7 @@ class ListarRolProyecto(flask.views.MethodView):
         sord=flask.request.args.get('sord', '')
         
         #se establece el campo de filtro proveniente del server
-        if(sidx=='nombre'):
-            filtrarPor='nombre'
-        elif(sidx=='descripcion'):
+        if sidx=='descripcion':
             filtrarPor='descripcion'
         elif(sidx=='estado'):
             filtrarPor='estado'
@@ -81,14 +78,10 @@ class ListarRolProyecto(flask.views.MethodView):
             i=0
             cantidad=len(vector)
            
-            nombre='%'; descripcion='%'; 
+            descripcion='%'; 
             estado='%'
             while(i<cantidad):
                 field=vector[i]['field']
-                if(field=='nombre'):
-                    nombre=vector[i]['data'] + '%'
-                    i=i+1
-                    continue
                 if field=='descripcion':
                     descripcion=vector[i]['data']+'%'
                     i=i+1
@@ -102,33 +95,27 @@ class ListarRolProyecto(flask.views.MethodView):
                     continue
                 
             
-            listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).\
-                                                    filter(RolProyecto.nombre.like(nombre )&\
-                                                    RolProyecto.descripcion.like(descripcion)&\
-                                                    RolProyecto.estado.like(estado)) \
-                                                    .filter(RolProyecto.idFase==int(idFase)) [desde:hasta] 
+            listaLB=sesion.query(LineaBase).order_by(filtrarPor).\
+                                                    filter(LineaBase.descripcion.like(descripcion)&\
+                                                    LineaBase.estado.like(estado)) \
+                                                    .filter(LineaBase.idFase==int(idFase)) [desde:hasta] 
                                                     
-            total=sesion.query(RolProyecto).order_by(filtrarPor).\
-                                                    filter( \
-                                                    RolProyecto.nombre.like(nombre ) & \
-                                                    RolProyecto.descripcion.like(descripcion) &\
-                                                    RolProyecto.estado.like(estado)) \
-                                                    .filter(RolProyecto.idFase==int(idFase)).count()
+            total=sesion.query(LineaBase).order_by(filtrarPor).\
+                                                    filter(LineaBase.descripcion.like(descripcion)&\
+                                                    LineaBase.estado.like(estado)) \
+                                                    .filter(LineaBase.idFase==int(idFase)).count()
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
-            listaRolProyecto=sesion.query(RolProyecto).order_by(filtrarPor).filter(RolProyecto.idFase==int(idFase))[desde:hasta]
-            total=sesion.query(RolProyecto).order_by(filtrarPor).filter(RolProyecto.idFase==int(idFase)).count()
-        print total 
-        print desde
-        print hasta 
+            listaLB=sesion.query(LineaBase).order_by(filtrarPor).filter(LineaBase.idFase==int(idFase))[desde:hasta]
+            total=sesion.query(LineaBase).order_by(filtrarPor).filter(LineaBase.idFase==int(idFase)).count()
         resto=total%rows
         if resto == 0:
             totalPages=total/rows
         else:
             totalPages=total/rows +1
         r=Respuesta(totalPages,page,total,rows);
-        respuesta=r.jasonizar(listaRolProyecto)
+        respuesta=r.jasonizar(listaLB)
         return respuesta
         
       

@@ -1,6 +1,13 @@
 import flask, flask.views
 from flask import jsonify
 
+from lineaBase.LBManager import LBManager
+from lineaBase.agregarLB import AgregarLB
+from lineaBase.modificarLB import ModificarLB
+from lineaBase.listarLB import ListarLB
+from lineaBase.listarItemsLB import ListarItemBase
+from lineaBase.agregarItem import AgregarItemLB
+from lineaBase.cerrarLB import CerrarLB
 
 from Usuarios.usuarioManager import UsuarioManager
 from Usuarios.agregarUsuario import AgregarUsuario
@@ -297,6 +304,32 @@ app.add_url_rule('/eliminarRelacion/',
 app.add_url_rule('/adjuntarArchivo/',
                  view_func=AdjuntarArchivo.as_view('adjuntarArchivo'),
                  methods=["GET","POST"])
+
+
+
+app.add_url_rule('/LBManager/',
+                 view_func=LBManager.as_view('LBManager'),
+                 methods=["GET","POST"])
+app.add_url_rule('/agregarLB/',
+                 view_func=AgregarLB.as_view('agregarLB'),
+                 methods=["GET","POST"])
+app.add_url_rule('/modificarLB/',
+                 view_func=ModificarLB.as_view('modificarLB'),
+                 methods=["GET","POST"])
+app.add_url_rule('/listarLB/',
+                 view_func=ListarLB.as_view('listarLB'),
+                 methods=["GET","POST"])
+app.add_url_rule('/listarItemBase/',
+                 view_func=ListarItemBase.as_view('listarItemBase'),
+                 methods=["GET","POST"])
+app.add_url_rule('/agregarItemLB/',
+                 view_func=AgregarItemLB.as_view('agregarItemLB'),
+                 methods=["GET","POST"])
+app.add_url_rule('/cerrarLB/',
+                 view_func=CerrarLB.as_view('cerrarLB'),
+                 methods=["GET","POST"])
+
+
 app.debug = True
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
