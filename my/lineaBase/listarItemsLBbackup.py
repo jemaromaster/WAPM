@@ -7,7 +7,6 @@ from datetime import date
 
 from models.itemModelo import Item
 from models.faseModelo import Fase
-from models.lineaBaseModelo import LineaBase
 sesion=Session()
 
 
@@ -35,7 +34,7 @@ class Respuesta():
         """
         p='' 
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
-        pre= pre + str(self.totalRecords) + "\",\"invdata\" : [" 
+        pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
 
         for f in listaItems:
             
@@ -57,15 +56,8 @@ class ListarItemBase(flask.views.MethodView):
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
+        idFase=flask.request.args.get('idFase', '')
         
-        idFase=0
-        if 'idFase' in flask.request.args:
-            idFase=flask.request.args.get('idFase', '')
-        
-        idLB=0
-        if 'idLB' in flask.request.args:
-            idLB=flask.request.args.get('idLB', '')
-            
         #caluclo de paginacion 
         page=long(param1)
         rows=long(param2)
@@ -113,61 +105,34 @@ class ListarItemBase(flask.views.MethodView):
                     i=i+1
                     #field=vector[i]['field']
                     continue
-                
-            if idLB!=0:
-                listaItem=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.nombreItem.like(nombreItem))\
-                                                        .filter(Item.estado.like("bloqueado"))\
-                                                        .join(Item.lb).filter(LineaBase.id==idLB)\
-                                                        [desde:hasta]
-                
-                                                        
-                                                        #.filter(Usuario.username.like(autor))
-                                                        
-                                                        #.filter(Proyecto.projectLeaderId==projectLeaderId)
-                total=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.nombreItem.like(nombreItem))\
-                                                        .filter(Item.estado.like("bloqueado"))\
-                                                        .join(Item.lb).filter(LineaBase.id==idLB)\
-                                                        .count()
+
+            listaItem=sesion.query(Item).order_by(filtrarPor)\
+                                                    .filter(Item.nombreItem.like(nombreItem))\
+                                                    .filter(Item.estado.like("aprobado"))\
+                                                    .filter(Item.idFase==idFase)\
+                                                    [desde:hasta]
             
-            else:
-                listaItem=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.nombreItem.like(nombreItem))\
-                                                        .filter(Item.estado.like("aprobado"))\
-                                                        .filter(Item.idFase==idFase)\
-                                                        [desde:hasta]
-                
-                                                        
-                                                        #.filter(Usuario.username.like(autor))
-                                                        
-                                                        #.filter(Proyecto.projectLeaderId==projectLeaderId)
-                total=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.nombreItem.like(nombreItem))\
-                                                        .filter(Item.estado.like("aprobado"))\
-                                                        .filter(Item.idFase==idFase)\
-                                                        .count()
+                                                    
+                                                    #.filter(Usuario.username.like(autor))
+                                                    
+                                                    #.filter(Proyecto.projectLeaderId==projectLeaderId)
+            total=sesion.query(Item).order_by(filtrarPor)\
+                                                    .filter(Item.nombreItem.like(nombreItem))\
+                                                    .filter(Item.estado.like("aprobado"))\
+                                                    .filter(Item.idFase==idFase)\
+                                                    .count()
             
                 
         else:
-            if idLB!=0:
-                listaItem=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.estado.like("bloqueado"))\
-                                                        .join(Item.lb).filter(LineaBase.id==idLB)\
-                                                        [desde:hasta]
-                total=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.estado.like("bloqueado"))\
-                                                        .join(Item.lb).filter(LineaBase.id==idLB)\
-                                                        .count()
+            #si no hubo filtro entonces se envian los datos de items activos
             
-            else:
-                listaItem=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.idFase==idFase)\
-                                                        .filter(Item.estado=='aprobado')[desde:hasta]
-                                                        #.filter(Proyecto.projectLeaderId==projectLeaderId)
-                total=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.idFase==idFase)\
-                                                        .filter(Item.estado=='aprobado').count()
+             listaItem=sesion.query(Item).order_by(filtrarPor)\
+                                                    .filter(Item.idFase==idFase).\
+                                                    filter(Item.estado=='aprobado')[desde:hasta]
+                                                    #.filter(Proyecto.projectLeaderId==projectLeaderId)
+             total=sesion.query(Item).order_by(filtrarPor)\
+                                                    .filter(Item.idFase==idFase)\
+                                                    .filter(Item.estado=='aprobado').count()
         print total
         print desde 
         print hasta 

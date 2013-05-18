@@ -136,6 +136,10 @@
 			</table>
 		</fieldset>
 	</form>
+	<div id="divItemLB">
+	<table  id="listaItemENLB"></table>
+	<div id="pagerItemLB"></div>
+	</div>
 </div>
 
 <script>
@@ -235,6 +239,89 @@
 		searchOnEnter : false,
 		defaultSearch : "cn"
 	});
+		
+	var gridLB = jQuery("#listaItemENLB").jqGrid(
+			{
+
+				
+				url : 'http://localhost:5000/listarItemBase',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					idLB : '0'
+				},
+				colNames : [ 'ID Item', 'Nombre Item',
+				             'Fecha Inicio', 'Fecha Fin.',
+							'Costo' ],
+				colModel : [ {
+					name : 'idItem',
+					index : 'idItem',
+					hidden : true
+				},
+
+				{
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 150
+				},{
+					name : 'fechaInicio',
+					index : 'fechaInicio',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				}, {
+					name : 'fechaFinalizacion',
+					index : 'fechaFinalizacion',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				},{
+					name : 'costo',
+					index : 'costo',
+					width : 100,search : false
+				}
+
+				],
+				sortname : 'nombreItem',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerItemLB',
+				caption : "Items en la Linea Base",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idItem"
+				}
+
+			}).jqGrid('navGrid', '#pagerItemLB', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
+	});
+	gridLB.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
 
 
 	
@@ -267,7 +354,7 @@
 						autoOpen : false,
 						modal : true,
 						resizable : false,
-						width : 500,
+						width : 'auto',
 						show : {
 							effect : 'fade',
 							duration : 400
@@ -397,10 +484,12 @@
 
 		
 		$("#descripcion").attr('disabled', habilitar);
-		
-
-		//aca se debe cargar los atributos del item en el grid
-		//se deshabilita
+		if(habilitar)//se esconde si habilitar==FALSE 
+			$("#divItemLB").show()
+		else	
+			$("#divItemLB").hide()
+		//aca se debe cargar los atributos del item en el grid 
+		//se deshabilita 
 	}
 
 	function control(esNuevo) {
@@ -500,6 +589,11 @@
 			mostrarMensaje("Error", "Debe seleccionar una fase")
 			return;
 		}
+		
+		
+		
+		
+		
 		/* se indica que el dato no es nuevo */
 		bandera = 3;
 		/* se comprueba que hay un dato seleccionado para consultar */
@@ -512,7 +606,25 @@
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarForm(rowdata, row);
 		/*se inhabilita la edicion*/
+		
+		row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		rowdata = $('#listaLB').getRowData(row);
+		idLBEnviar=rowdata.idLB;
+		
+		var myPostData = $('#listaItemENLB').jqGrid("getGridParam",
+		"postData");
+		delete myPostData.idLB;
+		$('#listaItemENLB').setGridParam({
+			postData : {
+				idLB : rowdata.idLB
+			}
+		});
+		
 		setCamposDisabled(true);
+		$('#listaItemENLB').trigger("reloadGrid");
+
+		
+		
 		/* se llama al dialogo para modificar los datos */
 		
 		$("#dialogo-lb").dialog("open");
