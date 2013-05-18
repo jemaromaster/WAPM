@@ -1,5 +1,6 @@
 from usuarioModelo import Usuario
 from proyectoModelo import Proyecto
+from faseModelo import Fase
 from permisoModelo import Permiso
 from rolSistemaModelo import RolSistema
 from bdCreator import Session
@@ -7,6 +8,7 @@ from tipoPrimarioModelo import TipoPrimario
 import md5
 import random
 from Proyectos.proyectoController import ProyectoControllerClass
+
 def poblar():
     sesion=Session()
     m=md5.new()
@@ -24,23 +26,72 @@ def poblar():
     sesion.commit()
     sesion.close()
 
+def cargarUsuarios(cant_usuario):
+    sesion=Session()
+    
+    for u in range(0,cant_usuarios):
+         nombreUser="user_"+str(u);
+         password=str(md5.new('super').hexdigest());
+         nomb="nombre_"+str(u);
+         ape="ape_"+str(u);
+         correo=nomb+'@wapm.com'
+         ci=random.randint(6000, 100000)
+         tel=random.randint(6000, 100000)
+         
+         user=Usuario(nombreUser,password,nomb,ape,correo,ci
+                  ,tel,'ninguna','true','Brasil'+str(u))
+         
+         sesion.add(user)
+    sesion.commit()
+    sesion.close()
 def cargarProyecto():
      sesion=Session()
-     pc=ProyectoControllerClass()
+     
+     #sesion.query(Proyecto).filter(Proyecto.nombreProyecto.like('Proyecto')).all()
+     sesion.query(Fase).filter(Fase.nombreFase.like("nombreFase_")).all()
      estate=["activo", "inactivo"]
-     for i in range(0,100):
+     for i in range(0,10):
          for j in range(1,10):
-              dia=random.randint(1, 28)
-              mes=random.randint(1, 12)
-              anho=random.randint(1990, 2020)
-              u=Proyecto("Proyecto"+str(i)+"_"+str(j), i, str(mes)+"/"+str(dia)+"/"+str(anho), \
-                   str(mes)+"/"+str(dia)+"/"+str(anho), \
-                   random.randint(1000, 100000),"observacion"+str(random.randint(1990, 2020)), random.randint(1, 12),estate[random.randint(0, 1)])
+              dia1=random.randint(1, 28)
+              mes1=random.randint(1, 12)
+              anho1=random.randint(1990, 1999)
               
-              pc.controlarProyecto(u,i)
+              dia2=random.randint(1, 28)
+              mes2=random.randint(1, 12)
+              anho2=random.randint(2000, 2020)
+              
+              
+              nombreP="Proyecto"+str(i)+"_"+str(j);
+              plId=1
+              fechaIni=str(mes2)+"/"+str(dia2)+"/"+str(anho2);
+              fechaFin=str(mes1)+"/"+str(dia1)+"/"+str(anho1);
+              pres=random.randint(1000, 100000)
+              obs="observacion"+str(random.randint(1990, 2020));
+              est=estate[random.randint(0, 1)]
+              
+              u=Proyecto(nombreP,plId,fechaIni,fechaFin, pres,obs,est)
+              
+              sesion.add(u)
+    
+     cons=sesion.query(Proyecto).filter(Proyecto.nombreProyecto=="Proyecto"+str(i)+"_"+str(j)).first()
+     
+     #carga las fases
+     for j in range(cons.idProyecto,cons.idProyecto+10):
+         for r in range (1,10):
+             dia1=random.randint(1, 28)
+             mes1=random.randint(1, 12)
+             anho1=random.randint(1990, 1999)
+                
+             dia2=random.randint(1, 28)
+             mes2=random.randint(1, 12)
+             anho2=random.randint(2000, 2020)
+             f=Fase("nombreFase_"+str(j)+"_"+str(r), "descripcion de fase " + str(r), "activo", str(mes1)+"/"+str(dia1)+"/"+str(anho1),\
+                  str(mes2)+"/"+str(dia2)+"/"+str(anho2), str(j))
+             sesion.add(f);
      sesion.commit()
      sesion.close()
-     
+
+    
 def cargaEstatica():
     """
     Metodo para cargar los valores estaticos que deben estar presentes en ciertas tablas para poder utilizarlas
@@ -107,3 +158,7 @@ def cargaEstatica():
         
     sesion.commit()
     sesion.close()
+
+def cargarDatosParametricos():
+    #nada
+    2+2
