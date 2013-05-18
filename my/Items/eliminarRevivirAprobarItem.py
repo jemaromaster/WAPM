@@ -6,8 +6,8 @@ from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
 import json
-from sqlalchemy import String
-from models.itemModelo import Item
+from sqlalchemy import String, or_
+from models.itemModelo import Item, Relacion
 from models.bdCreator import Session
 
 sesion=Session()
@@ -39,16 +39,32 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             else:
                 q.estado='inactivo'
                 sesion.merge(q)
+                sesion.query(Relacion).filter(or_(Relacion.padre_id==q.idItem, Relacion.hijo_id==q.idItem)).delete();
                 sesion.commit()
                 sesion.close()
                 msg='f,El item se ha eliminado correctamente'
         elif(accion=="revivir"):
-                q.estado='desarrollo'
+                q.estado='activo'
                 sesion.merge(q)
                 sesion.commit()
                 sesion.close()
                 msg='f,Se ha revivido correctamente al item'
         elif(accion=="aprobar"):
+            bandera=0;
+            listaPadres='';
+            consulta=sesion.query(Item).join(Relacion,Relacion.padre_id==Item.idItem).filter(Item.estado!='inactivo').filter(Relacion.hijo_id==q.idItem).all()
+            for p in consulta:
+                if(p.estado=='activo' or p.estado=='pendiente'):
+                    bandera=bandera+1;
+                    listaPadres=listaPadres+p.tag+", "
+            
+            listaPadres=listaPadres[0:len(listaPadres)-2]
+            if (bandera==1):
+                return make_response('t,El padre del item seleccionado": '+ listaPadres+ ' se encuentra en estado '+ p.estado\
+                                     + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten por lo menos en estado "aprobado" para poder aprobarse. ')
+            elif(bandera==2):
+                return make_response('t,Los padres del item seleccionado: '+ listaPadres+ ' no se encuentran en estado de por lo menos aprobado'\
+                                     + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten aprobados para poder aprobarse previamente. ')
             q.estado='aprobado'
             sesion.merge(q)
             sesion.commit()

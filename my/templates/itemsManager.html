@@ -18,7 +18,7 @@
 
 							// datatype : "local",
 							// data:mydata,
-							url : 'http://localhost:5000/listarItems',
+							url : '/listarItems',
 							datatype : "json",
 							mtype : "get",
 							postData : {
@@ -738,7 +738,7 @@
 		}else{
 			//pedir datos de la verison
 			//alert("entro")
-			$.getJSON("http://localhost:5000/listarDatosItemVersion/", {
+			$.getJSON("/listarDatosItemVersion/", {
 				idItem : rowdata.idItem,
 				version : version
 			}, function(atribs) {
@@ -769,7 +769,7 @@
 	
 	
 	function cargarInputAtributos(idTipoItem,idItem,version){
-		$.getJSON("http://localhost:5000/listarAtributosResultado/", {
+		$.getJSON("/listarAtributosResultado/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem,
 			idItem : idItem,
@@ -1212,7 +1212,7 @@
 	
 	function cargarTipoItemEnComboBox(idFaseA) {
 
-		$.getJSON("http://localhost:5000/listarTipoItemComboBox", {
+		$.getJSON("/listarTipoItemComboBox", {
 			idFase : idFaseA
 		}, function(atribs) {
 
@@ -1252,7 +1252,7 @@
 	
 	function cargarFasesEnComboBox() {
 
-		$.getJSON("http://localhost:5000/listarFasesComboBox",
+		$.getJSON("/listarFasesComboBox",
 				function(atribs) {
 
 					var select = $('#comboBoxFases');
@@ -1375,7 +1375,7 @@
 	}
 
 	function getJSONListarAtributos(idTipoItem){
-		$.getJSON("http://localhost:5000/listarAtributo/", {
+		$.getJSON("/listarAtributo/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem
 		}, function(atribs) {
@@ -1504,7 +1504,7 @@ function abrirMiniDialogoRelacion(){
 			"Seleccione Item Padre", 0);
 	
 	
-	$.getJSON("http://localhost:5000/itemsRelacionarMiniDialogoComboBox/", {
+	$.getJSON("/itemsRelacionarMiniDialogoComboBox/", {
 		idItem : rowdata.idItem,
 		idFase: rowdata.idFase
 	}, function(atribs) {
