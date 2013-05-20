@@ -1,0 +1,15 @@
+/__init__.pyc
+/agregarPermisoRol.pyc
+/agregarRolProyecto.pyc
+/agregarRolUsuario.pyc
+/estadoRol.pyc
+/listarPermiso_Rol.pyc
+/listarRolProyecto.pyc
+/listarRolUsuario.pyc
+/modificarRolProyecto.pyc
+/quitarPermisoRol.pyc
+/quitarRolUsuario.pyc
+/rolProyectoController.pyc
+/rolProyectoManager.pyc
+/rolProyectoManejador.pyc
+/rolUsuarioManager.pyc

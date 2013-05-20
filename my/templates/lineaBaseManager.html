@@ -1,0 +1,883 @@
+{% extends "baseMiembro.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% block header %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+
+<script type="text/javascript">
+	//<![CDATA[
+	jQuery(document).ready(
+			function() {
+
+				var grid = jQuery("#listaLB").jqGrid(
+						{
+
+							// datatype : "local",
+							// data:mydata,
+							url : '/listarLB/',
+							datatype : "json",
+							mtype : "get",
+							postData : {
+								idFase : '0'
+							},
+							colNames : [ 'ID LB',
+									'Descripcion',
+									'Estado'],
+							colModel : [ {
+								name : 'idLB',
+								index : 'idLB',
+								hidden : true
+							},
+
+							{
+								name : 'descripcion',
+								index : 'descripcion',
+								width : 200
+							}, {
+								name : 'estado',
+								index : 'estado',
+								width : 200,
+								formatter : 'select',
+								stype : 'select',
+								editoptions : {
+									value : "todos:Todos;abierta:Abierta;cerrada:Cerrada"
+								},
+								hidden : false
+							}
+
+							],
+							sortname : 'estado',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "desc",
+							ignoreCase : true,
+							pager : '#pager',
+							caption : "Lineas Base ",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+							//id : "idUsuario"
+							}
+
+						}).jqGrid('navGrid', '#pager', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : false
+				});
+				grid.jqGrid('filterToolbar', {
+					stringResult : true,
+					searchOnEnter : false,
+					defaultSearch : "cn"
+				});
+			});
+	
+	
+	
+	//]]>
+</script>
+
+
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	
+	border: 0;
+}
+</style>
+
+<script type="text/javascript">
+	function retornaValorenSesion() {
+		//alert('valor en sesion' + valorenSesion)
+		return valorenSesion
+	}
+
+	function retornaValorComboBoxFases() {
+
+		var r = $("#comboBoxFases").val()
+		//alert('valor combo box fases' + r)
+		return r;
+	}
+
+</script>
+
+<div id="dialogo-agregarItem" title="Agregar Items a Linea Base">
+	<table id="listaItem"></table>
+	<div id="pagerItem"></div>
+</div>
+
+<div id="dialogo-lb" title="Descripcion Linea Base">
+	<form title="(*) campos obligatorios">
+		<fieldset class="fieldset">
+			<input type="hidden" name="idLB" id="idLB" /> 
+			<input type="hidden" name="estado" id="estado" /> 
+			<table>
+				<tr>
+					<td><label for="descripcion" style="display: block">*Descripcion</label>
+						<textarea id="descripcion"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; ">
+						</textarea> 
+						<input title="20 caracteres max" readonly tabIndex="-1"
+						type="text" name="Edescripcion" id="Edescripcion"
+						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
+	<div id="divItemLB">
+	<table  id="listaItemENLB"></table>
+	<div id="pagerItemLB"></div>
+	</div>
+</div>
+
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+	var bandera;
+	var indice = 0;
+	var valorenSesion={{session['idProyecto']}};
+
+	function setSkyBlueTipoItem() {
+		$("#descripcion").css('border-color', 'skyblue');
+
+		//s establece bien el margen, para que quede bie el formulario 
+		$("#descripcion").css('margin-bottom', 12 + 'px');
+		$("#Edescripcion").hide();
+	}
+	
+	
+	var grid = jQuery("#listaItem").jqGrid(
+			{
+
+				
+				url : '/listarItemBase/',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					idFase : '0'
+				},
+				colNames : [ 'ID Item', 'Nombre Item',
+				             'Fecha Inicio', 'Fecha Fin.',
+							'Costo' ],
+				colModel : [ {
+					name : 'idItem',
+					index : 'idItem',
+					hidden : true
+				},
+
+				{
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 150
+				},{
+					name : 'fechaInicio',
+					index : 'fechaInicio',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				}, {
+					name : 'fechaFinalizacion',
+					index : 'fechaFinalizacion',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				},{
+					name : 'costo',
+					index : 'costo',
+					width : 100,search : false
+				}
+
+				],
+				sortname : 'nombreItem',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerItem',
+				caption : "Items",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idItem"
+				}
+
+			}).jqGrid('navGrid', '#pagerItem', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
+	});
+	grid.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
+		
+	var gridLB = jQuery("#listaItemENLB").jqGrid(
+			{
+
+				
+				url : '/listarItemBase/',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					idLB : '0'
+				},
+				colNames : [ 'ID Item', 'Nombre Item',
+				             'Fecha Inicio', 'Fecha Fin.',
+							'Costo' ],
+				colModel : [ {
+					name : 'idItem',
+					index : 'idItem',
+					hidden : true
+				},
+
+				{
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 150
+				},{
+					name : 'fechaInicio',
+					index : 'fechaInicio',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				}, {
+					name : 'fechaFinalizacion',
+					index : 'fechaFinalizacion',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				},{
+					name : 'costo',
+					index : 'costo',
+					width : 100,search : false
+				}
+
+				],
+				sortname : 'nombreItem',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerItemLB',
+				caption : "Items en la Linea Base",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idItem"
+				}
+
+			}).jqGrid('navGrid', '#pagerItemLB', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
+	});
+	gridLB.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
+
+
+	
+	$("#dialogo-agregarItem")
+	.dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				resizable : false,
+				width : 'auto',
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					"Agregar":function(){
+						agregarItemLB();
+					}
+				}
+			});
+				
+	
+	$("#dialogo-lb")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width : 'auto',
+						show : {
+							effect : 'fade',
+							duration : 400
+						},
+						hide : {
+							effect : 'fade',
+							duration : 350
+						},
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Aceptar" : function() {
+								/* si el dato es nuevo se llamar a la url para agregar */
+								if (bandera == 1) {
+									/* se indica la URL */
+									if (control(true) == 1) {
+										mostrarMensaje("Error",
+												"Campo completado incorrectamente");
+									} else {
+
+										$
+												.post(
+														'/agregarLB/',
+														{
+															/* se indican los parametros*/
+															descripcion : $(
+																	"#descripcion")
+																	.val().trim(),
+															idFase : retornaValorComboBoxFases()
+														},
+														function(data, status) {
+															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+															/* si hay error se muestra el mensaje*/
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido guardar:\n"
+																				+ data
+																						.substring(2));
+																/* se indica que no hubieron errores */
+															} else {
+																$(
+																		"#dialogo-lb")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		data
+																				.substring(2));
+															}
+															/* se indicar la recarga de la tabla */
+															$('#listaLB')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+
+									/* si el dato se modifica se llama a la url para modificar*/
+								} else if (bandera == 2) {
+									if (control(false) == 1) {
+										mostrarMensaje("Error",
+												"Campo completado incorrectamente");
+									} else {
+
+										/* se indica la url */
+										$
+												.post(
+														'/modificarLB/',
+														{
+															idLB : $(
+																	"#idLB")
+																	.val().trim(),
+															descripcion : $(
+																	"#descripcion")
+																	.val().trim(),
+															estado : $(
+																	"#estado")
+																	.val().trim()
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido modificar:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-lb")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Los datos han sido modificados");
+															}
+															$('#listaLB')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} else if (bandera == 3) {/*consultar*/
+									$(this).dialog("close");
+								}
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+
+		function cargarForm(rowdata, row) {
+
+		setSkyBlueTipoItem()
+
+		rowdata = $('#listaLB').getRowData(row);
+		$("#idLB").val(rowdata.idLB);
+		$("#descripcion").val(rowdata.descripcion);
+		$("#estado").val(rowdata.estado);
+		
+
+	}
+
+	function setCamposDisabled(habilitar) {
+
+		
+		$("#descripcion").attr('disabled', habilitar);
+		if(habilitar)//se esconde si habilitar==FALSE 
+			$("#divItemLB").show()
+		else	
+			$("#divItemLB").hide()
+		//aca se debe cargar los atributos del item en el grid 
+		//se deshabilita 
+	}
+
+	function control(esNuevo) {
+
+		setSkyBlueTipoItem()
+
+		var error = 0
+		var len;
+
+		
+		len = document.getElementById("descripcion").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len > 50 || len <= 0) {
+			$("#descripcion").css('border-color', 'red');
+			$("#descripcion").css('margin-bottom', 1 + 'px');
+			$("#Edescripcion").val("Campo Obligario. Long. max 50").css(
+					'color', 'red').show();
+			error = 1;
+		}
+
+		return error;
+	}
+
+	function agregar() {
+		/* se indica que se cargará un nuevo dato */
+		bandera = 1;
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
+		/* se vacian los elementos HTML de captura de datos */
+		$("#idLB").val("");
+		$("#descripcion").val("");
+		$("#estado").val("");
+		 
+		setCamposDisabled(false);
+		setSkyBlueTipoItem()
+		
+		$("#dialogo-lb").dialog("open");
+
+	}
+
+	/* funcion para llamar al formulario para la modificación de datos */
+	function modificar() {
+		
+		
+		var row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione Linea Base a Modificar");
+			return;
+		}
+		var rowdata = $('#listaLB').getRowData(row);
+		if (rowdata.estado=="cerrada"){
+			mostrarMensaje("Atencion", "Linea Base no puede ser modificada, ya se encuentra Cerrada!");
+			return;
+		}
+		
+		
+		
+		/* se indica que el dato no es nuevo */
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
+
+		bandera = 2;
+
+		/* se comprueba que hay un dato seleccionado para modificar */
+		var row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se habilita la edicion*/
+		setCamposDisabled(false);
+		
+		$("#dialogo-lb").dialog("open");
+	}
+
+	function consultar() {
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
+		
+		
+		
+		
+		
+		/* se indica que el dato no es nuevo */
+		bandera = 3;
+		/* se comprueba que hay un dato seleccionado para consultar */
+		var row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se inhabilita la edicion*/
+		
+		row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		rowdata = $('#listaLB').getRowData(row);
+		idLBEnviar=rowdata.idLB;
+		
+		var myPostData = $('#listaItemENLB').jqGrid("getGridParam",
+		"postData");
+		delete myPostData.idLB;
+		$('#listaItemENLB').setGridParam({
+			postData : {
+				idLB : rowdata.idLB
+			}
+		});
+		
+		setCamposDisabled(true);
+		$('#listaItemENLB').trigger("reloadGrid");
+
+		
+		
+		/* se llama al dialogo para modificar los datos */
+		
+		$("#dialogo-lb").dialog("open");
+	}
+
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			show : {
+				effect : 'fade',
+				duration : 250
+			},
+			hide : {
+				effect : 'fade',
+				duration : 250
+			},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+{% endblock %} {% block body %}
+<h2>Administracion de Lineas Base</h2>
+<td><label>Fase:</label><select id="comboBoxFases"
+	style="display: block; margin-bottom: 12px; padding: 0.4em; width: auto;"
+	class="ui-widget-content ui-corner-all">
+		<option value="0">(Ninguna)</option>
+
+</select></td>
+
+
+
+<tr>
+	<td><div>
+			<table id="listaLB"></table>
+			<div id="pager"></div>
+		</div></td>
+	<td><div>
+			<br></br> <input id="btAgregar" type="button" name="nuevo"
+				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
+				type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> <input id="btConsultar" type="button"
+				name="consultar" value="Consultar" onclick='consultar()' />
+				<input id="btCerrar" type="button"
+				name="cerrar" value="Cerrar Linea Base" onclick='cerrar()' />
+				<input id="btAgregarItem" type="button"
+				name="AgregarItem" value="Agregar Items" onclick='agregarItem()' /> <br></br>
+			<script>
+				$("#btAgregar").button();
+				$("#btModificar").button();
+				$("#btConsultar").button();
+				$("#btAgregarItem").button();
+				$("#btCerrar").button();
+			</script>
+		</div></td>
+
+</tr>
+
+<script>
+	if(retornaValorenSesion()!=0){
+		cargarFasesEnComboBox();
+	}
+	function cargarFasesEnComboBox() {
+
+		$.getJSON("/listarFasesComboBox/",
+				function(atribs) {
+
+					var select = $('#comboBoxFases');
+					var options = select.prop('options');
+					//alert ('hola')
+
+					$('option', select).remove();
+
+					var index = 0
+					bandera = false
+					options[options.length] = new Option("Seleccione Fase...",
+							0);
+					$.each(atribs, function(index, atrib) { //val,text
+						index = index + 1;
+						options[options.length] = new Option(index + " : "
+								+ atrib.nombreFase, atrib.idFase);
+						bandera = true
+					});
+				
+					if (bandera == false) {
+
+					}
+					//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
+					var myPostData = $('#listaLB').jqGrid("getGridParam",
+							"postData");
+					delete myPostData.idFase;
+					$('#listaLB').setGridParam({
+						postData : {
+							idFase : retornaValorComboBoxFases()
+						}
+					});
+
+					$('#listaLB').trigger("reloadGrid");
+
+				});
+
+	}
+
+	$('#comboBoxFases').change(
+			function() {
+				$("#comboBoxFases option[value='0']").remove();
+				var myPostData = $('#listaLB').jqGrid("getGridParam",
+						"postData");
+				delete myPostData.idFase;
+				$('#listaLB').setGridParam({
+					postData : {
+						idFase : retornaValorComboBoxFases()
+					}
+				});
+				$('#listaLB').trigger("reloadGrid");
+			});
+	
+	function cerrar(){
+		var row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione Linea Base a Cerrar");
+			return;
+		}
+		var rowdata = $('#listaLB').getRowData(row);
+		idLBEnviar=rowdata.idLB;
+		$.post('/cerrarLB/',{
+			idLB : idLBEnviar
+			},
+			function(data, status) {
+				/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+			
+				/* si hay error se muestra el mensaje*/
+				if (data.substring(
+						0, 1) == 't') {
+					mostrarMensaje(
+							"Error",
+							"Los datos no se han podido guardar:\n"
+									+ data
+											.substring(2));
+					/* se indica que no hubieron errores */
+				} else {
+					$(
+							"#dialogo-lb")
+							.dialog(
+									"close");
+					mostrarMensaje(
+							"Exito",
+							data
+									.substring(2));
+				}
+				/* se indicar la recarga de la tabla */
+				$('#listaLB')
+				.trigger(
+						"reloadGrid");
+			});
+		
+		
+	}
+	
+	function agregarItem(){
+		var row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione Linea Base a administrar");
+			return;
+		}
+		
+		var rowdata = $('#listaLB').getRowData(row);
+		if (rowdata.estado=="cerrada"){
+			mostrarMensaje("Atencion", "Linea Base no puede ser modificada, ya se encuentra Cerrada!");
+			return;
+		}
+		
+		
+		var myPostData = $('#listaItem').jqGrid("getGridParam","postData");
+		delete myPostData.idFase;
+		$('#listaItem').setGridParam({
+			postData : {
+				idFase : retornaValorComboBoxFases()
+			}
+		});
+		
+		$('#listaItem').trigger("reloadGrid");
+		$("#dialogo-agregarItem").dialog("open");
+		
+	}
+	
+	function agregarItemLB(){
+		
+		var row = $('#listaLB').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione Linea Base a Cerrar");
+			return;
+		}
+		var rowdata = $('#listaLB').getRowData(row);
+		idLBEnviar=rowdata.idLB;
+		
+		row = $('#listaItem').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione Item a agregar");
+			return;
+		}
+		rowdata = $('#listaItem').getRowData(row);
+		idItemEnviar=rowdata.idItem;
+		
+		
+		$.post('/agregarItemLB/',{
+							idItem : idItemEnviar,
+							idLB : idLBEnviar
+							},
+				function(data, status) {
+					/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+					/* si hay error se muestra el mensaje*/
+					if (data.substring(
+							0, 1) == 't') {
+						mostrarMensaje(
+								"Error",
+								"Los datos no se han podido guardar:\n"
+										+ data
+												.substring(2));
+						/* se indica que no hubieron errores */
+					} else {
+						$(
+								"#dialogo-lb")
+								.dialog(
+										"close");
+						mostrarMensaje(
+								"Exito",
+								data
+										.substring(2));
+					}
+					/* se indicar la recarga de la tabla */
+					$('#listaItem')
+							.trigger(
+									"reloadGrid");
+					$('#listaLB')
+					.trigger(
+							"reloadGrid");
+				});
+
+		
+		
+	}
+
+</script>
+
+
+{% endblock %}
+</html>

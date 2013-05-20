@@ -1,0 +1,17 @@
+/__init__.pyc
+/db_def.pyc
+/usuarioModelo.pyc
+/atributosModelo.pyc
+/bdCreator.pyc
+/faseModelo.pyc
+/historialModelo.pyc
+/instanciaAtributos.pyc
+/itemModelo.pyc
+/lineaBaseModelo.pyc
+/permisoModelo.pyc
+/poblarBD.pyc
+/proyectoModelo.pyc
+/rolProyectoModelo.pyc
+/rolSistemaModelo.pyc
+/tipoItemModelo.pyc
+/tipoPrimarioModelo.pyc

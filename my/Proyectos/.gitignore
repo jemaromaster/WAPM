@@ -1,0 +1,17 @@
+/__init__.pyc
+/activarProyecto.pyc
+/agregarMiembrosComite.pyc
+/agregarMiembrosProyecto.pyc
+/agregarProyecto.pyc
+/listarMiembrosComite.pyc
+/listarMiembrosProyecto.pyc
+/listarProyecto.pyc
+/listarProyectosComboBox.pyc
+/miembroManager.pyc
+/modificarProyecto.pyc
+/proyectoController.pyc
+/proyectoManager.pyc
+/proyectoManejador.pyc
+/quitarMiembrosComite.pyc
+/quitarMiembrosProyecto.pyc
+/seleccionarProyectoSesion.pyc

@@ -1,0 +1,16 @@
+/__init__.pyc
+/adjuntarArchivo.pyc
+/agregarItem.pyc
+/agregarRelacion.pyc
+/eliminarRelacion.pyc
+/eliminarRevivirAprobarItem.pyc
+/itemController.pyc
+/itemManager.pyc
+/itemManejador.pyc
+/listarAtributosResultado.pyc
+/listarDatosItemVersion.pyc
+/listarItems.pyc
+/listarItemsRelacionarMiniDialogoComboBox.pyc
+/listarRelaciones.pyc
+/listarTipoItemComboBox.pyc
+/modificarItem.pyc

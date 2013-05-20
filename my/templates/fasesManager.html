@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% block header %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+
+<script type="text/javascript">
+	//<![CDATA[
+	jQuery(document)
+			.ready(
+					function() {
+						
+						var gridFase = jQuery("#listaFases")
+								.jqGrid(
+										{
+
+											// datatype : "local",
+											// data:mydata,
+											url : 'http://localhost:5000/listarFases',
+											datatype : "json",
+											mtype : "get",
+											postData:{idProyecto: retornaValorenSesion()},
+											colNames : [ 'ID Fases',
+													'Nombre Fase', 'Fecha Inicio', 'Fecha Finalizacion',
+													'Descripcion', 'Estado', 'Id de Proyecto' ],
+											colModel : [
+													{
+														name : 'idFase',
+														index : 'idFase',
+														hidden : true
+													},
+													
+													{
+														name : 'nombreFase',
+														index : 'nombreFase',
+														width : 200
+													},
+													{
+														name : 'fechaInicio',
+														index : 'fechaInicio',
+														formatter: 'date',
+											            sorttype: 'date',
+											            datefmt: 'd/m/Y',
+											            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+														search:false
+													},{
+														name : 'fechaFinalizacion',
+														index : 'fechaFinalizacion',
+														formatter: 'date',
+											            sorttype: 'date',
+											            datefmt: 'd/m/Y',
+											            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+														search:false
+													},
+													{
+														name : 'descripcion',
+														index : 'descripcion',
+														hidden : true
+													},
+													{
+														name : 'estado',
+														index : 'estado',
+														
+													},
+													{
+														name : 'idProyecto',
+														index : 'idProyecto',
+														hidden : true
+													}
+
+											],
+											sortname : 'nombreFase',
+											viewrecords : true,
+											rownumbers : true,
+											sortorder : "desc",
+											ignoreCase : true,
+											pager : '#pager',
+											caption : "Fases",
+											jsonReader : {
+												root : "invdata",
+												page : "currpage",
+												total : "totalpages",
+												records : "totalrecords",
+												repeatitems : false,
+												id : "idUsuario"
+											}
+
+										}).jqGrid('navGrid', '#pager', {
+									edit : false,
+									add : false,
+									del : false,
+									search : false,
+									refresh : true
+								});
+						gridFase.jqGrid('filterToolbar', {
+							stringResult : true,
+							searchOnEnter : false,
+							defaultSearch : "cn"
+						});
+					});
+	//]]>
+</script>
+
+
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	width: 500px;
+	border: 0;
+}
+</style>
+
+<script type="text/javascript">
+function retornaValorenSesion() {
+	//alert('valor en sesion' + valorenSesion)
+	return valorenSesion
+}
+	
+	jQuery(function($) {
+		$.datepicker.regional['es'] = {
+			closeText : 'Cerrar',
+			prevText : '&#x3c;Ant',
+			nextText : 'Sig&#x3e;',
+			currentText : 'Hoy',
+			monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+					'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+					'Noviembre', 'Diciembre' ],
+			monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+					'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+			dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Mi&eacute;rcoles',
+					'Jueves', 'Viernes', 'S&aacute;bado' ],
+			dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mi&eacute;', 'Juv', 'Vie',
+					'S&aacute;b' ],
+			dayNamesMin : [ 'Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'S&aacute;' ],
+			weekHeader : 'Sm',
+			dateFormat : 'dd/mm/yy',
+			firstDay : 1,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : ''
+		};
+		$.datepicker.setDefaults($.datepicker.regional['es']);
+	});
+
+	
+</script>
+<div id="dialogo-datos-fase" title="Datos de Fase">
+	<form title="(*) campos obligatorios">
+		<fieldset class="fieldset">
+			<input type="hidden" name="idFase" id="idFase" />
+			<table>
+				<tr>
+					<td><label for="nombreFase" style="display: block">*Nombre Fase</label> 
+						<input type="text" name="nombreFase"
+						id="nombreFase" class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<label for="fechaInicio" style="display: block">*Fecha de Inicio</label>
+						 <input type="text" name="datepicker" id="datepicker" readonly="readonly"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="fechaFinalizacion" style="display: block">*Fecha de Finalizacion</label> 
+						<input type="text" name="datepicker2" id="datepicker2" readonly="readonly"
+						class="text ui-widget-content ui-corner-all"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
+					</td>
+						
+				</tr>
+				<tr>
+					<td><label for="descripcion" style="display: block">*Descripcion</label>
+						<textarea id="descripcion"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
+						</textarea></td>
+					<td><label for="estado" style="display: block">*Estado</label>
+						<select id="estado"
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
+						class="ui-widget-content ui-corner-all">
+							<option value="desarrollo">Desarrollo</option>
+							<option value="activo">Activo</option>
+							<option value="finalizado">Finalizado</option>
+					</select></td>
+					<input type="hidden" name="idProyecto" id="idProyecto" />
+				</tr>
+			</table>
+		</fieldset>
+	</form>
+</div>
+
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+	var bandera;
+	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+	
+	$("#dialogo-datos-fase")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width : 550,
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
+						buttons : {
+							/* funcion asociado al boton aceptar */
+							"Aceptar" : function() {
+								/* si el dato es nuevo se llamar a la url para agregar */
+								if (bandera == 1) {
+									/* se indica la URL */
+									if (control(true) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+										
+										$.post('/agregarFase/',{ 
+											/* se indican los parametros*/
+												nombreFase : $(
+														"#nombreFase")
+														.val(),
+												fechaInicio : $(
+														"#datepicker")
+														.val(),
+												fechaFinal : $(
+														"#datepicker2")
+														.val(),
+												descripcion: $("#descripcion")
+														.val(),
+												estado : $("#estado")
+														.val(),
+												
+												idProyecto :retornaValorenSesion()
+														},
+														function(data, status) {
+															/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+															/* si hay error se muestra el mensaje*/
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido guardar:\n"
+																				+ data
+																						.substring(2));
+																/* se indica que no hubieron errores */
+															} else {
+																$(
+																		"#dialogo-datos-fase")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		data
+																				.substring(2));
+															}
+															/* se indicar la recarga de la tabla */
+															$('#listaFases')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+
+									/* si el dato se modifica se llama a la url para modificar*/
+								} else if (bandera == 2) {
+									if (control(false) == 1) {
+										mostrarMensaje("Error",
+												"Campos completados incorrectamente");
+									} else {
+
+										/* se indica la url */
+										$
+												.post(
+														'/modificarFase/',
+														{
+													idFase:$(
+															"#idFase")
+															.val(),
+													nombreFase : $(
+															"#nombreFase")
+															.val(),
+													fechaInicio : $(
+															"#datepicker")
+															.val(),
+													fechaFinal : $(
+															"#datepicker2")
+															.val(),
+													descripcion: $("#descripcion")
+															.val(),
+													estado : $("#estado")
+															.val(),
+													idProyecto :retornaValorenSesion()
+														},
+														function(data, status) {
+
+															if (data.substring(
+																	0, 1) == 't') {
+																mostrarMensaje(
+																		"Error",
+																		"Los datos no se han podido modificar:\n"
+																				+ data
+																						.substring(2));
+															} else {
+																$(
+																		"#dialogo-datos-fase")
+																		.dialog(
+																				"close");
+																mostrarMensaje(
+																		"Exito",
+																		"Los datos han sido modificados");
+															}
+															$('#listaFases')
+																	.trigger(
+																			"reloadGrid");
+														});
+									}
+								} else if (bandera == 3) {/*consultar*/
+									$(this).dialog("close");
+								}
+							},
+							"Cancelar" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+
+	/*$.enmascarar = function() {
+		$("#ci").mask("?9999999999", {
+			placeholder : " "
+		});
+		$("#telefono").mask("?9999999999999", {
+			placeholder : " "
+		});
+	}*/
+	function cargarForm(rowdata, row) {
+		rowdata = $('#listaFases').getRowData(row);
+		$("#idFase").val(rowdata.idFase);
+		$("#nombreFase").val(rowdata.nombreFase);
+		$("#datepicker").val(rowdata.fechaInicio);
+		$("#datepicker2").val(rowdata.fechaFinalizacion);
+		$("#descripcion").val(rowdata.descripcion);
+		$("#estado").val(rowdata.estado);
+		$("#idProyecto").val(valorenSesion);
+		
+
+	}
+
+	function setCamposDisabled(habilitar) {
+			
+		$("#idFase").attr('disabled', habilitar);
+		$("#nombreFase").attr('disabled', habilitar);
+		$("#datepicker").attr('disabled', habilitar);
+		$("#datepicker2").attr('disabled', habilitar);
+		$("#descripcion").attr('disabled', habilitar);
+		$("#estado").attr('disabled', habilitar);
+		$("#idProyecto").attr('disabled', habilitar);
+	}
+
+	function control(esNuevo) {
+		$("#nombreFase").css('border-color', 'skyblue');
+		$("#datepicker").css('border-color', 'skyblue');
+		$("#datepicker2").css('border-color', 'skyblue');
+		$("#descripcion").css('border-color', 'skyblue');
+		$("#estado").css('border-color', 'skyblue');
+		
+		var error = 0
+		var len;
+
+		len = $("#nombreFase").val().trim().length;
+		if (len > 20 || len <= 0) {
+			$("#nombreFase").css('border-color', 'red');
+			error = 1;
+		}
+
+		len = document.getElementById("descripcion").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len > 50 || len <= 0) {
+			$("#descripcion").css('border-color', 'red');
+			error = 1;
+		}
+		len = document.getElementById("datepicker").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len <= 0) {
+			$("#datepicker").css('border-color', 'red');
+			error = 1;
+		}
+		
+		len = document.getElementById("datepicker2").value.trim().length;
+		//len=$("#observacion").val().trim().length;
+		if (len <= 0) {
+			$("#datepicker2").css('border-color', 'red');
+			error = 1;
+		}
+		return error;
+	}
+
+	
+	function agregar() {
+		/* se indica que se cargará un nuevo dato */
+		bandera = 1; 
+		/* se vacian los elementos HTML de captura de datos */
+		$("#idFase").val("");
+		$("#nombreFase").val("");
+		$("#datepicker").val("");
+		$("#datepicker2").val("");
+		$("#descripcion").val("");
+		$("#estado").val("");
+		$("#idProyecto").val("");
+		/* se llama al dialogo de captura de datos */
+		setCamposDisabled(false);
+		//$.enmascarar();
+		if(retornaValorenSesion()!=0){
+			$("#dialogo-datos-fase").dialog("open");
+		}else{
+			mostrarMensaje("Error", "Debe seleccionar un proyecto para agregar una fase")
+		}
+	}
+
+	/* funcion para llamar al formulario para la modificación de datos */
+	function modificar() {
+		/* se indica que el dato no es nuevo */
+		bandera = 2;
+		/* se comprueba que hay un dato seleccionado para modificar */
+		var row = $('#listaFases').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se habilita la edicion*/
+		setCamposDisabled(false);
+		//$.enmascarar();
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-datos-fase").dialog("open");
+	}
+
+	function consultar() {
+		/* se indica que el dato no es nuevo */
+		bandera = 3;
+		/* se comprueba que hay un dato seleccionado para consultar */
+		var row = $('#listaFases').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
+			return;
+		}
+		var rowdata;
+		/* se cargan los elementos HTML segun la fila seleccionada*/
+		cargarForm(rowdata, row);
+		/*se inhabilita la edicion*/
+		setCamposDisabled(true);
+		/* se llama al dialogo para modificar los datos */
+		$("#dialogo-datos-fase").dialog("open");
+	}
+	/* funcion que maneja la accion de desactivar un cliente*/
+	
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			show: {effect: 'fade', duration: 250},
+			hide: {effect: 'fade', duration: 250},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+{% endblock %} {% block body %}
+
+<tr>
+	<td><div>
+			<table id="listaFases"></table>
+			<div id="pager"></div>
+		</div></td>
+	<td><div>
+			<br></br>
+			<input id="btAgregar" type="button" name="nuevo" value="Nueva Fase" onclick='agregar()' />
+			<input id="btModificar" type="button" name="detalle" onclick='modificar();'
+				value="Modificar" /> 
+			<input id="btConsultar" type="button" name="consultar"
+				value="Consultar" onclick='consultar()' />
+			<br></br>
+			<script>
+			$("#btAgregar").button();
+			$("#btModificar").button();
+			$("#btConsultar").button();
+			</script>
+		</div></td>
+		
+</tr>
+
+
+{% endblock %}
+</html>

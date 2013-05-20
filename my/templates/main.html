@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+{% block header %}
+{% endblock %} 
+{% block body %}
+
+<div id="perfiles" title="Seleccionar perfil para ingresar" style="margin-left:auto;
+margin-right:auto;
+">
+<h2>Seleccione un modulo del sistema </h2>
+{% if 'rolAdmin' in session %}	
+ <input id="btAdmin" type="button"  value="Administracion de Usuarios" onclick="location.href='/usuarioManager/'"></input>
+ {% endif %}
+ <br></br>
+ {% if 'rolPL' in session %}
+ <input id="btPL" type="button"  value="Administracion de Proyectos" onclick="location.href='/proyectoManager/'"></input>
+ {% endif %}
+ <br></br>
+ <input id="btMiembro" type="button" value="Desarrollo y Gestion de Cambio" onclick="location.href='/miembros/'"></input>
+ <br></br>
+</div>
+
+<script>
+$("#btAdmin").button();
+$("#btPL").button();
+$("#btMiembro").button();
+</script>
+
+
+
+{% endblock %}
