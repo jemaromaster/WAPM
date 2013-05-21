@@ -1302,12 +1302,18 @@
 
 {% endblock %} {% block body %}
 <h2>Administrar Items</h2>
-<td><label>Fase:</label><select id="comboBoxFases"
+
+
+<td><label>Fase:</label>
+
+
+<select id="comboBoxFases"
 	style="display: block; margin-bottom: 12px; padding: 0.4em; width: auto;"
 	class="ui-widget-content ui-corner-all">
 		<option value="0">(Ninguna)</option>
+</select>
+</td>
 
-</select></td>
 <tr>
 	<td><div>
 			<table id="listaItems"></table>

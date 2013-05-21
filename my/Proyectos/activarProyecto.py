@@ -43,6 +43,12 @@ class ActivarProyecto(flask.views.MethodView):
         if numberFases <= 0:
             return "t,No se puede pasar a Activo, el proyecto no contiene fases!"
         
+        fasesProyecto=sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==int(idProyecto));
+        for fase in fasesProyecto:
+            fase.estado="activa"
+            print "Fase:  "+fase.nombreFase+" estado de la fase: "+fase.estado
+            sesion.add(fase)
+            
         proyecto.estado="activo"
         sesion.add(proyecto)
         sesion.commit()

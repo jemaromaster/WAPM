@@ -2329,6 +2329,7 @@ var banderaRol;
 		$("#idProyectoFase").val("");
 		/* se llama al dialogo de captura de datos */
 		setCamposDisabledFase(false);
+		$("#estadoFaseDiv").hide();
 		//$.enmascarar();
 		if(valorProyectoSeleccion()!=0){
 			$("#dialogo-datos-fase").dialog("open");
@@ -2362,6 +2363,7 @@ var banderaRol;
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarFormFase(rowdata, row);
+		$("#estadoFaseDiv").hide();
 		/*se habilita la edicion*/
 		setCamposDisabledFase(false);
 		/* se llama al dialogo para modificar los datos */
@@ -2379,6 +2381,7 @@ var banderaRol;
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarFormFase(rowdata, row);
+		$("#estadoFaseDiv").show();
 		/*se inhabilita la edicion*/
 		setCamposDisabledFase(true);
 		/* se llama al dialogo para modificar los datos */
@@ -2635,7 +2638,7 @@ var banderaRol;
 																		.substring(2));
 													}
 												
-													$('#listRoles')
+													$('#list')
 															.trigger(
 																	"reloadGrid");
 												});	
@@ -2790,14 +2793,18 @@ var banderaRol;
 							class="text ui-widget-content ui-corner-all"
 							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;">
 						</textarea></td>
-					<td><label for="estado" style="display: block">*Estado</label>
+					<td>
+						<div id="estadoFaseDiv">
+						<label for="estado" style="display: block">*Estado</label>
 						<select id="estadoFase"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
 						class="ui-widget-content ui-corner-all">
 							<option value="desarrollo">Desarrollo</option>
 							<option value="activo">Activo</option>
 							<option value="finalizado">Finalizado</option>
-					</select></td>
+						</select>
+						</div>
+					</td>
 					<input type="hidden" name="idProyectoFase" id="idProyectoFase" />
 				</tr>
 			</table>

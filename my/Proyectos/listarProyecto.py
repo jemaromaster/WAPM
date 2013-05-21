@@ -144,7 +144,6 @@ class ListarProyectos(flask.views.MethodView):
                     continue
             
             estado=vector[i]['data']
-            
                   
            
             projectLeaderId=flask.session['idUsuario']

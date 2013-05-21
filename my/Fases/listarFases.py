@@ -43,7 +43,7 @@ class Respuesta():
                 fase.nombreFase+ \
                 "\",\"fechaInicio\": \""+str(fase.fechaInicio)+"\", \"fechaFinalizacion\": \""+ \
                 str(fase.fechaFinalizacion) +\
-                "\", \"descripcion\": \""+fase.descripcion+"\", \"estado\":\"" + fase.estado +\
+                "\", \"descripcion\": \""+fase.descripcion+"\", \"ordenFase\":\"" + fase.tag+"\", \"estado\":\"" + fase.estado +\
                 "\",\"idProyecto\":\"" + str(fase.idProyecto) + "\"},"
         p=p[0:len(p)-1]    
         p=p+"]}"    
@@ -58,7 +58,7 @@ class ListarComboFases(flask.views.MethodView):
         if(idProyecto=='' or idProyecto=='0'):
             return "[]"
         
-        lf=sesion.query(Fase).filter(Fase.idProyecto==int(idProyecto))
+        lf=sesion.query(Fase).filter(Fase.idProyecto==int(idProyecto)).order_by("idFase")
         prejsonF='['
         jsonF=''
         for fase in lf:
@@ -98,6 +98,8 @@ class ListarFases(flask.views.MethodView):
             filtrarPor='fecha_finalizacion'
         elif(sidx=='estado'):
             filtrarPor='estado'
+        elif(sidx=='ordenFase'):
+            filtrarPor='tag'
         
              
         #se extrae el id de la session cookie

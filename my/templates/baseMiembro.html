@@ -74,8 +74,8 @@
 							//location.reload();
 							var pathname = window.location.pathname;
 							switch (pathname){
-								case '/faseManager/':
-									
+								case '/estadoFase/':
+									reloadFasePD();
 									$("#listaFases").trigger("reloadGrid");
 									break;
 								case '/usuarioManager/':
@@ -89,9 +89,12 @@
 									break;
 								case'/itemManager/':
 					                  cargarFasesEnComboBox();
-					                  //cargarFasesEnComboBox();
 					                  $('#listaItems').trigger("reloadGrid");
-					                  break; 	
+					                  break;
+								case'/LBManager/':
+									  cargarFasesEnComboBox()
+					                  $('#listaLB').trigger("reloadGrid");
+					                  break;
 								default:
 									
 							}
@@ -202,6 +205,7 @@
 					<ul style="width:210px">
 						<li><a href="{{url_for('LBManager')}}">Linea Base Manager</a>
 						<li><a href="{{url_for('tipoItemManager')}}">Tipo Item Manager</a>
+						<li><a href="{{url_for('estadoFase')}}">Estado de Fases</a>
 					</ul></li> {% else %} {% endif %}
 			</ul>
 	</div>

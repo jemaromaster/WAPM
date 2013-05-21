@@ -1,0 +1,343 @@
+{% extends "baseMiembro.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% block header %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+
+<script type="text/javascript">
+	//<![CDATA[
+	jQuery(document).ready(function() {
+		var gridFase = jQuery("#listaFases").jqGrid({
+
+							// datatype : "local",
+							// data:mydata,
+							url : 'http://localhost:5000/listarFases',
+							datatype : "json",
+							mtype : "get",
+							postData:{idProyectoPD: retornaValorenSesion()},
+							colNames : [ 'ID Fases',
+									'Nombre Fase', 'Fecha Inicio', 'Fecha Finalizacion',
+									'Descripcion', 'Estado', 'Id de Proyecto','Numero de Fase' ],
+							colModel : [
+									{
+										name : 'idFase',
+										index : 'idFase',
+										hidden : true
+									},
+									
+									{
+										name : 'nombreFase',
+										index : 'nombreFase',
+										width : 200
+									},
+									{
+										name : 'fechaInicio',
+										index : 'fechaInicio',
+										formatter: 'date',
+							            sorttype: 'date',
+							            datefmt: 'd/m/Y',
+							            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+										search:false
+									},{
+										name : 'fechaFinalizacion',
+										index : 'fechaFinalizacion',
+										formatter: 'date',
+							            sorttype: 'date',
+							            datefmt: 'd/m/Y',
+							            formatoptions: { srcformat: 'Y-m-d', newformat: 'd/m/Y' },
+										search:false
+									},
+									{
+										name : 'descripcion',
+										index : 'descripcion',
+										hidden : true
+									},
+									{
+										name : 'estado',
+										index : 'estado',
+										
+									},
+									{
+										name : 'idProyecto',
+										index : 'idProyecto',
+										hidden : true
+									},
+									{
+										name: 'ordenFase',
+										index: 'ordenFase',
+									}
+
+							],
+							sortname : 'ordenFase',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "asc",
+							ignoreCase : true,
+							pager : '#pager',
+							caption : "Fases",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+								id : "idUsuario"
+							}
+
+						}).jqGrid('navGrid', '#pager', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : true
+				});
+		gridFase.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+	});
+	//]]>
+	
+	 function reloadFasePD() {
+		var myPostData = $('#listaFases').jqGrid("getGridParam", "postData");
+		delete myPostData.idProyectoPD;
+		//eso borra el idFase actual
+		$('#listaFases').setGridParam({
+		postData: { idProyectoPD: retornaValorenSesion() } });
+		$('#listaFases').trigger("reloadGrid");	
+		
+	}
+	
+	
+</script>
+
+
+
+<!-- Formulario HTML para la carga de datos a ser inicializado por JqGrid -->
+<style type="text/css">
+.fieldset {
+	border: 0;
+}
+</style>
+
+<script type="text/javascript">
+function retornaValorenSesion() {
+	//alert('valor en sesion' + valorenSesion)
+	return valorenSesion
+}
+	
+
+
+	
+</script>
+<div id="dialogo-items-fase" title="Items en la fase">
+	<table id="listaItem"></table>
+	<div id="pagerItem"></div>
+</div>
+
+<script>
+	/* variable permite indicar si se está cargando un nuevo item de datos */
+	var bandera;
+	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+	
+	var grid = jQuery("#listaItem").jqGrid(
+			{				
+				url : '/listarItemsFase/',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					idFase : '0'
+				},
+				colNames : [ 'ID Item', 'Nombre Item',
+				             'Fecha Inicio', 'Fecha Fin.',
+							'Costo', 'Estado' ],
+				colModel : [ {
+					name : 'idItem',
+					index : 'idItem',
+					hidden : true
+				},
+
+				{
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 150
+				},{
+					name : 'fechaInicio',
+					index : 'fechaInicio',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				}, {
+					name : 'fechaFinalizacion',
+					index : 'fechaFinalizacion',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				},{
+					name : 'costo',
+					index : 'costo',
+					width : 100,search : false
+				},{
+					name : 'estado',
+					index : 'estado',
+					width : 90,
+					align : "center",
+					formatter : 'select',
+					stype : 'select',
+					editoptions : {
+						value : "todos:Todos;activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado"
+					}
+				}
+
+
+				],
+				sortname : 'nombreItem',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerItem',
+				caption : "Items",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idItem"
+				}
+
+			}).jqGrid('navGrid', '#pagerItem', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
+	});
+	grid.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
+
+	
+	$("#dialogo-items-fase")
+			.dialog(
+					{
+						autoOpen : false,
+						modal : true,
+						resizable : false,
+						width:'auto',
+						show: {effect: 'fade', duration: 400},
+						hide: {effect: 'fade', duration: 350},
+						buttons : {
+								"Salir" : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+	
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			show: {effect: 'fade', duration: 250},
+			hide: {effect: 'fade', duration: 250},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+	function finalizar(){
+		
+		var row = $('#listaFases').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione una Fase!");
+			return;
+		}
+		var rowdata;
+		rowdata = $("#listaFases").getRowData(row);
+		
+		$.post('/finalizarFase/',{
+			idFase : rowdata.idFase
+			},
+			function(data, status) {
+				if (data.substring(0, 1) == 't') {
+					mostrarMensaje("Error",
+							"Los datos no se han podido guardar:\n"
+									+ data.substring(2));
+				} else {
+					mostrarMensaje("Exito",data.substring(2));
+				}
+				$('#listaFases').trigger("reloadGrid");
+			});
+
+		
+	}
+	
+	function items(){
+		
+		var row = $('#listaFases').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione una Fase!");
+			return;
+		}
+		var rowdata;
+		rowdata = $("#listaFases").getRowData(row);
+		
+		var myPostData = $('#listaItem').jqGrid("getGridParam", "postData");
+		delete myPostData.idFase;
+		//eso borra el idFase actual
+		$('#listaItem').setGridParam({
+		postData: { idFase: rowdata.idFase } });
+		$('#listaItem').trigger("reloadGrid");	
+		$("#dialogo-items-fase").dialog("open");
+	}
+</script>
+<div id='msgbox' title='' style='display: none'></div>
+
+{% endblock %} {% block body %}
+
+<h2>Estado de Fases</h2>
+<tr>
+	<td><div>
+			<table id="listaFases"></table>
+			<div id="pager"></div>
+		</div></td>
+	<td><div>
+			<br></br>
+			<input id="btFinalizar" type="button" name="finalizarFase" value="Finalizar la Fase" onclick='finalizar()' />
+			<input id="btVerItems" type="button" name="verItems" onclick='items()'
+				value="Ver Items" /> 
+			<br></br>
+			<script>
+			$("#btFinalizar").button();
+			$("#btVerItems").button();
+			</script>
+		</div></td>
+</tr>
+
+
+{% endblock %}
+</html>

@@ -25,7 +25,7 @@ class TipoItemControllerClass(flask.views.MethodView):
        
         '''controla el tamano de los strings'''
          
-        if not(1<=len(ti.nombreTipoItem)<=20 and 1<=len(ti.descripcion)<=50 \
+        if not(1<=len(ti.nombreTipoItem)<=20 and 1<=len(ti.descripcion)<=30 \
               and 1<=len(ti.estado)<=10): 
             return make_response('t,Se supera caracteres de los campos ')
             

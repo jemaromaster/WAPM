@@ -33,7 +33,9 @@ from Proyectos.activarProyecto import ActivarProyecto
 from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
 from Proyectos.seleccionarProyectoSesion import SeleccionarProyectoSesion
 
-from Fases.faseManager import FaseManager
+from Fases.finalizarFase import FinalizarFase
+from Fases.estadoFase import EstadoFase
+from Fases.listarItems import ListarItemsFase
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
@@ -93,7 +95,7 @@ initDB()
 poblarBD.cargaEstatica() 
 #
 #poblarBD.cargarUsuarios(10) 
-poblarBD.cargarProyecto()
+#poblarBD.cargarProyecto()
 # Don't do this
 app.secret_key = "bacon"
 app.add_url_rule('/',
@@ -167,14 +169,20 @@ app.add_url_rule('/quitarMiembrosComite',
                  methods=["GET", "POST"])
 
 #fases
+app.add_url_rule('/finalizarFase/',
+                 view_func=FinalizarFase.as_view('finalizarFase'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/estadoFase/',
+                 view_func=EstadoFase.as_view('estadoFase'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarFase/',
                  view_func=AgregarFase.as_view('agregarFase'),
                  methods=["GET", "POST"])
-app.add_url_rule('/faseManager/',
-                 view_func=FaseManager.as_view('faseManager'),
-                 methods=["GET", "POST"])
 app.add_url_rule('/listarFases/',
                  view_func=ListarFases.as_view('listaFases'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarItemsFase/',
+                 view_func=ListarItemsFase.as_view('listaItemsFase'),
                  methods=["GET", "POST"])
 app.add_url_rule('/listarComboFases/',
                  view_func=ListarComboFases.as_view('listarComboFases'),
