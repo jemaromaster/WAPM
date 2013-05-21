@@ -57,6 +57,7 @@ class ListarProyectosComboBox(flask.views.MethodView):
                                                 .filter(Usuario.id==usuarioId).all()
          
         respuesta=self.jasonizar(proyectoLista)
+        sesion.close()
         return respuesta
         
       

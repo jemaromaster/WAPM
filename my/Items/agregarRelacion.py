@@ -30,16 +30,19 @@ class AgregarRelacion(flask.views.MethodView):
         
         #se realiza el control
         if(padre_id==hijo_id):
+            sesion.close()
             return make_response('t,No se puede relacionar el item con el mismo item')
         
         q=sesion.query(Relacion).filter(Relacion.padre_id==padre_id).filter(Relacion.hijo_id==hijo_id).first();
         
         if(q is not None):
+            sesion.close()
             return make_response('t,Ya existe esa relacion')
         
         q=sesion.query(Relacion).filter(Relacion.padre_id==hijo_id).filter(Relacion.hijo_id==padre_id).first();
         
         if(q is not None):
+            sesion.close()
             return make_response('t,Ya existe la relacion inversa, genera una relacion circular')
         
         qp=sesion.query(Item).filter(Item.idItem==padre_id).first()
@@ -47,10 +50,12 @@ class AgregarRelacion(flask.views.MethodView):
         
         if(qp is not None and qs is not None):
             if qp.idFase>qs.idFase:
+                sesion.close()
                 return make_response('t,No puede relacionar un item de una Fase posterior con una fase Anterior')
         
         
         if(qs.estado!="activo"):
+            sesion.close()
             return make_response('t,Solamente puede relacionarse items con estado activo')
         
         q=sesion.query(Item).filter(Item.idFase==int(idFase)).filter(Item.estado=='activo').all()
@@ -96,12 +101,13 @@ class AgregarRelacion(flask.views.MethodView):
             cicloImprimir=dict()
             
             cad=cad[2:len(cad)]  
+            sesion.close()
             return make_response('t,La relacion que desea agregar genera el siguiente ciclo: '+ cad)
         
         rel=Relacion(padre_id, hijo_id);
         sesion.add(rel)
         sesion.commit()
-        
+        sesion.close()
         return make_response('f,Items relacionados correctamente')
     
         

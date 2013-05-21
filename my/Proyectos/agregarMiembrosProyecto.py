@@ -30,6 +30,7 @@ class AgregarMiembrosProyecto(flask.views.MethodView):
         if(idProyecto!=0):
             p=sesion.query(Proyecto).filter(Proyecto.idProyecto==int(idProyecto)).first()
             if(user in p.usuariosMiembros):
+                sesion.close()
                 return "t,Usuario ya existe en proyecto" 
             else:
                 p.usuariosMiembros.append(user)

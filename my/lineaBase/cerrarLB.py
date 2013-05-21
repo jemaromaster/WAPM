@@ -21,8 +21,10 @@ class CerrarLB(flask.views.MethodView):
        
                    
         if(lb.estado=="cerrada"):
+            sesion.close()
             return "t,Linea Base ya se encuentra cerrada"
         if len(lb.items) <= 0:
+            sesion.close()
             return "t,Linea Base no posee items. No puede ser cerrada"
         
         lb.estado="cerrada"

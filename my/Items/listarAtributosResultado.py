@@ -67,5 +67,6 @@ class ListarAtributosResultado(flask.views.MethodView):
             print str(s.idInstanciaTipoItem)+","+str(s.nombreCampo)+","+ str(s.tipoPrimario)
         
         respuesta=self.jasonizar(i,version)
+        sesion.close()
         return respuesta
         

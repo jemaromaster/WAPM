@@ -15,6 +15,7 @@ class UsuarioControllerClass(flask.views.MethodView):
         u=sesion.query(Usuario).filter(Usuario.id==idU).first()
         u.passwd=passNuevo
         um=UsuarioManejador()
+        sesion.close()
         return um.guardarUsuario(u, idU)
         
     def controlarUsuario(self, usuario, idU):
@@ -54,15 +55,18 @@ class UsuarioControllerClass(flask.views.MethodView):
         if(idU==0):
             usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
             if(usr is not None):
+                sesion.close()
                 return make_response('t,Ya existe el usuario')
         else:
             usr=sesion.query(Usuario).filter(Usuario.username==u.username).first()
             if( usr is not None and str(usr.id) != idU ):
+                sesion.close()
                 return make_response('t,Ya existe el usuario')
             
             PLproyectos=sesion.query(Proyecto).join(Usuario).filter(Usuario.id==idU).filter(Proyecto.estado=="activo").count()
             print "Soy project leader de  " + str(PLproyectos) + " Proyectos activos"
             if  u.activo=="false" and PLproyectos>0:
+                sesion.close()
                 return make_response('t,El usuario no puede ser inactivado. Es Projec Leader de Proyectos en curso')
             
             comiteProyectos=sesion.query(Proyecto).join(Proyecto.usuariosComite).filter(Usuario.id==idU)            
@@ -70,11 +74,13 @@ class UsuarioControllerClass(flask.views.MethodView):
             if countComite > 0:
                 countComiteActivos=comiteProyectos.filter(Proyecto.estado=="activo").count()
                 if countComiteActivos >0:
+                    sesion.close()
                     return make_response('t,El usuario no puede ser inactivado. Es Miembro de Comite/s de Proyectos en curso')
                 else:
+                    sesion.close()
                     return make_response('t,Para ser Inactivado debe dejar de ser miembro de Comite/s de Cambios.')
             
         um=UsuarioManejador()
-        
+        sesion.close()
         return um.guardarUsuario(u, idU)
         

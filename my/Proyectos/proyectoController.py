@@ -40,10 +40,12 @@ class ProyectoControllerClass(flask.views.MethodView):
         if(idProyecto==0):
             pry=sesion.query(Proyecto).filter(Proyecto.nombreProyecto==p.nombreProyecto).first()
             if(pry is not None):
+                sesion.close()
                 return make_response('t,Ya existe Proyecto con ese nombre')
         else:
             pry=sesion.query(Proyecto).filter(Proyecto.nombreProyecto==p.nombreProyecto).first()
             if(pry is not None and int(pry.idProyecto)!=int(idProyecto)):
+                sesion.close()
                 return make_response('t,Ya existe Proyecto con ese nombre')
         print "fecha de inicio de proyecto"+p.fechaInicio[3:5]+ p.fechaInicio[0:2]
         print p.fechaFinalizacion
@@ -64,11 +66,13 @@ class ProyectoControllerClass(flask.views.MethodView):
                              int(p.fechaFinalizacion[3:5]))
             '''
         except:
+            sesion.close()
             return make_response('t,Fecha invalida') 
         
         if not(fi<=ff):
+            sesion.close()
             return make_response('t,Fecha finalizacion antes que fecha inicio')
         um=ProyectoManejador()
-        
+        sesion.close()
         return um.guardarProyecto(p, idProyecto)
         

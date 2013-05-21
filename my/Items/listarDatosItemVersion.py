@@ -42,5 +42,6 @@ class ListarDatosItemVersion(flask.views.MethodView):
         iV=sesion.query(HistorialItem).filter(HistorialItem.idItemFK==idItem).filter(HistorialItem.version==version).first()
         
         respuesta=self.jasonizar(iV)
+        sesion.close()
         return respuesta
         

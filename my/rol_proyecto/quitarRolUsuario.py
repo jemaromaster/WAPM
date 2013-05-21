@@ -31,6 +31,7 @@ class QuitarRolUsuario(flask.views.MethodView):
         try:
             usuario.roles_proyecto.remove(rol)
         except:
+            sesion.close()
             return "t,El rol seleccionado no se encuentra asignado al Usuario"
         
         sesion.add(usuario)

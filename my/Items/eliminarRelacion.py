@@ -33,10 +33,11 @@ class EliminarRelacion(flask.views.MethodView):
         if(q is not None):
             sesion.query(Relacion).filter(Relacion.idRelacion==idRelacion).delete();
         else:
+            sesion.close()
             return make_response('t,No existe relacion con ese id')
         
         sesion.commit();
-        
+        sesion.close()
         return make_response('f,Items eliminado correctamente')
     
         

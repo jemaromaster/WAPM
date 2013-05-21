@@ -46,13 +46,16 @@ class ItemControllerClass(flask.views.MethodView):
         if(esReversion==0): 
             if(idF==0):
                 if(qr is not None):
+                    sesion.close()
                     return make_response('t,Ya existe un item con el nombre indicado en la fase')
             else:
                 if( qr is not None and str(qr.idItem) != idF ):
+                    sesion.close()
                     return make_response('t,Ya existe un item con el nombre indicado en la fase')
         else:
             if(qr is not None and str(qr.idItem) != idF):
-                    return make_response('t,Existe item que cuenta con el mismo nombre que la version a la cual desea\
+                sesion.close()
+                return make_response('t,Existe item que cuenta con el mismo nombre que la version a la cual desea\
                                             reversionar. Modifique el nombre del item "'+ qr.nombreItem + '" para poder reversionar' )
         
         if(esReversion==0):#cuando no es reversion
@@ -78,10 +81,12 @@ class ItemControllerClass(flask.views.MethodView):
                              int(f.fechaFinalizacion[3:5]))
             '''
         except:
+            sesion.close()
             return make_response('t,Fecha invalida') 
         
         #se controla que fecha inicio sea menor que fecha finalizacion
         if not(fi<=ff):
+            sesion.close()
             return make_response('t,Fecha finalizacion antes que fecha inicio')
         
         
@@ -98,7 +103,8 @@ class ItemControllerClass(flask.views.MethodView):
             if (a is not None):
                 if(a.tipoPrimarioId==1): #cadena
                     
-                    if not(1<=len(at['valor'].strip())<=a.longitudCadena): 
+                    if not(1<=len(at['valor'].strip())<=a.longitudCadena):
+                        sesion.close() 
                         return make_response('t,Se supera caracteres de los campos del atributo '+ at['nombreAtributo'])
                     
                 elif(a.tipoPrimarioId==2):#numerico
@@ -113,10 +119,12 @@ class ItemControllerClass(flask.views.MethodView):
                     print(at["valor"])
                     
                 else:
+                    sesion.close()
                     return make_response('t,Tipo primario invalido')
                 
                 lista.append(at)
             else:
+                sesion.close()
                 return make_response('t,No existe ese atributo')
         sesion.close()
       

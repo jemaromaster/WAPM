@@ -34,6 +34,7 @@ class QuitarMiembrosComite(flask.views.MethodView):
         try:
             proyecto.usuariosComite.remove(user)
         except:
+            sesion.close()
             return "t,No se puede extraer del Comite a un usuario que no es miembro"
         
         sesion.add(proyecto)

@@ -46,13 +46,16 @@ class FaseControllerClass(flask.views.MethodView):
         
         sesion=Session()
         qr=sesion.query(Fase).filter(Fase.idProyecto==f.idProyecto).filter(Fase.nombreFase==f.nombreFase).first()
+        
         #print 'consulta es'+ qr
         
         if(idF==0):
             if(qr is not None):
+                sesion.close()
                 return make_response('t,Ya existe una fase con el nombre indicado')
         else:
             if( qr is not None and str(qr.idFase) != idF ):
+                sesion.close()
                 return make_response('t,Ya existe una fase con el nombre indicado')
         
         '''cuando la fase es nueva se le setea su tag'''
@@ -80,12 +83,14 @@ class FaseControllerClass(flask.views.MethodView):
                              int(f.fechaFinalizacion[3:5]))
             '''
         except:
+            sesion.close()
             return make_response('t,Fecha invalida') 
         
         #se controla que fecha inicio sea menor que fecha finalizacion
         if not(fi<=ff):
+            sesion.close()
             return make_response('t,Fecha finalizacion antes que fecha inicio')
         fm=FaseManejador()
-        
+        sesion.close()
         return fm.guardarFase(f, idF)
         

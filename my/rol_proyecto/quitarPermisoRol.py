@@ -29,11 +29,13 @@ class QuitarPermisoRol(flask.views.MethodView):
         permiso=sesion.query(Permiso).filter(Permiso.id==idPermiso).first()
         rol= sesion.query(RolProyecto).filter(RolProyecto.id==idRol).first()
         if rol.estado== "activo":
-                return "t,El rol no puede ser modificado. Ya se encuentra activo"
+            sesion.close()
+            return "t,El rol no puede ser modificado. Ya se encuentra activo"
         
         try:
             rol.permisos.remove(permiso)
         except:
+            sesion.close()
             return "t,El permiso seleccionado no se encuentra en el Rol"
         
         sesion.add(rol)

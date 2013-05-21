@@ -25,19 +25,23 @@ class FinalizarFase(flask.views.MethodView):
         
         #Controles
         if fase is None:
+            sesion.close()
             return "t,La fase no existe"
         
         if fase.estado != "activa":
+            sesion.close()
             return "t,No se puede finalizar una fase que no este activa"
         
         itemsFase= sesion.query(Item).join(Fase).filter(Fase.idFase==int(idFase))
         
         numberItems=itemsFase.count() 
         if numberItems <= 0:
+            sesion.close()
             return "t,La fase no posee items!"
         
         for item in itemsFase:
             if item.estado!="bloqueado":
+                sesion.close()
                 return "t,Todos los ITEMS deben estar BLQUEADOS"
             
         fase.estado="finalizada"

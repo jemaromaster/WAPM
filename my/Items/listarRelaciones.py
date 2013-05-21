@@ -200,6 +200,7 @@ class ListarRelaciones(flask.views.MethodView):
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
         respuesta=r.jasonizar(listaRel, idItem)
+        sesion.close()
         return respuesta
         
         

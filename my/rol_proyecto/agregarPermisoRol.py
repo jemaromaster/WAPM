@@ -24,8 +24,10 @@ class AgregarPermisoRol(flask.views.MethodView):
         if(idRol!=0):
             p=sesion.query(RolProyecto).filter(RolProyecto.id==int(idRol)).first()
             if p.estado== "activo":
+                sesion.close()
                 return "t,El rol no puede ser modificado. Ya se encuentra activo"
             if(permiso in p.permisos):
+                sesion.close()
                 return "t,Permiso ya existe en el Rol" 
             else:
                 p.permisos.append(permiso)

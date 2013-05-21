@@ -151,6 +151,7 @@ class ListarItemsFase(flask.views.MethodView):
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
         respuesta=r.jasonizar(listaItem)
+        sesion.close()
         return respuesta
         
         

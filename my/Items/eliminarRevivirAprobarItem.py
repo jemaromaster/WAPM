@@ -22,6 +22,7 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
     
     @login_required
     def get(self):
+        sesion.close()
         return flask.render_template('crearUsuario.html')
     
     @login_required
@@ -35,6 +36,7 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
         msg=""
         if(accion=="eliminar"):
             if(q.estado=='inactivo'):
+                sesion.close()
                 return make_response('t,El item ya se encuentra eliminado')
             else:
                 q.estado='inactivo'
@@ -60,9 +62,11 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             
             listaPadres=listaPadres[0:len(listaPadres)-2]
             if (bandera==1):
+                sesion.close()
                 return make_response('t,El padre del item seleccionado": '+ listaPadres+ ' se encuentra en estado '+ p.estado\
                                      + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten por lo menos en estado "aprobado" para poder aprobarse. ')
             elif(bandera==2):
+                sesion.close()
                 return make_response('t,Los padres del item seleccionado: '+ listaPadres+ ' no se encuentran en estado de por lo menos aprobado'\
                                      + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten aprobados para poder aprobarse previamente. ')
             q.estado='aprobado'
@@ -77,6 +81,7 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             sesion.close()
             msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
         else:
+            sesion.close()
             return make_response('t,accion invalida ')
         return make_response(msg)
     

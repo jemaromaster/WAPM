@@ -183,6 +183,7 @@ class ListarMiembrosProyecto(flask.views.MethodView):
             
         r=Respuesta(totalPages,page,total,rows);
         respuesta=r.jasonizar(todosUsuarios,listaUsuarioEnProyecto, enProyecto)
+        sesion.close()
         return respuesta
         
       

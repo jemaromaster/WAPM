@@ -76,6 +76,7 @@ class ListarAtributo(flask.views.MethodView):
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
         respuesta=self.jsonizarListaAtributos(listaAtributo)
+        sesion.close()
         return respuesta
        
    

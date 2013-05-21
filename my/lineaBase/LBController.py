@@ -17,14 +17,18 @@ class LBControllerClass(flask.views.MethodView):
         controlDesc=sesion.query(LineaBase).filter(LineaBase.descripcion==lb.descripcion).first()
         if idLb==0:    
             if controlDesc is not None:
+                sesion.close()
                 return make_response("t,Descripcion de LineaBase coincide con otra!")
             if lb.idFase == '' or lb.idFase=='0':
+                sesion.close()
                 return make_response("t,Fase no valida. No se pudo crear la LineaBase")
             lb.idFase=int(lb.idFase)
         else:
             
             if controlDesc is not None and controlDesc.id != int(idLb):
+                sesion.close()
                 return make_response("t,Descripcion de LineaBase coincide con otra!")    
         lbm=LBManejador()    
+        sesion.close()
         return lbm.guardarLB(lb, idLb)
             

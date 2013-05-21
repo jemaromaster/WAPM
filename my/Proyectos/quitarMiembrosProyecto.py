@@ -37,6 +37,7 @@ class QuitarMiembrosProyecto(flask.views.MethodView):
         try:
             proyecto.usuariosMiembros.remove(user)
         except:
+            sesion.close()
             return "t,No se puede extraer del proyecto a un usuario que no es miembro"
         
         sesion.add(proyecto)

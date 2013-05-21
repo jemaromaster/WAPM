@@ -25,15 +25,18 @@ class FinalizarProyecto(flask.views.MethodView):
         
         #Controles
         if proyecto is None:
+            sesion.close()
             return "t,La El proyecto no existe"
         
         if proyecto.estado != "activo":
+            sesion.close()
             return "t,No se puede finalizar un proyecto que no este activo!"
         
         fasesProyecto= sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==int(idProyecto))
         
         for fase in fasesProyecto:
             if fase.estado!="finalizada":
+                sesion.close()
                 return "t,Todas las FASES deben estar FINALIZADAS"
             
         proyecto.estado="finalizado"

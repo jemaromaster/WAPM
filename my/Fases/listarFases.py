@@ -56,6 +56,7 @@ class ListarComboFases(flask.views.MethodView):
         idProyecto=flask.request.form['idProyecto']
         print "id proyecto en listar combo fases:  " + idProyecto
         if(idProyecto=='' or idProyecto=='0'):
+            sesion.close()
             return "[]"
         
         lf=sesion.query(Fase).order_by("id asc").filter(Fase.idProyecto==int(idProyecto))
@@ -64,7 +65,8 @@ class ListarComboFases(flask.views.MethodView):
         for fase in lf:
             jsonF=jsonF+"{\"idFase\":\""+str(fase.idFase)+"\",\"nombreFase\":\""+fase.nombreFase+"\"},"
         jsonF=jsonF[0:len(jsonF)-1]    
-        jsonF=prejsonF+jsonF+"]"        
+        jsonF=prejsonF+jsonF+"]"
+        sesion.close()        
         return jsonF
         
         
@@ -167,6 +169,7 @@ class ListarFases(flask.views.MethodView):
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
         respuesta=r.jasonizar(listaFase)
+        sesion.close()
         return respuesta
         
         

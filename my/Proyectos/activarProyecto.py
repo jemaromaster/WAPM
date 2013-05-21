@@ -23,24 +23,30 @@ class ActivarProyecto(flask.views.MethodView):
         
         #Controles
         if proyecto is None:
+            sesion.close()
             return "t,El proyecto no existe"
         
         if proyecto.estado != "desarrollo":
+            sesion.close()
             return "t,No se puede pasar a Activo, el proyecto debe estar en desarrollo!"
         
         numberMiembros= len(proyecto.usuariosMiembros)
         if numberMiembros <= 0:
+            sesion.close()
             return "t,El proyecto no posee miembros!"
             
         numberComite= len(proyecto.usuariosComite)
         if numberComite  <= 0:
+            sesion.close()
             return "t,El comite de cambios no posee miembros!"
         resto= numberComite % 2
         if resto == 0:
+            sesion.close()
             return "t,El comite de cambios debe estar compuesto por un numero impar de miembros!"
         
         numberFases= sesion.query(Proyecto).filter(Proyecto.idProyecto==int(idProyecto)).join(Fase).count();
         if numberFases <= 0:
+            sesion.close()
             return "t,No se puede pasar a Activo, el proyecto no contiene fases!"
         
         fasesProyecto=sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==int(idProyecto));

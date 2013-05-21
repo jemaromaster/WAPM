@@ -146,6 +146,7 @@ class ListarRolUsuario(flask.views.MethodView):
             totalPages=total/rows +1
         r=Respuesta(totalPages,page,total,rows);
         respuesta=r.jasonizar(listaRolEnUsuario,listaRolProyecto,enUsuario)
+        sesion.close()
         return respuesta
         
       

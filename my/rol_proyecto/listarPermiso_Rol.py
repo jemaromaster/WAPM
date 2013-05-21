@@ -133,4 +133,5 @@ class ListarPermisosRol(flask.views.MethodView):
             
         r=Respuesta(totalPages,page,total,rows);
         respuesta=r.jasonizar(todosPermisos,listaPermisoEnRol, enRol)
+        sesion.close()
         return respuesta    

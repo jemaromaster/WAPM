@@ -77,6 +77,7 @@ class ItemManejador:
                                 #sesion.commit();
                             
             else:
+                sesion.close()
                 return make_response('t,no se puDOinsertar el Item')
         else: #item a modificar
             #se obtiene el item a modificar
@@ -118,6 +119,7 @@ class ItemManejador:
                                 #sesion.commit();
                             
             else:
+                sesion.close()
                 return make_response('t,no se puedo insertar el Item22')
             
         sesion.commit()

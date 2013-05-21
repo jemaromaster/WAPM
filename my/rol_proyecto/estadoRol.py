@@ -23,11 +23,13 @@ class EstadoRol(flask.views.MethodView):
         sesion=Session()
         rol= sesion.query(RolProyecto).filter(RolProyecto.id==int(idRol)).first()
         if rol is None:
+            sesion.close()
             return "t,No existe Rol"
         if estado == "activo":
             #se debe pasar a inactivo
             cantidad = sesion.query(RolProyecto).filter(RolProyecto.id==idRol).join(RolProyecto.usuarios).count()
             if cantidad > 0:
+                sesion.close()
                 return "t,No se puede inactivar el Rol. Ya ha sido asignado a usuario/s"
             rol.estado="inactivo"
 

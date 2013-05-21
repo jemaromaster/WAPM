@@ -187,6 +187,7 @@ class ListarProyectos(flask.views.MethodView):
         elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
         respuesta=r.jasonizar(listaUsuario, elUser.username)
+        sesion.close()
         return respuesta
         
       

@@ -44,5 +44,6 @@ class ListarItemsRelacionarMiniDialogoComboBox(flask.views.MethodView):
         #or Item.idFase==str(int(idFase)-1)
         
         respuesta=self.jasonizar(relLista)
+        sesion.close()
         return respuesta
         

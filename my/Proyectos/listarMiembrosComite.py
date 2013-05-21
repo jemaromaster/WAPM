@@ -155,6 +155,7 @@ class ListarMiembrosComite(flask.views.MethodView):
             
         r=Respuesta(totalPages,page,total,rows);
         respuesta=r.jasonizar(listaUsuarioEnProyecto,idProyecto,enComite)
+        sesion.close()
         return respuesta
         
       

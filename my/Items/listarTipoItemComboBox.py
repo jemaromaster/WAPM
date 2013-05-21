@@ -35,5 +35,6 @@ class ListarTipoItemComboBox(flask.views.MethodView):
         tipoItemLista=sesion.query(TipoItem).filter(TipoItem.fase_id==idTI)
        
         respuesta=self.jasonizar(tipoItemLista)
+        sesion.close()
         return respuesta
         
