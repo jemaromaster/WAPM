@@ -58,7 +58,7 @@ class ListarComboFases(flask.views.MethodView):
         if(idProyecto=='' or idProyecto=='0'):
             return "[]"
         
-        lf=sesion.query(Fase).filter(Fase.idProyecto==int(idProyecto)).order_by("idFase")
+        lf=sesion.query(Fase).order_by("id asc").filter(Fase.idProyecto==int(idProyecto))
         prejsonF='['
         jsonF=''
         for fase in lf:

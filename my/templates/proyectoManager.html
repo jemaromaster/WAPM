@@ -2658,7 +2658,28 @@ var banderaRol;
 			if(rowdata.estado!="activo"){
 				mostrarMensaje("Error", "El proyecto debe estar en estado activo para ser fiinalizado")
 			}else{
-				
+				$.post('/finalizarProyecto/',{
+					
+					idProyecto: rowdata.idProyecto
+					},
+					function(data, status) {
+						if (data.substring(0, 1) == 't') {
+							mostrarMensaje(
+									"Error","Los datos no se han podido guardar:\n"
+											+ data.substring(2));
+					
+						} else {
+							mostrarMensaje(
+									"Exito",
+									data
+											.substring(2));
+						}
+					
+						$('#list')
+								.trigger(
+										"reloadGrid");
+					});	
+		
 				
 				
 				

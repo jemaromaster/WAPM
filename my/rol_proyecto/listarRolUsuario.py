@@ -119,16 +119,20 @@ class ListarRolUsuario(flask.views.MethodView):
                     continue    
             listaRolProyecto=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).\
                                                     filter((RolProyecto.nombre.like(nombre )& \
-                                                    RolProyecto.descripcion.like(descripcion)))[desde:hasta] 
+                                                    RolProyecto.descripcion.like(descripcion)))\
+                                                    .filter(RolProyecto.estado=="activo")[desde:hasta] 
                                                     
             total==sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).\
                                                     filter((RolProyecto.nombre.like(nombre )& \
-                                                    RolProyecto.descripcion.like(descripcion))).count();
+                                                    RolProyecto.descripcion.like(descripcion)))\
+                                                    .filter(RolProyecto.estado=="activo").count();
             
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
-            listaRolProyecto=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto))[desde:hasta]
-            total=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).count()
+            listaRolProyecto=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto))\
+                                                    .filter(RolProyecto.estado=="activo")[desde:hasta]
+            total=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto))\
+                                                    .filter(RolProyecto.estado=="activo").count()
         
         listaRolEnUsuario=sesion.query(RolProyecto).join(Fase).join(Proyecto).filter(Proyecto.idProyecto == int(idProyecto)).join(RolProyecto.usuarios).filter(Usuario.id==int(idUsuario))
             

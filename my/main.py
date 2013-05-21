@@ -15,7 +15,7 @@ from Usuarios.modificarUsuario import ModificarUsuario
 from Usuarios.listarUsuarios import ListarUsuarios
 from Usuarios.listarUsuarios import ListarComboUsuarios
 
-
+from Proyectos.finalizarProyecto import FinalizarProyecto
 from Proyectos.proyectoManager import ProyectoManager
 from Proyectos.modificarProyecto import ModificarProyecto
 from Proyectos.agregarProyecto import AgregarProyecto
@@ -127,6 +127,9 @@ app.add_url_rule('/usuarioManager/modificarUsuario',
                  methods=["GET", "POST"])
 
 
+app.add_url_rule('/finalizarProyecto/',
+                 view_func=FinalizarProyecto.as_view('finalizarProyecto'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarProyecto/',
                  view_func=AgregarProyecto.as_view('agregarProyecto'),
                  methods=["GET", "POST"])
