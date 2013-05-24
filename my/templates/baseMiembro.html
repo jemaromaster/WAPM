@@ -95,6 +95,9 @@
 									  cargarFasesEnComboBox()
 					                  $('#listaLB').trigger("reloadGrid");
 					                  break;
+								case'/solicitudCambioManager/':
+									  updateListSC();
+					                  break;
 								default:
 									
 							}
@@ -206,7 +209,9 @@
 						<li><a href="{{url_for('LBManager')}}">Linea Base Manager</a>
 						<li><a href="{{url_for('tipoItemManager')}}">Tipo Item Manager</a>
 						<li><a href="{{url_for('estadoFase')}}">Estado de Fases</a>
-					</ul></li> {% else %} {% endif %}
+					</ul></li> 
+				<li><a href="{{url_for('solicitudCambioManager')}}">Solicitud de Cambio</a>
+					{% else %} {% endif %}
 			</ul>
 	</div>
 	

@@ -37,5 +37,7 @@ def initDB():
     from instanciaAtributos import InstanciaTipoItem,InstanciaFecha, InstanciaCadena, InstanciaNumerico, InstanciaEntero
     from atributosModelo import Atributos
     from historialModelo import HistorialItem
-    from lineaBaseModelo import LineaBase    
+    from lineaBaseModelo import LineaBase
+    from solicitudCambioModelo import SolicitudCambio
+    from solicitudCambioModelo import Voto    
     Base.metadata.create_all(engine)

@@ -1,6 +1,11 @@
 import flask, flask.views
 from flask import jsonify
 
+from SC.listarSCSolicitante import ListarSCSolicitante
+from SC.listarItemAgregar import ListarItemAgregar
+from SC.solicitudCambioManager import SolicitudCambioManager
+from SC.agregarSolicitudCambio import AgregarSolicitudCambio
+
 from lineaBase.LBManager import LBManager
 from lineaBase.agregarLB import AgregarLB
 from lineaBase.modificarLB import ModificarLB
@@ -101,6 +106,22 @@ app.secret_key = "bacon"
 app.add_url_rule('/',
                  view_func=Login.as_view('index'),
                  methods=["GET", "POST"])
+
+
+app.add_url_rule('/agregarSolicitudCambio/',
+                 view_func=AgregarSolicitudCambio.as_view('agregarSolicitudCambio'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarSCSolicitante/',
+                 view_func=ListarSCSolicitante.as_view('listarSCSolicitante'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarItemAgregar/',
+                 view_func=ListarItemAgregar.as_view('listarItemAgregar'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/solicitudCambioManager/',
+                 view_func=SolicitudCambioManager.as_view('solicitudCambioManager'),
+                 methods=["GET", "POST"])
+
+
 
 app.add_url_rule('/miembros/',
                  view_func=Miembros.as_view('miembros'),
@@ -345,4 +366,4 @@ app.add_url_rule('/cerrarLB/',
 
 app.debug = True
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run()
