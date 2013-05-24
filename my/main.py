@@ -3,6 +3,7 @@ from flask import jsonify
 
 from SC.listarSCSolicitante import ListarSCSolicitante
 from SC.listarItemAgregar import ListarItemAgregar
+from SC.listarItemIncluido import ListarItemIncluido
 from SC.solicitudCambioManager import SolicitudCambioManager
 from SC.agregarSolicitudCambio import AgregarSolicitudCambio
 
@@ -116,6 +117,9 @@ app.add_url_rule('/listarSCSolicitante/',
                  methods=["GET", "POST"])
 app.add_url_rule('/listarItemAgregar/',
                  view_func=ListarItemAgregar.as_view('listarItemAgregar'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarItemIncluido/',
+                 view_func=ListarItemIncluido.as_view('listarItemIncluido'),
                  methods=["GET", "POST"])
 app.add_url_rule('/solicitudCambioManager/',
                  view_func=SolicitudCambioManager.as_view('solicitudCambioManager'),

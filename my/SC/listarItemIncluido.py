@@ -7,6 +7,8 @@ from datetime import date
 
 from models.usuarioModelo import Usuario
 from models.proyectoModelo import Proyecto
+from models.itemModelo import Item
+from models.faseModelo import Fase
 from models.solicitudCambioModelo import SolicitudCambio
 sesion=Session()
 
@@ -29,7 +31,7 @@ class Respuesta():
         self.totalRecords=totalRecords
         self.rows=rows
     
-    def jasonizar(self, listaSC):
+    def jasonizar(self, listaItemIncluido):
         """
         modulo que jasoniza la respuesta
         """
@@ -39,24 +41,25 @@ class Respuesta():
         
         
         
-        for sc in listaSC:
-            p=p+"{\"idSC\": \""+str(sc.id)+"\",\"descripcion\": \""+ \
-                sc.descripcion+ \
-                "\", \"estado\":\"" + sc.estado +"\"},"
+        for item in listaItemIncluido:
+            p=p+"{\"idItem\": \""+str(item.idItem)+ \
+                "\",\"idFase\": \""+ item.tag+ \
+                "\", \"estado\":\"" + item.estado + \
+                "\", \"nombreItem\":\"" + item.nombreItem +"\"},"
         p=p[0:len(p)-1]    
         p=p+"]}"    
         p=pre+p
         return p 
         
-class ListarSCSolicitante(flask.views.MethodView):
+class ListarItemIncluido(flask.views.MethodView):
     @login_required
     def get(self): 
         #se obtiene los datos de post del server
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
-        idProyecto=flask.request.args.get('idProyecto', '')
-        idUsuario=flask.request.args.get('idUsuario', '')
+        idSC=flask.request.args.get('idSC', '')
+        
         
         #caluclo de paginacion 
         page=long(param1)
@@ -71,53 +74,53 @@ class ListarSCSolicitante(flask.views.MethodView):
         
         
         #se establece el campo de filtro proveniente del server para hacer coincidir con el nombre de la tabla
-        if(sidx=='descripcion'):
-            filtrarPor='descripcion'
+        if(sidx=='idFase'):
+            filtrarPor='idFase'
+        elif(sidx=='nombreItem'):
+            filtrarPor='nombreItem'
         elif(sidx=='estado'):
             filtrarPor='estado'
-        elif(sidx=='idSC'):
-            filtrarPor='id'
+        else:
+            filtrarPor='idFase'
              
         #se extrae el id de la session cookie
         #projectLeaderId=flask.session['idUsuario']
         
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
-        estado='pendiente'
+        
         if (search=='true'):
             filters=flask.request.args.get('filters', '')
             obj = json.loads(filters)
             vector=obj['rules']
             i=0
             #field=vector[0]['field']
-            descripcion='%'
-            
+            idFase='%'
+            nombreItem='%'
             
             for comp in vector:
-                if(comp['field']=='descripcion'):
-                    descripcion=comp['data'].strip() + '%'
+                if(comp['field']=='idFase'):
+                    idFase=comp['data'].strip() + '%'
                     continue
-                if comp['field']=='estado':
-                    estado=comp['data'].strip()+'%'
+                if comp['field']=='nombreItem':
+                    nombreItem=comp['data'].strip()+'%'
                     continue
-                    
                 
-            querySC=sesion.query(SolicitudCambio).order_by(filtrarPor)\
-                                                    .filter(SolicitudCambio.idProyecto==int(idProyecto))\
-                                                    .filter(SolicitudCambio.idSolicitante==int(idUsuario))\
-                                                    .filter(SolicitudCambio.descripcion.like(descripcion) &\
-                                                    SolicitudCambio.estado.like(estado))
-            listaSC=querySC[desde:hasta]
-            total=querySC.count()
+            queryItemIncluido=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Item.idFase==Fase.idFase)\
+                                                                        .join(SolicitudCambio.items).filter(SolicitudCambio.id==idSC);
+            queryItemIncluido=queryItemIncluido.filter(Fase.tag.like(idFase),Item.nombreItem.like(nombreItem))                                                            
+            listaItemIncluido=queryItemIncluido[desde:hasta]
+            total=queryItemIncluido.count()
             
         else:
             
-            querySC=sesion.query(SolicitudCambio).order_by(filtrarPor)\
-                                                    .filter(SolicitudCambio.idProyecto==int(idProyecto))\
-                                                    .filter(SolicitudCambio.idSolicitante==int(idUsuario))\
-                                                    .filter(SolicitudCambio.estado.like(estado))
-            listaSC=querySC[desde:hasta]
-            total=querySC.count()
+            queryItemIncluido=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Item.idFase==Fase.idFase)\
+                                                                        .join(SolicitudCambio.items).filter(SolicitudCambio.id==idSC);
+            listaItemIncluido=queryItemIncluido[desde:hasta]
+            total=queryItemIncluido.count()
             
+        print total
+        print desde
+        print hasta 
         resto=total%rows
         if resto == 0:
             totalPages=total/rows
@@ -127,7 +130,7 @@ class ListarSCSolicitante(flask.views.MethodView):
         
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
-        respuesta=r.jasonizar(listaSC)
+        respuesta=r.jasonizar(listaItemIncluido)
         sesion.close()
         return respuesta
         

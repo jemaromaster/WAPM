@@ -100,21 +100,40 @@ class ListarItemAgregar(flask.views.MethodView):
             
             for comp in vector:
                 if(comp['field']=='idFase'):
-                    idFase=vector[i]['data'].strip() + '%'
+                    idFase=comp['data'].strip() + '%'
                     continue
                 if comp['field']=='nombreItem':
-                    nombreItem=vector[i]['data'].strip()+'%'
+                    nombreItem=comp['data'].strip()+'%'
                     continue
-                
-            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Fase.idProyecto==idProyecto,Item.idFase==Fase.idFase,\
-                                                            Item.estado=="aprobado" or Item.estado=="bloqueado");
-            listaItemAgregar=queryItemAgregar[desde:hasta]
-            total=queryItemAgregar.count()
-            
-        else:
-            
+            '''    
             queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Fase.idProyecto==idProyecto,Item.idFase==Fase.idFase,\
                                                             Item.estado.in_(['aprobado', 'bloqueado']));
+            queryItemAgregar=queryItemAgregar.filter(Fase.tag.like(idFase),Item.nombreItem.like(nombreItem))
+            
+            listaItemAgregar=queryItemAgregar[desde:hasta]
+            total=queryItemAgregar.count()
+            '''
+            #controlar que no se encuentre en otra solicitud de cambio pendiente
+            
+            itemtAlreadySC=sesion.query(Item.idItem).filter(SolicitudCambio.estado=="pendiente").join(SolicitudCambio.items).all()
+            
+            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Fase.idProyecto==idProyecto,\
+                                                            Item.idFase==Fase.idFase,\
+                                                            Item.estado.in_(['aprobado', 'bloqueado']),\
+                                                            ~Item.idItem.in_(itemtAlreadySC));
+            
+            queryItemAgregar=queryItemAgregar.filter(Fase.tag.like(idFase),Item.nombreItem.like(nombreItem))
+            listaItemAgregar=queryItemAgregar[desde:hasta]
+            total=queryItemAgregar.count()
+                
+            
+        else:
+            itemtAlreadySC=sesion.query(Item.idItem).filter(SolicitudCambio.estado=="pendiente").join(SolicitudCambio.items).all()
+            
+            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Fase.idProyecto==idProyecto,\
+                                                            Item.idFase==Fase.idFase,\
+                                                            Item.estado.in_(['aprobado', 'bloqueado']),\
+                                                            ~Item.idItem.in_(itemtAlreadySC));
             listaItemAgregar=queryItemAgregar[desde:hasta]
             total=queryItemAgregar.count()
             

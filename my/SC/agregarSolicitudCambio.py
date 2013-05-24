@@ -54,6 +54,14 @@ class AgregarSolicitudCambio(flask.views.MethodView):
         for idItem in listaItem:
             id=int(idItem)
             item=sesion.query(Item).filter(Item.idItem==id).first()
+            #control para no poner un item en mas de una SC
+            SCpendientes=sesion.query(SolicitudCambio).filter(SolicitudCambio.estado=="pendiente")\
+                                            .join(SolicitudCambio.items)\
+                                            .filter(Item.idItem==id).count()
+            if SCpendientes > 0:
+                return make_response('t,El item ya se encuentra en otra solicitud')
+                sesion.close()
+            ##################################    
             SC.items.append(item)
         
         comite=sesion.query(Usuario).join(Proyecto.usuariosComite).filter(Proyecto.idProyecto==int(idProyecto)).all()

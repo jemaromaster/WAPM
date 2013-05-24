@@ -152,6 +152,73 @@
 			defaultSearch : "cn"
 		});
 		
+		var gridItemAgregar = jQuery("#listItemIncluido").jqGrid(
+				{
+					
+					// datatype : "local",
+					// data:mydata,
+					url : '/listarItemIncluido',
+					datatype : "json",
+					mtype : "get",
+					postData: { idSC: '0'},
+					show : {
+						effect : 'fade',
+						duration : 200
+					},
+					hide : {
+						effect : 'fade',
+						duration : 200
+					},
+					colNames : [ 'ID SC ', 'Fase',
+							'Item','Estado'],
+					colModel : [ {
+						name : 'idItem',
+						index : 'idItem',
+						hidden : true
+					}, {
+						name : 'idFase',
+						index : 'idFase',
+					},{
+						name : 'nombreItem',
+						index : 'nombreItem',
+					},
+					{
+						name: 'estado',
+						index: 'estado',
+						search:false
+					}
+
+					],
+					sortname : 'idFase',
+					viewrecords : true,
+					rownumbers : true,
+					sortorder : "desc",
+					ignoreCase : true,
+					pager : '#pagerItemIncluido',
+					caption : "Items dentro de la Solicitud",
+					jsonReader : {
+						root : "invdata",
+						page : "currpage",
+						total : "totalpages",
+						records : "totalrecords",
+						repeatitems : false
+					}
+
+				}).jqGrid('navGrid', '#pagerItemIncluido', {
+			edit : false,
+			add : false,
+			del : false,
+			search : false,
+			refresh : true
+		});
+		gridItemAgregar.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+
+		
+		
 		$("#dialogo-item-agregar")
 		.dialog(
 				{
@@ -177,6 +244,30 @@
 						"Quitar item" : function() {quitar() },
 						"Enviar Solicitud" : function() {enviar()},
 						"Cancelar Solicitud" : function() { cancelar()}
+					}
+				});
+		$("#dialogo-item-incluido")
+		.dialog(
+				{
+					autoOpen : false,
+					modal : true,
+					overflow : scroll,
+					resizable : false,
+					width: 'auto',
+					heigth: 'auto',
+					
+					
+					show : {
+						effect : 'fade',
+						duration : 400
+					},
+					hide : {
+						effect : 'fade',
+						duration : 350
+					},
+					buttons : {
+						/* funcion asociado al boton aceptar */
+						"Salir" : function() {$(this).dialog("close"); }
 					}
 				});
 
@@ -328,6 +419,22 @@
 			});
 			
 	}
+	function consultar(){
+		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
+		if (rowItem == null) {
+			//window.alert("Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar una solicitud");
+			return;
+		}
+		var rowdata = $('#listSC').getRowData(rowItem);
+		
+		$('#listItemIncluido').setGridParam({postData : {
+			idSC: rowdata.idSC,
+		}
+		});
+		$('#listItemIncluido').trigger("reloadGrid");
+		$("#dialogo-item-incluido").dialog("open");
+	}
 	
 	
 	
@@ -341,7 +448,7 @@
 	
 			<br></br> 
 			<input id="btAgregar" type="button" name="nueva" value="Nueva" onclick='agregar()' />
-			<input id="btConsultar" type="button" name="consultar" value="Consultar" onclick='consultar()' />
+			<input id="btConsultar" type="button" name="consultar" value="Consultar Items" onclick='consultar()' />
 			 <br></br>
 	
 		</div>
@@ -360,6 +467,11 @@
 			style="width: 80%; display: block; margin-bottom: 12px; padding: 0.4em;">
 			</textarea>
 			<br/>
+		</div>
+		
+		<div id="dialogo-item-incluido" title="Items incluidos en la solicitud">
+			<table id="listItemIncluido"></table>
+			<div id="pagerItemIncluido"></div>
 		</div>
 		
 		<div id="msgbox"></div>
