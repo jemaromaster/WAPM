@@ -4,11 +4,15 @@ import flask.views
 from models.itemModelo import Item
 from models.atributosModelo import Atributos
 from models.bdCreator import Session
+from models.historialModelo import HistorialRelacion
 
 from models.faseModelo import Fase
 
 from itemManejador import ItemManejador
 from datetime import datetime
+from Grafos.nodo import Nodo
+from models.itemModelo import Item, Relacion
+
 class ItemControllerClass(flask.views.MethodView):
             
     def controlarItem(self, f, idF, atributos, esReversion):
@@ -52,11 +56,73 @@ class ItemControllerClass(flask.views.MethodView):
                 if( qr is not None and str(qr.idItem) != idF ):
                     sesion.close()
                     return make_response('t,Ya existe un item con el nombre indicado en la fase')
-        else:
+        else: #es reversion
             if(qr is not None and str(qr.idItem) != idF):
                 sesion.close()
                 return make_response('t,Existe item que cuenta con el mismo nombre que la version a la cual desea\
                                             reversionar. Modifique el nombre del item "'+ qr.nombreItem + '" para poder reversionar' )
+        
+        
+            q2=sesion.query(HistorialRelacion).filter(HistorialRelacion.hijo_id==f.idItem)\
+                                             .filter(HistorialRelacion.versionHijo==esReversion)\
+                                             .all()
+            
+            #########################################################33
+            #se controla que no se este creando un ciclo a la hora de agregar las relaciones
+            ##############################################################333
+            q=sesion.query(Item).filter(Item.idFase==int(f.idFase)).filter(Item.estado=='activo').all()
+        
+            nLista=dict()
+            #aca se crea el grafo
+            p=None;
+            h=None;
+            for i in q:
+                aux=Nodo(i.idItem, i.nombreItem,i.idFase);
+                '''if(int(padre_id)==aux.idItem):
+                    p=aux;
+                elif(int(hijo_id)==aux.idItem):
+                    h=aux;'''
+                
+                nLista[str(aux.idItem)]=aux #se utiliza un mapper
+            
+            #para cada nodo en estado activo y sea de la fase
+            for i in nLista:
+                #se obtiene los nodos padres
+                q=sesion.query(Relacion).filter(Relacion.hijo_id==nLista[i].idItem).all();
+                      
+                #se crea la relacion con sus padres
+                for s in q:
+                    if(str(s.padre_id) in nLista):
+                        nodo_rel=nLista[str(s.padre_id)];
+                        nLista[i].agregarRelacion(nodo_rel)
+            
+            
+            
+            #para cada relacion de la version a reversionar se controla si no generara ciclo
+            for hrel in q2:
+                tienec=0;
+                p=nLista[str(hrel.padre_id)]
+                h=nLista[str(hrel.hijo_id)]
+                if h is not None:
+                    h.agregarRelacion(p);
+                    print("el ciclo es")
+                    tienec=h.probarSiTieneCiclo(h);
+                    
+                
+                if(tienec==1):
+                    cad=''
+                    for a in Nodo.cicloImprimir:
+                        cad=cad+'->'+Nodo.cicloImprimir[a];
+                    cicloImprimir=dict()
+                    
+                    cad=cad[2:len(cad)]  
+                    sesion.close()
+                    return make_response('t,La version a la que desea reversion genera el siguiente ciclo: '\
+                                         + cad +'. Se debe eliminar alguna relacion del grafo actual para poder reversionar a la version')
+            
+            ##########################################################################################
+            ##########################################################################33
+            ############################################################################
         
         if(esReversion==0):#cuando no es reversion
             if(idF==0):
@@ -131,5 +197,5 @@ class ItemControllerClass(flask.views.MethodView):
         
         im=ItemManejador()
        
-        return im.guardarItem(f, idF, lista)
+        return im.guardarItem(f, idF, lista, esReversion)
         

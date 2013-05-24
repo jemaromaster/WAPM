@@ -343,6 +343,8 @@ app.add_url_rule('/cerrarLB/',
                  methods=["GET","POST"])
 
 
+
+
 app.debug = True
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

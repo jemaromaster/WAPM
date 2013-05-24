@@ -38,6 +38,8 @@ class ModificarItem(flask.views.MethodView):
         nombreItem=flask.request.form['nombreItem']
         prioridad=flask.request.form['prioridad']
         
+        
+        
         tipoItemId=0; #aca le paso 0 ya que el tipo item no cambia y es el mismo de la version anterior
         
         

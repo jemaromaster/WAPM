@@ -62,7 +62,7 @@ class ListarAtributosResultado(flask.views.MethodView):
         idItem=flask.request.args.get('idItem', '')
         version=flask.request.args.get('version', '')
         i=sesion.query(InstanciaTipoItem)\
-                                .filter(InstanciaTipoItem.idItem==idItem).all();
+                                .filter(InstanciaTipoItem.idItem==int(idItem)).all();
         for s in i:
             print str(s.idInstanciaTipoItem)+","+str(s.nombreCampo)+","+ str(s.tipoPrimario)
         

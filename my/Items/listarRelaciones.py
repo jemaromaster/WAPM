@@ -9,7 +9,7 @@ from models.tipoItemModelo import TipoItem
 from models.itemModelo import Item
 from models.itemModelo import Relacion
 from models.usuarioModelo import Usuario
-
+from models.historialModelo import HistorialRelacion
 from sqlalchemy import or_
 
 sesion=Session()
@@ -32,7 +32,7 @@ class Respuesta():
         self.totalRecords=totalRecords
         self.rows=rows
     
-    def jasonizar(self, listaRel, idItem):
+    def jasonizar(self, listaRel, idItem, esReversion, listaHijos):
         """
         modulo que jasoniza la respuesta
         """
@@ -60,6 +60,19 @@ class Respuesta():
             p=p+json.dumps({"idRelacion": f.idRelacion,"relacion":r_descripcion , "idItemRelacionado":id_item_relacionado,  \
                             "nombreItem": i.tag , "estado": i.estado}, separators=(',',':'))+",";
            
+        
+        
+        if (esReversion==1 and listaHijos is not None):
+            for f in listaHijos:
+                i=None
+                r_descripcion='Hijo'
+                id_item_relacionado=f.hijo_id;
+                i=sesion.query(Item).filter(Item.idItem==f.hijo_id).first()
+                if(i is not None):
+                    p=p+json.dumps({"idRelacion": f.idRelacion,"relacion":r_descripcion , "idItemRelacionado":id_item_relacionado,  \
+                            "nombreItem": i.tag , "estado": i.estado}, separators=(',',':'))+",";
+                else:
+                    return make_response("t,No se pudo agregar a la lista los hijos la relacion a la cual se desea reversionar")
         p=p[0:len(p)-1]    
         p=p+"]}"    
         p=pre+p
@@ -77,6 +90,7 @@ class ListarRelaciones(flask.views.MethodView):
         idProyecto=flask.request.args.get('idP', '')
         idFase=flask.request.args.get('idF', '')
         idItem=flask.request.args.get('idIt', '')
+        version=flask.request.args.get('version', '')
         
         print "ide del item es :  "+ idItem
         if idItem is not None and idItem!='':
@@ -185,21 +199,37 @@ class ListarRelaciones(flask.views.MethodView):
                                                     .filter(Item.idFase==idFase)\
                                                     .filter(Item.estado!='inactivo').count()'''
             print (filtrarPor);
-            listaRel=sesion.query(Relacion).order_by(filtrarPor)\
-                                                    .filter(or_(Relacion.hijo_id==idItem, Relacion.padre_id==idItem)).all()
+            q=sesion.query(Item).filter(Item.idItem==int(idItem)).first()
+            esReversion=0;
+            listaHijos=None;
+            if(q.version==int(version)):
+                
+                listaRel=sesion.query(Relacion).order_by(filtrarPor)\
+                                                        .filter(or_(Relacion.hijo_id==idItem, Relacion.padre_id==idItem))\
+                                                        .all()
+            elif(q.version>int(version)):
+                listaRel=sesion.query(HistorialRelacion).filter(HistorialRelacion.versionHijo==int(version))\
+                                                        .filter(HistorialRelacion.hijo_id==idItem)\
+                                                        .all()
+                esReversion=1;
+                listaHijos=sesion.query(Relacion)\
+                                                        .filter(Relacion.padre_id==idItem)\
+                                                        .all()
+            else:
+                return make_response("t,version invalida")
         print total
-        print desde
+        print desde 
         print hasta 
         resto=total%rows
         if resto == 0:
             totalPages=total/rows
-        else:
+        else:   
             totalPages=total/rows +1
         r=Respuesta(totalPages,page,total,rows);
         
         # elUser=sesion.query(Usuario).filter(Usuario.id==projectLeaderId).first()
         
-        respuesta=r.jasonizar(listaRel, idItem)
+        respuesta=r.jasonizar(listaRel, idItem, esReversion,listaHijos)
         sesion.close()
         return respuesta
         

@@ -8,12 +8,12 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 from sqlalchemy.orm import sessionmaker
 if DEV == True:
-    engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
-    #engine = create_engine('postgresql://postgres:pm@localhost:5432/wapm')
+    #engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
+    engine = create_engine('postgresql://postgres:pm@localhost:5432/wapm')
     print "ambiente de desarrollo"
 else:
-    engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
-    #engine = create_engine('postgresql://postgres:pm@localhost:5432/WAPM_PROD')
+    #engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm')
+    engine = create_engine('postgresql://postgres:pm@localhost:5432/WAPM_PROD')
     print "ambiente de produccion"
 Session = sessionmaker(bind=engine)
 
@@ -36,6 +36,6 @@ def initDB():
     from itemModelo import Item, Relacion
     from instanciaAtributos import InstanciaTipoItem,InstanciaFecha, InstanciaCadena, InstanciaNumerico, InstanciaEntero
     from atributosModelo import Atributos
-    from historialModelo import HistorialItem
+    from historialModelo import HistorialItem, HistorialRelacion
     from lineaBaseModelo import LineaBase    
     Base.metadata.create_all(engine)

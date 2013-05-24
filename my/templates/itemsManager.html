@@ -302,6 +302,16 @@
 		
 		<div id="atributosTipodeItem"></div>
 		</fieldset>
+		
+		<div id="divJQGridRelacionesConsultar" style="margin-left:auto; margin-right:auto; ">
+		<fieldset id="fieldsetRelaciones" class="ui-widget-content ui-corner-all"  style="border: 1px solid inherit; margin-top: 12px ">
+		<legend>Relaciones</legend>
+		
+			<table id="listaRelacionesConsultar"></table>
+			<div id="pagerRelacionesConsultar"></div>
+		
+		</fieldset>
+		</div>
 	</form>
 </div>
 
@@ -334,11 +344,20 @@
 </div>
 <div id="dialogo-relacionarManager" title="Relaciones">
 	<td>
-		<div><label for="Item" style="display: block">Nombre Item:</label><input type="text" name="nombreItemDialogo" id="nombreItemDialogo"
+		<div>
+			<table> 
+			<tr>
+			<td><label for="Item" style="display: block">Nombre Item:</label><input type="text" name="nombreItemDialogo" id="nombreItemDialogo"
 						class="text ui-widget-content ui-corner-all" readonly="readonly"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 60%;" /></td>
+			<td><label for="Version" style="display: block">Version:</label><input type="text" name="versionRelacionarItemDialogo" id="versionRelacionarItemDialogo"
+			class="text ui-widget-content ui-corner-all" readonly="readonly"
+			style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" /></td>
+			
+			</tr>
+			</table>
 		</div>
-		<div style="margin-left:auto; margin-right:auto;">
+		<div id="divJQGridRelaciones" style="margin-left:auto; margin-right:auto;">
 			<table id="listaRelaciones"></table>
 				<div id="pagerRelaciones"></div>
 		</div>
@@ -629,7 +648,7 @@
 									}
 								} else if (bandera == 3) {/*consultar*/
 									$(this).dialog("close");
-								}else if (bandera == 4) {
+								}else if (bandera == 4) {/*reversionar*/
 									var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 									rowdata = $('#listaItems').getRowData(row);
 									if (control(false) == 1 | controlTI()==1) {
@@ -670,7 +689,7 @@
 																	.val(),
 															tipoItemId : rowdata.tipoItem_id,
 															idFase : rowdata.idFase,
-															esReversion : 1,
+															esReversion : $("#versionComboBox").val(),
 															atributos: jsonizarAtributos()
 														},
 														function(data, status) {
@@ -915,6 +934,7 @@
 		setCamposDisabled(false);
 		setearFormularioSkyBlue();
 		//$.enmascarar();
+		$("#divJQGridRelacionesConsultar").hide();
 		$("#dialogo-datos-item").dialog("open");
 		
 	}
@@ -951,6 +971,7 @@
 		
 		//$.enmascarar();
 		/* se llama al dialogo para modificar los datos */
+		$("#divJQGridRelacionesConsultar").hide();
 		$("#dialogo-datos-item").dialog("open");
 	}
 	
@@ -977,8 +998,23 @@
 		setCamposDisabled(true);
 		
 		/* se llama al dialogo para modificar los datos */
+		$("#divJQGridRelacionesConsultar").show();
+		reloadListaRelaciones('listaRelacionesConsultar', false)
+		//$("#listaRelacionesConsultar").trigger("reloadGrid");
 		$("#dialogo-datos-item").dialog("open");
 	}
+	$('#versionComboBox').change(function() {
+		//$('#atributosTipodeItem').empty();
+		//alert("change")
+		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+		var rowdata;
+		$('#atributosTipodeItem').empty();
+		cargarForm(rowdata, row, $('#versionComboBox').val());
+		reloadListaRelaciones('listaRelacionesConsultar', true)
+		//$("#listaRelacionesConsultar").trigger("reloadGrid");
+		
+	});
+	
 	function reversionar() {
 		/* se indica que el dato no es nuevo */
 		bandera = 4;
@@ -994,13 +1030,6 @@
 		cargarComboBoxVersiones(row);
 		$('#atributosTipodeItem').empty();
 		cargarForm(rowdata, row, $('#versionComboBox').val());
-		$('#versionComboBox').change(function() {
-			//$('#atributosTipodeItem').empty();
-			$('#atributosTipodeItem').empty();
-			cargarForm(rowdata, row, $('#versionComboBox').val());
-		});
-		
-		
 		
 		/*se inhabilita la edicion*/
 		setCamposDisabled(true);
@@ -1008,7 +1037,9 @@
 		$("#versionDiv").show();
 		$('#versionComboBox').show();
 		/* se llama al dialogo para modificar los datos */
-		
+		$("#divJQGridRelacionesConsultar").show();
+		reloadListaRelaciones('listaRelacionesConsultar', true)
+		//$("#listaRelacionesConsultar").trigger("reloadGrid");
 		$("#dialogo-datos-item").dialog("open");
 	}
 	
@@ -1060,14 +1091,18 @@
 		}
 		rowdata = $('#listaItems').getRowData(row);
 		
-		if(rowdata.estado!="activo"){
+		if(rowdata.estado!="activo" && rowdata.estado!="pendiente"){
 			titulo="Atencion"
 			mensaje="No se puede setear a Pendiente un item en estado "+ rowdata.estado
 			mostrarMensaje(titulo, mensaje)
 			return;
-		}else{
+		}else if (rowdata.estado=="activo"){
 			titulo="Atencion"
 			mensaje="Esta seguro que desea setear a pendiente el estado del item "+ rowdata.nombreItem + "?"
+			accion="pendiente"
+		}else if (rowdata.estado=="pendiente"){
+			titulo="Atencion"
+			mensaje="Esta seguro que desea volver a activar el item "+ rowdata.nombreItem + "?"
 			accion="pendiente"
 		}
 		
@@ -1412,6 +1447,7 @@
 	}
 	
 	
+	
 	var gridRelaciones = jQuery("#listaRelaciones").jqGrid(
 			{
 				url : '/listarRelaciones/',
@@ -1421,7 +1457,8 @@
 				postData : {
 					idP : retornaValorenSesion(),
 					idF : retornaValorComboBoxFases(),
-					idIt: retornaItem_seleccionado_para_consultar_relacion()
+					idIt: retornaItem_seleccionado_para_consultar_relacion(),
+					version:retornaVersionFilaSeleccionada()
 				},
 				//aca se pone el proyecto el cual selecciono 
 				//y la fase al cual pertenece el proyecto
@@ -1466,6 +1503,61 @@
 				}
 
 			});
+	var gridRelacionesConsultar = jQuery("#listaRelacionesConsultar").jqGrid(
+			{
+				url : '/listarRelaciones/',
+				datatype : "json",
+				width: 500,
+				mtype : "get",
+				postData : {
+					idP : retornaValorenSesion(),
+					idF : retornaValorComboBoxFases(),
+					idIt: retornaItem_seleccionado_para_consultar_relacion(), 
+					version:retornaVersionFilaSeleccionada
+				},
+				//aca se pone el proyecto el cual selecciono 
+				//y la fase al cual pertenece el proyecto
+				colNames : [ 'ID Relacion', 'idItemRelacionado','Nombre Item ', 'Estado','Relacion'],
+				colModel : [ {
+					name : 'idRelacion',
+					index : 'idRelacion',
+					hidden : true
+				},{
+					name : 'idItemRelacionado',
+					index : 'idItemRelacionado',
+					hidden : true
+				},
+				 {
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 120
+				},{
+					name : 'estado',
+					index : 'estado',
+					width : 120
+				},{
+					name : 'relacion',
+					index : 'relacion',
+					align: 'center'
+				}
+				],
+				sortname : 'relacion',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerRelacionesConsultar',
+				caption : "Relacion",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idRelacion"
+				}
+
+			});
 function abrirDialogoRelacionar(){
 	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 	
@@ -1483,29 +1575,44 @@ function abrirDialogoRelacionar(){
 		mostrarMensaje("Atencion", "No se puede relacionar/desrelacionar un item que no este en estado activo ")
 		return;
 	}*/
-	$("#nombreItemDialogo").val(rowdata.nombreItem)
-	reloadListaRelaciones()
+	$("#nombreItemDialogo").val(rowdata.nombreItem);
+	
+	$("#versionRelacionarItemDialogo").val(rowdata.version);
+	reloadListaRelaciones('listaRelaciones', false)
 	$("#dialogo-relacionarManager").dialog("open");
 }
 
-function reloadListaRelaciones(){
+function reloadListaRelaciones(idLista, esReversionar){
 	var row= $('#listaItems').jqGrid('getGridParam', 'selrow');
 	rowdata = $('#listaItems').getRowData(row);
-	
-	var myPostData = $('#listaRelaciones').jqGrid("getGridParam",
+	v=rowdata.version;
+	if (esReversionar==true){
+		v=$("#versionComboBox").val()
+	}else{
+		v=rowdata.version
+	}
+	var myPostData = $('#'+idLista).jqGrid("getGridParam",
 	"postData");
 	delete myPostData.idP;
 	delete myPostData.idF;
 	delete myPostData.idIt;
-	$('#listaRelaciones').setGridParam({
+	delete myPostData.version;
+	$('#'+idLista).setGridParam({
 		postData : {
 			idP : retornaValorenSesion(),
 			idF : retornaValorComboBoxFases(),
-			idIt: rowdata.idItem
+			idIt: rowdata.idItem,
+			version: v
 		}
 	});
+	$('#'+idLista).trigger("reloadGrid")
+}
 
-$('#listaRelaciones').trigger("reloadGrid")
+function retornaVersionFilaSeleccionada(){
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	rowdata = $('#listaItems').getRowData(row);
+	
+	return rowdata.version;
 }
 function abrirMiniDialogoRelacion(){
 	
@@ -1577,19 +1684,39 @@ $("#dialogo-relacionarManager")
 						return;
 					}
 					rowdata= $('#listaRelaciones').getRowData(row);
+					
+						
+					
+					var rowItems= $('#listaItems').jqGrid('getGridParam', 'selrow');
+					rowdataItems= $('#listaItems').getRowData(rowItems);
+					
+					if(rowdataItems.estado!='activo'){
+						mostrarMensaje("Atencion", "Solo se puede eliminar relaciones con items padres y el item actual en estado activo ")
+						return;
+					}
+					if(rowdata.relacion=='Padre'){
+						eliminarRelacion(rowdata.idRelacion, rowdataItems.version)
+					}else{
+						mostrarMensaje("Atencion", "Solo se puede eliminar relaciones con items padres")
+						return
+					}
 					//se llama a eliminar Relaciona
-					eliminarRelacion(rowdata.idRelacion)
+					
 				},
 				"Salir" : function() {
+					$('#listaItems')
+					.trigger(
+							"reloadGrid");
 					$(this).dialog("close");
 				}
 			}
 		});
 		
-function eliminarRelacion(idRelacion){
+function eliminarRelacion(idRelacion, ver){
 	$.post('/eliminarRelacion/',
 			{
-				idRelacion: idRelacion
+				idRelacion: idRelacion,
+				version_hijo:parseInt(ver)+1
 			},
 			function(data, status) {
 				/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
@@ -1637,8 +1764,9 @@ $("#minidialogo-relacion")
 							{
 								padre_id: $("#comboItemsMiniDialogo").val(),
 								hijo_id: rowdata.idItem,
-								id_Fase: rowdata.idFase
-							},
+								id_Fase: rowdata.idFase,
+								versionHijo:parseInt(rowdata.version)+1,
+							}, 
 							function(data, status) {
 								/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
 
@@ -1687,6 +1815,7 @@ $("#dialogo-archivos")
 				/* funcion asociado al boton aceptar */
 				
 				"Salir" : function() {
+					
 					$(this).dialog("close");
 				}
 				
@@ -1752,6 +1881,8 @@ function ajaxFileUpload()
 	return false;
 
 }
+
+//$('#divJQGridRelaciones').clone( true ).insertAfter("#divRelaciones");
 </script>
 
 {% endblock %}

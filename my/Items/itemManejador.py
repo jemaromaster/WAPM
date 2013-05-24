@@ -1,14 +1,15 @@
 from models.faseModelo import Fase
 from models.bdCreator import Session
 from flask import make_response
-from models.itemModelo import Item
+from models.itemModelo import Item, Relacion
 from models.atributosModelo import Atributos
 from models.instanciaAtributos import InstanciaTipoItem,InstanciaCadena,InstanciaFecha, InstanciaNumerico, InstanciaEntero
-from models.historialModelo import HistorialItem
+from models.historialModelo import HistorialItem, HistorialRelacion
+
 #,HistorialInstanciaFecha, HistorialInstanciaEntero,HistorialInstanciaNumerico, HistorialInstanciaCadena
 
 class ItemManejador:
-    def guardarItem(self, item, idI, lista):
+    def guardarItem(self, item, idI, lista, esReversion):
         sesion=Session()
         i=item;
         i.version=1;
@@ -21,6 +22,35 @@ class ItemManejador:
                         i.fechaCreacion, i.autorVersion_id, i.idItem)
             sesion.add(histoItem);
             
+            if (esReversion>0):
+                r=sesion.query(Relacion).filter(Relacion.hijo_id==i.idItem).all()
+                
+                for rela in r: #se agrega la relaciones actuales al historial
+                    histoRel=HistorialRelacion(rela.padre_id, rela.hijo_id, rela.versionHijo)
+                    #rela.versionHijo=rela.versionHijo+1;
+                    sesion.add(histoRel);
+                    #sesion.merge(rela);
+                #se borra las relaciones existentes en la tabla Relacion
+                sesion.query(Relacion).filter(Relacion.hijo_id==i.idItem).delete();
+                
+                
+                q2=sesion.query(HistorialRelacion).filter(HistorialRelacion.hijo_id==i.idItem)\
+                                             .filter(HistorialRelacion.versionHijo==esReversion)\
+                                             .all()
+                for relInsertar in q2:
+                    relReversionada=Relacion(relInsertar.padre_id,relInsertar.hijo_id,i.version+1);
+                    sesion.add(relReversionada)
+                
+            else: #es un imte a modificar SOLO SE COPIA LAS RELACIONES ACTUALES AL HISTORIAL
+                #SE CAMBIA LA VERSION A VERSION EN LA TABLA RELACION
+                r=sesion.query(Relacion).filter(Relacion.hijo_id==i.idItem).all()
+                
+                for rela in r: #se agrega la relaciones actuales al historial
+                    histoRel=HistorialRelacion(rela.padre_id, rela.hijo_id, rela.versionHijo)
+                    rela.versionHijo=rela.versionHijo+1;
+                    sesion.add(histoRel);
+                    sesion.merge(rela);
+                    
             i.setValues(item.nombreItem, item.prioridad, item.costo, item.complejidad, item.fechaInicio, item.fechaFinalizacion, \
                         i.tipoItem_id,item.estado, item.descripcion, \
                         item.fechaCreacion, item.autorVersion_id, item.idFase)
@@ -120,7 +150,7 @@ class ItemManejador:
                             
             else:
                 sesion.close()
-                return make_response('t,no se puedo insertar el Item22')
+                return make_response('t,no pudo insertar el Item2')
             
         sesion.commit()
         sesion.close()

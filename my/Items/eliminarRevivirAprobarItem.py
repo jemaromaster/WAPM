@@ -10,7 +10,7 @@ from sqlalchemy import String, or_
 from models.itemModelo import Item, Relacion
 from models.bdCreator import Session
 
-sesion=Session()
+sesion=Session() 
 class EliminarRevivirAprobarItem(flask.views.MethodView):
     """
     Clase utilizada cuando se hace una peticion de creacion de \
@@ -54,7 +54,13 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
         elif(accion=="aprobar"):
             bandera=0;
             listaPadres='';
+            contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
+            f=sesion.query(Fase).filter(Fase.idFase==q.idFase).first()
+            if(f.tag!="F1" and contador==0): #si no esta en la primera fase y contador==0
+                return make_response('t,No puede aprobarse un item que no tenga por lo menos algun padre')
+            
             consulta=sesion.query(Item).join(Relacion,Relacion.padre_id==Item.idItem).filter(Item.estado!='inactivo').filter(Relacion.hijo_id==q.idItem).all()
+
             for p in consulta:
                 if(p.estado=='activo' or p.estado=='pendiente'):
                     bandera=bandera+1;
@@ -75,11 +81,24 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             sesion.close()
             msg='f,Se ha aprobado correctamente al item'
         elif(accion=="pendiente"):
-            q.estado='pendiente'
-            sesion.merge(q)
-            sesion.commit()
-            sesion.close()
-            msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
+            if(q.estado=="activo"):
+                contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
+                
+                f=sesion.query(Fase).filter(Fase.idFase==q.idFase).first()
+                if(f.tag!="F1" and contador==0): #si no esta en la primera fase y contador==0
+                    return make_response('t,No puede pasar a pendiente un item que no tenga por lo menos algun padre')
+                q.estado='pendiente'
+                sesion.merge(q)
+                sesion.commit()
+                sesion.close()
+                msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
+            elif(q.estado=="pendiente"):
+                q.estado='activo'
+                sesion.merge(q)
+                sesion.commit()
+                sesion.close()
+                msg='f,Se ha cambiado correctamente el estado del item de "pendiente" a "activo"'
+            
         else:
             sesion.close()
             return make_response('t,accion invalida ')
