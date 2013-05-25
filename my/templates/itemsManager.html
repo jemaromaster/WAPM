@@ -1735,6 +1735,15 @@ function eliminarRelacion(idRelacion, ver){
 							"Exito",
 							data
 									.substring(2));*/
+					var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+					var rowdata=$('#listaItems').getRowData(row);
+					var myPostData = $('#listaRelaciones').jqGrid("getGridParam", "postData");
+					delete myPostData.version;
+					$('#listaRelaciones').setGridParam({
+						postData : {
+							version:parseInt(rowdata.version)+1
+						}
+					});
 					$('#listaRelaciones')
 					.trigger(
 							"reloadGrid");
@@ -1788,6 +1797,15 @@ $("#minidialogo-relacion")
 											"Exito",
 											data
 													.substring(2));*/
+									var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+									var rowdata=$('#listaItems').getRowData(row);
+									var myPostData = $('#listaRelaciones').jqGrid("getGridParam", "postData");
+									delete myPostData.version;
+									$('#listaRelaciones').setGridParam({
+										postData : {
+											version:parseInt(rowdata.version)+1
+										}
+									});
 									$('#listaRelaciones')
 									.trigger(
 											"reloadGrid");

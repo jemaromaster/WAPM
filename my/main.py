@@ -342,6 +342,14 @@ app.add_url_rule('/cerrarLB/',
                  view_func=CerrarLB.as_view('cerrarLB'),
                  methods=["GET","POST"])
 
+import ejecutarSolCambios
+list=[1]
+from models.bdCreator import Session
+from models.itemModelo import Item
+
+#sesion=Session()
+#q=sesion.query(Item).filter(Item.idItem.in_(list)).all()
+#ejecutarSolCambios.ejecutarSCLB([1])
 
 
 

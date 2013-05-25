@@ -92,6 +92,9 @@ class ListarRelaciones(flask.views.MethodView):
         idItem=flask.request.args.get('idIt', '')
         version=flask.request.args.get('version', '')
         
+        
+        if(int(idFase)==0):
+            return make_response ("f,No se ha enviado suficiente informacion")
         print "ide del item es :  "+ idItem
         if idItem is not None and idItem!='':
             idItem=int(idItem)
@@ -201,7 +204,7 @@ class ListarRelaciones(flask.views.MethodView):
             print (filtrarPor);
             q=sesion.query(Item).filter(Item.idItem==int(idItem)).first()
             esReversion=0;
-            listaHijos=None;
+            listaHijos=None; 
             if(q.version==int(version)):
                 
                 listaRel=sesion.query(Relacion).order_by(filtrarPor)\

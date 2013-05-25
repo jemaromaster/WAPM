@@ -33,7 +33,7 @@ from Proyectos.activarProyecto import ActivarProyecto
 from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
 from Proyectos.seleccionarProyectoSesion import SeleccionarProyectoSesion
 
-from Fases.faseManager import FaseManager
+#from Fases.faseManager import FaseManager
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
