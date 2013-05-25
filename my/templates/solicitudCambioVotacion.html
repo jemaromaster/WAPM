@@ -77,15 +77,15 @@
 			defaultSearch : "cn"
 		});
 		
-		var gridItemAgregar = jQuery("#listItemAgregar").jqGrid(
+		var gridVotaciones = jQuery("#listVotaciones").jqGrid(
 				{
 					
 					// datatype : "local",
 					// data:mydata,
-					url : '/listarItemAgregar',
+					url : '/listarVotos',
 					datatype : "json",
 					mtype : "get",
-					postData: { idProyecto: "{{session['idProyecto']}}", idUsuario: "{{session['idUsuario']}}" },
+					postData: { idSC:'0' },
 					show : {
 						effect : 'fade',
 						duration : 200
@@ -94,43 +94,31 @@
 						effect : 'fade',
 						duration : 200
 					},
-					colNames : [ 'ID SC ', 'Fase',
-							'Item','Estado','Incluido'],
+					colNames : [ 'Miembro de comite', 'Voto del miembro'],
 					colModel : [ {
-						name : 'idItem',
-						index : 'idItem',
-						hidden : true
-					}, {
-						name : 'idFase',
-						index : 'idFase',
-					},{
-						name : 'nombreItem',
-						index : 'nombreItem',
+						name : 'miembro',
+						index : 'miembro',
+						
 					},
 					{
-						name: 'estado',
-						index: 'estado',
-						search:false
-					},
-					{
-						name: 'incluir',
-						index: 'incluir',
+						name: 'voto',
+						index: 'voto',
 						formatter : 'select',
 						stype : 'select',
 						editoptions : {
-							value : "no:No;si:Si"
+							value : "p:Pendiente;si:Aprobar;no:Rechazar"
 						},
-						search:false
+						
 					}
 
 					],
-					sortname : 'idFase',
+					sortname : 'voto',
 					viewrecords : true,
 					rownumbers : true,
 					sortorder : "desc",
 					ignoreCase : true,
-					pager : '#pagerItemAgregar',
-					caption : "Items a Agregar",
+					pager : '#pagerVotaciones',
+					caption : "Listado de votos para la solicitud",
 					jsonReader : {
 						root : "invdata",
 						page : "currpage",
@@ -139,14 +127,14 @@
 						repeatitems : false
 					}
 
-				}).jqGrid('navGrid', '#pagerItemAgregar', {
+				}).jqGrid('navGrid', '#pagerVotaciones', {
 			edit : false,
 			add : false,
 			del : false,
 			search : false,
 			refresh : true
 		});
-		gridItemAgregar.jqGrid('filterToolbar', {
+		gridVotaciones.jqGrid('filterToolbar', {
 			stringResult : true,
 			searchOnEnter : false,
 			defaultSearch : "cn"
@@ -219,7 +207,7 @@
 
 		
 		
-		$("#dialogo-item-agregar")
+		$("#dialogo-votacion")
 		.dialog(
 				{
 					autoOpen : false,
@@ -237,13 +225,6 @@
 					hide : {
 						effect : 'fade',
 						duration : 350
-					},
-					buttons : {
-						/* funcion asociado al boton aceptar */
-						"Incluir item" : function(){agregarItem() },
-						"Quitar item" : function() {quitar() },
-						"Enviar Solicitud" : function() {enviar()},
-						"Cancelar Solicitud" : function() { cancelar()}
 					}
 				});
 		$("#dialogo-item-incluido")
@@ -316,109 +297,78 @@
 		
 	}
 	
-	var itemsAgregar=new Array()//variable global
-	function agregar(){
-		itemsAgregar=new Array()
-		$('#motivo').val("");
-		$('#listItemAgregar').trigger("reloadGrid");
-		$("#dialogo-item-agregar").dialog("open");
-	}
-	
-	function agregarItem(){
+	function dialogoVotacion(){
 		
-		var rowItem = $('#listItemAgregar').jqGrid('getGridParam', 'selrow');
+		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
 		if (rowItem == null) {
 			//window.alert("Debe seleccionar un item");
-			mostrarMensaje("Atencion","Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar una solicitud");
 			return;
 		}
-		var rowdata = $('#listItemAgregar').getRowData(rowItem);
-		if (rowdata.incluir=="si")
-		{
-			//window.alert("El item ya ha sido agregado");
-			mostrarMensaje("Atencion","El item ya ha sido agregado");
-			return;
+		var rowdata = $('#listSC').getRowData(rowItem);
+		
+		$('#listVotaciones').setGridParam({postData : {
+			idSC: rowdata.idSC
 		}
-		
-		itemsAgregar.push(rowdata.idItem);
-		$('#listItemAgregar').jqGrid('setCell', rowItem, 'incluir', "si");
-		
-	}
-	function quitar(){
-		
-		var rowItem = $('#listItemAgregar').jqGrid('getGridParam', 'selrow');
-		if (rowItem == null) {
-			window.alert("Debe seleccionar un item");
-			//mostrarMensaje("Atencion","Debe seleccionar un item");
-			return;
-		}
-		var rowdata = $('#listItemAgregar').getRowData(rowItem);
-		if (rowdata.incluir=="no")
-		{
-			mostrarMensaje("Atencion","El item no se encuentra en la solicitud");
-			return;
-		}	
-		index = itemsAgregar.indexOf(rowdata.idItem);
-		itemsAgregar.splice(index, 1);
-		
-		$('#listItemAgregar').jqGrid('setCell', rowItem, 'incluir', "no");
-
-	}	
-	function cancelar(){
-		$('#motivo').val("");
-		itemsAgregar=new Array()
-		$('#listItemAgregar').trigger("reloadGrid");
+		});
+		$('#listVotaciones').trigger("reloadGrid");
+		$("#dialogo-votacion").dialog("open");	
 	}
 	
-	function control(){
+	function aprobar(){
+		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
+		var rowdata = $('#listSC').getRowData(rowItem);
 		
-		msj="";result=0;
-		len = $("#motivo").val().trim().length;
-		if (len <= 0){
-			result=1;
-			msj="Se debe completar el motivo de la Solicitud"
-		}	
-		if (len > 50){
-			result=1;
-			msj="La longitud maxima es de 50 caracteres"
-		}
-		len=itemsAgregar.length
-		if (len <= 0){
-			result=1;
-			msj=msj+" \n Se deben Incluir item/s en la Solicitud"
-		}
-		if (result == 1)
-			mostrarMensaje("Error",msj);
-		return result;
-			
-		
-	}
-	
-	function enviar(){
-		
-		if (control()==1){
-			return;
-		}
-		
-		listaItem=JSON.stringify(itemsAgregar);
-		$.post('/agregarSolicitudCambio/',{
-			items : listaItem,
-			idProyecto : valorenSesion,
-			idSolicitante : "{{session['idUsuario']}}", 
-			descripcion: $('#motivo').val()
-			},
-			function(data, status) {
-				if (data.substring(0, 1) == 't') {
-					mostrarMensaje("Error","Los datos no se han podido guardar:\n"
-									+ data.substring(2));
-				} else {
-					$("#dialogo-item-agregar").dialog("close");
-					mostrarMensaje("Exito",data.substring(2));
+		$.post('/setVoto/',
+				{
+					idSC: rowdata.idSC,voto:'si'
+				},
+				function(data, status) {
+					if (data.substring(0, 1) == 't') {
+						mostrarMensaje("Error","Los datos no se han podido guardar:\n"
+										+ data.substring(2));
+						$("#dialogo-votacion").dialog("close");
+					} else {
+						
+						mostrarMensaje("Exito",data.substring(2));
+						$("#dialogo-votacion").dialog("close");
+					}
 				}
-				$('#listSC').trigger("reloadGrid");
-			});
-			
+
+			);		
+		$('#listVotaciones').trigger("reloadGrid");
+		$('#listSC').trigger("reloadGrid");
 	}
+	
+	function rechazar(){
+		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
+		var rowdata = $('#listSC').getRowData(rowItem);
+		
+		$.post('/setVoto/',
+				{ 
+					idSC: rowdata.idSC,voto:'no'
+				},
+				function(data, status) {
+					if (data.substring(0, 1) == 't') {
+						mostrarMensaje("Error","Los datos no se han podido guardar:\n"
+										+ data.substring(2));
+						$("#dialogo-votacion").dialog("close");
+					} else {
+						
+						mostrarMensaje("Exito",data.substring(2));
+						$("#dialogo-votacion").dialog("close");
+					}
+				}
+
+			);		
+		$('#listVotaciones').trigger("reloadGrid");
+		$('#listSC').trigger("reloadGrid");
+	}
+		
+	
+	
+	
+	
 	function consultar(){
 		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
 		if (rowItem == null) {
@@ -447,27 +397,32 @@
 			<div id="pagerSC"></div>
 	
 			<br></br> 
-			<input id="btAgregar" type="button" name="nueva" value="Nueva" onclick='agregar()' />
+			<input id="btVotar" type="button" name="votar" value="Votacion" onclick='dialogoVotacion()' />
 			<input id="btConsultar" type="button" name="consultar" value="Consultar Items" onclick='consultar()' />
 			 <br></br>
 	
 		</div>
 
 		<script>
-				$("#btAgregar").button();
+				$("#btVotar").button();
 				$("#btConsultar").button();
 		</script>
 		
-		<div id="dialogo-item-agregar" title="Solicitud de Cambio Nueva">
-			<table id="listItemAgregar"></table>
-			<div id="pagerItemAgregar"></div>
-			<br>
-			<label for="motivo" style="display: block">*Motivo por el cual realiza la solicitud</label>
-			<textarea title="50 caracteres max" type="text" name="motivo" id="motivo"
-			style="width: 80%; display: block; margin-bottom: 12px; padding: 0.4em;">
-			</textarea>
-			<br/>
+		
+		<div id="dialogo-votacion" title="Votacion">
+			<table id="listVotaciones"></table>
+			<div id="pagerVotaciones"></div>
+			<br></br> 
+			<input id="btAprobar" type="button" name="aprobar" value="Aprobar solicitud!" onclick='aprobar()' />
+			<input id="btRechazar" type="button" name="rechazar" value="Rechazar solicitud!" onclick='rechazar()' />
+			<br></br>
+	
 		</div>
+		<script>
+				$("#btAprobar").button();
+				$("#btRechazar").button();
+		</script>
+
 		
 		<div id="dialogo-item-incluido" title="Items incluidos en la solicitud">
 			<table id="listItemIncluido"></table>

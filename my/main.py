@@ -1,6 +1,8 @@
 import flask, flask.views
 from flask import jsonify
 
+from SC.setVoto import SetVoto
+from SC.listarVotos import ListarVotos
 from SC.listarSCVotante import ListarSCVotante
 from SC.listarSCSolicitante import ListarSCSolicitante
 from SC.listarItemAgregar import ListarItemAgregar
@@ -111,6 +113,12 @@ app.add_url_rule('/',
                  methods=["GET", "POST"])
 
 
+app.add_url_rule('/setVoto/',
+                 view_func=SetVoto.as_view('setVoto'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarVotos/',
+                 view_func=ListarVotos.as_view('listarVotos'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarSolicitudCambio/',
                  view_func=AgregarSolicitudCambio.as_view('agregarSolicitudCambio'),
                  methods=["GET", "POST"])
