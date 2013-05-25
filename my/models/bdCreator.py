@@ -36,7 +36,7 @@ def initDB():
     from itemModelo import Item, Relacion
     from instanciaAtributos import InstanciaTipoItem,InstanciaFecha, InstanciaCadena, InstanciaNumerico, InstanciaEntero
     from atributosModelo import Atributos
-    from historialModelo import HistorialItem
+    from historialModelo import HistorialItem, HistorialRelacion
     from lineaBaseModelo import LineaBase
     from solicitudCambioModelo import SolicitudCambio
     from solicitudCambioModelo import Voto    

@@ -83,6 +83,26 @@ class HistorialInstanciaEntero(Base):
     def __init__(self,entero):
         self.entero=entero;'''
         
+class HistorialRelacion(Base):
+    __tablename__='histo_relacion'
+    idRelacion=Column("id",Integer, primary_key=True)
+    padre_id = Column(Integer, ForeignKey('item.id'))
+    hijo_id = Column(Integer, ForeignKey('item.id'))
+    versionHijo=Column("version_hijo",Integer)
+    
+    padres=relationship("Item", primaryjoin="HistorialRelacion.padre_id==Item.idItem")
+    hijos=relationship("Item", primaryjoin="HistorialRelacion.hijo_id==Item.idItem")
+    
+    def setValues (self, padre_id, hijo_id, versionHijo):
+        self.padre_id=padre_id;
+        self.hijo_id=hijo_id;
+        self.versionHijo=versionHijo;
+    
+    def __init__(self, padre_id, hijo_id, versionHijo):
+        self.padre_id=padre_id;
+        self.hijo_id=hijo_id;
+        self.versionHijo=versionHijo;
+        
 class HistorialItem(Base):
     #Nombre de la tabla
     __tablename__ = 'histo_item'

@@ -5,6 +5,7 @@ from models.usuarioModelo import Usuario
 from models.solicitudCambioModelo import Voto
 from models.itemModelo import Item
 from models.bdCreator import Session
+from ejecutarSolCambios import ejecutarSCLB 
 
 class SetVoto(flask.views.MethodView):
     """
@@ -75,7 +76,7 @@ class SetVoto(flask.views.MethodView):
                 listaItem.append(it.idItem)
             for it in listaItem:
                 print "item en listado a pasar:  "+ str(it)    
-            #procesar(listaItem)
+            ejecutarSCLB(listaItem)
             SCaprobada=sesion.query(SolicitudCambio).filter(SolicitudCambio.id==idSC).first()
             SCaprobada.estado='aprobada'
             sesion.add(SCaprobada)

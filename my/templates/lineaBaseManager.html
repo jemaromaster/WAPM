@@ -332,6 +332,7 @@
 				modal : true,
 				resizable : false,
 				width : 'auto',
+				//close: function(event, ui) { $('#listaLB').trigger("reloadGrid"); }, 
 				show : {
 					effect : 'fade',
 					duration : 400
@@ -867,9 +868,7 @@
 					$('#listaItem')
 							.trigger(
 									"reloadGrid");
-					$('#listaLB')
-					.trigger(
-							"reloadGrid");
+					
 				});
 
 		

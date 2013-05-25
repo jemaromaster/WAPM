@@ -10,17 +10,20 @@ class Relacion(Base):
     idRelacion=Column("id",Integer, primary_key=True)
     padre_id = Column(Integer, ForeignKey('item.id'))
     hijo_id = Column(Integer, ForeignKey('item.id'))
+    versionHijo=Column("version_hijo",Integer)
     
     padres=relationship("Item", primaryjoin="Relacion.padre_id==Item.idItem")
     hijos=relationship("Item", primaryjoin="Relacion.hijo_id==Item.idItem")
     
-    def setValues (self, padre_id, hijo_id):
+    def setValues (self, padre_id, hijo_id, versionHijo):
         self.padre_id=padre_id;
         self.hijo_id=hijo_id;
+        self.versionHijo=versionHijo;
     
-    def __init__(self, padre_id, hijo_id):
+    def __init__(self, padre_id, hijo_id, versionHijo):
         self.padre_id=padre_id;
         self.hijo_id=hijo_id;
+        self.versionHijo=versionHijo;
 class Item(Base):
     #Nombre de la tabla
     __tablename__ = 'item'

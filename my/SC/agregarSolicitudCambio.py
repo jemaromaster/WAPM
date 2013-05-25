@@ -67,14 +67,15 @@ class AgregarSolicitudCambio(flask.views.MethodView):
         comite=sesion.query(Usuario).join(Proyecto.usuariosComite).filter(Proyecto.idProyecto==int(idProyecto)).all()
         i=0
         #sesion.add(SC)
-        voto=Voto()
+        
         for miembro in comite:
-            
-            
+            print "miembros id   " + str(miembro.id)
+            voto=Voto()
             voto.solicitud=SC.id
             voto.votante=miembro.id
             voto.voto="p"
-            SC.votos.append(voto)
+            sesion.add(voto)
+            #SC.votos.append(voto)
             #sesion.add(voto)
         sesion.add(SC)    
         sesion.commit()

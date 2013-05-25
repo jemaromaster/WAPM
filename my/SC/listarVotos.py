@@ -108,11 +108,14 @@ class ListarVotos(flask.views.MethodView):
             listaVotos=queryVotos[desde:hasta]
             
         else:
-            
             queryVotos=sesion.query(Usuario.username,Voto.voto).order_by(filtrarPor)\
                                                     .filter(Voto.solicitud==int(idSC))\
                                                     .filter(Voto.votante==Usuario.id)
-            
+            '''
+            queryVotos=sesion.query(Usuario.username,Voto.voto).order_by(filtrarPor)\
+                                                    .filter(Voto.solicitud==int(idSC))\
+                                                    .filter(Voto.votante==Usuario.id)
+            '''
             queryVotos=queryVotos.filter(Voto.voto.like(voto))                                        
             total=queryVotos.count()
             listaVotos=queryVotos[desde:hasta]

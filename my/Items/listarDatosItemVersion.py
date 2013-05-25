@@ -39,7 +39,7 @@ class ListarDatosItemVersion(flask.views.MethodView):
         idItem=flask.request.args.get('idItem', '')
         version=flask.request.args.get('version', '')
         
-        iV=sesion.query(HistorialItem).filter(HistorialItem.idItemFK==idItem).filter(HistorialItem.version==version).first()
+        iV=sesion.query(HistorialItem).filter(HistorialItem.idItemFK==int(idItem)).filter(HistorialItem.version==int(version)).first()
         
         respuesta=self.jasonizar(iV)
         sesion.close()
