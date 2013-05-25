@@ -1,10 +1,12 @@
 import flask, flask.views
 from flask import jsonify
 
+from SC.listarSCVotante import ListarSCVotante
 from SC.listarSCSolicitante import ListarSCSolicitante
 from SC.listarItemAgregar import ListarItemAgregar
 from SC.listarItemIncluido import ListarItemIncluido
 from SC.solicitudCambioManager import SolicitudCambioManager
+from SC.solicitudCambioManager import SolicitudCambioVotacion
 from SC.agregarSolicitudCambio import AgregarSolicitudCambio
 
 from lineaBase.LBManager import LBManager
@@ -112,6 +114,9 @@ app.add_url_rule('/',
 app.add_url_rule('/agregarSolicitudCambio/',
                  view_func=AgregarSolicitudCambio.as_view('agregarSolicitudCambio'),
                  methods=["GET", "POST"])
+app.add_url_rule('/listarSCVotante/',
+                 view_func=ListarSCVotante.as_view('listarSCVotante'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/listarSCSolicitante/',
                  view_func=ListarSCSolicitante.as_view('listarSCSolicitante'),
                  methods=["GET", "POST"])
@@ -123,6 +128,9 @@ app.add_url_rule('/listarItemIncluido/',
                  methods=["GET", "POST"])
 app.add_url_rule('/solicitudCambioManager/',
                  view_func=SolicitudCambioManager.as_view('solicitudCambioManager'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/solicitudCambioVotacion/',
+                 view_func=SolicitudCambioVotacion.as_view('solicitudCambioVotacion'),
                  methods=["GET", "POST"])
 
 

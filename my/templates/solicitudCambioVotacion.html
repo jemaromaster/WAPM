@@ -1,0 +1,480 @@
+
+{% extends "baseMiembro.html" %}
+
+
+{% block header %}
+
+
+{% endblock %} {% block body %}
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function() {
+		
+		var gridSC = jQuery("#listSC").jqGrid(
+				{
+					
+					// datatype : "local",
+					// data:mydata,
+					url : '/listarSCVotante',
+					datatype : "json",
+					mtype : "get",
+					postData: { idProyecto: "{{session['idProyecto']}}", idUsuario: "{{session['idUsuario']}}" },
+					show : {
+						effect : 'fade',
+						duration : 200
+					},
+					hide : {
+						effect : 'fade',
+						duration : 200
+					},
+					colNames : [ 'ID SC ', 'Descripcion',
+							'Estado'],
+					colModel : [ {
+						name : 'idSC',
+						index : 'idSC',
+						hidden : true
+					}, {
+						name : 'descripcion',
+						index : 'descripcion',
+					},{
+						name : 'estado',
+						index : 'estado',
+						formatter : 'select',
+						stype : 'select',
+						editoptions : {
+							value : "pendiente:Pendiente;aprobada:Aprobada;rechazada:Rechazada"
+						},
+						hidden : false
+					}
+
+					],
+					sortname : 'idSC',
+					viewrecords : true,
+					rownumbers : true,
+					sortorder : "desc",
+					ignoreCase : true,
+					pager : '#pagerSC',
+					caption : "Solicitudes de cambio enviadas",
+					jsonReader : {
+						root : "invdata",
+						page : "currpage",
+						total : "totalpages",
+						records : "totalrecords",
+						repeatitems : false
+					}
+
+				}).jqGrid('navGrid', '#pagerSC', {
+			edit : false,
+			add : false,
+			del : false,
+			search : false,
+			refresh : true
+		});
+		gridSC.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+		
+		var gridItemAgregar = jQuery("#listItemAgregar").jqGrid(
+				{
+					
+					// datatype : "local",
+					// data:mydata,
+					url : '/listarItemAgregar',
+					datatype : "json",
+					mtype : "get",
+					postData: { idProyecto: "{{session['idProyecto']}}", idUsuario: "{{session['idUsuario']}}" },
+					show : {
+						effect : 'fade',
+						duration : 200
+					},
+					hide : {
+						effect : 'fade',
+						duration : 200
+					},
+					colNames : [ 'ID SC ', 'Fase',
+							'Item','Estado','Incluido'],
+					colModel : [ {
+						name : 'idItem',
+						index : 'idItem',
+						hidden : true
+					}, {
+						name : 'idFase',
+						index : 'idFase',
+					},{
+						name : 'nombreItem',
+						index : 'nombreItem',
+					},
+					{
+						name: 'estado',
+						index: 'estado',
+						search:false
+					},
+					{
+						name: 'incluir',
+						index: 'incluir',
+						formatter : 'select',
+						stype : 'select',
+						editoptions : {
+							value : "no:No;si:Si"
+						},
+						search:false
+					}
+
+					],
+					sortname : 'idFase',
+					viewrecords : true,
+					rownumbers : true,
+					sortorder : "desc",
+					ignoreCase : true,
+					pager : '#pagerItemAgregar',
+					caption : "Items a Agregar",
+					jsonReader : {
+						root : "invdata",
+						page : "currpage",
+						total : "totalpages",
+						records : "totalrecords",
+						repeatitems : false
+					}
+
+				}).jqGrid('navGrid', '#pagerItemAgregar', {
+			edit : false,
+			add : false,
+			del : false,
+			search : false,
+			refresh : true
+		});
+		gridItemAgregar.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+		
+		var gridItemAgregar = jQuery("#listItemIncluido").jqGrid(
+				{
+					
+					// datatype : "local",
+					// data:mydata,
+					url : '/listarItemIncluido',
+					datatype : "json",
+					mtype : "get",
+					postData: { idSC: '0'},
+					show : {
+						effect : 'fade',
+						duration : 200
+					},
+					hide : {
+						effect : 'fade',
+						duration : 200
+					},
+					colNames : [ 'ID SC ', 'Fase',
+							'Item','Estado'],
+					colModel : [ {
+						name : 'idItem',
+						index : 'idItem',
+						hidden : true
+					}, {
+						name : 'idFase',
+						index : 'idFase',
+					},{
+						name : 'nombreItem',
+						index : 'nombreItem',
+					},
+					{
+						name: 'estado',
+						index: 'estado',
+						search:false
+					}
+
+					],
+					sortname : 'idFase',
+					viewrecords : true,
+					rownumbers : true,
+					sortorder : "desc",
+					ignoreCase : true,
+					pager : '#pagerItemIncluido',
+					caption : "Items dentro de la Solicitud",
+					jsonReader : {
+						root : "invdata",
+						page : "currpage",
+						total : "totalpages",
+						records : "totalrecords",
+						repeatitems : false
+					}
+
+				}).jqGrid('navGrid', '#pagerItemIncluido', {
+			edit : false,
+			add : false,
+			del : false,
+			search : false,
+			refresh : true
+		});
+		gridItemAgregar.jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false,
+			defaultSearch : "cn"
+		});
+
+		
+		
+		$("#dialogo-item-agregar")
+		.dialog(
+				{
+					autoOpen : false,
+					modal : true,
+					overflow : scroll,
+					resizable : false,
+					width: 'auto',
+					heigth: 'auto',
+					
+					
+					show : {
+						effect : 'fade',
+						duration : 400
+					},
+					hide : {
+						effect : 'fade',
+						duration : 350
+					},
+					buttons : {
+						/* funcion asociado al boton aceptar */
+						"Incluir item" : function(){agregarItem() },
+						"Quitar item" : function() {quitar() },
+						"Enviar Solicitud" : function() {enviar()},
+						"Cancelar Solicitud" : function() { cancelar()}
+					}
+				});
+		$("#dialogo-item-incluido")
+		.dialog(
+				{
+					autoOpen : false,
+					modal : true,
+					overflow : scroll,
+					resizable : false,
+					width: 'auto',
+					heigth: 'auto',
+					
+					
+					show : {
+						effect : 'fade',
+						duration : 400
+					},
+					hide : {
+						effect : 'fade',
+						duration : 350
+					},
+					buttons : {
+						/* funcion asociado al boton aceptar */
+						"Salir" : function() {$(this).dialog("close"); }
+					}
+				});
+
+	
+	});
+	
+	function mostrarMensaje(titulo, mensaje) {
+		$('#msgbox').text(mensaje);
+		$('#msgbox').dialog({
+			title : titulo,
+			modal : true,
+			show : {
+				effect : 'fade',
+				duration : 250
+			},
+			hide : {
+				effect : 'fade',
+				duration : 200
+			},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+
+	
+	
+	
+	function updateListSC(){
+		
+		$('#listSC').setGridParam({postData : {
+				idProyecto: valorenSesion,
+			}
+		});
+		$('#listSC').trigger("reloadGrid");
+		
+		$('#listItemAgregar').setGridParam({postData : {
+			idProyecto: valorenSesion,
+		}
+		});
+		$('#listItemAgregar').trigger("reloadGrid");
+
+		
+		
+	}
+	
+	var itemsAgregar=new Array()//variable global
+	function agregar(){
+		itemsAgregar=new Array()
+		$('#motivo').val("");
+		$('#listItemAgregar').trigger("reloadGrid");
+		$("#dialogo-item-agregar").dialog("open");
+	}
+	
+	function agregarItem(){
+		
+		var rowItem = $('#listItemAgregar').jqGrid('getGridParam', 'selrow');
+		if (rowItem == null) {
+			//window.alert("Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar un item");
+			return;
+		}
+		var rowdata = $('#listItemAgregar').getRowData(rowItem);
+		if (rowdata.incluir=="si")
+		{
+			//window.alert("El item ya ha sido agregado");
+			mostrarMensaje("Atencion","El item ya ha sido agregado");
+			return;
+		}
+		
+		itemsAgregar.push(rowdata.idItem);
+		$('#listItemAgregar').jqGrid('setCell', rowItem, 'incluir', "si");
+		
+	}
+	function quitar(){
+		
+		var rowItem = $('#listItemAgregar').jqGrid('getGridParam', 'selrow');
+		if (rowItem == null) {
+			window.alert("Debe seleccionar un item");
+			//mostrarMensaje("Atencion","Debe seleccionar un item");
+			return;
+		}
+		var rowdata = $('#listItemAgregar').getRowData(rowItem);
+		if (rowdata.incluir=="no")
+		{
+			mostrarMensaje("Atencion","El item no se encuentra en la solicitud");
+			return;
+		}	
+		index = itemsAgregar.indexOf(rowdata.idItem);
+		itemsAgregar.splice(index, 1);
+		
+		$('#listItemAgregar').jqGrid('setCell', rowItem, 'incluir', "no");
+
+	}	
+	function cancelar(){
+		$('#motivo').val("");
+		itemsAgregar=new Array()
+		$('#listItemAgregar').trigger("reloadGrid");
+	}
+	
+	function control(){
+		
+		msj="";result=0;
+		len = $("#motivo").val().trim().length;
+		if (len <= 0){
+			result=1;
+			msj="Se debe completar el motivo de la Solicitud"
+		}	
+		if (len > 50){
+			result=1;
+			msj="La longitud maxima es de 50 caracteres"
+		}
+		len=itemsAgregar.length
+		if (len <= 0){
+			result=1;
+			msj=msj+" \n Se deben Incluir item/s en la Solicitud"
+		}
+		if (result == 1)
+			mostrarMensaje("Error",msj);
+		return result;
+			
+		
+	}
+	
+	function enviar(){
+		
+		if (control()==1){
+			return;
+		}
+		
+		listaItem=JSON.stringify(itemsAgregar);
+		$.post('/agregarSolicitudCambio/',{
+			items : listaItem,
+			idProyecto : valorenSesion,
+			idSolicitante : "{{session['idUsuario']}}", 
+			descripcion: $('#motivo').val()
+			},
+			function(data, status) {
+				if (data.substring(0, 1) == 't') {
+					mostrarMensaje("Error","Los datos no se han podido guardar:\n"
+									+ data.substring(2));
+				} else {
+					$("#dialogo-item-agregar").dialog("close");
+					mostrarMensaje("Exito",data.substring(2));
+				}
+				$('#listSC').trigger("reloadGrid");
+			});
+			
+	}
+	function consultar(){
+		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
+		if (rowItem == null) {
+			//window.alert("Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar una solicitud");
+			return;
+		}
+		var rowdata = $('#listSC').getRowData(rowItem);
+		
+		$('#listItemIncluido').setGridParam({postData : {
+			idSC: rowdata.idSC,
+		}
+		});
+		$('#listItemIncluido').trigger("reloadGrid");
+		$("#dialogo-item-incluido").dialog("open");
+	}
+	
+	
+	
+</script>
+
+		<div  style="margin-left:auto;margin-right:auto;width:100%;">
+		
+			<h2>Solicitudes de Cambio recibidas</h2>
+			<table id="listSC" ></table>
+			<div id="pagerSC"></div>
+	
+			<br></br> 
+			<input id="btAgregar" type="button" name="nueva" value="Nueva" onclick='agregar()' />
+			<input id="btConsultar" type="button" name="consultar" value="Consultar Items" onclick='consultar()' />
+			 <br></br>
+	
+		</div>
+
+		<script>
+				$("#btAgregar").button();
+				$("#btConsultar").button();
+		</script>
+		
+		<div id="dialogo-item-agregar" title="Solicitud de Cambio Nueva">
+			<table id="listItemAgregar"></table>
+			<div id="pagerItemAgregar"></div>
+			<br>
+			<label for="motivo" style="display: block">*Motivo por el cual realiza la solicitud</label>
+			<textarea title="50 caracteres max" type="text" name="motivo" id="motivo"
+			style="width: 80%; display: block; margin-bottom: 12px; padding: 0.4em;">
+			</textarea>
+			<br/>
+		</div>
+		
+		<div id="dialogo-item-incluido" title="Items incluidos en la solicitud">
+			<table id="listItemIncluido"></table>
+			<div id="pagerItemIncluido"></div>
+		</div>
+		
+		<div id="msgbox"></div>
+		
+
+{% endblock %}

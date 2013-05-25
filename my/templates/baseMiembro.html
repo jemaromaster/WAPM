@@ -22,6 +22,10 @@
 	 <script>
 		$(function() {
 		$( "#menu" ).menu();
+		if ("{{session['esComite']}}" == 0)
+			$("#votantesOpcion").hide();
+		else
+			$("#votantesOpcion").show();
 		});
 	</script>
 	<style>
@@ -65,11 +69,11 @@
 							/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
 		
 							/* si hay error se muestra el mensaje*/
-							if (data.substring(0, 1) == 't') {
+							/*if (data.substring(0, 1) == 't') {
 								mostrarMensaje(
 										"Error",data.substring(2));
-								/* se indica que no hubieron errores */
-							}
+								
+							}*/
 							/* se indicar la recarga de la tabla */
 							//location.reload();
 							var pathname = window.location.pathname;
@@ -98,9 +102,18 @@
 								case'/solicitudCambioManager/':
 									  updateListSC();
 					                  break;
+								case'/solicitudCambioVotacion/':
+									  window.location.reload()	
+									  updateListSC();
+					                  break;
 								default:
 									
 							}
+							
+							if (data=='0')			
+								$("#votantesOpcion").hide();
+							else
+								$("#votantesOpcion").show();	
 							
 						});
 				
@@ -124,11 +137,11 @@
 
 		<div style="position:fixed;left:220px">
 			
-			<img src="/static/images/blue-23957_640.png" width="150px" title="Volver a Pagina Principal" onclick="location.href='/'" 
+			<img src="/static/images/blue-23957_640.png" width="250px" title="Volver a Pagina Principal" onclick="location.href='/'" 
 			style="cursor:pointer; position:fixed;left:90"/>
 			<br></br>
 			<br></br>
-			<h6 style="position:fixed;"> Web Aplication Project Manager</h6>
+			
 			
 	</div>
 	<div  style="position:fixed;right:220px">
@@ -211,6 +224,8 @@
 						<li><a href="{{url_for('estadoFase')}}">Estado de Fases</a>
 					</ul></li> 
 				<li><a href="{{url_for('solicitudCambioManager')}}">Solicitud de Cambio</a>
+				
+				<li id="votantesOpcion"><a href="{{url_for('solicitudCambioVotacion')}}">Solicitudes Pendientes</a>
 					{% else %} {% endif %}
 			</ul>
 	</div>
