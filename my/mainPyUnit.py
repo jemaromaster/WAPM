@@ -1,6 +1,16 @@
 import flask, flask.views
 from flask import jsonify
 
+from SC.setVoto import SetVoto
+from SC.listarVotos import ListarVotos
+from SC.listarSCVotante import ListarSCVotante
+from SC.listarSCSolicitante import ListarSCSolicitante
+from SC.listarItemAgregar import ListarItemAgregar
+from SC.listarItemIncluido import ListarItemIncluido
+from SC.solicitudCambioManager import SolicitudCambioManager
+from SC.solicitudCambioManager import SolicitudCambioVotacion
+from SC.agregarSolicitudCambio import AgregarSolicitudCambio
+
 from lineaBase.LBManager import LBManager
 from lineaBase.agregarLB import AgregarLB
 from lineaBase.modificarLB import ModificarLB
@@ -15,7 +25,7 @@ from Usuarios.modificarUsuario import ModificarUsuario
 from Usuarios.listarUsuarios import ListarUsuarios
 from Usuarios.listarUsuarios import ListarComboUsuarios
 
-
+from Proyectos.finalizarProyecto import FinalizarProyecto
 from Proyectos.proyectoManager import ProyectoManager
 from Proyectos.modificarProyecto import ModificarProyecto
 from Proyectos.agregarProyecto import AgregarProyecto
@@ -33,7 +43,9 @@ from Proyectos.activarProyecto import ActivarProyecto
 from Proyectos.listarProyectosComboBox import ListarProyectosComboBox
 from Proyectos.seleccionarProyectoSesion import SeleccionarProyectoSesion
 
-from Fases.faseManager import FaseManager
+from Fases.finalizarFase import FinalizarFase
+from Fases.estadoFase import EstadoFase
+from Fases.listarItems import ListarItemsFase
 from Fases.agregarFase import AgregarFase
 from Fases.modificarFase import ModificarFase 
 from Fases.listarFases import ListarFases
@@ -90,13 +102,46 @@ de las reglas de URL a las funciones que se haran cargo de senrvirlas
 """
 
 initDB() 
-poblarBD.cargaEstatica()
+poblarBD.cargaEstatica() 
+#
+#poblarBD.cargarUsuarios(10) 
 #poblarBD.cargarProyecto()
 # Don't do this
 app.secret_key = "bacon"
 app.add_url_rule('/',
                  view_func=Login.as_view('index'),
                  methods=["GET", "POST"])
+
+
+app.add_url_rule('/setVoto/',
+                 view_func=SetVoto.as_view('setVoto'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarVotos/',
+                 view_func=ListarVotos.as_view('listarVotos'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/agregarSolicitudCambio/',
+                 view_func=AgregarSolicitudCambio.as_view('agregarSolicitudCambio'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarSCVotante/',
+                 view_func=ListarSCVotante.as_view('listarSCVotante'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarSCSolicitante/',
+                 view_func=ListarSCSolicitante.as_view('listarSCSolicitante'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarItemAgregar/',
+                 view_func=ListarItemAgregar.as_view('listarItemAgregar'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarItemIncluido/',
+                 view_func=ListarItemIncluido.as_view('listarItemIncluido'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/solicitudCambioManager/',
+                 view_func=SolicitudCambioManager.as_view('solicitudCambioManager'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/solicitudCambioVotacion/',
+                 view_func=SolicitudCambioVotacion.as_view('solicitudCambioVotacion'),
+                 methods=["GET", "POST"])
+
+
 
 app.add_url_rule('/miembros/',
                  view_func=Miembros.as_view('miembros'),
@@ -123,6 +168,9 @@ app.add_url_rule('/usuarioManager/modificarUsuario',
                  methods=["GET", "POST"])
 
 
+app.add_url_rule('/finalizarProyecto/',
+                 view_func=FinalizarProyecto.as_view('finalizarProyecto'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarProyecto/',
                  view_func=AgregarProyecto.as_view('agregarProyecto'),
                  methods=["GET", "POST"])
@@ -165,14 +213,20 @@ app.add_url_rule('/quitarMiembrosComite',
                  methods=["GET", "POST"])
 
 #fases
+app.add_url_rule('/finalizarFase/',
+                 view_func=FinalizarFase.as_view('finalizarFase'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/estadoFase/',
+                 view_func=EstadoFase.as_view('estadoFase'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarFase/',
                  view_func=AgregarFase.as_view('agregarFase'),
                  methods=["GET", "POST"])
-app.add_url_rule('/faseManager/',
-                 view_func=FaseManager.as_view('faseManager'),
-                 methods=["GET", "POST"])
 app.add_url_rule('/listarFases/',
                  view_func=ListarFases.as_view('listaFases'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarItemsFase/',
+                 view_func=ListarItemsFase.as_view('listaItemsFase'),
                  methods=["GET", "POST"])
 app.add_url_rule('/listarComboFases/',
                  view_func=ListarComboFases.as_view('listarComboFases'),
@@ -331,7 +385,5 @@ app.add_url_rule('/cerrarLB/',
 
 
 app.debug = True
-#===============================================================================
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0')
-#===============================================================================
+if __name__ == '__main__':
+    app.run()

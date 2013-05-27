@@ -108,31 +108,29 @@ class WAPMTestCase(unittest.TestCase):
           activo=activo
       ), follow_redirects=True)
 
-    #===========================================================================
-    # def test_modificarUsuario_OK(self):
-    #     """Se prueba modificar un Usuario, asignandole un nombre de usuario nuevo valido"""
-    #     self.test_login_OK()
-    #     rera=str(random.randint(-999999999999999999,9999999999999999999))
-    #     rv=self.modificarU('4',
-    #                      rera,
-    #                      'hola',
-    #                      '65874',
-    #                      'johna',
-    #                      'smith',
-    #                      'john@smith.com',
-    #                      'brasil 876',
-    #                      '124874',
-    #                      'ninguna',
-    #                      'activo')
-    #     print rv.data
-    #     assert 'Usuario guardado correctamente' in rv.data
-    #===========================================================================
+    def test_modificarUsuario_OK(self):
+        """Se prueba modificar un Usuario, asignandole un nombre de usuario nuevo valido"""
+        self.test_login_OK()
+        rera=str(random.randint(-999999999999999999,9999999999999999999))
+        rv=self.modificarU('6',
+                         rera,
+                         'hola',
+                         '65874',
+                         'johna',
+                         'smith',
+                         'john@smith.com',
+                         'brasil 876',
+                         '124874',
+                         'ninguna',
+                         'true')
+        print rv.data
+        assert 'Usuario guardado correctamente' in rv.data
 
     def test_modificarUsuario_FUsername(self):
         """Se prueba modificar un Usuario y asignarle un nombre de usuario ya existente"""
         self.test_login_OK()
         rera=str(random.randint(-999999999999999999,9999999999999999999))
-        rv=self.modificarU('4',
+        rv=self.modificarU('1',
                          'hola',
                          'hola',
                          '65874',
@@ -142,7 +140,7 @@ class WAPMTestCase(unittest.TestCase):
                          'brasil 876',
                          '124874',
                          'ninguna por ahora',
-                         'activo')
+                         'true')
         assert 'Ya existe el usuario' in rv.data
         
     def agregarP(self, nombreProyecto, idUsuario, nroFases, observacion, presupuesto, fechaInicio, fechaFinal, estado):
@@ -168,7 +166,7 @@ class WAPMTestCase(unittest.TestCase):
                          '500000',
                          '12/04/1998',
                          '15/08/2001',
-                         'activo')
+                         'desarrollo')
         assert 'Proyecto guardado correctamente' in rv.data
 
     def test_agregarProyecto_FName(self):    
@@ -228,22 +226,21 @@ class WAPMTestCase(unittest.TestCase):
  #==============================================================================
  # EESTOOO NO DEBERIA FUNCIONAR, ME DEJA MODIFICAR Y PONERLE EL MISMO NOMBRE DE PROYECTO YA EXISTENTE
  #==============================================================================
-    #===========================================================================
-    # def test_modificarProyecto_OK(self):    
-    #     """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno nuevo(valido, no existente)"""
-    #     self.test_login_OK()
-    #     rera='ProjectX'+str(random.randint(-9999999999,9999999999))
-    #     rv=self.modificarP('2',
-    #                        rera,
-    #                        '1',
-    #                        '5',
-    #                        'Proyecto de gran envergadura',
-    #                        '500000',
-    #                        '12/04/1998',
-    #                        '15/08/2001',
-    #                        'activo')
-    #     assert 'Proyecto guardado correctamente' in rv.data
-    #===========================================================================
+
+    def test_modificarProyecto_OK(self):    
+        """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno nuevo(valido, no existente)"""
+        self.test_login_OK()
+        rera='ProjectX'+str(random.randint(-9999999999,9999999999))
+        rv=self.modificarP('10',
+                           rera,
+                           '1',
+                           '5',
+                           'Proyecto de gran envergadura',
+                           '500000',
+                           '12/04/1998',
+                           '15/08/2015',
+                           'desarrollo')
+        assert 'Proyecto guardado correctamente' in rv.data
         
     def test_modificarProyecto_FName(self):    
         """Se prueba modificar un Proyecto, cambiar el nombre de proyecto, a uno  YA existente)"""

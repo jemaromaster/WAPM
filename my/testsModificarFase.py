@@ -48,7 +48,7 @@ class WAPMTestCase(unittest.TestCase):
         """Se prueba modificar una fase, poniendole un nombre valido(no existe)"""
         self.test_login_OK()
         rera=str(random.randint(-9999999999,9999999999))
-        rv=self.modificar_Fase('2',
+        rv=self.modificar_Fase('1',
                          rera,
                          '20/05/1998',
                          '21/06/2000',
@@ -57,44 +57,46 @@ class WAPMTestCase(unittest.TestCase):
                          '2')
         assert 'Fase guardada correctamente' in rv.data
 
-    def test_modificarFase_YaEsta(self):
-        """Se prueba modificar una fase, poniendole un nombre ya existente"""
-        self.test_login_OK()
-        rv=self.modificar_Fase('3',
-                         'ya_estoy',
-                         '20/05/2013',
-                         '21/06/2013',
-                         'heello flow',
-                         'Activo',
-                         '6')
-        print rv.data
-        assert 'Ya existe una fase con el nombre indicado' in rv.data
- 
-    def test_modificarFase_FechaInv(self):
-        """Se prueba modificar una fase, poniendole una fecha invalida"""
-        self.test_login_OK()
-        rera=str(random.randint(-9999999999,9999999999))
-        rv=self.modificar_Fase('2',
-                         rera,
-                         '58/31/1998',
-                         '21/06/2000',
-                         'heello flow',
-                         'activa',
-                         '2')
-        assert 'Fecha invalida' in rv.data
- 
-    def test_modificarFase_FechaIniFin(self):
-        """Se prueba modificar una fase, poniendole una fecha de finalizacion anterior a la de inicio"""
-        self.test_login_OK()
-        rera=str(random.randint(-9999999999,9999999999))
-        rv=self.modificar_Fase('2',
-                         rera,
-                         '20/05/2000',
-                         '21/06/1998',
-                         'heello flow',
-                         'activa',
-                         '2')
-        assert 'Fecha finalizacion antes que fecha inicio' in rv.data
+ #==============================================================================
+ #    def test_modificarFase_YaEsta(self):
+ #        """Se prueba modificar una fase, poniendole un nombre ya existente"""
+ #        self.test_login_OK()
+ #        rv=self.modificar_Fase('3',
+ #                         'ya_estoy',
+ #                         '20/05/2013',
+ #                         '21/06/2013',
+ #                         'heello flow',
+ #                         'Activo',
+ #                         '6')
+ #        print rv.data
+ #        assert 'Ya existe una fase con el nombre indicado' in rv.data
+ # 
+ #    def test_modificarFase_FechaInv(self):
+ #        """Se prueba modificar una fase, poniendole una fecha invalida"""
+ #        self.test_login_OK()
+ #        rera=str(random.randint(-9999999999,9999999999))
+ #        rv=self.modificar_Fase('2',
+ #                         rera,
+ #                         '58/31/1998',
+ #                         '21/06/2000',
+ #                         'heello flow',
+ #                         'activa',
+ #                         '2')
+ #        assert 'Fecha invalida' in rv.data
+ # 
+ #    def test_modificarFase_FechaIniFin(self):
+ #        """Se prueba modificar una fase, poniendole una fecha de finalizacion anterior a la de inicio"""
+ #        self.test_login_OK()
+ #        rera=str(random.randint(-9999999999,9999999999))
+ #        rv=self.modificar_Fase('2',
+ #                         rera,
+ #                         '20/05/2000',
+ #                         '21/06/1998',
+ #                         'heello flow',
+ #                         'activa',
+ #                         '2')
+ #        assert 'Fecha finalizacion antes que fecha inicio' in rv.data
+ #==============================================================================
 
 if __name__ == '__main__':
     unittest.main()

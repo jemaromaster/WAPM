@@ -51,7 +51,7 @@ class WAPMTestCase(unittest.TestCase):
         """Se prueba modificar un Usuario, asignandole un nombre de usuario nuevo valido"""
         self.test_login_OK()
         rera=str(random.randint(-999999999999999999,9999999999999999999))
-        rv=self.modificarU('1',
+        rv=self.modificarU('6',
                          rera,
                          'hola',
                          '65874',
@@ -61,7 +61,7 @@ class WAPMTestCase(unittest.TestCase):
                          'brasil 876',
                          '124874',
                          'ninguna',
-                         'activo')
+                         'true')
         print rv.data
         assert 'Usuario guardado correctamente' in rv.data
 
@@ -79,7 +79,7 @@ class WAPMTestCase(unittest.TestCase):
                          'brasil 876',
                          '124874',
                          'ninguna por ahora',
-                         'activo')
+                         'true')
         assert 'Ya existe el usuario' in rv.data
 
 if __name__ == '__main__':
