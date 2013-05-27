@@ -6,9 +6,18 @@ from models.bdCreator import Session
 from faseManejador import FaseManejador
 from datetime import datetime
 class FaseControllerClass(flask.views.MethodView):
-            
+    """
+    Clase que es utilizada para controlar los datos recibidos del cliente,
+    para asegurarse de que no se almacenen valores inconsistentes en la bd 
+    
+    """        
     def controlarFase(self, f, idF):
-       
+        """
+        Metodo utilizado para controlar los datos recibidos del cliente,
+        Parametros: 
+        @type  f: Fase
+        @param f: fase cuyos datos se van a controlar antes de que sea almacenada
+        """
         
         f.nombrefase=f.nombreFase.strip()
         #f.fechaInicio=f.fechaInicio.strip()

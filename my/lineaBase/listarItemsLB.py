@@ -8,6 +8,7 @@ from datetime import date
 from models.itemModelo import Item
 from models.faseModelo import Fase
 from models.lineaBaseModelo import LineaBase
+from models.solicitudCambioModelo import SolicitudCambio
 sesion=Session()
 
 
@@ -90,7 +91,9 @@ class ListarItemBase(flask.views.MethodView):
         #projectLeaderId=flask.session['idUsuario']
         
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
-        ############33
+        ############No se deben listar los items que ya se encuentran en una SC
+        
+        itemtAlreadySC=sesion.query(Item.idItem).filter(SolicitudCambio.estado=="pendiente").join(SolicitudCambio.items).all()
         
         ###############33
         if (search=='true'):
@@ -135,8 +138,8 @@ class ListarItemBase(flask.views.MethodView):
                 listaItem=sesion.query(Item).order_by(filtrarPor)\
                                                         .filter(Item.nombreItem.like(nombreItem))\
                                                         .filter(Item.estado.like("aprobado"))\
-                                                        .filter(Item.idFase==idFase)\
-                                                        [desde:hasta]
+                                                        .filter(Item.idFase==idFase,\
+                                                        ~Item.idItem.in_(itemtAlreadySC))[desde:hasta]
                 
                                                         
                                                         #.filter(Usuario.username.like(autor))
@@ -145,8 +148,8 @@ class ListarItemBase(flask.views.MethodView):
                 total=sesion.query(Item).order_by(filtrarPor)\
                                                         .filter(Item.nombreItem.like(nombreItem))\
                                                         .filter(Item.estado.like("aprobado"))\
-                                                        .filter(Item.idFase==idFase)\
-                                                        .count()
+                                                        .filter(Item.idFase==idFase,\
+                                                        ~Item.idItem.in_(itemtAlreadySC)).count()
             
                 
         else:
@@ -163,11 +166,13 @@ class ListarItemBase(flask.views.MethodView):
             else:
                 listaItem=sesion.query(Item).order_by(filtrarPor)\
                                                         .filter(Item.idFase==idFase)\
-                                                        .filter(Item.estado=='aprobado')[desde:hasta]
+                                                        .filter(Item.estado=='aprobado',\
+                                                        ~Item.idItem.in_(itemtAlreadySC))[desde:hasta]
                                                         #.filter(Proyecto.projectLeaderId==projectLeaderId)
                 total=sesion.query(Item).order_by(filtrarPor)\
                                                         .filter(Item.idFase==idFase)\
-                                                        .filter(Item.estado=='aprobado').count()
+                                                        .filter(Item.estado=='aprobado',\
+                                                        ~Item.idItem.in_(itemtAlreadySC)).count()
         print total
         print desde 
         print hasta 

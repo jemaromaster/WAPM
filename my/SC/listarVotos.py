@@ -81,7 +81,7 @@ class ListarVotos(flask.views.MethodView):
         #projectLeaderId=flask.session['idUsuario']
         
         filtrarPor= filtrarPor + ' ' + sord #establece el si filtrar por asc o desc 
-        voto='p'
+        
         if (search=='true'):
             filters=flask.request.args.get('filters', '')
             obj = json.loads(filters)
@@ -95,15 +95,12 @@ class ListarVotos(flask.views.MethodView):
                 if(comp['field']=='miembro'):
                     miembro=comp['data'].strip() + '%'
                     continue
-                if comp['field']=='voto':
-                    voto=comp['data'].strip()+'%'
-                    continue
                     
                 
             queryVotos=sesion.query(Usuario.username,Voto.voto).order_by(filtrarPor)\
                                                     .filter(Voto.solicitud==int(idSC))\
                                                     .filter(Voto.votante==Usuario.id)
-            queryVotos=queryVotos.filter(Voto.voto.like(voto) & Usuario.username.like(miembro) )                                        
+            queryVotos=queryVotos.filter(Usuario.username.like(miembro) )                                        
             total=queryVotos.count()
             listaVotos=queryVotos[desde:hasta]
             
@@ -116,7 +113,6 @@ class ListarVotos(flask.views.MethodView):
                                                     .filter(Voto.solicitud==int(idSC))\
                                                     .filter(Voto.votante==Usuario.id)
             '''
-            queryVotos=queryVotos.filter(Voto.voto.like(voto))                                        
             total=queryVotos.count()
             listaVotos=queryVotos[desde:hasta]
             

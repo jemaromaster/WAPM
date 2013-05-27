@@ -1310,22 +1310,22 @@
 								+ atrib.nombreFase, atrib.idFase);
 						bandera = true
 					});
-
-					$('#listaItems').trigger("reloadGrid");
-					/*//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
-					var myPostData = $('#listaItems').jqGrid("getGridParam",
-							"postData");
-					delete myPostData.idFase;
+					var myPostData = $('#listaItems').jqGrid("getGridParam","postData");
+					delete myPostData.idF;
 					$('#listaItems').setGridParam({
-						postData : {
-							search: true,
-							idFase : retornaValorComboBoxFases()
-						}
-					});*/
-
-				});
-
+							postData : {
+								idF : retornaValorComboBoxFases()
+							}
+					});
+					$('#listaItems').trigger("reloadGrid")	
+					
+			});
+	
 	}
+	
+		
+		
+	
 	function retornaValorComboBoxFases() {
 
 		var r = $("#comboBoxFases").val();

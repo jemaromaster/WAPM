@@ -1,27 +1,29 @@
 
 import flask.views
 from utils import login_required
+from utils import rolPL_required
 from models.faseModelo import Fase
 from Fases.faseController import FaseControllerClass;
 
 
 
 class AgregarFase(flask.views.MethodView):
-    """
-    Clase utilizada cuando se hace una peticion de creacion de 
-    usuario al servidor. Los metodos get y post indican como
+    """Clase utilizada cuando se hace una peticion de creacion de 
+    fase al servidor. Los metodos get y post indican como
     debe comportarse la clase segun el tipo de peticion que 
-    se realizo 
-    Atributos de la clase: id, nombre, fecha inicio, fecha finalizacion, descripcion, estado, proyecto
-    """
+    se realizo """
     
     @login_required
+    @rolPL_required
     def get(self):
-        return flask.render_template('crearUsuario.html')
+        return "<h1>no existe el contenido<h1>"
     
     @login_required
+    @rolPL_required
     def post(self):
-    
+        """Metodo utilizado para recibir los datos con los que se creara una fase nueva dentro
+        de algun proyecto. Invocado cuando se hace una peticion de creacion de 
+        fase al servidor."""
         nombreFase=flask.request.form['nombreFase']
         fechaInicio=flask.request.form['fechaInicio']
         fechaFinalizacion=flask.request.form['fechaFinal']

@@ -50,7 +50,7 @@ class ListarLB(flask.views.MethodView):
         param1=flask.request.args.get('page', '')
         param2=flask.request.args.get('rows', '')
         idFase=flask.request.args.get('idFase', '') 
-        if(idFase == '' or idFase == '0'):
+        if(idFase == ''):
             return "fase no valida"
         #caluclo de paginacion 
         page=long(param1)
