@@ -15,6 +15,18 @@ class ModificarLB(flask.views.MethodView):
     """
     @login_required
     def post(self):
+        """
+        Metodo utilizado para recibir los datos de una linea base cuyos valores
+        corresponden a los nuevos valores que tomara esa linea base en el sistema. 
+        Invocado cuando se hace una peticion de modificacion de 
+        linea base al servidor.
+        @type descripcion : sting
+        @param descripcion: descripcion de la linea base a agregar
+        @type idLB : string
+        @param idLB : id de la linea base a modificar
+        @type estado : string
+        @param estado : id de la linea base a modificar
+        """
         idLb=flask.request.form['idLB']
         descripcion=flask.request.form['descripcion']
         estado=flask.request.form['estado']

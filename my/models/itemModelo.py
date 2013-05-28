@@ -6,6 +6,11 @@ from faseModelo import Fase
 #from usuarioModelo import Usuario
 
 class Relacion(Base):
+    """
+    Esta clase se utiliza para mapear a sus instancias con la tabla de relacion
+    Hereda de la clase Base. La clase Base debe ser heredada por todas las 
+    clases que mapearan a una tabla.
+    """
     __tablename__='relacion'
     idRelacion=Column("id",Integer, primary_key=True)
     padre_id = Column(Integer, ForeignKey('item.id'))
@@ -16,15 +21,38 @@ class Relacion(Base):
     hijos=relationship("Item", primaryjoin="Relacion.hijo_id==Item.idItem")
     
     def setValues (self, padre_id, hijo_id, versionHijo):
+        """
+        Metodo para establecer valores de atributos de la clase. 
+        @type padre_id : Integer
+        @param padre_id : id del item padre
+        @type versionHijo : Integer
+        @param versionHijo : numero de version del hijo
+        @type hijo_id : Integer
+        @param hijo_id : id del item hijo
+        """
         self.padre_id=padre_id;
         self.hijo_id=hijo_id;
         self.versionHijo=versionHijo;
     
     def __init__(self, padre_id, hijo_id, versionHijo):
+        """
+        Constructor de la clase 
+        @type padre_id : Integer
+        @param padre_id : id del item padre
+        @type versionHijo : Integer
+        @param versionHijo : numero de version del hijo
+        @type hijo_id : Integer
+        @param hijo_id : id del item hijo
+        """
         self.padre_id=padre_id;
         self.hijo_id=hijo_id;
         self.versionHijo=versionHijo;
 class Item(Base):
+    """
+    Esta clase se utiliza para mapear a sus instancias con la tabla de item
+    Hereda de la clase Base. La clase Base debe ser heredada por todas las 
+    clases que mapearan a una tabla.
+    """
     #Nombre de la tabla
     __tablename__ = 'item'
     
@@ -64,7 +92,30 @@ class Item(Base):
                   fechaCreacion, autorVersion_id, idFase):
         """
         Metodo para establecer valores de atributos de la clase. 
-        Parametros: id, nombre, descripcion, estado
+        @type nombreItem : string
+        @param nombreItem : nombre del item
+        @type prioridad : Integer
+        @param prioridad : Prioridad del item
+        @type costo : Integer
+        @param costo : Costo economico asociado al item
+        @type complejidad : Integer
+        @param complejidad : Costo de complejidad asociado al item
+        @type fechaInicio : Date
+        @param fechaInicio : fecha de inicio del item
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion del item
+        @type tipoItem_id : Integer
+        @param tipoItem_id : id correspondiente al tipo de item del cual se instancion el item
+        @type estado : String
+        @param estado : descripcion del estado en que se encuentra el item
+        @type descripcion : String
+        @param descripcion : descripcion del item
+        @type fechaCreacion : Date
+        @param fechaCreacion : fecha en que se creo el item
+        @type autoVersion_id : Integer
+        @param autoVersion_id : auto version
+        @type idFase : Integer
+        @param idFase : Fase a la cual esta relacionada este Item
         """
               
         self.nombreItem=nombreItem;
@@ -85,9 +136,31 @@ class Item(Base):
                   fechaFinalizacion, tipoItem_id,estado, descripcion, \
                   fechaCreacion, autorVersion_id, idFase):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: id, nombre, descripcion, estado
+        Constructor de la clase 
+        @type nombreItem : string
+        @param nombreItem : nombre del item
+        @type prioridad : Integer
+        @param prioridad : Prioridad del item
+        @type costo : Integer
+        @param costo : Costo economico asociado al item
+        @type complejidad : Integer
+        @param complejidad : Costo de complejidad asociado al item
+        @type fechaInicio : Date
+        @param fechaInicio : fecha de inicio del item
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion del item
+        @type tipoItem_id : Integer
+        @param tipoItem_id : id correspondiente al tipo de item del cual se instancion el item
+        @type estado : String
+        @param estado : descripcion del estado en que se encuentra el item
+        @type descripcion : String
+        @param descripcion : descripcion del item
+        @type fechaCreacion : Date
+        @param fechaCreacion : fecha en que se creo el item
+        @type autoVersion_id : Integer
+        @param autoVersion_id : auto version
+        @type idFase : Integer
+        @param idFase : Fase a la cual esta relacionada este Item
         """
         
         

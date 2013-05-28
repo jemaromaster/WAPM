@@ -21,9 +21,21 @@ class AgregarFase(flask.views.MethodView):
     @login_required
     @rolPL_required
     def post(self):
-        """Metodo utilizado para recibir los datos con los que se creara una fase nueva dentro
+        """
+        Metodo utilizado para recibir los datos con los que se creara una fase nueva dentro
         de algun proyecto. Invocado cuando se hace una peticion de creacion de 
-        fase al servidor."""
+        fase al servidor.
+        @type  nombreFase: String
+        @param nombreFase: nombre de la fase a agregar
+        @type  fechaInicio: date
+        @param fechaInicio: fecha de inicio de la fase
+        @type  fechaFinal: date
+        @param fechaFinal: fecha de finalizacion de la fase
+        @type  descripcion: String
+        @param descripcion: una descripcion de la fase
+        @type  idProyecto: String
+        @param idProyecto: el id del proyecto al cual la fase pertenecera
+        """
         nombreFase=flask.request.form['nombreFase']
         fechaInicio=flask.request.form['fechaInicio']
         fechaFinalizacion=flask.request.form['fechaFinal']
@@ -40,9 +52,3 @@ class AgregarFase(flask.views.MethodView):
         fc=FaseControllerClass()
         
         return fc.controlarFase(f, 0)
-    
-        
-            
-        
-        
-               

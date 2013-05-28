@@ -9,7 +9,7 @@ sesion=Session()
 class Respuesta():
     """
     Clase utilizada cuando se hace una peticion de listado de 
-    roles de proyecto al servidor. Se obtienen de la bd las filas a 
+    linea base al servidor. Se obtienen de la bd las filas a 
     devolver dentro de la lista y se convierte a un formato
     json para que pueda ser interpretado por el navegador 
     """
@@ -19,6 +19,17 @@ class Respuesta():
     rows=1
     
     def __init__(self, totalPages,currPage,totalRecords,rows):
+        """
+        Constructor de la clase.
+        @type  totalPages: number
+        @param totalPages: Indica el numero de paginas que tendra el listado.
+        @type  currPage: number
+        @param currPage: Indica el numero de pagina actual.
+        @type  totalRecords: number
+        @param totalRecords: Indica el numero de registros en el listado.
+        @type  rows: number
+        @param rows: Indica el numero de filas por pagina que se tendra dentro del listado.
+        """
         self.totalPages=totalPages
         self.currPage=currPage
         self.totalRecords=totalRecords
@@ -26,7 +37,10 @@ class Respuesta():
     
     def jasonizar(self, listaLB):
         """
-        modulo que jasoniza la respuesta
+        Modulo que jasoniza la respuesta.
+        @type  listaLB: LineaBase[]
+        @param listaLB: Resultado de una consulta que trae los datos de las Lineas bases a inicluir en el listado
+            de lineas bases que se devolvera al cliente.
         """
         p='' 
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
@@ -43,8 +57,22 @@ class Respuesta():
         return p 
         
 class ListarLB(flask.views.MethodView):
+    """
+    Clase que realiza un listado de lineas bases segun los datos que se 
+    reciban del cliente. Este listado incluye a las lineas bases que 
+    se crearon dentro de la fase de un proyecto.
+    """     
     @login_required
     def get(self): 
+        """
+        Recibe la peticion de listar items, segun los parametros que incluya la peticion.
+        type page : string
+        @param page : parametro que indica el numero de pagina actual.
+        @type rows : string
+        @param rows : parametro que indica la cantidad de filas por pagina
+        @type idFase : string
+        @param idFase : indica la fase a la que pertenecen las lineas bases a listar
+        """
         #se obtiene los datos de post del server
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')

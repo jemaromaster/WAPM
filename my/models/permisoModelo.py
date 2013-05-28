@@ -18,9 +18,13 @@ class Permiso(Base):
     
     def __init__(self, nombre, codigo, descripcion):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: self,id, nombre, codigo, descripcion 
+        Constructor de la clase.
+        @type nombre : string
+        @param nombre : nombre del permiso
+        @type codigo : string
+        @param codigo : codigo del permiso 
+        @type descripcion : string
+        @param descripcion : descripcion del permiso
         """ 
         self.codigo=codigo;self.nombre=nombre;self.descripcion=descripcion
         

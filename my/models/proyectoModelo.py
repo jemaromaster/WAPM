@@ -46,8 +46,20 @@ class Proyecto(Base):
                   observacion,estado):
         """
         Metodo para establecer valores de atributos de la clase. 
-        Parametros: self,nombreProyecto,projectLeaderId,fechaInicio,
-        fechaFinalizacion,observacion,fases
+        @type nombreProyecto : string
+        @param nombreProyecto : nombre del proyecto
+        @type projectLeaderId : Integer
+        @param projectLeaderId : id del project leader 
+        @type fechaInicio : date
+        @param fechaInicio : fecha de inicio del proyecto
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion del proyecto
+        @type presupuesto : Integer
+        @param presupuesto : presupuesto aproximado para el proyecto
+        @type observacion : string
+        @param observacion : observacion dentro del proyecto
+        @type estado : string
+        @param estado : estado del proyecto
         """
         self.nombreProyecto=nombreProyecto;
         self.projectLeaderId=projectLeaderId;
@@ -59,6 +71,23 @@ class Proyecto(Base):
         
     def __init__(self,nombreProyecto,projectLeaderId,fechaInicio,fechaFinalizacion, \
                   presupuesto,observacion,estado):
+        """
+        Constructor de la clase 
+        @type nombreProyecto : string
+        @param nombreProyecto : nombre del proyecto
+        @type projectLeaderId : Integer
+        @param projectLeaderId : id del project leader 
+        @type fechaInicio : date
+        @param fechaInicio : fecha de inicio del proyecto
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion del proyecto
+        @type presupuesto : Integer
+        @param presupuesto : presupuesto aproximado para el proyecto
+        @type observacion : string
+        @param observacion : observacion dentro del proyecto
+        @type estado : string
+        @param estado : estado del proyecto
+        """
         self.nombreProyecto=nombreProyecto;
         self.projectLeaderId=projectLeaderId;
         self.fechaInicio=fechaInicio;

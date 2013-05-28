@@ -27,8 +27,25 @@ class Usuario(Base):
     
     def setValues(self,username,passwd,nombres,apellidos,email,ci,telefono,observacion,activo,direccion):
         """
-        Metodo para establecer valores de atributos de la clase. 
-        Parametros: self,username,passwd,nombres,apellidos,email,ci,telefono,observacion,activo,direccion 
+        Metodo para establecer valores de la clase
+        @type username : string
+        @param username : nombre de usuario
+        @type passwd : string
+        @param passwd : pass del usuario
+        @type nombres : string
+        @param nombres : nombres del usuario
+        @type apellidos : string
+        @param apellidos : apellidos del usuario
+        @type email : string
+        @param email : email del usuario
+        @type ci : string
+        @param ci : ci del usuario
+        @type observacion : string
+        @param observacion : observacion
+        @type activo : boolean
+        @param activo : indica si el usuario se encuentra activo o inactivo 
+        @type direccion : string
+        @param direccion : direccion del usuario
         """
         self.username=username;self.passwd=passwd;self.nombres=nombres
         self.apellidos=apellidos;self.email=email;self.ci=ci;self.telefono=telefono
@@ -36,9 +53,25 @@ class Usuario(Base):
         
     def __init__(self,username,passwd,nombres,apellidos,email,ci,telefono,observacion,activo,direccion):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: self,username,passwd,nombres,apellidos,email,ci,telefono,observacion,activo,direccion 
+        Constructor de la clase
+        @type username : string
+        @param username : nombre de usuario
+        @type passwd : string
+        @param passwd : pass del usuario
+        @type nombres : string
+        @param nombres : nombres del usuario
+        @type apellidos : string
+        @param apellidos : apellidos del usuario
+        @type email : string
+        @param email : email del usuario
+        @type ci : string
+        @param ci : ci del usuario
+        @type observacion : string
+        @param observacion : observacion
+        @type activo : boolean
+        @param activo : indica si el usuario se encuentra activo o inactivo 
+        @type direccion : string
+        @param direccion : direccion del usuario
         """
         self.username=username;self.passwd=passwd;self.nombres=nombres
         self.apellidos=apellidos;self.email=email;self.ci=ci;self.telefono=telefono

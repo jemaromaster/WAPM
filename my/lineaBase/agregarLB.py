@@ -15,6 +15,16 @@ class AgregarLB(flask.views.MethodView):
     """
     @login_required
     def post(self):
+        """
+        Metodo utilizado para recibir los datos con los que se creara una Linea Base nueva dentro
+        de algun proyecto. Invocado cuando se hace una peticion de creacion de 
+        linea base al servidor.
+        @type descripcion : sting
+        @param descripcion: descripcion de la linea base a agregar
+        @type idFase : string
+        @param idFase : id de la fase a la que corresponde la Linea base a agregar
+        
+        """
         descripcion=flask.request.form['descripcion']
         idFase=flask.request.form['idFase']
         estado="abierta"

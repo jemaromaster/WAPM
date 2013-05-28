@@ -13,7 +13,7 @@ sesion=Session()
 class Respuesta():
     """
     Clase utilizada cuando se hace una peticion de listado de 
-    proyectos al servidor. Se obtienen de la bd las filas a 
+    faseas de un proyecto al servidor. Se obtienen de la bd las filas a 
     devolver dentro de la lista y se convierte a un formato
     json para que pueda ser interpretado por el navegador 
     """
@@ -23,6 +23,17 @@ class Respuesta():
     rows=1
     
     def __init__(self, totalPages,currPage,totalRecords,rows):
+        """
+        Constructor de la clase.
+        @type  totalPages: number
+        @param totalPages: Indica el numero de paginas que tendra el listado.
+        @type  currPage: number
+        @param currPage: Indica el numero de pagina actual.
+        @type  totalRecords: number
+        @param totalRecords: Indica el numero de registros en el listado.
+        @type  rows: number
+        @param rows: Indica el numero de filas por pagina que se tendra dentro del listado.
+        """
         self.totalPages=totalPages
         self.currPage=currPage
         self.totalRecords=totalRecords
@@ -30,7 +41,10 @@ class Respuesta():
     
     def jasonizar(self, listaFase):
         """
-        modulo que jasoniza la respuesta
+        Modulo que jasoniza la respuesta.
+        @type  listaFase: Fase[]
+        @param listaFase: Resultado de una consulta que trae los datos de las fases a inicluir en el listado
+            de fases que se devolvera al cliente.
         """
         p='' 
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
@@ -50,9 +64,18 @@ class Respuesta():
         p=pre+p
         return p 
         
-class ListarComboFases(flask.views.MethodView):        
+class ListarComboFases(flask.views.MethodView):  
+    """
+    Clase que realiza un listado de fases segun los datos que se 
+    reciban del cliente
+    """      
     @login_required
     def post(self):
+        """
+        Recibe la peticion de listar los nombres y ids de fase para su utilizacion en comboBox en el cliente
+        @type idProyecto: String
+        @param idProyecto: Id del proyecto sobre el cual se filtraran las fases del listado
+        """
         idProyecto=flask.request.form['idProyecto']
         print "id proyecto en listar combo fases:  " + idProyecto
         if(idProyecto=='' or idProyecto=='0'):
@@ -72,8 +95,21 @@ class ListarComboFases(flask.views.MethodView):
         
 
 class ListarFases(flask.views.MethodView):
+    """
+    Clase que realiza un listado de fases segun los datos que se 
+    reciban del cliente
+    """
     @login_required
-    def get(self): 
+    def get(self):
+        """
+        Recibe la peticion de listar fases, segun los parametros que incluya la peticion.
+        @type page : string
+        @param page : parametro que indica el numero de pagina actual.
+        @type rows : string
+        @param rows : parametro que indica la cantidad de filas por pagina
+        @type idProyecto : string
+        @param idProyecto : indica sobre que proyecto filtrar las fases
+        """ 
         #se obtiene los datos de post del server
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
@@ -150,11 +186,11 @@ class ListarFases(flask.views.MethodView):
         else:
             #si no hubo filtro entonces se envian los datos de usuarios activos
             
-             print 'el id proyeceeecto es' + str(idProyecto)
-             listaFase=sesion.query(Fase).order_by(filtrarPor)\
+            print 'el id proyeceeecto es' + str(idProyecto)
+            listaFase=sesion.query(Fase).order_by(filtrarPor)\
                                                     .filter(Fase.idProyecto==int(idProyecto))[desde:hasta]
                                                     #.filter(Proyecto.projectLeaderId==projectLeaderId)
-             total=sesion.query(Fase).order_by(filtrarPor)\
+            total=sesion.query(Fase).order_by(filtrarPor)\
                                                     .filter(Fase.idProyecto==int(idProyecto)).count()
         print total
         print desde

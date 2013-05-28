@@ -7,14 +7,19 @@ from models.bdCreator import Session
 
 class FinalizarFase(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de activacion de 
-    proyecto al servidor. Los metodos get y post indican como
+    Clase utilizada cuando se hace una peticion de finalizacion de 
+    fase al servidor. Los metodos get y post indican como
     debe comportarse la clase segun el tipo de peticion que 
     se realizo 
     """
     @login_required
     def post(self):
-    
+        """
+        Metodo utilizado para recibir los datos de la fase que sera finalizada
+        dentro del proyecto.
+        @type idFase : String
+        @param idFase : Id de la fase a la cual se le cambiara el estado por finalizado
+        """
         idFase=flask.request.form['idFase']
         idFase=idFase.strip()
         if idFase=="0" or idFase=='':

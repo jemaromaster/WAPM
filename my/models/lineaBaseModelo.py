@@ -36,7 +36,12 @@ class LineaBase(Base):
     def setValues(self,descripcion, estado,idFase):
         """
         Metodo para establecer valores de atributos de la clase. 
-        Parametros: descripcion, estado
+        @type descripcion : string
+        @param descripcion : descripcion de la linea base
+        @type estado : string
+        @param estado : estado actual de la fase        
+        @type idFase : Integer
+        @param idFase : fase a la que esta relacionada la linea base
         """ 
         self.descripcion=descripcion;
         self.estado=estado;
@@ -44,9 +49,11 @@ class LineaBase(Base):
         
     def __init__(self,descripcion, estado):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: descripcion, estado
+        Constructor de la clase 
+        @type descripcion : string
+        @param descripcion : descripcion de la linea base
+        @type estado : string
+        @param estado : estado actual de la fase        
         """
         self.descripcion=descripcion;
         self.estado=estado;

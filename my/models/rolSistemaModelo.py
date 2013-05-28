@@ -26,5 +26,14 @@ class RolSistema(Base):
     usuarios = relationship("Usuario", secondary=rolSistema_usuario, backref=backref('roles_sistema'))
 
     def __init__(self, nombre,descripcion):
+        """
+        Constructor de la clase
+        @type nombre : string
+        @param nombre : nombre del rol de sistema
+        @type descripcion : string
+        @param descripcion : descripcion del rol de sistema 
+        @type estado : string
+        @param estado : estado del rol de sistema
+        """
         self.nombre=nombre
         self.descripcion=descripcion

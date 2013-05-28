@@ -55,5 +55,12 @@ class SolicitudCambio(Base):
 
         
     def __init__(self,descripcion,estado):
+        """
+        Constructor de la clase
+        @type descripcion : string
+        @param descripcion : descripcion de la solicitud de cambio
+        @type estado : string
+        @param estado : estado  de la solicitud de cambio
+        """
         self.descripcion=descripcion;
         self.estado=estado;

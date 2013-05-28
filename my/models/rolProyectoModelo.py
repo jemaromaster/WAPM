@@ -36,9 +36,13 @@ class RolProyecto(Base):
     
     def __init__(self,nombre, descripcion,estado):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: self,id, nombre, descripcion 
+        Constructor de la clase
+        @type nombre : string
+        @param nombre : nombre del rol
+        @type descripcion : string
+        @param descripcion : descripcion del rol 
+        @type estado : string
+        @param estado : estado del rol
         """
         self.nombre=nombre;self.descripcion=descripcion
         self.estado=estado

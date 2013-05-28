@@ -13,10 +13,9 @@ from tipoPrimarioModelo import TipoPrimario
 
 class Atributos(Base):
     """
-    Esta clase se utiliza para mapear a sus instancias con la tabla de TIPOSDEITEM
+    Esta clase se utiliza para mapear a sus instancias con la tabla de ATRIBUTOS
     Hereda de la clase Base. La clase Base debe ser heredada por todas las 
     clases que mapearan a una tabla.
-    Atributos de la clase: id, nombreAtributo, TipoAtributo, TipoItem
     """
     #Nombre de la tabla
     __tablename__ = 'atributos'
@@ -35,10 +34,17 @@ class Atributos(Base):
     
     tipoItemId = Column("tipo_item_id",Integer, ForeignKey('tipo_item.id'))
     
-    def setValues(self,idAtributo,mbreAtributo,tipoPrimarioId, longitudCadena):
+    def setValues(self,idAtributo,nombreAtributo,tipoPrimarioId, longitudCadena):
         """
         Metodo para establecer valores de atributos de la clase. 
-        Parametros: self,nombreTipoItem, faseId
+        @type idAtributo : number
+        @param idAtributo : id del atributo
+        @type nombreAtributo : string
+        @param nombreAtributo : nombre del atributo
+        @type tipoPrimarioId : number
+        @param tipoPrimarioId : id del tipo primario del cual hereda el atributo
+        @type longitudCadena : number
+        @param longitudCadena : longitud maxima de un atributo tipo string
         """
         self.idAtributo=idAtributo;
         self.nombreAtributo=nombreAtributo;
@@ -47,6 +53,17 @@ class Atributos(Base):
         
         
     def __init__(self,idAtributo,nombreAtributo,tipoPrimarioId, longitudCadena):
+        """
+        Metodo para inicializar valores de atributos de la clase. 
+        @type idAtributo : number
+        @param idAtributo : id del atributo
+        @type nombreAtributo : string
+        @param nombreAtributo : nombre del atributo
+        @type tipoPrimarioId : number
+        @param tipoPrimarioId : id del tipo primario del cual hereda el atributo
+        @type longitudCadena : number
+        @param longitudCadena : longitud maxima de un atributo tipo string
+        """
         self.idAtributo=idAtributo;
         self.nombreAtributo=nombreAtributo;
         self.tipoPrimarioId=tipoPrimarioId;

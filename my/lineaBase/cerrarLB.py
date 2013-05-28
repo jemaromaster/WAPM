@@ -7,13 +7,17 @@ from models.bdCreator import Session
 class CerrarLB(flask.views.MethodView):
     """
     Clase utilizada cuando se hace una peticion al servidor para 
-    agregar un permiso a un rol de proyecto. Los metodos get y post 
+    cerrar una linea Base. Los metodos get y post 
     indican como debe comportarse la clase segun el tipo de peticion que 
     se realizo 
     """
     @login_required
     def post(self):
-    
+        """
+        Metodo utilizado para recibir los datos de la linea base a cerrar.
+        @type idLB : string
+        @param idLb : id de la linea base a ser cerrada
+        """
         idLB=flask.request.form['idLB']
         
         sesion=Session()

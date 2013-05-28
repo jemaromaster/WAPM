@@ -8,13 +8,20 @@ from models.bdCreator import Session
 class AgregarItemLB(flask.views.MethodView):
     """
     Clase utilizada cuando se hace una peticion al servidor para 
-    agregar un permiso a un rol de proyecto. Los metodos get y post 
+    agregar un item a una linea base del proyecto. Los metodos get y post 
     indican como debe comportarse la clase segun el tipo de peticion que 
     se realizo 
     """
     @login_required
     def post(self):
-    
+        """
+        Metodo utilizado para recibir los datos de un item a ser agregado dentro
+        de una linea base.
+        @type idLB: string
+        @param idLB: id de la linea base a la cual se le agregara el item
+        @type idItem: string
+        @param idItem :id del item a agregar
+        """
         idLB=flask.request.form['idLB']
         idItem=flask.request.form['idItem']
         

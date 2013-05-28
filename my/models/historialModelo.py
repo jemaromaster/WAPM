@@ -84,6 +84,11 @@ class HistorialInstanciaEntero(Base):
         self.entero=entero;'''
         
 class HistorialRelacion(Base):
+    """
+    Esta clase se utiliza para mapear a sus instancias con la tabla de Historial_relacion
+    Hereda de la clase Base. La clase Base debe ser heredada por todas las 
+    clases que mapearan a una tabla.
+    """
     __tablename__='histo_relacion'
     idRelacion=Column("id",Integer, primary_key=True)
     padre_id = Column(Integer, ForeignKey('item.id'))
@@ -94,16 +99,39 @@ class HistorialRelacion(Base):
     hijos=relationship("Item", primaryjoin="HistorialRelacion.hijo_id==Item.idItem")
     
     def setValues (self, padre_id, hijo_id, versionHijo):
+        """
+        Metodo para establecer valores de atributos de la clase. 
+        @type padre_id : number
+        @param padre_id : nombre de la fase
+        @type hijo_id : number
+        @param hijo_id : descripcion de la fase
+        @type versionHijo : number
+        @param versionHijo : estado actual de la fase
+        """
         self.padre_id=padre_id;
         self.hijo_id=hijo_id;
         self.versionHijo=versionHijo;
     
     def __init__(self, padre_id, hijo_id, versionHijo):
+        """
+        Constructor de la clase 
+        @type padre_id : number
+        @param padre_id : nombre de la fase
+        @type hijo_id : number
+        @param hijo_id : descripcion de la fase
+        @type versionHijo : number
+        @param versionHijo : estado actual de la fase
+        """
         self.padre_id=padre_id;
         self.hijo_id=hijo_id;
         self.versionHijo=versionHijo;
         
 class HistorialItem(Base):
+    """
+    Esta clase se utiliza para mapear a sus instancias con la tabla de Historial_Item
+    Hereda de la clase Base. La clase Base debe ser heredada por todas las 
+    clases que mapearan a una tabla.
+    """
     #Nombre de la tabla
     __tablename__ = 'histo_item'
     
@@ -137,7 +165,33 @@ class HistorialItem(Base):
                   fechaCreacion, autorVersion_id,idItemFK):
         """
         Metodo para establecer valores de atributos de la clase. 
-        Parametros: id, nombre, descripcion, estado
+        @type nombreItem : string
+        @param nombreItem : nombre del item
+        @type version : Integer
+        @param version : Numero de version del item
+        @type prioridad : Integer
+        @param prioridad : Prioridad del item
+        @type costo : Integer
+        @param costo : Costo economico asociado al item
+        @type complejidad : Integer
+        @param complejidad : Costo de complejidad asociado al item
+        @type fechaInicio : Date
+        @param fechaInicio : fecha de inicio del item
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion del item
+        @type tipoItem_id : Integer
+        @param tipoItem_id : id correspondiente al tipo de item del cual se instancion el item
+        @type estado : String
+        @param estado : descripcion del estado en que se encuentra el item
+        @type descripcion : String
+        @param descripcion : descripcion del item
+        @type fechaCreacion : Date
+        @param fechaCreacion : fecha en que se creo el item
+        @type autorVersion_id : Integer
+        @param autorVersion_id : Id del usuario autor de la version del item
+        @type idItemFk : Integer
+        @param idItemFk : Item al cual esta relacionado este historial
+        
         """
               
         self.nombreItem=nombreItem;
@@ -161,9 +215,34 @@ class HistorialItem(Base):
                   fechaFinalizacion, tipoItem_id, estado, descripcion, \
                   fechaCreacion, autorVersion_id, idItemFK):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: id, nombre, descripcion, estado
+        Constructor de la clase 
+        @type nombreItem : string
+        @param nombreItem : nombre del item
+        @type version : Integer
+        @param version : Numero de version del item
+        @type prioridad : Integer
+        @param prioridad : Prioridad del item
+        @type costo : Integer
+        @param costo : Costo economico asociado al item
+        @type complejidad : Integer
+        @param complejidad : Costo de complejidad asociado al item
+        @type fechaInicio : Date
+        @param fechaInicio : fecha de inicio del item
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion del item
+        @type tipoItem_id : Integer
+        @param tipoItem_id : id correspondiente al tipo de item del cual se instancion el item
+        @type estado : String
+        @param estado : descripcion del estado en que se encuentra el item
+        @type descripcion : String
+        @param descripcion : descripcion del item
+        @type fechaCreacion : Date
+        @param fechaCreacion : fecha en que se creo el item
+        @type autorVersion_id : Integer
+        @param autorVersion_id : Id del usuario autor de la version del item
+        @type idItemFk : Integer
+        @param idItemFk : Item al cual esta relacionado este historial
+        
         """
         
         

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: #E6E6E6;">
 <header>
 
 	
@@ -21,7 +21,7 @@
 		
 	 <script>
 		$(function() {
-		$( "#menu" ).menu();
+		$( "#menu" ).menu().draggable();
 		if ("{{session['esComite']}}" == 0)
 			$("#votantesOpcion").hide();
 		else
@@ -34,7 +34,7 @@
 	{% block header %}{% endblock %}
 </header>
 
-<script>
+	<script>
 		var valorenSesion={{session['idProyecto']}};
 		$.getJSON("http://localhost:5000/listarProyectoComboBase", function(atribs) {
 		  
@@ -129,82 +129,99 @@
 
 		
 	</script>
-
+	
 
 <body>
+<div style="border-radius: 15px;width: 1028px; height: 100%; background-color:  #0B3861; margin-left: auto ;
+  		margin-right: auto ;">
+	<div  style="border-radius: 15px;width: 1024px; height: 100%; background-color: #FFFFFF; margin-left: auto ;
+  margin-right: auto ;">
+		<table style="width:100%">
+			<tr>
+				<td>
+					<div align="left">
 
-		<div style="position:fixed;left:220px">
-			
-			<img src="/static/images/blue-23957_640.png" width="250px" title="Volver a Pagina Principal" onclick="location.href='/'" 
-			style="cursor:pointer; position:fixed;left:90"/>
-			<br></br>
-			<br></br>
-			
-			
-	</div>
-	<div  style="position:fixed;right:220px">
-		<h4 style="float:right; background-color:#FFFFFF ;text-indent: 4;" >
-			
-			Bienvenido:{{session['username']}}!   
-			<br></br>
-			 <script> document.write( new Date().toLocaleString())</script>
-			<br></br> 
-			 <form action="{{url_for('index')}}" method="post">
-		            <input id="btLogOut" type="submit" name="logout" value="logout" />
-		        </form>
-		     <script>
-					$("#btLogOut").button();
-		    </script>
-			 </h4>
-	</div>
-			
-			
-	
-	<div id="barraHeader" style="clear:both;width:75%;text-align:center; 
-	top:160px;left:200px;position:fixed;	 background-color: #659EC7;"> WAPM. Version 1.0.1
-	</div>
-	
-	 <div id="content" style="top:180px;position:fixed;left:250px;bottom:120px;overflow:auto; width:100%">
-	{% block body %}{% endblock %}
-	</div>
-	<div
-	style="float:left; background-color:#E6E6E6; height: 900px;position:fixed;top:0;left:0 ">
-	<iframe width="200px" height="auto" style="border-style:none;"> </iframe>
-	
-	</div>
-	
-	 <div  style="float:right; background-color:#E6E6E6;position:fixed;top:0;height:900px;right:0 ">
-			<iframe width="200px" height="100%" style="border-style:none;"> </iframe>
-	</div> 
-	<div id="barraFooter" style="clear:both;text-align:center; background-color: #0B3861;height: 70px;width:100%;
-	  position: fixed; bottom: 0 ;left:0;right:0">
-	Copyright © WAPM <br></br> Desarrollado por: RALSS    email: prass@software.ralss.py
-	
-	</div>
-		
-					
-	<div id="sectorProyectoComboBox"  >
-			<br></br>
-			<table style="margin-left:auto; margin-right:auto;"  >
-			<tr >
-			<td >
-			<h4 >Seleccionar Proyecto:</h4>
-			</td>
-			<td >
-			<select id="proyectosUsuario" 
-					style="display: block; margin-bottom: 12px; padding: 0.4em; "
-					class="ui-widget-content ui-corner-all"
-					onchange="proyChange()"	>
-					<option value="activo">Ninguno</option>
-			</select>
-			</td>
+						<img src="/static/images/blue-23957_640.png" width="250px"
+							title="Volver a Pagina Principal" onclick="location.href='/'"
+							style="cursor: pointer;" />
+					</div>
+				</td>
+				<td>
+					<div align="center"  id="sectorProyectoComboBox"  >
+						<br></br>
+						<table  >
+						<tr >
+						<td >
+						<h4 >Seleccionar Proyecto:</h4>
+						</td>
+						<td >
+						<select id="proyectosUsuario" 
+								style="display: block; margin-bottom: 12px; padding: 0.4em; "
+								class="ui-widget-content ui-corner-all"
+								onchange="proyChange()"	>
+								<option value="activo">Ninguno</option>
+						</select>
+						</td>
+						</tr>
+						</table>	
+					</div>					
+				</td>
+				
+				<td style=" padding:5px" align="right" >
+					<div  >
+						<h4 style="float: right; text-indent: 4;">
+							Bienvenido:{{session['username']}}! <br></br>
+							<script>
+								document.write(new Date().toLocaleString())
+							</script>
+							<br></br>
+							<form action="{{url_for('index')}}" method="post">
+								<input id="btLogOut" type="submit" name="logout" value="logout" />
+							</form>
+							<script>
+								$("#btLogOut").button();
+							</script>
+						</h4>
+					</div>
+				</td>
 			</tr>
-			</table>	
+		</table>
+
+
+
+		<div id="barraHeader"
+			style="clear: both; width: 100%; text-align: center; background-color: #659EC7;">
+			WAPM. Version 1.0.1</div>
+
+
+		<div  id="content" style="overflow: auto;padding:10px">
+			{% block body %}{%endblock %}
+		</div>
+		<br></br>
+		
+	</div>
+	<div id="barraFooter"
+			style=" position:relative;border-width: 0; bottom:25px;text-align: center;  height: 20px; width: 100%;">
+
+			<table align="center">
+				<tr >
+					<td  >Copyright © WAPM. Desarrollado por: RALSS email: prass@software.ralss.py</td>
+				
+					
+				</tr>
+			</table>
+		</div>
+	
 	</div>
 	
 	
-	
 		
+						
+	
+	
+	
+	
+	
 	<div id="menuBarr" css=".ui-menu" style="position:fixed; top:220px;left:50px">
 			<ul id="menu">
 			<h2>Menu</h2>
@@ -227,8 +244,6 @@
 					{% else %} {% endif %}
 			</ul>
 	</div>
-	
-	
-
 </body>
 </html>
+	

@@ -13,10 +13,12 @@ class FaseControllerClass(flask.views.MethodView):
     """        
     def controlarFase(self, f, idF):
         """
-        Metodo utilizado para controlar los datos recibidos del cliente,
-        Parametros: 
+        Metodo utilizado para controlar los datos recibidos del cliente
         @type  f: Fase
-        @param f: fase cuyos datos se van a controlar antes de que sea almacenada
+        @param f: Fase cuyos datos seran controlados antes de ser almacenados en la bd
+        @type  idF: number
+        @param idF: El id de la fase. Si es cero, la fase enviada es nueva, sino, es una
+            fase ya existente cuyos atributos quieren ser modificados.
         """
         
         f.nombrefase=f.nombreFase.strip()

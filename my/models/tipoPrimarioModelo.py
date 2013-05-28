@@ -20,15 +20,20 @@ class TipoPrimario(Base):
     
     def setValues(self,nombre,tipoPrimario):
         """
-        Metodo para establecer valores de atributos de la clase. 
-        Parametros: self,nombre,tipoprimario
-        """
-        self.nombre=nombre; self.tipoprimario=tipoprimario
+        Metodo para establecer valores de la clase
+        @type nombre : string
+        @param nombre : nombre del tipo primario
+        @type tipoPrimario : string
+        @param tipoPrimario : descripcion del tipo primario 
+        """        
+        self.nombre=nombre; self.tipoprimario=tipoPrimario
         
     def __init__(self,nombre,tipoprimario):
         """
-        Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
-        componen. 
-        Parametros: self,nombre,tipoprimario 
+        Constructor de la clase
+        @type nombre : string
+        @param nombre : nombre del tipo primario
+        @type tipoPrimario : string
+        @param tipoPrimario : descripcion del tipo primario 
         """
         self.nombre=nombre; self.tipoprimario=tipoprimario        

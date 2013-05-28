@@ -6,7 +6,6 @@ class Fase(Base):
     Esta clase se utiliza para mapear a sus instancias con la tabla de Fases
     Hereda de la clase Base. La clase Base debe ser heredada por todas las 
     clases que mapearan a una tabla.
-    Atributos de la clase: idFase, nombre, descripcion, estado, fecha inicio, fecha finalizacion, proyecto
     """
     #Nombre de la tabla
     __tablename__ = 'fase'
@@ -27,7 +26,18 @@ class Fase(Base):
     def setValues(self,nombreFase, descripcion, estado, fechaInicio, fechaFinalizacion, idProyecto):
         """
         Metodo para establecer valores de atributos de la clase. 
-        Parametros: id, nombre, descripcion, estado
+        @type nombreFase : string
+        @param nombreFase : nombre de la fase
+        @type descripcion : string
+        @param descripcion : descripcion de la fase
+        @type estado : string
+        @param estado : estado actual de la fase
+        @type fechaInicio : date
+        @param fechaInicio : fecha de inicio de la fase
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion de la fase
+        @type idProyecto : number
+        @param idProyecto : id del proyecto al que la fase pertenece
         """
               
         self.nombreFase=nombreFase; 
@@ -41,7 +51,18 @@ class Fase(Base):
         """
         Constructor de la clase. Al instanciar la clase se da valor a todos los atributos que la 
         componen. 
-        Parametros: id, nombre, descripcion, estado
+        @type nombreFase : string
+        @param nombreFase : nombre de la fase
+        @type descripcion : string
+        @param descripcion : descripcion de la fase
+        @type estado : string
+        @param estado : estado actual de la fase
+        @type fechaInicio : date
+        @param fechaInicio : fecha de inicio de la fase
+        @type fechaFinalizacion : date
+        @param fechaFinalizacion : fecha de finalizacion de la fase
+        @type idProyecto : number
+        @param idProyecto : id del proyecto al que la fase pertenece
         """
         self.nombreFase=nombreFase; 
         self.descripcion=descripcion;

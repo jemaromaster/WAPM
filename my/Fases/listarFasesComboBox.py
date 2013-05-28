@@ -13,7 +13,10 @@ class ListarFasesComboBox(flask.views.MethodView):
     
     def jasonizar(self, fl):
         """
-        modulo que jasoniza la respuesta
+        Modulo que jasoniza la respuesta.
+        @type  fl: Fase[]
+        @param fl: Resultado de una consulta que trae los datos de las fases a inicluir en el listado
+        de fases que se devolvera al cliente.
         """
         
         cad=''
@@ -32,6 +35,11 @@ class ListarFasesComboBox(flask.views.MethodView):
     
     @login_required
     def get(self):
+        """
+        Recibe la peticion de listar fases, segun los parametros que incluya la peticion.
+        @type idProyecto:string
+        @param idProyecto: indica el proyecto sobre el que se filtraran las fases a listar
+        """
         sesion=Session() 
         #se obtiene los datos de post del server
       
