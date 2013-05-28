@@ -3,6 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <script type="text/javascript" src="http://www.phpletter.com/contents/ajaxfileupload/ajaxfileupload.js"></script>
 <script type="text/javascript" src="http://www.phpletter.com/javascript/general.js"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/raphael-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/dracula_graffle.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/jquery-1.4.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/dracula_graph.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/example.js') }}"></script>
+    
 {% block header %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,7 +25,7 @@
 
 							// datatype : "local",
 							// data:mydata,
-							url : '/listarItems',
+							url : '/listarItems/',
 							datatype : "json",
 							mtype : "get",
 							postData : {
@@ -45,7 +52,8 @@
 							}, {
 								name : 'version',
 								index : 'version',
-								width : 50,search : false
+								width : 50,
+								search : false
 							}, {
 								name : 'prioridad',
 								index : 'prioridad',
@@ -285,13 +293,15 @@
 				<input type="hidden" name="idFase" id="idFase" />
 				</td></tr>
 				<tr>
-					<td> <label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
+					
+					<td id="divComboBoxTI"> <label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
 					<select id="tipoItemIdComboBox"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
 						class="ui-widget-content ui-corner-all">
 						<option value='0'>Ninguno</option>
 					</select>
 					</td>
+					
 				</tr>
 				
 			</table>
@@ -388,7 +398,8 @@
 	
 	function controlTI(){
 		var error=0;
-		if (atributosTI!=null){
+		
+		if (atributosTI!=null && $('#tipoItemIdComboBox').val!=0){
 			var len;
 			for(var i=0; i<atributosTI.length;i++){
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
@@ -735,9 +746,9 @@
 			placeholder : " "
 		});
 	}*/
-	function cargarForm(rowdata, row, version) {
+	function cargarForm(rowdata, row, version, habilitar) {
 		rowdata = $('#listaItems').getRowData(row);
-		
+		$('#divComboBoxTI').hide()
 		if(version==0 || version==rowdata.version){ //cuando es 0 le pide la version actal nada mas, es decir, la que esta en jqgrid
 			$("#idItem").val(rowdata.idItem);
 			$("#nombreItem").val(rowdata.nombreItem);
@@ -751,9 +762,11 @@
 			$("#idFase").val(rowdata.idFase);
 			
 			$('#atributosTipodeItem').empty();
+			
+			
 			getJSONListarAtributos(rowdata.tipoItem_id);
 			
-			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version);
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version, habilitar);
 		}else{
 			//pedir datos de la verison
 			//alert("entro")
@@ -776,7 +789,7 @@
 			});
 			$('#atributosTipodeItem').empty();
 			getJSONListarAtributos(rowdata.tipoItem_id);
-			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version);
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version, habilitar);
 		}
 		
 		
@@ -787,7 +800,7 @@
 	}
 	
 	
-	function cargarInputAtributos(idTipoItem,idItem,version){
+	function cargarInputAtributos(idTipoItem,idItem,version, habilitar){
 		$.getJSON("/listarAtributosResultado/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem,
@@ -796,6 +809,7 @@
 		}, function(atribs) {
 			$.each(atribs, function(index, atrib) { //val,text
 				$("#input_"+atrib["nombreInput"]).val(atrib["valor"]);
+				$("#input_"+atrib["nombreInput"]).attr('disabled', habilitar);
 				//alert($("#input_"+atrib["nombreAtributo"]).val())
 			});
 		});
@@ -827,21 +841,21 @@
 		//$('#fieldsetTipoItem').refresh()
 		
 		//alert("hola")
-		alert(window.atributosTI)
+		//alert(window.atributosTI)
 		
 		/*$('#fieldsetTipoItem').find('.text').each(function(){
 		    jQuery(this).attr('disabled', habilitar);
 		    alert(jQuery(this).val())
 		    
 		});*/
-		if(atributosTI!=null){
+		/*if(atributosTI!=null){
 			//alert("entro al for") 
 			for(var i=0; i<atributosTI.length;i++){
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
 				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
 			}
 			
-		}
+		}*/
 		
 	}
 
@@ -925,6 +939,7 @@
 		$("#estado").val("activo");
 		$("#idFase").val(retornaValorComboBoxFases());
 		
+		$('#divComboBoxTI').show();
 		
 		
 		$('#atributosTipodeItem').empty();
@@ -964,7 +979,7 @@
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		//$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row, 0);
+		cargarForm(rowdata, row, 0, false);
 		/*se habilita la edicion*/
 		setCamposDisabled(false);
 		setearFormularioSkyBlue();
@@ -992,10 +1007,11 @@
 		}
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		cargarForm(rowdata, row, 0);
+		cargarForm(rowdata, row, 0, true);
 		/*se inhabilita la edicion*/
 		//alert(window.atributosTI)
 		setCamposDisabled(true);
+		setearFormularioSkyBlue();
 		
 		/* se llama al dialogo para modificar los datos */
 		$("#divJQGridRelacionesConsultar").show();
@@ -1009,7 +1025,7 @@
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		var rowdata;
 		$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row, $('#versionComboBox').val());
+		cargarForm(rowdata, row, $('#versionComboBox').val(), true);
 		reloadListaRelaciones('listaRelacionesConsultar', true)
 		//$("#listaRelacionesConsultar").trigger("reloadGrid");
 		
@@ -1029,10 +1045,11 @@
 		
 		cargarComboBoxVersiones(row);
 		$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row, $('#versionComboBox').val());
+		cargarForm(rowdata, row, $('#versionComboBox').val(), true);
 		
 		/*se inhabilita la edicion*/
 		setCamposDisabled(true);
+		setearFormularioSkyBlue();
 		
 		$("#versionDiv").show();
 		$('#versionComboBox').show();
@@ -1347,6 +1364,9 @@
 	class="ui-widget-content ui-corner-all">
 		<option value="0">(Ninguna)</option>
 </select>
+<input id="btGraficar" type="button" name="nuevo"
+				value="Graficar" onclick='graficar()' /> 
+
 </td>
 
 <tr>

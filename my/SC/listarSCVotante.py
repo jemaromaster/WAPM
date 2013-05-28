@@ -14,7 +14,7 @@ sesion=Session()
 class Respuesta():
     """
     Clase utilizada cuando se hace una peticion de listado de 
-    solicitud de cambios al servidor. Se obtienen de la bd las filas a 
+    solicitud de votantes. Se obtienen de la bd las filas a 
     devolver dentro de la lista y se convierte a un formato
     json para que pueda ser interpretado por el navegador 
     """

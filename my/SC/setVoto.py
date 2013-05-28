@@ -9,8 +9,7 @@ from ejecutarSolCambios import ejecutarSCLB
 
 class SetVoto(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de activacion de 
-    proyecto al servidor. Los metodos get y post indican como
+    Clase utilizada cuando para setear el estado de los votos. Los metodos get y post indican como
     debe comportarse la clase segun el tipo de peticion que 
     se realizo 
     """

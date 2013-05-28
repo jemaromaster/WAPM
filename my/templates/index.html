@@ -18,8 +18,9 @@
 <title>WAPM</title>
 </header>
     <body>
-   <h1>Welcome!</h1>
-
+    <p align="center"> 
+<img id='imagen' src="/static/images/blue-23957_640.png" width="300px" title="Volver a Pagina Principal" 
+			style="cursor:pointer;"/></p>
     {% if 'username' in session %}
     	
     {% else %}
@@ -55,6 +56,7 @@
 	<div id="msgbox"></div>
 	<script>
 
+	
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);
 		$('#msgbox').dialog({
@@ -73,6 +75,14 @@
 						modal : true,
 						resizable : false,
 						width : 'auto',
+						show : {
+							effect : 'fade',
+							duration : 200
+						},
+						hide : {
+							effect : 'fade',
+							duration : 200
+						},
 						
 						buttons : {
 							"Aceptar" : function enviarPostLogin() {

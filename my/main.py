@@ -87,6 +87,8 @@ from Items.adjuntarArchivo import AdjuntarArchivo
 from login import Login
 from miembros import Miembros
 
+from Grafos.grafosManager import GrafosManager
+from Grafos.listarRelacionesEnFase import ListarRelacionesEnFase
 from TiposDeItem.listarAtributo import ListarAtributo
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -382,7 +384,12 @@ app.add_url_rule('/agregarItemLB/',
 app.add_url_rule('/cerrarLB/',
                  view_func=CerrarLB.as_view('cerrarLB'),
                  methods=["GET","POST"])
-
+app.add_url_rule('/example/',
+                 view_func=GrafosManager.as_view('example'),
+                 methods=["GET"])
+app.add_url_rule('/listarRelacionesEnFase/',
+                 view_func=ListarRelacionesEnFase.as_view('listarRelacionesEnFase'),
+                 methods=["GET"])
 
 app.debug = True
 if __name__ == '__main__':

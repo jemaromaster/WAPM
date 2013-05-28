@@ -131,7 +131,7 @@ class ItemControllerClass(flask.views.MethodView):
         #se valida la fecha 
        
         try:
-            
+            '''
             fi=datetime(int(f.fechaInicio[6:10]),\
                              int(f.fechaInicio[3:5]),\
                              int(f.fechaInicio[0:2]))
@@ -145,7 +145,7 @@ class ItemControllerClass(flask.views.MethodView):
             ff=datetime(int(f.fechaFinalizacion[6:10]),\
                              int(f.fechaFinalizacion[0:2]),\
                              int(f.fechaFinalizacion[3:5]))
-            '''
+            
         except:
             sesion.close()
             return make_response('t,Fecha invalida') 
