@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='js/i18n/grid.locale-en.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.jqGrid.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/WebToolKit.MD5.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.touch-punch.min.js') }}"></script>
 		<title>WAPM</title>
 		
 	 <script>
@@ -27,6 +28,7 @@
 		else
 			$("#votantesOpcion").show();
 		});
+		
 	</script>
 	<style>
 		.ui-menu {  float:left;  z-index: 5; }
@@ -35,6 +37,9 @@
 </header>
 
 	<script>
+	
+		
+	
 		var valorenSesion={{session['idProyecto']}};
 		$.getJSON("http://localhost:5000/listarProyectoComboBase", function(atribs) {
 		  
