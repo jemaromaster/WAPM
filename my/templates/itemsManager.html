@@ -11,6 +11,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	jQuery(document).ready(
+			
 			function() {
 
 				var grid = jQuery("#listaItems").jqGrid(
@@ -148,6 +149,8 @@
 				});
 			});
 	//]]>
+	
+	
 </script>
 
 
@@ -380,11 +383,15 @@
 	</td>
 </div>
 
+
+
+
+
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
-    var atributosTI;
+    
 	
 	function controlTI(){
 		var error=0;
@@ -421,7 +428,7 @@
 		var form = ['<form id="formTI" action=\'\'>']//[ '<form method="POST" action="', url, '">' ];
 		var input_que_son_fecha=['']
 		var lista_input_numerico=['']
-		window.atributosTI=params_vec;
+		atributosTI=params_vec;
 		
 		for(var i=0; i<params_vec.length;i++){
 					form.push('<td>');
@@ -735,7 +742,7 @@
 			placeholder : " "
 		});
 	}*/
-	function cargarForm(rowdata, row, version) {
+	function cargarForm(rowdata, row, version,disable) {
 		rowdata = $('#listaItems').getRowData(row);
 		
 		if(version==0 || version==rowdata.version){ //cuando es 0 le pide la version actal nada mas, es decir, la que esta en jqgrid
@@ -751,7 +758,7 @@
 			$("#idFase").val(rowdata.idFase);
 			
 			$('#atributosTipodeItem').empty();
-			getJSONListarAtributos(rowdata.tipoItem_id);
+			getJSONListarAtributos(rowdata.tipoItem_id,disable);
 			
 			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version);
 		}else{
@@ -775,7 +782,7 @@
 				
 			});
 			$('#atributosTipodeItem').empty();
-			getJSONListarAtributos(rowdata.tipoItem_id);
+			getJSONListarAtributos(rowdata.tipoItem_id,disable);
 			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version);
 		}
 		
@@ -827,7 +834,8 @@
 		//$('#fieldsetTipoItem').refresh()
 		
 		//alert("hola")
-		alert(window.atributosTI)
+		//alert(atributosTI)
+		
 		
 		/*$('#fieldsetTipoItem').find('.text').each(function(){
 		    jQuery(this).attr('disabled', habilitar);
@@ -835,8 +843,9 @@
 		    
 		});*/
 		if(atributosTI!=null){
-			//alert("entro al for") 
+			
 			for(var i=0; i<atributosTI.length;i++){
+				
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
 				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
 			}
@@ -964,9 +973,10 @@
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		//$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row, 0);
+		disabled=false
+		cargarForm(rowdata, row, 0,disabled);
 		/*se habilita la edicion*/
-		setCamposDisabled(false);
+		
 		setearFormularioSkyBlue();
 		
 		//$.enmascarar();
@@ -992,10 +1002,11 @@
 		}
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		cargarForm(rowdata, row, 0);
+		disabled=true
+		cargarForm(rowdata, row, 0,disabled);
 		/*se inhabilita la edicion*/
-		//alert(window.atributosTI)
-		setCamposDisabled(true);
+		//alert(atributosTI)
+		
 		
 		/* se llama al dialogo para modificar los datos */
 		$("#divJQGridRelacionesConsultar").show();
@@ -1029,10 +1040,12 @@
 		
 		cargarComboBoxVersiones(row);
 		$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row, $('#versionComboBox').val());
+		
+		disabled=true
+		cargarForm(rowdata, row, $('#versionComboBox').val(),disabled);
 		
 		/*se inhabilita la edicion*/
-		setCamposDisabled(true);
+		//setCamposDisabled(true);
 		
 		$("#versionDiv").show();
 		$('#versionComboBox').show();
@@ -1392,6 +1405,8 @@
 
 </tr>
 <script>
+	var atributosTI=[];
+
 	function retornaValorenSesion() {
 		//alert('valor en sesion' + valorenSesion)
 		return valorenSesion;
@@ -1425,21 +1440,25 @@
 		op[op.length] = new Option(String(i), i);
 	}
 
-	function getJSONListarAtributos(idTipoItem){
+	function getJSONListarAtributos(idTipoItem,disable){
+		
 		$.getJSON("/listarAtributo/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem
 		}, function(atribs) {
-			//window.atributosTI=atribs;
-			window['atributosTI'] = atribs; 
+			
+			atributosTI = atribs; 
 			submitValues("#", atribs);
+			setCamposDisabled(disable)
+			
 		});
+		
 	}
 	
 	$('#tipoItemIdComboBox').change(function() {
 		$("#tipoItemIdComboBox option[value='0']").remove();
 		$('#atributosTipodeItem').empty();
-		 getJSONListarAtributos($('#tipoItemIdComboBox').val())
+		 getJSONListarAtributos($('#tipoItemIdComboBox').val(),true)
 
 	});
 	

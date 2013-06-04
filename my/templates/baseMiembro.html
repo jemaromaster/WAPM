@@ -41,7 +41,7 @@
 		
 	
 		var valorenSesion={{session['idProyecto']}};
-		$.getJSON("http://localhost:5000/listarProyectoComboBase", function(atribs) {
+		$.getJSON("/listarProyectoComboBase", function(atribs) {
 		  
 			var select = $('#proyectosUsuario');
 			var options = select.prop('options');
@@ -137,7 +137,7 @@
 	
 
 <body>
-<div style="border-radius: 15px;width: 1028px; height: 100%; background-color:  #0B3861; margin-left: auto ;
+<div style="border-radius: 15px;width: 1028px; height: 100%; background-color:  #0B3F80; margin-left: auto ;
   		margin-right: auto ;">
 	<div  style="border-radius: 15px;width: 1024px; height: 100%; background-color: #FFFFFF; margin-left: auto ;
   margin-right: auto ;">
@@ -210,7 +210,7 @@
 
 			<table align="center">
 				<tr >
-					<td  >Copyright © WAPM. Desarrollado por: RALSS email: prass@software.ralss.py</td>
+					<td  ><h6>Copyright © WAPM. Desarrollado por: RALSS email: ralss@software.ralss.py</h6></td>
 				
 					
 				</tr>
