@@ -2,6 +2,8 @@ from flask import views, make_response
 import flask.views
 from models.rolProyectoModelo import RolProyecto 
 from models.bdCreator import Session
+from models.proyectoModelo import Proyecto
+from models.faseModelo import Fase
 
 from rolProyectoManejador import RolProyectoManejador
 
@@ -16,15 +18,19 @@ class RolProyectoControllerClass(flask.views.MethodView):
             return make_response("f,Descripcion del Rol incorrecto")
         
         sesion=Session()
-        controlNombre=sesion.query(RolProyecto).filter(RolProyecto.nombre==rol.nombre).first()
+        
+        if rol.idFase == '' or rol.idFase=='0':
+            sesion.close()
+            return make_response("t,Fase no valida. No se pudo crear el rol")
+        rol.idFase=int(rol.idFase)
+        
+        proyectoId=sesion.query(Fase.idProyecto).filter(Fase.idFase==rol.idFase).first()
+        
+        controlNombre=sesion.query(RolProyecto).join(Fase).filter(RolProyecto.nombre==rol.nombre).filter(Fase.idProyecto==proyectoId).first()
         if idRol==0:    
             if controlNombre is not None:
                 sesion.close()
                 return make_response("t,Nombre del Rol ya existe")
-            if rol.idFase == '' or rol.idFase=='0':
-                sesion.close()
-                return make_response("t,Fase no valida. No se pudo crear el rol")
-            rol.idFase=int(rol.idFase)
         else:
             
             if controlNombre is not None and controlNombre.id != int(idRol):
