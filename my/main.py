@@ -52,9 +52,11 @@ from Fases.listarFases import ListarFases
 from Fases.listarFases import ListarComboFases
 from Fases.listarFasesComboBox import ListarFasesComboBox
 
+from TiposDeItem.importarTipoItem import ImportarTipoItem
 from TiposDeItem.tipoItemManager import TipoItemManager
 from TiposDeItem.agregarTipoItem import AgregarTipoItem
 from TiposDeItem.listarTipoItem import ListarTipoItem
+from TiposDeItem.listarImportarItem import ListarImportarItem
 from TiposDeItem.modificarTipoItem import ModificarTipoItem
 
 from rol_proyecto.rolProyectoManager import RolProyectoManager
@@ -237,11 +239,18 @@ app.add_url_rule('/modificarFase/',
 app.add_url_rule('/tipoItemManager/',
                  view_func=TipoItemManager.as_view('tipoItemManager'),
                  methods=["GET", "POST"])
+
+app.add_url_rule('/importarTipoItem/',
+                 view_func=ImportarTipoItem.as_view('importarTipoItem'),
+                 methods=["GET", "POST"])
 app.add_url_rule('/agregarTipoItem/',
                  view_func=AgregarTipoItem.as_view('agregarTipoItem'),
                  methods=["GET", "POST"])
 app.add_url_rule('/listarTipoItem/',
                  view_func=ListarTipoItem.as_view('listarTipoItem'),
+                 methods=["GET", "POST"])
+app.add_url_rule('/listarImportarItem/',
+                 view_func=ListarImportarItem.as_view('listarImportarItem'),
                  methods=["GET", "POST"])
 app.add_url_rule('/listarAtributo/',
                  view_func=ListarAtributo.as_view('listarAtributo'),

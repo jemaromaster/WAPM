@@ -13,7 +13,81 @@
 	//<![CDATA[
 	jQuery(document).ready(
 			function() {
+				
+				
+				var gridImportarAtt = jQuery("#listaImportarAtt").jqGrid(
+						{
+							url : '/listarAtributo/',
+							datatype : "json",
+							mtype : "get",
+							postData : {
+								idTipoItem : '0',
+								idFase : retornaValorComboBoxFases()
+							},
+							colNames : [ 'idAtributoLocal', 'idAtributoRemoto',
+									'Nombre Atributo', 'Tipo Primario', 'Longitud' ],
+							colModel : [ {
+								name : 'idAtributosLocal',
+								index : 'idAtributosLocal',
+								width : 50,
+								key : true,
+								hidden : true
 
+							}, {
+								name : 'idAtributosRemoto',
+								index : 'idAtributosRemoto',
+								width : 50,
+								hidden : true
+
+							}, {
+								name : 'nombreAtributo',
+								index : 'nombreAtributo',
+								width : 180,
+								search : true
+							}, {
+								name : 'tipoPrimario',
+								index : 'tipoPrimario',
+								width : 120,
+								search : true
+							}, {
+								name : 'longitudCadena',
+								index : 'longitudCadena',
+								width : 100
+							}
+
+							],
+
+							sortname : 'nombreAtributo',
+							viewrecords : true,
+							rownumbers : true,
+							sortorder : "desc",
+							ignoreCase : true,
+							pager : '#pagerImportarAtt',
+							caption : "Atributos",
+							jsonReader : {
+								root : "invdata",
+								page : "currpage",
+								total : "totalpages",
+								records : "totalrecords",
+								repeatitems : false,
+							//id : "idUsuario"
+							}
+
+						}).jqGrid('navGrid', '#pagerImportarAtt', {
+					edit : false,
+					add : false,
+					del : false,
+					search : false,
+					refresh : true
+				});
+				gridImportarAtt.jqGrid('filterToolbar', {
+					stringResult : true,
+					searchOnEnter : false,
+					defaultSearch : "cn"
+
+				});
+
+				
 				var grid = jQuery("#listaTipoItem").jqGrid(
 						{
 
@@ -93,7 +167,76 @@
 					searchOnEnter : false,
 					defaultSearch : "cn"
 				});
-			});
+			
+	var gridImportar = jQuery("#listaImportar").jqGrid(
+			{
+
+				// datatype : "local",
+				// data:mydata,
+				url : '/listarImportarItem/',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					
+					idFase : retornaValorComboBoxFases()
+				},
+				colNames : [ 'ID Tipo de Item', 'Proyecto','Fase',
+						'Nombre Tipo de Item', 'Descripcion'],
+				colModel : [ {
+					name : 'idTipoItem',
+					index : 'idTipoItem',
+					hidden : true
+				},
+				 {
+					name : 'proyecto',
+					index : 'proyecto',
+				},
+				{
+					name : 'fase',
+					index : 'fase',
+				},
+
+				{
+					name : 'nombreTipoItem',
+					index : 'nombreTipoItem',
+					width : 200
+				}, {
+					name : 'descripcion',
+					index : 'descripcion',
+					width : 200
+				} 
+
+				],
+				sortname : 'proyecto',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerImportar',
+				caption : "Tipos de Item",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+				//id : "idUsuario"
+				}
+
+			}).jqGrid('navGrid', '#pagerImportar', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : false
+	});
+	gridImportar.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
+});
+
 	//]]>
 </script>
 
@@ -153,6 +296,16 @@
 		$("#datepicker2").datepicker();
 	});
 </script>
+
+<div id="dialogo-importar" title="Importar Tipo de Item">
+			<table id="listaImportar"></table>
+			<div id="pagerImportar"></div>
+</div>
+<div id="dialogo-importarAtt" title="Atributos">
+			<table id="listaImportarAtt"></table>
+			<div id="pagerImportarAtt"></div>
+</div>
+
 <div id="dialogo-datos-tipoItem" title="Datos de Tipo de Item">
 	<form title="(*) campos obligatorios">
 		<fieldset class="fieldset">
@@ -421,7 +574,7 @@
 		defaultSearch : "cn"
 
 	});
-
+	
 	$.enmascarar = function() {
 		$("#cadenaLongitudAtributo").mask("?9999999999", {
 			placeholder : " "
@@ -623,6 +776,110 @@
 						}
 					});
 
+	$("#dialogo-importar")
+	.dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				resizable : false,
+				width : 'auto',
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					/* funcion asociado al boton aceptar */
+					"Importar" : function() {
+						var row = $('#listaImportar').jqGrid('getGridParam', 'selrow');
+						if (row == null) {
+							//window.alert("Debe seleccionar un item");
+							mostrarMensaje("Atencion","Debe seleccionar una Tipo a importar");
+							return;
+						}
+						var rowdata = $('#listaImportar').getRowData(row);
+											$.post(
+												'/importarTipoItem/',
+												{
+													
+													idTipo : rowdata.idTipoItem.trim(),
+													idFase : retornaValorComboBoxFases() 		
+												},												
+												function(data, status) {
+														if (data.substring(
+															0, 1) == 't') {
+														mostrarMensaje(
+																"Error",
+																"No se pudo importar el tipo:\n"
+																		+ data
+																				.substring(2));
+														
+													} else {
+														$(
+																"#dialogo-importar")
+																.dialog(
+																		"close");
+														mostrarMensaje(
+																"Exito",
+																data
+																		.substring(2));
+													}
+	
+													$('#listaTipoItem')
+															.trigger(
+																	"reloadGrid");
+												});
+					
+					},
+					"Consultar Atributos" : function() {
+						
+						var row = $('#listaImportar').jqGrid('getGridParam', 'selrow');
+						if (row == null) {
+							mostrarMensaje("Atencion", "Seleccione la fila a consultarr");
+							return;
+						}
+						var rowdata;
+						rowdata = $('#listaImportar').getRowData(row);
+						
+						$('#listaImportarAtt').setGridParam({postData : {
+							idTipoItem : rowdata.idTipoItem 
+						}
+						});
+						
+						$('#listaImportarAtt').trigger("reloadGrid");
+						$("#dialogo-importarAtt").dialog("open");
+					
+					}
+				}
+			});
+	
+	$("#dialogo-importarAtt")
+	.dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				resizable : false,
+				width : 'auto',
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					"Salir" : function() {
+					$("#dialogo-importarAtt").dialog("close");
+					}
+				}
+			});	
+				
+	
+	
 	$("#dialogo-datos-tipoItem")
 			.dialog(
 					{
@@ -954,6 +1211,24 @@
 		$("#btEliminarAtributo").hide()
 		$("#dialogo-datos-tipoItem").dialog("open");
 	}
+	function importar(){
+		if (retornaValorenSesion() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar un proyecto")
+			return;
+		}
+		if (retornaValorComboBoxFases() == 0) {
+			mostrarMensaje("Error", "Debe seleccionar una fase")
+			return;
+		}
+		
+		$('#listaImportar').setGridParam({postData : {
+			idFase : retornaValorComboBoxFases() 
+		}
+		});
+		
+		$('#listaImportar').trigger("reloadGrid");
+		$("#dialogo-importar").dialog("open");
+	}
 	/* funcion que maneja la accion de desactivar un cliente*/
 
 	function mostrarMensaje(titulo, mensaje) {
@@ -987,6 +1262,10 @@
 <td><label>Fase: </label>
 </td>
 <td>
+
+
+
+
 <select id="comboBoxFases"
 	style="display: block; margin-bottom: 12px; padding: 6px; width: auto;"
 	class="ui-widget-content ui-corner-all">
@@ -1002,18 +1281,26 @@
 		</div></td>
 	<td><div>
 			<br></br> <input id="btAgregar" type="button" name="nuevo"
-				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
+				value="Nuevo" onclick='agregar()' />
+				<input id="btImportar"
+				type="button" name="importar" onclick='importar();'
+				value="Importar" />
+				
+				 <input id="btModificar"
 				type="button" name="detalle" onclick='modificar();'
 				value="Modificar" /> <input id="btConsultar" type="button"
 				name="consultar" value="Consultar" onclick='consultar()' /> <br></br>
 			<script>
 				$("#btAgregar").button();
+				$("#btImportar").button();
 				$("#btModificar").button();
 				$("#btConsultar").button();
 			</script>
 		</div></td>
 
 </tr>
+
+		
 
 <script>
 	if(retornaValorenSesion()!=0){

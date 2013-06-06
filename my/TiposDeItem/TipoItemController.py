@@ -73,7 +73,7 @@ class TipoItemControllerClass(flask.views.MethodView):
             else:
                 at=Atributos(int(at['idAtributosRemoto']),at['nombreAtributo'], tPrimId, at['longitudCadena'])
             lista.append(at)
-        sesion.close()
+        
       
         
         listaControlada=[]
