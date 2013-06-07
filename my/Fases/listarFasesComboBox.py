@@ -21,11 +21,14 @@ class ListarFasesComboBox(flask.views.MethodView):
         
         cad=''
         pre="["
-        print('fl is'+ str(fl))
+        print('fl  is '+ str(fl))
         if(fl is not None):
             for f in fl:
+                
                 strFase=str(f.idFase)
+                
                 if controlRol(strFase,'fase','consulta')==1:
+                    print('f inside loop  is ' + str(f.idFase))
                     cad=cad+ json.dumps({"idFase":f.idFase , "nombreFase":f.nombreFase}, separators=(',',':'));
                     cad=cad + ","
             cad=cad[0:len(cad)-1] 
@@ -45,7 +48,7 @@ class ListarFasesComboBox(flask.views.MethodView):
         sesion=Session() 
         #se obtiene los datos de post del server
       
-        fasesLista=sesion.query(Fase).filter(Fase.idProyecto==flask.session['idProyecto'])
+        fasesLista=sesion.query(Fase).filter(Fase.idProyecto==flask.session['idProyecto']).all()
        
         
         respuesta=self.jasonizar(fasesLista)

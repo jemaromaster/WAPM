@@ -94,6 +94,9 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             msg='f,Se ha aprobado correctamente al item'
         elif(accion=="pendiente"):
             if(q.estado=="activo"):
+                if controlRol(idFase,'item','administrar')==0:
+                    sesion.close()
+                    return "t, No posee permiso para realizar esta accion"
                 contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
                 
                 f=sesion.query(Fase).filter(Fase.idFase==q.idFase).first()
@@ -105,6 +108,9 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
             elif(q.estado=="pendiente"):
+                if controlRol(idFase,'item','administrar')==0:
+                    sesion.close()
+                    return "t, No posee permiso para realizar esta accion"
                 q.estado='activo'
                 sesion.merge(q)
                 sesion.commit()

@@ -46,14 +46,16 @@ class SeleccionarProyectoSesion(flask.views.MethodView):
         listadoPermisosProyecto=dict()
         
         sesion=Session()
-        listaPermisos=sesion.query(Permiso.codigo,Fase.idFase).order_by('fase.id').filter(Usuario.id==idUsuario).join(Usuario.roles_proyecto)\
-                                    .join(Fase).join(Proyecto).filter(Proyecto.idProyecto==idProyecto).join(RolProyecto.permisos).all()
+        listaPermisos=sesion.query(Permiso.codigo,Fase.idFase).order_by('fase.id').filter(Usuario.id==int(idUsuario)).join(Usuario.roles_proyecto)\
+                                    .join(Fase).join(Proyecto).filter(Proyecto.idProyecto==int(idProyecto)).join(RolProyecto.permisos).all()
         
+        print "longitud lista permisos  " + str(len(listaPermisos))
         faseActual=0
         #rol=self.newRol()
         for permiso in listaPermisos:
             
             
+              
             if faseActual!=permiso.idFase:
                 '''se crea una estructura vacia que agrupa los permisos segun los componentes (fase==1,lb==2,item==3,tipo==4)'''
                 rol=self.newRol()
@@ -83,7 +85,7 @@ class SeleccionarProyectoSesion(flask.views.MethodView):
                  
             stringFase=str(permiso.idFase)
             listadoPermisosProyecto[stringFase]=rol
-        
+        print "listado de permisos es  este "+ str(listadoPermisosProyecto)
         flask.session['permisos']=listadoPermisosProyecto
         #print "valor de consulta para fase en el rol :  " + str(roles['fase']['consulta'])
         return

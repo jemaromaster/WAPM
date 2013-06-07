@@ -70,9 +70,12 @@ def controlRol(idFase,componente,permiso):
         sesion.close()
         return 1
     respuesta=0
+    print "a veeeeeeeeer la fase que envio    " + idFase
     for p in permisos:
         '''corrobora si existe el permiso(consultar,finalizar,administrar) sobre el componente (fase,lb,item,tipo)'''
+        
         if idFase in permisos:
+            
             if permisos[idFase][componente][permiso]==1:
                 respuesta=1
                 sesion.close()
