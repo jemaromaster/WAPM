@@ -1,5 +1,6 @@
 import flask.views
 from utils import login_required
+from utils import controlRol
 from models.itemModelo import Item
 from models.faseModelo import Fase
 
@@ -21,6 +22,9 @@ class FinalizarFase(flask.views.MethodView):
         @param idFase : Id de la fase a la cual se le cambiara el estado por finalizado
         """
         idFase=flask.request.form['idFase']
+        if controlRol(idFase,'fase','finalizar')==0:
+            return "t, No posee permiso para esta accion"
+        
         idFase=idFase.strip()
         if idFase=="0" or idFase=='':
             return "t, Fase no valida"

@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -24,8 +24,10 @@ class ListarFasesComboBox(flask.views.MethodView):
         print('fl is'+ str(fl))
         if(fl is not None):
             for f in fl:
-                cad=cad+ json.dumps({"idFase":f.idFase , "nombreFase":f.nombreFase}, separators=(',',':'));
-                cad=cad + ","
+                strFase=str(f.idFase)
+                if controlRol(strFase,'fase','consulta')==1:
+                    cad=cad+ json.dumps({"idFase":f.idFase , "nombreFase":f.nombreFase}, separators=(',',':'));
+                    cad=cad + ","
             cad=cad[0:len(cad)-1] 
         else:
             cad=cad+ json.dumps({"idFase":0 , "nombreFase":'ninguna'}, separators=(',',':'));

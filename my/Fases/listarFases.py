@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -86,7 +86,9 @@ class ListarComboFases(flask.views.MethodView):
         prejsonF='['
         jsonF=''
         for fase in lf:
-            jsonF=jsonF+"{\"idFase\":\""+str(fase.idFase)+"\",\"nombreFase\":\""+fase.nombreFase+"\"},"
+            stringFase=str(fase.idFase)
+            if controlRol(stringFase,'fase','consulta')==1:
+                jsonF=jsonF+"{\"idFase\":\""+stringFase+"\",\"nombreFase\":\""+fase.nombreFase+"\"},"
         jsonF=jsonF[0:len(jsonF)-1]    
         jsonF=prejsonF+jsonF+"]"
         sesion.close()        

@@ -55,3 +55,16 @@ def miembroComite_required(method):
             sesion.close()
             return method(*args, **kwargs)
     return wrapper
+
+
+def controlRol(idFase,componente,permiso):
+    permisos=flask.session['permisos']
+    respuesta=0
+    
+    for p in permisos:
+        '''corrobora si existe el permiso(consultar,finalizar,administrar) sobre el componente (fase,lb,item,tipo)'''
+        if idFase in permisos:
+            if permisos[idFase][componente][permiso]==1:
+                respuesta=1
+                return respuesta
+    return respuesta
