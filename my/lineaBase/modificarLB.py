@@ -1,5 +1,5 @@
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.lineaBaseModelo import LineaBase
 from LBController import LBControllerClass;
 from models.bdCreator import Session
@@ -30,6 +30,15 @@ class ModificarLB(flask.views.MethodView):
         idLb=flask.request.form['idLB']
         descripcion=flask.request.form['descripcion']
         estado=flask.request.form['estado']
+        
+        sesion=Session()
+        l=sesion.query(LineaBase).filter(LineaBase.id==int(idLb)).first()
+        if l is None:
+            return "t, Linea Base no existe"
+        if controlRol(str(l.idFase),'lb','administrar')==0:
+            return "t, No posee permiso para realizar esta accion"
+        
+        
         if estado=="cerrada":
             return "t,La linea Base se ha cerrado. No puede modificarse"
         lb=LineaBase(descripcion,estado)

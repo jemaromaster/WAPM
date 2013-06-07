@@ -1,5 +1,5 @@
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.lineaBaseModelo import LineaBase
 from models.itemModelo import Item
 from models.bdCreator import Session
@@ -27,7 +27,10 @@ class AgregarItemLB(flask.views.MethodView):
         
         sesion=Session()
         item=sesion.query(Item).filter(Item.idItem==idItem).first()
-       
+        idFase=str(item.idFase)
+        if controlRol(idFase,'lb','administrar')==0:
+            sesion.close()
+            return "t, No posee permiso para realizar esta accion"
                    
         if(idLB!=0):
             lb=sesion.query(LineaBase).filter(LineaBase.id==int(idLB)).first()

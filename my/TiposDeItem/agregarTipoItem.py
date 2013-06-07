@@ -1,5 +1,5 @@
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.tipoItemModelo import TipoItem
 from models.atributosModelo import Atributos
 from TipoItemController import TipoItemControllerClass;
@@ -29,7 +29,8 @@ class AgregarTipoItem(flask.views.MethodView):
         idProyecto=flask.request.form['idProyecto']
         idFase=flask.request.form['idFase']
         
-        
+        if controlRol(idFase,'tipo','administrar')==0:
+            return "t, No posee permiso para realizar esta accion" 
              
         #  [{"idAtributos":"1","nombreAtributo":"sada","tipoPrimario":"Texto","longitudCadena":"12"},
         #   {"idAtributos":"2","nombreAtributo":"wad","tipoPrimario":"Texto","longitudCadena":"2"}]

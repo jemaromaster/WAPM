@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json
 from models.bdCreator import Session
@@ -48,6 +48,8 @@ class Respuesta():
         
         
         for lb in listaLB:
+            if controlRol(str(lb.idFase),'lb','consulta')==0:
+                break
             p=p+"{\"idLB\":\""+str(lb.id)+"\",\"descripcion\": \""+lb.descripcion +"\",\"estado\": \""+lb.estado+"\"},"
             # {"nombre":"nombre","idRol":"rol","descripcion":"descripciones"},
         p=p[0:len(p)-1]    

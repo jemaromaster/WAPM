@@ -1,5 +1,5 @@
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.tipoItemModelo import TipoItem
 from models.atributosModelo import Atributos
 from TipoItemController import TipoItemControllerClass;
@@ -30,7 +30,8 @@ class ModificarTipoItem(flask.views.MethodView):
         idProyecto=flask.request.form['idProyecto']
         idFase=flask.request.form['idFase']
         
-        
+        if controlRol(idFase,'tipo','administrar')==0:
+            return "t, No posee permiso para realizar esta accion"
         ti=TipoItem(nombreTI,descripcion, estado)
         tic=TipoItemControllerClass();
         return tic.controlarTI(ti, idTipoItem, atributos, idProyecto, idFase)

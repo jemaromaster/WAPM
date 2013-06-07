@@ -1,7 +1,7 @@
 
 import flask.views
 from flask import make_response
-from utils import login_required
+from utils import login_required,controlRol
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -38,6 +38,13 @@ class EliminarRelacion(flask.views.MethodView):
         
         
         i=sesion.query(Item).filter(Item.idItem==q.hijo_id).first()
+        
+        #se hace el control de rol
+        idFase=str(i.idFase)
+        if controlRol(idFase,'item','administrar')==0:
+            sesion.close()
+            return "t, No posee permiso para realizar esta accion"
+        
         if(i.version==int(version_hijo)-1): #hay que crear una nueva version del item porque es el primero en eliminar de la version
             
             

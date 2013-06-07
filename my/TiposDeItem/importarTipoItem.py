@@ -1,6 +1,6 @@
 import flask.views 
 from flask import make_response
-from utils import login_required
+from utils import login_required,controlRol
 from models.tipoItemModelo import TipoItem
 from models.faseModelo import Fase
 from models.atributosModelo import Atributos
@@ -28,6 +28,8 @@ class ImportarTipoItem(flask.views.MethodView):
         '''Le paso id del tipo de item que importare y el id de la fase a la cual se importara el tipo'''
         idTipo=flask.request.form['idTipo']
         idFase=flask.request.form['idFase']
+        if controlRol(idFase,'tipo','administrar')==0:
+            return "t, No posee permiso para realizar esta accion"
         sesion=Session()
         ''' obtengo el tipo de item a importar'''
         importado=sesion.query(TipoItem).filter(TipoItem.idTipoItem==int(idTipo)).first()

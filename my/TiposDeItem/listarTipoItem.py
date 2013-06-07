@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -39,6 +39,8 @@ class Respuesta():
         pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
                
         for tipoItem in listaTipoItem:
+            if controlRol(str(tipoItem.fase_id),'tipo','consulta')==0:
+                    break
             p=p+"{\"idTipoItem\": \""+str(tipoItem.idTipoItem)+"\",\"nombreTipoItem\": \""+ \
                 tipoItem.nombreTipoItem+ \
                 "\",\"estado\": \""+str(tipoItem.estado)+"\", \"descripcion\": \""+ \

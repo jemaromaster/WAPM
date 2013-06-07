@@ -1,5 +1,5 @@
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.lineaBaseModelo import LineaBase
 from models.bdCreator import Session
 
@@ -22,7 +22,13 @@ class CerrarLB(flask.views.MethodView):
         
         sesion=Session()
         lb=sesion.query(LineaBase).filter(LineaBase.id==int(idLB)).first()
-       
+        
+        if lb is None:
+            sesion.close()
+            return "t, Linea Base no existe"
+        if controlRol(str(lb.idFase),'lb','finalizar')==0:
+            sesion.close()
+            return "t, No posee permiso para realizar esta accion"
                    
         if(lb.estado=="cerrada"):
             sesion.close()

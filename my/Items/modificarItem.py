@@ -1,6 +1,6 @@
 import flask, json, datetime
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.itemModelo import Item
 from itemController import ItemControllerClass
 from models.bdCreator import Session
@@ -41,7 +41,9 @@ class ModificarItem(flask.views.MethodView):
         
         
         tipoItemId=0; #aca le paso 0 ya que el tipo item no cambia y es el mismo de la version anterior
-        
+        #control de rol
+        if controlRol(idFase,'item','administrar')==0:
+            return "t, No posee permiso para realizar esta accion"
         
         
         

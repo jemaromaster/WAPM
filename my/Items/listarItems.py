@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -39,6 +39,9 @@ class Respuesta():
         
         
         for f in listaItems:
+            #si no se tiene permiso de consultar items, no se devuelve nada en el listar
+            if controlRol(str(f.idFase),'item','consulta')==0:
+                break
             name=sesion.query(Usuario.username).filter(Usuario.id==f.autorVersion_id).first()
             p=p+json.dumps({"idItem":f.idItem , "nombreItem":f.nombreItem, "version": f.version, "prioridad":f.prioridad, 
                         "fechaInicio": str(f.fechaInicio), "fechaFinalizacion": str(f.fechaFinalizacion), "tipoItem_id": f.tipoItem_id, 
