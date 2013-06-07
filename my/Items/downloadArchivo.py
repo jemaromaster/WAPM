@@ -14,64 +14,28 @@ from models.archivosModelo import Archivos
 
 sesion=Session()
 UPLOAD_FOLDER = '../ArchivosEnServer/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'odt', 'doc', 'ods', 'docx', 'html'])
-class AdjuntarArchivo(flask.views.MethodView):
-    """Clase utilizada cuando se hace una peticion de adjunto de 
-    de archivo al server. Los metodos get y post indican como
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'odt', 'doc'])
+class DownloadArchivo(flask.views.MethodView):
+    """Clase utilizada cuando se hace una peticion de download de 
+    de un archivo al server. Los metodos get y post indican como
     debe comportarse la clase segun el tipo de peticion que 
     se realizo """
     def allowed_file(self,filename):
-        """
-        Metodo utilizado para controlar el nombre correcto de un archivo, y filtrar de acuerdo a la extension. 
-        @type filename: string 
-        @param filename: nombre del a rchivo a adjuntar 
-        """
         return '.' in filename and \
                filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
                
     @login_required
     def post(self):
         """
-        Metodo utilizado para recibir los datos para la creacion del archivo en la base de datos. 
-        El metodo es invocado cuando se hace una peticion de creacion de 
-        archivo al servidor.
-        @type  file: FILE
-        @param file: archivo recibido como binario
-        @type  id: int
-        @param id: idItem dentro de la BD
-        
+        Metodo utilizado para recibir los datos para la identificacion y consulta del archivo en la base de datos. 
+        @type  idARchivo: String
+        @param idArchivo: id del archivo dentro del server
         """
         if flask.request.method == 'POST':
-            file = flask.request.files['fileToUpload']
-            id=flask.request.form['idItem']
-            #flask.request.form['idItemInput']
-            print (file) 
-              
-            if file and self.allowed_file(file.filename) and len(file.filename)<=50:
-                filename = secure_filename(file.filename) 
-                #if not(os.path.exists(UPLOAD_FOLDER)):
-                #os.makedirs(UPLOAD_FOLDER);
-                #file.save(os.path.join(UPLOAD_FOLDER, filename))
-                arc=file.read()
-                miFile=Archivos(filename, arc, id)
-                sesion.add(miFile)
-                sesion.commit()
-                sesion.close()
-                return  make_response("<span class='msg' style='font:12px/12px Arial, Helvetica, sans-serif;'>Se subio sscorrectamente el archivo</span> ")
-            #make_response('f,Archivo subido correctameten')
-            
-            else: 
-                return'''
-                no se pudo subir archivo
-                '''
-    @login_required
-    def get(self):
-        if flask.request.method == 'GET':
             #se debe controlar si se tiene el privilegio
             #idItem=flask.request.args.get('idItem', '')
-            idArchivo=flask.request.args.get('idArchivo', '')
-            print "llala" + str(idArchivo)
-            
+            idArchivo=flask.request.form['idArchivo']
+           
             #nombreArchivo=flask.request.args.get('nombreArchivo', '')
             i=sesion.query(Archivos)\
                                     .filter(Archivos.idArchivo==int(idArchivo)).first();

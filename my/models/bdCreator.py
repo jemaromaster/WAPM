@@ -40,4 +40,5 @@ def initDB():
     from lineaBaseModelo import LineaBase
     from solicitudCambioModelo import SolicitudCambio
     from solicitudCambioModelo import Voto    
+    from archivosModelo import Archivos   
     Base.metadata.create_all(engine)

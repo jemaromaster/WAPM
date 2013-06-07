@@ -5,11 +5,27 @@ from models.itemModelo import Item, Relacion
 from models.atributosModelo import Atributos
 from models.instanciaAtributos import InstanciaTipoItem,InstanciaCadena,InstanciaFecha, InstanciaNumerico, InstanciaEntero
 from models.historialModelo import HistorialItem, HistorialRelacion
+from models.tipoItemModelo import TipoItem
 
 #,HistorialInstanciaFecha, HistorialInstanciaEntero,HistorialInstanciaNumerico, HistorialInstanciaCadena
 
 class ItemManejador:
+    """
+    Clase que es utilizada para guardar los datos de un item una vez que sus datos han sido 
+    controlados. 
+    """
     def guardarItem(self, item, idI, lista, esReversion):
+        """
+        Metodo utilizado para guardar los datos del item
+        @type  item: Item
+        @param item: Item controlado a guardar
+        @type  idI: String
+        @param idI: Id del item a guardar. Si item es nuevo id es 0
+        @type lista: Atributos[]
+        @param lista:lista de atributos
+        @type esReversion:String
+        @param esReversion:Indica si es una reversion 
+        """
         sesion=Session()
         i=item;
         i.version=1;
@@ -59,7 +75,10 @@ class ItemManejador:
         
         else: #item nuevo
             2+2 #nada se hace se agrega nada mas
-                    
+            tipoItem=sesion.query(TipoItem).filter(TipoItem.idTipoItem==i.tipoItem_id).first()
+            if(tipoItem is not None and tipoItem.estado=='activo'):
+                tipoItem.estado='inst'
+                sesion.merge(tipoItem)
         
         sesion.add(i);
         si=None
@@ -151,7 +170,7 @@ class ItemManejador:
             else:
                 sesion.close()
                 return make_response('t,no pudo insertar el Item2')
-            
+        
         sesion.commit()
         sesion.close()
         

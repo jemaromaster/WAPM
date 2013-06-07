@@ -100,7 +100,20 @@ class TipoItemControllerClass(flask.views.MethodView):
                if not(1<=atrib.longitudCadena<=1000):
                    sesion.close()
                    return make_response('t,Numeros valido para longitud cadena para atributo:' + atrib.nombreAtributo\
-                                             + 'debe ser entre 1 y 500')
+                                             + 'debe ser entre 1 y 1000')
+            elif(atrib.tipoPrimarioId==2): #si esl atributo es Numerico
+               try:
+                   atrib.longitudCadena=int(atrib.longitudCadena)
+                   print "entro " + str(atrib.longitudCadena)
+                   
+               except:
+                   sesion.close()
+                   return make_response('t,no es valido el numero ' + str(atrib.longitudCadena) + 'en atributo '+ atrib.nombreAtributo)
+               
+               if not(1<=atrib.longitudCadena<=10):
+                   sesion.close()
+                   return make_response('t,Numeros valido para precision para atributo:' + atrib.nombreAtributo\
+                                             + 'debe ser entre 1 y 1 0 ')
             else:
                 atrib.longitudCadena=int(0); 
                 #print 'numerico su longitud cadena es ' + str(atrib.longitudCadena)

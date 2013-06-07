@@ -50,7 +50,7 @@
 								formatter : 'select',
 								stype : 'select',
 								editoptions : {
-									value : "todos:Todos;activo:Activo;inactivo:Inactivo"
+									value : "todos:Todos;activo:Activo;inst:Instanciado;inactivo:Inactivo"
 								},
 								hidden : false
 							}, {
@@ -181,11 +181,12 @@
 						type="text" name="Edescripcion" id="Edescripcion"
 						style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</td>
-					<td><label for="estado" style="display: block">*Estado</label>
+					<td><label id="labelEstado"for="estado" style="display: block">*Estado</label>
 						<select id="estado"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;"
 						class="ui-widget-content ui-corner-all">
 							<option value="activo">Activo</option>
+							<option value="inst">Instanciado</option>
 							<option value="inactivo">Inactivo</option>
 					</select></td>
 					<input type="hidden" name="idProyecto" id="idProyecto" />
@@ -242,7 +243,17 @@
 							style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
 					</div></td>
 				</td>
-
+				<td><div id='inputAtributosPrecision'>
+						<label for="precision" style="display: block">Precision</label> <input type="text" name="inputPrecision"
+							id="inputPrecision"
+							class="text ui-widget-content ui-corner-all"
+							style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;" />
+							
+							<input title="1 al 5" readonly tabIndex="-1" type="text"
+							name="EinputPrecision" id="EinputPrecision"
+							style="width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;" />
+					</div>
+				</td>
 			</fieldset>
 		</tr>
 	</form>
@@ -253,6 +264,7 @@
 	var banderaAtributo;
 	var indice = 0;
 	var valorenSesion={{session['idProyecto']}};
+	
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
 	///////////////////////////////////////////////////////////////////
 	//Tunear lista tipo atributo 
@@ -277,6 +289,8 @@
 		$("#listaAtributos").trigger("reloadGrid");
 
 	}
+	$("#labelEstado").hide()
+	$("#estado").hide()
 	function modificarAtributo() {
 		banderaAtributo = 2;
 		var row = $('#listaAtributos').jqGrid('getGridParam', 'selrow');
@@ -290,25 +304,41 @@
 		$("#idAtributoRemoto").val(rowdata.idAtributosRemoto);
 		$("#nombreAtributo").val(rowdata.nombreAtributo);
 		$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
+		$("#inputPrecision").val(rowdata.longitudCadena);
 		$("#listBoxTipoPrimario").val(rowdata.tipoPrimario);
-		if ($("#listBoxTipoPrimario").val() != 'Texto') {
-			$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
-			$("#inputAtributosSector").hide();
-		} else {
-			$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
+		if ($("#listBoxTipoPrimario").val() == 'Texto') {
+			//$("#cadenaLongitudAtributo").val("");
 			$("#inputAtributosSector").show();
+			$("#inputAtributosPrecision").hide();
 			$.enmascarar();
+		} else if ($("#listBoxTipoPrimario").val() == 'Numerico') {
+			//$("#cadenaLongitudAtributo").val("");
+			$("#inputAtributosSector").hide();
+			$("#inputAtributosPrecision").show();
+		}else {
+			//$("#cadenaLongitudAtributo").val("");
+			$("#inputAtributosSector").hide();
+			$("#inputAtributosPrecision").hide();
+			
 		}
 		$("#listBoxTipoPrimario").change(function() {
 			//alert($("#listBoxTipoPrimario").val())
-			if ($("#listBoxTipoPrimario").val() != 'Texto') {
-				$("#cadenaLongitudAtributo").val(rowdata.cadenaLongitud);
-				$("#inputAtributosSector").hide();
-			} else {
-				$("#cadenaLongitudAtributo").val(rowdata.cadenaLongitud);
+			
+			if($("#listBoxTipoPrimario").val() == 'Texto') {
+				$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
 				$("#inputAtributosSector").show();
+				$("#inputAtributosPrecision").hide();
 				$.enmascarar();
+			} else if($("#listBoxTipoPrimario").val() == 'Numerico'){
+				$("#inputPrecision").val(rowdata.longitudCadena);
+				$("#inputAtributosSector").hide();
+				$("#inputAtributosPrecision").show();
 			}
+			else{
+				$("#cadenaLongitudAtributo").val(rowdata.longitudCadena);
+				$("#inputAtributosSector").hide();
+				$("#inputAtributosPrecision").hide();}
+			
 		});
 		$("#dialogo-Atributos").dialog("open")
 
@@ -322,15 +352,32 @@
 		setSkyBlueAtributos();
 		$("#nombreAtributo").val("");
 		$("#cadenaLongitudAtributo").val("");
+		$("#inputAtributosPrecision").hide();
+		$("#inputAtributosSector").hide();
+		if($("#listBoxTipoPrimario").val() == 'Texto'){
+			$("#cadenaLongitudAtributo").val("");
+			$("#inputAtributosSector").show();
+		}else if($("#listBoxTipoPrimario").val() == 'Numerico'){
+			$("#inputPrecision").val("");
+			$("#inputAtributosPrecision").show();
+		}
 		$("#listBoxTipoPrimario").change(function() {
 			//alert($("#listBoxTipoPrimario").val())
-			if ($("#listBoxTipoPrimario").val() != 'Texto') {
-				$("#cadenaLongitudAtributo").val("");
-				$("#inputAtributosSector").hide();
-			} else {
+			if ($("#listBoxTipoPrimario").val() == 'Texto') {
 				$("#cadenaLongitudAtributo").val("");
 				$("#inputAtributosSector").show();
+				$("#inputAtributosPrecision").hide();
 				$.enmascarar();
+			} else if ($("#listBoxTipoPrimario").val() == 'Numerico') {
+				$("#inputPrecision").val("");
+				$("#inputAtributosSector").hide();
+				$("#inputAtributosPrecision").show();
+			}else {
+				$("#cadenaLongitudAtributo").val("");
+				$("#inputPrecision").val("");
+				$("#inputAtributosSector").hide();
+				$("#inputAtributosPrecision").hide();
+				
 			}
 		});
 		$("#dialogo-Atributos").dialog("open")
@@ -421,6 +468,10 @@
 		defaultSearch : "cn"
 
 	});
+	
+	$("#inputPrecision").mask("?9999999999", {
+		placeholder : " "
+	});
 
 	$.enmascarar = function() {
 		$("#cadenaLongitudAtributo").mask("?9999999999", {
@@ -432,12 +483,14 @@
 	function setSkyBlueAtributos() {
 		$("#nombreAtributo").css('border-color', 'skyblue');
 		$("#cadenaLongitudAtributo").css('border-color', 'skyblue');
+		$("#inputPrecision").css('border-color', 'skyblue');
 
 		$("#nombreAtributo").css('margin-bottom', 12 + 'px');
 		$("#cadenaLongitudAtributo").css('margin-bottom', 12 + 'px');
 
 		$("#EnombreAtributo").hide()
 		$("#EcadenaLongitudAtributo").hide()
+		$("#EinputPrecision").hide()
 	}
 	function setSkyBlueTipoItem() {
 		$("#nombreTipoItem").css('border-color', 'skyblue');
@@ -450,7 +503,7 @@
 		$("#EnombreTipoItem").hide();
 		$("#Edescripcion").hide();
 	}
-	function controlAtributos(esString) {
+	function controlAtributos(esStringONumerico) {
 
 		setSkyBlueAtributos();
 		var error = 0
@@ -465,7 +518,7 @@
 					'color', 'red').show();
 			error = 1;
 		}
-		if (esString == true) {
+		if (esStringONumerico == 1) {
 			var cl = $("#cadenaLongitudAtributo").val().trim().length;
 			valor = $("#cadenaLongitudAtributo").val();
 			if (cl > 255 || cl <= 0 || valor < 0 || valor > 1000) {
@@ -477,6 +530,17 @@
 				error = 1;
 			}
 
+		}else if(esStringONumerico==2){
+			var cl = $("#inputPrecision").val().trim().length;
+			valor = $("#inputPrecision").val();
+			if (cl > 255 || cl <= 0 || valor <=0 || valor > 10) {
+				$("#inputPrecision").css('border-color', 'red');
+				$("#inputPrecision").css('margin-bottom', 1 + 'px');
+				$("#EinputPrecision").val(
+						"Ingrese entero en rango [1-10]").css('color', 'red')
+						.show();
+				error = 1;
+			}
 		}
 
 		return error;
@@ -524,24 +588,20 @@
 									longCad = 'N/A'
 
 									/*si es texto se extrae la longCadena*/
-									esString = false
+									esString = 0
 									if (tipoPrimario == 'Texto') {
-										esString = true;
+										esString = 1;
 										longCad = $('#cadenaLongitudAtributo')
 												.val();
+									}else if(tipoPrimario=='Numerico'){
+										esString = 2;
+										longCad = $('#inputPrecision').val();
 									}
 
 									if (controlAtributos(esString) == 1) {
 										mostrarMensaje('Error',
 												"Se debe completar correctamente el formulario ")
 										return 
-
-										
-
-																				
-
-										
-
 									}
 									indice = indice + 1;
 									//var cuantosDatos = $('#listaAtributos').jqGrid('getRowData').length + 1 
@@ -577,12 +637,16 @@
 									longCad = 'N/A'
 
 									/*si es texto se extrae la longCadena*/
-									esString = false
+									esString = 0
 									if (tipoPrimario == 'Texto') {
-										esString = true;
+										esString = 1;
 										longCad = $('#cadenaLongitudAtributo')
 												.val();
+									}else if(tipoPrimario=='Numerico'){
+										esString = 2;
+										longCad = $('#inputPrecision').val();
 									}
+
 
 									if (controlAtributos(esString) == 1) {
 										mostrarMensaje('Error',
@@ -786,7 +850,7 @@
 			$.each(atribs, function(index, atrib) {
 				indice = indice + 1
 				LC = atrib.longitudCadena;
-				if (atrib.tipoPrimario != 'Texto') {
+				if (atrib.tipoPrimario != 'Texto' && atrib.tipoPrimario!='Numerico') {
 					LC = 'N/A';
 				}
 				var a = {
@@ -912,7 +976,17 @@
 			mostrarMensaje("Atencion", "Seleccione la fila a modificar");
 			return;
 		}
-		var rowdata;
+		var rowdata=$('#listaTipoItem').getRowData(row);
+		if(rowdata.estado=='inst')
+		{
+			mostrarMensaje("Atencion", "Solo puede modificarse Item en estado: activo. Ya existe instancia del tipo de item ")
+			return;
+		}
+		else if(rowdata.estado=='inactivo')
+		{
+			mostrarMensaje("Atencion", "Solo puede modificarse Item en estado: activo. El item se encuentra inactivo ")
+			return;
+		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		cargarForm(rowdata, row);
 		/*se habilita la edicion*/
@@ -925,7 +999,8 @@
 
 		$("#dialogo-datos-tipoItem").dialog("open");
 	}
-
+	
+	
 	function consultar() {
 		if (retornaValorenSesion() == 0) {
 			mostrarMensaje("Error", "Debe seleccionar un proyecto")
@@ -955,27 +1030,74 @@
 		$("#dialogo-datos-tipoItem").dialog("open");
 	}
 	/* funcion que maneja la accion de desactivar un cliente*/
-
-	function mostrarMensaje(titulo, mensaje) {
+	function inactivar(){
+		
+		var row = $('#listaTipoItem').jqGrid('getGridParam', 'selrow');
+		if(row==null){
+			mostrarMensaje("Atencion", "Seleccione la fila del item a inactivar");
+			return;
+		}
+		rowdata = $('#listaTipoItem').getRowData(row);
+		
+		if(rowdata.estado=="inactivo"){
+			mostrarMensaje("Atencion","El tipo de item "+ rowdata.nombreTipoItem + " ya se encuentra en estado inactivo")
+			return;
+		}else if(rowdata.estado=="inst"){
+			titulo="Atencion"
+			mensaje="Esta seguro que desea inactivar el tipo item "+ rowdata.nombreTipoItem + "?"
+		}else{//esta en estado activo
+			mostrarMensaje("Atencion","No se puede inactivar un tipo de item en estado "+ rowdata.estado + ".Debe estar instanciado primeramente")
+			return;
+		}
+		
 		$('#msgbox').text(mensaje);
 		$('#msgbox').dialog({
 			title : titulo,
 			modal : true,
-			show : {
-				effect : 'fade',
-				duration : 250
-			},
-			hide : {
-				effect : 'fade',
-				duration : 250
-			},
 			buttons : {
-				"Ok" : function() {
+				"Aceptar" : function() {
+					postInactivarTI(rowdata.idTipoItem);
 					$(this).dialog("close");
+					return;
+				},"Cancelar" : function() {
+					$(this).dialog("close");
+					return;
 				}
 			}
 		});
-	}
+	
+function postInactivarTI(a){
+		
+		$.post('/inactivarTipoItem/',
+				{
+					idTI : a
+						
+				},
+				function(data, status) {
+					/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+					/* si hay error se muestra el mensaje*/
+					if (data.substring(
+							0, 1) == 't') {
+						mostrarMensaje(
+								"Error",
+								data.substring(2));
+						/* se indica que no hubieron errores */
+					} else {
+						$("#dialogo-datos-item")
+								.dialog(
+										"close");
+						mostrarMensaje(
+								"Exito",
+								data
+										.substring(2));
+					}
+					/* se indicar la recarga de la tabla */
+					$('#listaTipoItem')
+							.trigger(
+									"reloadGrid");
+				});
+		}}
 </script>
 <div id='msgbox' title='' style='display: none'></div>
 
@@ -997,17 +1119,42 @@
 				value="Nuevo" onclick='agregar()' /> <input id="btModificar"
 				type="button" name="detalle" onclick='modificar();'
 				value="Modificar" /> <input id="btConsultar" type="button"
-				name="consultar" value="Consultar" onclick='consultar()' /> <br></br>
+				name="consultar" value="Consultar" onclick='consultar()' />
+				<input id="btInactivar" type="button"
+				name="Inactivar" value="Inactivar" onclick='inactivar()' /><br></br>
 			<script>
 				$("#btAgregar").button();
 				$("#btModificar").button();
 				$("#btConsultar").button();
+				$("#btInactivar").button();
 			</script>
 		</div></td>
 
 </tr>
 
 <script>
+
+function mostrarMensaje(titulo, mensaje) {
+	$('#msgbox').text(mensaje);
+	$('#msgbox').dialog({
+		title : titulo,
+		modal : true,
+		show : {
+			effect : 'fade',
+			duration : 250
+		},
+		hide : {
+			effect : 'fade',
+			duration : 250
+		},
+		buttons : {
+			"Ok" : function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+}
+	
 	if(retornaValorenSesion()!=0){
 		cargarFasesEnComboBox();
 	}

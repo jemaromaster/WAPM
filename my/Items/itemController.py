@@ -14,8 +14,21 @@ from Grafos.nodo import Nodo
 from models.itemModelo import Item, Relacion
 
 class ItemControllerClass(flask.views.MethodView):
-            
+    """
+    Clase que es utilizada para controlar los datos recibidos de un item,
+    para asegurarse de que no se almacenen valores inconsistentes en la bd 
+    Es invocada por la clase agregar, modificar item 
+    """ 
     def controlarItem(self, f, idF, atributos, esReversion):
+        """
+        Metodo utilizado para controlar los datos recibidos del lado cliente
+        @type  f: Item
+        @param f: item a controlar
+        @type  idF: string
+        @param idF: id del item si es que es un item a modificar, 0 si es nuevo
+        @type  esReversion: string
+        @param esReversion: indica si es una reversion 
+        """
         f.nombreItem=f.nombreItem.strip()
         f.estado=f.estado.strip()
         f.descripcion=f.descripcion.strip()
@@ -25,10 +38,13 @@ class ItemControllerClass(flask.views.MethodView):
             f.prioridad=int(f.prioridad)
             f.complejidad=int(f.complejidad)
             f.idFase=int(f.idFase)
+            f.tipoItem_id=int(f.tipoItem_id)
             esReversion=int(esReversion)
         except:
             return make_response ('t, no se pudo castear a entero')
         
+        if(f.tipoItem_id==-1):
+            f.tipoItem_id=None
         '''controla el tamano de los strings'''
          
         if not(1<=len(f.nombreItem)<=20 \

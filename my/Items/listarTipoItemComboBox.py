@@ -32,7 +32,7 @@ class ListarTipoItemComboBox(flask.views.MethodView):
     def get(self):
         #se obtiene los datos de post del server
         idTI=flask.request.args.get('idFase', '')
-        tipoItemLista=sesion.query(TipoItem).filter(TipoItem.fase_id==idTI)
+        tipoItemLista=sesion.query(TipoItem).filter(TipoItem.fase_id==idTI).filter(TipoItem.estado!='inactivo')
        
         respuesta=self.jasonizar(tipoItemLista)
         sesion.close()

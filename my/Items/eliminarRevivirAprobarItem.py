@@ -13,11 +13,9 @@ from models.bdCreator import Session
 sesion=Session() 
 class EliminarRevivirAprobarItem(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de creacion de \
-    usuario al servidor. \Los metodos get y post indican como\
-    debe comportarse la clase segun el tipo de peticion que \
-    se realizo \
-    Atributos de la clase: id, nombre, fecha inicio, fecha finalizacion, descripcion, estado, proyecto
+    Clase utilizada cuando se hace una peticion de \
+    eliminar, revivir o aprobar un item  al servidor. 
+    
     """
     
     @login_required
@@ -27,7 +25,15 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
     
     @login_required
     def post(self):
-        
+        """
+        Metodo utilizado para recibir los datos para eliminar, revivir o aprobar item en la base de datos. 
+        @type  idItem: string
+        @param idItem: id del item en BD
+        @type  idFase: string
+        @param idFase: id de la fase del item
+        @type  accion: string
+        @param accion: Permite definir si es un eliminar, revivir o aprobacion 
+        """
         idItem=flask.request.form['idItem']
         idFase=flask.request.form['idFase']
         accion=flask.request.form['accion']

@@ -17,14 +17,24 @@ sesion=Session()
 class AgregarRelacion(flask.views.MethodView):
     """
     Clase utilizada cuando se hace una peticion de creacion de \
-    usuario al servidor. \Los metodos get y post indican como\
+    relacion al servidor. \Los metodos get y post indican como\
     debe comportarse la clase segun el tipo de peticion que \
     se realizo \
-    Atributos de la clase: id, nombre, fecha inicio, fecha finalizacion, descripcion, estado, proyecto
+   
     """
     
     @login_required
     def post(self):
+        """
+        Metodo utilizado cuando se realiza una peticion de creacion de \
+        relacion al servidor. 
+        @type idPadre: String
+        @param idPadre: id del item padre a relacionar
+        @type idHijo: String
+        @param idHijo: id del item hijo a relacionar
+        @type version: String
+        @param version: version del hijo a relacionar 
+        """
         
         idFase=flask.request.form['id_Fase']
         padre_id=flask.request.form['padre_id']

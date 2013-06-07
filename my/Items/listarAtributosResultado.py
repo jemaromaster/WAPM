@@ -13,7 +13,10 @@ from models.instanciaAtributos import InstanciaTipoItem, InstanciaNumerico, Inst
 sesion=Session()
 
 class ListarAtributosResultado(flask.views.MethodView):
-    
+    """
+    Clase utilizada cuando se hace una peticion de listado de 
+    instancias de atributos al servidor
+    """
     def format_fecha(self, fecha):
         print("es" + fecha)
         
@@ -22,6 +25,10 @@ class ListarAtributosResultado(flask.views.MethodView):
     def jasonizar(self, i,version):
         """
         modulo que jasoniza la respuesta
+        @type i:AtributosInstancias[]
+        @param i: query de los atributos
+        @type version: String
+        @param version: version del item
         """
         cad=''
         pre="["
@@ -56,6 +63,17 @@ class ListarAtributosResultado(flask.views.MethodView):
     
     @login_required
     def get(self):
+        """
+        Recibe la peticion de listar los campos de los atributos dependiendo del tipo de item, segun los parametros que incluya la peticion.
+        @type idFase: String
+        @param idFase: id de fase de la cual listar los archivos 
+        @type idItem: String
+        @param idItem: id de item del cual listar los archivos 
+        @type idTipoItem: String
+        @param idTipoItem: id del tipo de item
+        @type version: String
+        @param version: version del item 
+        """ 
         #se obtiene los datos de post del server
         idFase=flask.request.args.get('idFase', '')
         idTI=flask.request.args.get('idTipoItem', '')

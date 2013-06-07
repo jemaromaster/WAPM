@@ -248,13 +248,76 @@
 					},
 					buttons : {
 						/* funcion asociado al boton aceptar */
+						"Informe de Costo": function(){informe()},
 						"Salir" : function() {$(this).dialog("close"); }
 					}
 				});
-
-	
+		
+		$("#dialogo-informe-costos")
+		.dialog(
+				{
+					autoOpen : false,
+					modal : true,
+					overflow : scroll,
+					resizable : false,
+					width: 'auto',
+					heigth: 'auto',
+					
+					
+					show : {
+						effect : 'fade',
+						duration : 400
+					},
+					hide : {
+						effect : 'fade',
+						duration : 350
+					},
+					buttons : {
+						/* funcion asociado al boton aceptar */
+						"Salir" : function() {$(this).dialog("close"); }
+					}
+				});
 	});
 	
+
+	function informe(){
+		var rowItem = $('#listSC').jqGrid('getGridParam', 'selrow');
+		if (rowItem == null) {
+			//window.alert("Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar una solicitud");
+			return;
+		}
+		var rowdata = $('#listSC').getRowData(rowItem);
+		$("#divDetalles").empty()
+		
+		$.getJSON("/informe/", {
+			idSC : rowdata.idSC
+		}, function(atribs) {
+			
+			$("#divDetalles").append(atribs.html)
+			/*$.each(atribs, function(index, atrib) { //val,text
+				index = index + 1;
+				
+				bandera = true
+			});*/
+
+			//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
+			/*var myPostData = $('#tipoItemIdComboBox').jqGrid("getGridParam",
+					"postData");
+			delete myPostData.idFase;
+			$('#listaTipoItem').setGridParam({
+				postData : {
+					search: true,
+					idFase : retornaValorComboBoxFases()
+				}
+			});
+
+			$('#listaTipoItem').trigger("reloadGrid");*/
+
+		});
+		$("#dialogo-informe-costos").dialog("open");
+		
+	}
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);
 		$('#msgbox').dialog({
@@ -430,6 +493,11 @@
 		</div>
 		
 		<div id="msgbox"></div>
+		
+		<div id="dialogo-informe-costos" title="Informe de Costos">
+			<div id="divDetalles">
+			</div>
+		</div>
 		
 
 {% endblock %}
