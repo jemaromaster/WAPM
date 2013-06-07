@@ -58,13 +58,24 @@ def miembroComite_required(method):
 
 
 def controlRol(idFase,componente,permiso):
-    permisos=flask.session['permisos']
-    respuesta=0
     
+    permisos=flask.session['permisos']
+    idUsuario=flask.session['idUsuario']
+    idProyecto=flask.session['idProyecto']
+    
+    sesion=Session()
+    idPL=sesion.query(Proyecto.projectLeaderId).filter(Proyecto.idProyecto==int(idProyecto)).first()
+    print "id project  leader es:  "+str(idPL.projectLeaderId)+"id del usuario logueado es "+str(idUsuario)
+    if idPL.projectLeaderId==int(idUsuario):
+        sesion.close()
+        return 1
+    respuesta=0
     for p in permisos:
         '''corrobora si existe el permiso(consultar,finalizar,administrar) sobre el componente (fase,lb,item,tipo)'''
         if idFase in permisos:
             if permisos[idFase][componente][permiso]==1:
                 respuesta=1
+                sesion.close()
                 return respuesta
+    sesion.close()        
     return respuesta

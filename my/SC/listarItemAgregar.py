@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -42,11 +42,12 @@ class Respuesta():
         
         
         for item in listaItemAprobar:
-            p=p+"{\"idItem\": \""+str(item.idItem)+ \
-                "\",\"idFase\": \""+ item.tag+ \
-                "\", \"estado\":\"" + item.estado + \
-                "\", \"nombreItem\":\"" + item.nombreItem + \
-                "\", \"incluir\":\"" + "no" +"\"},"
+            if controlRol(str(item.idFase),'item','administrar')==1:
+                p=p+"{\"idItem\": \""+str(item.idItem)+ \
+                    "\",\"idFase\": \""+ item.tag+ \
+                    "\", \"estado\":\"" + item.estado + \
+                    "\", \"nombreItem\":\"" + item.nombreItem + \
+                    "\", \"incluir\":\"" + "no" +"\"},"
         p=p[0:len(p)-1]    
         p=p+"]}"    
         p=pre+p
@@ -117,7 +118,7 @@ class ListarItemAgregar(flask.views.MethodView):
             
             itemtAlreadySC=sesion.query(Item.idItem).filter(SolicitudCambio.estado=="pendiente").join(SolicitudCambio.items).all()
             
-            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Fase.idProyecto==idProyecto,\
+            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag,Fase.idFase).filter(Fase.idProyecto==idProyecto,\
                                                             Item.idFase==Fase.idFase,\
                                                             Item.estado.in_(['aprobado', 'bloqueado']),\
                                                             ~Item.idItem.in_(itemtAlreadySC));
@@ -130,7 +131,7 @@ class ListarItemAgregar(flask.views.MethodView):
         else:
             itemtAlreadySC=sesion.query(Item.idItem).filter(SolicitudCambio.estado=="pendiente").join(SolicitudCambio.items).all()
             
-            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag).filter(Fase.idProyecto==idProyecto,\
+            queryItemAgregar=sesion.query(Item.idItem,Item.nombreItem,Item.estado,Fase.tag,Fase.idFase).filter(Fase.idProyecto==idProyecto,\
                                                             Item.idFase==Fase.idFase,\
                                                             Item.estado.in_(['aprobado', 'bloqueado']),\
                                                             ~Item.idItem.in_(itemtAlreadySC));

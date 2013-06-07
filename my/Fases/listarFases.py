@@ -87,8 +87,7 @@ class ListarComboFases(flask.views.MethodView):
         jsonF=''
         for fase in lf:
             stringFase=str(fase.idFase)
-            if controlRol(stringFase,'fase','consulta')==1:
-                jsonF=jsonF+"{\"idFase\":\""+stringFase+"\",\"nombreFase\":\""+fase.nombreFase+"\"},"
+            jsonF=jsonF+"{\"idFase\":\""+stringFase+"\",\"nombreFase\":\""+fase.nombreFase+"\"},"
         jsonF=jsonF[0:len(jsonF)-1]    
         jsonF=prejsonF+jsonF+"]"
         sesion.close()        
