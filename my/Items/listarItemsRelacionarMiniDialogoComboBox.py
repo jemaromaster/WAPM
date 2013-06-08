@@ -17,6 +17,8 @@ class ListarItemsRelacionarMiniDialogoComboBox(flask.views.MethodView):
     def jasonizar(self, fl):
         """
         modulo que jasoniza la respuesta
+        @type fl:Relacion[]
+        @param fl: query de las Relaciones 
         """
         cad=''
         pre="["
@@ -33,6 +35,13 @@ class ListarItemsRelacionarMiniDialogoComboBox(flask.views.MethodView):
     
     @login_required
     def get(self):
+        """
+        Recibe la peticion de listar relaciones, segun los parametros que incluya la peticion.
+        @type idItem: String
+        @param idItem: id del item del cual listar los archivos 
+        @type idFase: String
+        @param idFase: id de la fase
+        """ 
         #se obtiene los datos de post del server
         idItem=idTI=flask.request.args.get('idItem', '')
         idFase=flask.request.args.get('idFase', '')

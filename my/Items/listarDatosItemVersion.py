@@ -11,14 +11,17 @@ from models.historialModelo import HistorialItem
 sesion=Session()
 
 class ListarDatosItemVersion(flask.views.MethodView):
-    
-    
+    """
+    Clase utilizada cuando se hace una peticion de los datos una version determinada de un item
+    """
     def format_fecha(self, fecha):
         r=(fecha[8:10]+"/"+fecha[5:7]+"/"+fecha[0:4])
         return r
     def jasonizar(self, iv):
         """
         modulo que jasoniza la respuesta
+        @type iv:ItemHistorial
+        @param iv:objeto de un item en historial 
         """
         cad=''
         
@@ -34,7 +37,13 @@ class ListarDatosItemVersion(flask.views.MethodView):
     
     @login_required
     def get(self): 
-        
+        """
+        Recibe la peticion de listar los atributos de un item del historial, segun los parametros que incluya la peticion.
+        @type idItem: String
+        @param idItem: id de item del cual listar los valores de atributos 
+        @type version: String
+        @param version: version del item 
+        """ 
         #se obtiene los datos de post del server
         idItem=flask.request.args.get('idItem', '')
         version=flask.request.args.get('version', '')

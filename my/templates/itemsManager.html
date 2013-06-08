@@ -1,8 +1,15 @@
 {% extends "baseMiembro.html" %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<script type="text/javascript" src="http://www.phpletter.com/contents/ajaxfileupload/ajaxfileupload.js"></script>
-<script type="text/javascript" src="http://www.phpletter.com/javascript/general.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/ajaxfsdsdsileuspload.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/general.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/raphael-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/dracula_graffle.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/jquery-1.4.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/dracula_graph.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grafos/example.js') }}"></script>
+    
 {% block header %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -11,7 +18,6 @@
 <script type="text/javascript">
 	//<![CDATA[
 	jQuery(document).ready(
-			
 			function() {
 
 				var grid = jQuery("#listaItems").jqGrid(
@@ -19,7 +25,7 @@
 
 							// datatype : "local",
 							// data:mydata,
-							url : '/listarItems',
+							url : '/listarItems/',
 							datatype : "json",
 							mtype : "get",
 							postData : {
@@ -46,7 +52,8 @@
 							}, {
 								name : 'version',
 								index : 'version',
-								width : 50,search : false
+								width : 50,
+								search : false
 							}, {
 								name : 'prioridad',
 								index : 'prioridad',
@@ -149,8 +156,6 @@
 				});
 			});
 	//]]>
-	
-	
 </script>
 
 
@@ -196,6 +201,9 @@
 
 	$(document).ready(function() {
 		$("#datepicker2").datepicker();
+		$("#costo").mask("?9999999999", {
+			placeholder : " "
+		});
 	});
 </script>
 <div id="dialogo-datos-item" title="Datos de Item">
@@ -288,13 +296,15 @@
 				<input type="hidden" name="idFase" id="idFase" />
 				</td></tr>
 				<tr>
-					<td> <label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
+					
+					<td id="divComboBoxTI"> <label for="tipoItemIdComboBox" style="display: block">*TipoItem</label>
 					<select id="tipoItemIdComboBox"
 						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;"
 						class="ui-widget-content ui-corner-all">
 						<option value='0'>Ninguno</option>
 					</select>
 					</td>
+					
 				</tr>
 				
 			</table>
@@ -318,31 +328,38 @@
 	</form>
 </div>
 
-<div id="dialogo-archivos" title="Archivos">
-
-		<form name="form" action="" method="POST" enctype="multipart/form-data">
-		<table cellpadding="0" cellspacing="0" class="tableForm">
-
-		<thead>
-			<tr>
-				<th>Ajax File Upload</th>
-			</tr>
-		</thead>
-		<tbody>	
-			<tr>
-				<td><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></td>	
-			</tr>
-			<tr>
-				<td>Seleccione un archivo para agregar al item</td>
-			</tr>
-		</tbody>
-			<tfoot>
+<div id="dialogo-archivos" title="Archivos">	
+		
+				
+		<form name="formFileUpload" action="/adjuntarArchivo/" method="POST"  enctype="multipart/form-data" target="upload_target" >
+			<td><input id="idItemInput" name="idItem" type="hidden" class="input" ></input></td>	
+			<p id="f1_upload_process" >Loading...<br/><img src="{{url_for('static',filename='images/loading.gif')}}" width=120 height=120/></p>
+			<p id="result"></p>
+			<table cellpadding="0" cellspacing="0" class="tableForm">
+			
+			<thead>
 				<tr>
-					<td><button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button></td>
+					<th>Subir Archivos</th>
 				</tr>
-			</tfoot>
-	
-	</table>
+			</thead>
+			<tbody>	
+				<tr>
+					<td><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></input></td>	
+				</tr>
+				<tr>
+					<td>Seleccione un archivo para agregar al items</td>
+				</tr>
+			</tbody>
+				<tfoot>
+					<tr>
+						<td><button class="button" id="buttonUpload" onclick="subirArchivo()"">Subir</button></td>
+					</tr>
+				</tfoot>
+		
+			</table>
+			<iframe id="upload_target" name="upload_target" src="#" style="width:30;height:0;border:0px solid #fff;"></iframe>
+			<iframe id="download_target" name="download_target" src="#" style="width:30;height:0;border:0px solid #fff;"></iframe>
+			<p id="archivosSubidos" style="overflow:auto;height:200px; width: auto;"></p>
 		</form>
 </div>
 <div id="dialogo-relacionarManager" title="Relaciones">
@@ -383,37 +400,83 @@
 	</td>
 </div>
 
-
-
-
-
 <script>
 	/* variable permite indicar si se está cargando un nuevo item de datos */
 	var bandera;
 	/* inicialización del dialogo JQuery que permite tomar los datos de cliente */
+    var atributosTI;
     
+   
+   $('iframe#upload_target').load(function() {//cuando se carga todo el archivo esconde el "loading" 
+	   stopUpload()
+	   
+	 });
+   function startUpload(){
+	    	document.getElementById('f1_upload_process').style.visibility = 'visible';
+	    return true;
+	    }
+   function stopUpload(){
+	   $("#f1_upload_process").hide()
+	   //alert("entro")
+	   listarArchivosEnServer();
+	  
+	   return true;
+	}
+   	$("#f1_upload_process").hide()
 	
-	function controlTI(){
-		var error=0;
-		if (atributosTI!=null){
+   	function controlTI(){
+		var error=0; 
+		
+		if (atributosTI!=null && $('#tipoItemIdComboBox').val!=0){
 			var len;
 			for(var i=0; i<atributosTI.length;i++){
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
-				$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'skyblue');
+				$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'skyblue');
 				if(atributosTI[i]["tipoPrimario"]=="Texto"){
 					
-					len = $("#input_"+atributosTI[i]["nombreAtributo"]).val().trim().length;
-					
+					len = $("#input_"+atributosTI[i]["idAtributos"]).val().length;
+					//alert(len)
 					if (len > atributosTI[i]["longitudCadena"] || len <= 0) {
-						$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'red');
+						$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
+						$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
+								"type=\"text\" name=\"EnombreTipoItem\" id=\"EnombreTipoItem\""+
+									"float=\"left\""+
+									"style=\"width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;\" /></div>")
 						error = 1;
 					}
+				}else if(atributosTI[i]["tipoPrimario"]=="Numerico"){
+						
+						valor=$("#input_"+atributosTI[i]["idAtributos"]).val()
+						len=$("#input_"+atributosTI[i]["idAtributos"]).val().length
+						//alert(len)
+						if(len!=0 && valor.indexOf('.')!=-1){ //si es que no tiene "," entonces se debe el len=1 para que pase la prueba
+							valor=valor.substring(valor.indexOf('.')+1,valor.length)
+							len = valor.length;
+						}else{
+							len=atributosTI[i]["longitudCadena"];
+											
+						}
+						
+						if (len > atributosTI[i]["longitudCadena"] || len <= 0) {
+							$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
+							error = 1;
+							$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
+									"type=\"text\" value='Maximo "+ parseInt(atributosTI[i]["longitudCadena"]) + " caracteres'"+
+										"float=\"left\""+
+										"style=\"width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;\" /></div>")
+							
+						}
+					
 				}else{
 					
-					len = $("#input_"+atributosTI[i]["nombreAtributo"]).val().trim().length;
-					
+					len = $("#input_"+atributosTI[i]["idAtributos"]).val().length;
+					//alert(len)
 					if (len <= 0) {
-						$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'red');
+						$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
+						$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
+								"type=\"text\" value='Maximo "+ parseInt(atributosTI[i]["longitudCadena"]) + " caracteres'"+
+									"float=\"left\""+
+									"style=\"width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;\" /></div>")
 						error = 1;
 					}
 				
@@ -424,43 +487,48 @@
 		
 		}
 	  }
+	function sendContactForm(){
+        setTimeout('$("#formFileUpload").slideUp("slow")', 2000);
+   }
 	function submitValues(url, params_vec) {
 		var form = ['<form id="formTI" action=\'\'>']//[ '<form method="POST" action="', url, '">' ];
 		var input_que_son_fecha=['']
-		var lista_input_numerico=['']
-		atributosTI=params_vec;
+		var lista_input_numerico=[]
+		var lista_input_entero=['']
+		window.atributosTI=params_vec;
 		
 		for(var i=0; i<params_vec.length;i++){
 					form.push('<td>');
-					form.push('<tr><label style="display: block">',params_vec[i]["nombreAtributo"],'</label>');
+					form.push('<tr><label style="display: block">',params_vec[i]["nombreAtributo"] ,'</label>');
 					if(params_vec[i]["tipoPrimario"]=="Texto"){
 						
 						if(params_vec[i]["longitudCadena"]<100){
-							form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+							form.push('<input type="text" id="', "input_"+params_vec[i]["idAtributos"],'" class="text ui-widget-content ui-corner-all"',
 									'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 40%;"','/></tr>');
 						}else{
-							form.push('<textarea type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+							form.push('<textarea type="text" id="', "input_"+params_vec[i]["idAtributos"],'" class="text ui-widget-content ui-corner-all"',
 									'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 40%;"','/></tr>');
 						}
 					}else if(params_vec[i]["tipoPrimario"]=="Numerico"){
-						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+						form.push('<input type="text" id="', "input_"+params_vec[i]["idAtributos"],'" class="text ui-widget-content ui-corner-all"',
 								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
 						
-						lista_input_numerico.push("#"+"input_"+params_vec[i]["nombreAtributo"])
+						lista_input_numerico.push(i)
 					}else if(params_vec[i]["tipoPrimario"]=="Fecha"){
 						
-						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" readonly="readonly"',
+						form.push('<input type="text" id="', "input_"+params_vec[i]["idAtributos"],'" readonly="readonly"',
 								'" class="text ui-widget-content ui-corner-all"',
 								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
 						
 								//para que pueda indicarse que el input es una fecha, primero debe agregarse al formulario con .appendTo()
 								//mas abajo se indica que todos los inputs que van en esta lista input_que_son_fecha sean tipo datepicker
-						input_que_son_fecha.push("#"+"input_"+params_vec[i]["nombreAtributo"])
+						input_que_son_fecha.push("#"+"input_"+params_vec[i]["idAtributos"])
 						
 					}else{
-						form.push('<input type="text" id="', "input_"+params_vec[i]["nombreAtributo"],'" class="text ui-widget-content ui-corner-all"',
+						form.push('<input type="text" id="', "input_"+params_vec[i]["idAtributos"],'" class="text ui-widget-content ui-corner-all"',
 								'style="display: block; margin-bottom: 12px; padding: 0.4em; width: 30%;"','/></tr>');
-						lista_input_numerico.push("#"+"input_"+params_vec[i]["nombreAtributo"])
+						lista_input_entero.push("#"+"input_"+params_vec[i]["idAtributos"])
+						
 					}
 					form.push('</td>')
 					
@@ -478,7 +546,19 @@
 		
 		//enmascar los inputs que son numericos
 		for (var b=0; b<lista_input_numerico.length;b++){
-			$(lista_input_numerico[b]).mask("?9999999999", {
+			/*$.mask.definitions['h'] = "[.0-9]"
+			$(lista_input_numerico[b]).mask("?9999999999999", {
+				placeholder : " "
+			});*/
+				// 	alert(String(lista_input_numerico[b]))
+			
+				$("#input_"+atributosTI[lista_input_numerico[b]]["idAtributos"]).number(true, atributosTI[lista_input_numerico[b]]["longitudCadena"]);
+				//$("#presup7uesto").mask("", {placeholder : " "}); 
+				//$("#nroFases").mask("?9999999999999", {placeholder : " "}); 
+			
+		}
+		for (var b=0; b<lista_input_entero.length;b++){
+			$(lista_input_entero[b]).mask("?9999999999999", {
 				placeholder : " "
 			});
 		}
@@ -487,12 +567,13 @@
 	function jsonizarAtributos(){
 		
 		json=[]
+		
 		//alert(atributosTI[0]["nombreAtributo"])
 		for (var a=0; a<atributosTI.length;a++){
 			
 			t='{"idAtributos":'+atributosTI[a]["idAtributos"]+', "nombreAtributo":"'+
 				atributosTI[a]["nombreAtributo"]+'","tipoPrimario":"' + atributosTI[a]["tipoPrimario"]+ '", "valor":"'+
-				$("#input_"+atributosTI[a]["nombreAtributo"]).val()+'"}'
+				$("#input_"+atributosTI[a]["idAtributos"]).val()+'"}'
 			
 			json.push(t)
 		}
@@ -742,9 +823,9 @@
 			placeholder : " "
 		});
 	}*/
-	function cargarForm(rowdata, row, version,disable) {
+	function cargarForm(rowdata, row, version, habilitar) {
 		rowdata = $('#listaItems').getRowData(row);
-		
+		$('#divComboBoxTI').hide()
 		if(version==0 || version==rowdata.version){ //cuando es 0 le pide la version actal nada mas, es decir, la que esta en jqgrid
 			$("#idItem").val(rowdata.idItem);
 			$("#nombreItem").val(rowdata.nombreItem);
@@ -758,9 +839,11 @@
 			$("#idFase").val(rowdata.idFase);
 			
 			$('#atributosTipodeItem').empty();
-			getJSONListarAtributos(rowdata.tipoItem_id,disable);
 			
-			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version);
+			
+			getJSONListarAtributos(rowdata.tipoItem_id);
+			
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, rowdata.version, habilitar);
 		}else{
 			//pedir datos de la verison
 			//alert("entro")
@@ -782,8 +865,8 @@
 				
 			});
 			$('#atributosTipodeItem').empty();
-			getJSONListarAtributos(rowdata.tipoItem_id,disable);
-			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version);
+			getJSONListarAtributos(rowdata.tipoItem_id);
+			cargarInputAtributos(rowdata.tipoItem_id,rowdata.idItem, version, habilitar);
 		}
 		
 		
@@ -794,7 +877,7 @@
 	}
 	
 	
-	function cargarInputAtributos(idTipoItem,idItem,version){
+	function cargarInputAtributos(idTipoItem,idItem,version, habilitar){
 		$.getJSON("/listarAtributosResultado/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem,
@@ -802,7 +885,14 @@
 			version : version
 		}, function(atribs) {
 			$.each(atribs, function(index, atrib) { //val,text
-				$("#input_"+atrib["nombreInput"]).val(atrib["valor"]);
+				aux=0;
+				for(var i=0; i<atributosTI.length;i++){
+					if(atributosTI[i]["nombreAtributo"]==atrib["nombreInput"]){
+						aux=atributosTI[i]["idAtributos"]
+					}
+				}
+				$("#input_"+aux).val(atrib["valor"]);
+				$("#input_"+aux).attr('disabled', habilitar);
 				//alert($("#input_"+atrib["nombreAtributo"]).val())
 			});
 		});
@@ -834,23 +924,21 @@
 		//$('#fieldsetTipoItem').refresh()
 		
 		//alert("hola")
-		//alert(atributosTI)
-		
+		//alert(window.atributosTI)
 		
 		/*$('#fieldsetTipoItem').find('.text').each(function(){
 		    jQuery(this).attr('disabled', habilitar);
 		    alert(jQuery(this).val())
 		    
 		});*/
-		if(atributosTI!=null){
-			
+		/*if(atributosTI!=null){
+			//alert("entro al for") 
 			for(var i=0; i<atributosTI.length;i++){
-				
 				//alert("#input_"+atributosTI[i]["nombreAtributo"])
 				$("#input_"+atributosTI[i]["nombreAtributo"]).attr('disabled', habilitar);
 			}
 			
-		}
+		}*/
 		
 	}
 
@@ -867,7 +955,7 @@
 		$("#idFase").css('border-color', 'skyblue');
 		if(atributosTI!=null){
 			for(var i=0; i<atributosTI.length;i++){
-				$("#input_"+atributosTI[i]["nombreAtributo"]).css('border-color', 'skyblue');
+				$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'skyblue');
 			}
 			
 		}
@@ -887,6 +975,13 @@
 
 		len = $("#costo").val().trim().length;
 		if (len <= 0) {
+			$("#costo").css('border-color', 'red');
+			error = 1;
+		}
+		
+		var intRegex = /^\d+$/;
+		someNumber=$("#costo").val().trim()
+		if(!intRegex.test(someNumber)) {
 			$("#costo").css('border-color', 'red');
 			error = 1;
 		}
@@ -934,6 +1029,7 @@
 		$("#estado").val("activo");
 		$("#idFase").val(retornaValorComboBoxFases());
 		
+		$('#divComboBoxTI').show();
 		
 		
 		$('#atributosTipodeItem').empty();
@@ -973,10 +1069,9 @@
 		}
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		//$('#atributosTipodeItem').empty();
-		disabled=false
-		cargarForm(rowdata, row, 0,disabled);
+		cargarForm(rowdata, row, 0, false);
 		/*se habilita la edicion*/
-		
+		setCamposDisabled(false);
 		setearFormularioSkyBlue();
 		
 		//$.enmascarar();
@@ -1002,11 +1097,11 @@
 		}
 		var rowdata;
 		/* se cargan los elementos HTML segun la fila seleccionada*/
-		disabled=true
-		cargarForm(rowdata, row, 0,disabled);
+		cargarForm(rowdata, row, 0, true);
 		/*se inhabilita la edicion*/
-		//alert(atributosTI)
-		
+		//alert(window.atributosTI)
+		setCamposDisabled(true);
+		setearFormularioSkyBlue();
 		
 		/* se llama al dialogo para modificar los datos */
 		$("#divJQGridRelacionesConsultar").show();
@@ -1020,7 +1115,7 @@
 		var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 		var rowdata;
 		$('#atributosTipodeItem').empty();
-		cargarForm(rowdata, row, $('#versionComboBox').val());
+		cargarForm(rowdata, row, $('#versionComboBox').val(), true);
 		reloadListaRelaciones('listaRelacionesConsultar', true)
 		//$("#listaRelacionesConsultar").trigger("reloadGrid");
 		
@@ -1040,12 +1135,11 @@
 		
 		cargarComboBoxVersiones(row);
 		$('#atributosTipodeItem').empty();
-		
-		disabled=true
-		cargarForm(rowdata, row, $('#versionComboBox').val(),disabled);
+		cargarForm(rowdata, row, $('#versionComboBox').val(), true);
 		
 		/*se inhabilita la edicion*/
-		//setCamposDisabled(true);
+		setCamposDisabled(true);
+		setearFormularioSkyBlue();
 		
 		$("#versionDiv").show();
 		$('#versionComboBox').show();
@@ -1069,15 +1163,16 @@
 			mensaje="No se puede aprobarItem en estado activo, primero debe pasar al estado \"Pendiente\""
 			mostrarMensaje(titulo, mensaje)
 			return;
-		}else if(rowdata.estado!="pendiente"){
-			titulo="Atencion"
-			mensaje="No se puede aprobarItem en estado "+ rowdata.estado
-			mostrarMensaje(titulo, mensaje)
-			return;
+		}else if(rowdata.estado=="pendiente" || rowdata.estado=="revision"){
+					
+					titulo="Atencion"
+					mensaje="Esta seguro que desea aprobar el item "+ rowdata.nombreItem + "?"
+					accion="aprobar"
 		}else{
-			titulo="Atencion"
-			mensaje="Esta seguro que desea aprobar el item "+ rowdata.nombreItem + "?"
-			accion="aprobar"
+					titulo="Atencion"
+					mensaje="No se puede aprobarItem en estado "+ rowdata.estado
+					mostrarMensaje(titulo, mensaje)
+					return;
 		}
 		
 		$('#msgbox').text(mensaje);
@@ -1277,12 +1372,14 @@
 			var index = 0
 			bandera = false
 			options[options.length] = new Option("Seleccione Tipo Item...", 0);
+			
 			$.each(atribs, function(index, atrib) { //val,text
 				index = index + 1;
 				options[options.length] = new Option(index + " : "
 						+ atrib.nombreTipoItem, atrib.idTipoItem);
 				bandera = true
 			});
+			options[options.length] = new Option("Ninguno", -1);
 
 			//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
 			/*var myPostData = $('#tipoItemIdComboBox').jqGrid("getGridParam",
@@ -1323,22 +1420,22 @@
 								+ atrib.nombreFase, atrib.idFase);
 						bandera = true
 					});
-					var myPostData = $('#listaItems').jqGrid("getGridParam","postData");
-					delete myPostData.idF;
+
+					$('#listaItems').trigger("reloadGrid");
+					/*//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
+					var myPostData = $('#listaItems').jqGrid("getGridParam",
+							"postData");
+					delete myPostData.idFase;
 					$('#listaItems').setGridParam({
-							postData : {
-								idF : retornaValorComboBoxFases()
-							}
-					});
-					$('#listaItems').trigger("reloadGrid")	
-					
-			});
-	
+						postData : {
+							search: true,
+							idFase : retornaValorComboBoxFases()
+						}
+					});*/
+
+				});
+
 	}
-	
-		
-		
-	
 	function retornaValorComboBoxFases() {
 
 		var r = $("#comboBoxFases").val();
@@ -1349,22 +1446,23 @@
 <div id='msgbox' title='' style='display: none'></div>
 
 {% endblock %} {% block body %}
+		
 <h2>Administrar Items</h2>
 
 
-<table>
-<tr>
-<td><label>Fase: </label>
-</td>
-<td>
+<td><label>Fase:</label>
+
+
 <select id="comboBoxFases"
-	style="display: block; margin-bottom: 12px; padding: 6px; width: auto;"
+	style="display: block; margin-bottom: 12px; padding: 0.4em; width: auto;"
 	class="ui-widget-content ui-corner-all">
 		<option value="0">(Ninguna)</option>
+</select>
+<input id="btGraficar" type="hidden" name="nuevo"
+				value="Graficar" onclick='graficar()' /> 
 
-</select></td>
-</tr>
-</table>
+</td>
+
 <tr>
 	<td><div>
 			<table id="listaItems"></table>
@@ -1386,7 +1484,7 @@
 				<input id="btArchivos" type="button" name="nuevo"
 				value="Archivos" onclick='abrirDialogoArchivos()' />
 				<input id="btPendiente" type="button" name="nuevo"
-				value="Pendiente" onclick='setPendiente()' />
+				value="Pendiente/Activo" onclick='setPendiente()' />
 
 				<input id="btAprobar" type="button" name="nuevo"
 				value="Aprobar" onclick='aprobarItem()' /><br></br>
@@ -1405,8 +1503,6 @@
 
 </tr>
 <script>
-	var atributosTI=[];
-
 	function retornaValorenSesion() {
 		//alert('valor en sesion' + valorenSesion)
 		return valorenSesion;
@@ -1440,25 +1536,27 @@
 		op[op.length] = new Option(String(i), i);
 	}
 
-	function getJSONListarAtributos(idTipoItem,disable){
-		
+	function getJSONListarAtributos(idTipoItem){
+		if(idTipoItem==-1){
+			form=['']
+			form.push("<div><p>Ningun Tipo Item Elegido</p></div>")
+			jQuery(form.join('')).appendTo($('#atributosTipodeItem')); 
+			atributosTI=[]
+		}
 		$.getJSON("/listarAtributo/", {
 			idFase : retornaValorComboBoxFases(),
 			idTipoItem : idTipoItem
 		}, function(atribs) {
-			
-			atributosTI = atribs; 
+			//window.atributosTI=atribs;
+			window['atributosTI'] = atribs; 
 			submitValues("#", atribs);
-			setCamposDisabled(disable)
-			
 		});
-		
 	}
 	
 	$('#tipoItemIdComboBox').change(function() {
 		$("#tipoItemIdComboBox option[value='0']").remove();
 		$('#atributosTipodeItem').empty();
-		 getJSONListarAtributos($('#tipoItemIdComboBox').val(),true)
+		 getJSONListarAtributos($('#tipoItemIdComboBox').val())
 
 	});
 	
@@ -1861,6 +1959,39 @@ $("#dialogo-archivos")
 				
 			}
 		});
+
+function listarArchivosEnServer(){
+	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
+	if(row == null){
+		mostrarMensaje("Atencion", "Seleccione item a administrar Archivos")
+		return;
+	}
+	rowdata= $('#listaItems').getRowData(row);
+	
+	$("#archivosSubidos").empty()
+	$.getJSON("/listarArchivosItem/", {
+		idItem : rowdata.idItem
+	}, function(atribs) {
+		$.each(atribs, function(index, atrib) { //val,text
+			$("#archivosSubidos").append(
+					"<table><tr>"+
+					"<td><label>"+atrib["nombreArchivo"]+"</label></td>"+
+					"<td><form method='POST' action='/downloadArchivo/'>"+
+					"<input id='idArchivo' name='idArchivo' type='hidden' value='"+ parseInt(atrib["idArchivo"])+"' class='input'></input>"+
+					"<button id='buttonDownload_"+atrib["idArchivo"]+ "type='submit'><img width=15 height=15 src='{{url_for('static',filename='images/save.png')}}'/></button>"+
+					
+					"</form></td>"+
+					"<td><button id='buttonDelete_"+atrib["idArchivo"]+ "type='text' onclick=deleteFile("+ parseInt(atrib["idArchivo"])+")><img width=15 height=15 src='{{url_for('static',filename='images/del-iconBig.jpg')}}'/></button>"+
+					"</td>"	+
+					"</tr></table>"
+					
+			)
+			$("#buttonDownload_"+atrib["idArchivo"]).button()
+		});
+		
+	});
+	
+}
 		
 function abrirDialogoArchivos(){
 	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
@@ -1870,20 +2001,49 @@ function abrirDialogoArchivos(){
 	}
 	rowdata= $('#listaItems').getRowData(row);
 	
+	listarArchivosEnServer();
+	$("#idItemInput").val(rowdata.idItem)
+	$("#fileToUpload").val('')
 	$("#dialogo-archivos")
 	.dialog("open")
 }
-function ajaxFileUpload()
+function deleteFile(idA){
+	$.post('/eliminarArchivo/',
+			{
+				idArchivo : idA
+			},
+			function(data, status) {
+				/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+
+				/* si hay error se muestra el mensaje*/
+				if (data.substring(
+						0, 1) == 't') {
+					mostrarMensaje(
+							"Error",
+							data.substring(2));
+					/* se indica que no hubieron errores */
+				} else {
+					$("#dialogo-datos-item")
+							.dialog(
+									"close");
+					
+				}
+				
+			});
+	
+}
+function subirArchivo()
 {
-/*		$("#loading")
+	$("#f1_upload_process").show()
+	/*$("#loading")
 	.ajaxStart(function(){
 		$(this).show();
 	})
 	.ajaxComplete(function(){
 		$(this).hide();
 	});*/
-
-	$.ajaxFileUpload
+	
+	/*$.ajaxFileUpload
 	(
 		{
 			url:'{{url_for('adjuntarArchivo')}}',
@@ -1897,33 +2057,44 @@ function ajaxFileUpload()
 			complete:function()
 			{
 				$("#loading").hide();
-			},				
-			success: function (data, status)
-			{
-				if(typeof(data.error) != 'undefined')
-				{
-					if(data.error != '')
-					{
-						alert(data.error);
-					}else
-					{
-						alert(data.msg);
-					}
+			},		
+			
+			success: function(data, status) {
+				alert(data + status)
+				if (data.substring(
+						0, 1) == 't') {
+					mostrarMensaje(
+							"Error",
+							"No se ha podido revertir el item:\n"
+									+ data
+											.substring(2));
+				} else {
+					$(
+							"#dialogo-datos-item")
+							.dialog(
+									"close");
+					mostrarMensaje(
+							"Exito",
+							"Se reversiono    el item "+
+							$(
+							"#nombreItem").val() + "a la version "+ 
+							$(
+							"#versionComboBox").val());
 				}
-			},
-			error: function (data, status, e)
-			{
-				alert(e);
+				$('#listaItems')
+						.trigger(
+								"reloadGrid");
 			}
 		}
-	)
+	)*/
 	
-	return false;
+	return true;
 
 }
 
 //$('#divJQGridRelaciones').clone( true ).insertAfter("#divRelaciones");
 </script>
+
 
 {% endblock %}
 </html>

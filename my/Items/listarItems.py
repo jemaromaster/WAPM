@@ -1,4 +1,4 @@
-from utils import login_required,controlRol
+from utils import login_required
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -17,6 +17,7 @@ class Respuesta():
     devolver dentro de la lista y se convierte a un formato
     json para que pueda ser interpretado por el navegador 
     """
+    
     totalPages=1
     currPage=1
     totalRecords=1
@@ -39,12 +40,12 @@ class Respuesta():
         
         
         for f in listaItems:
-            #si no se tiene permiso de consultar items, no se devuelve nada en el listar
-            if controlRol(str(f.idFase),'item','consulta')==0:
-                break
             name=sesion.query(Usuario.username).filter(Usuario.id==f.autorVersion_id).first()
+            ti_id=f.tipoItem_id;
+            if f.tipoItem_id==None:
+                ti_id=-1;
             p=p+json.dumps({"idItem":f.idItem , "nombreItem":f.nombreItem, "version": f.version, "prioridad":f.prioridad, 
-                        "fechaInicio": str(f.fechaInicio), "fechaFinalizacion": str(f.fechaFinalizacion), "tipoItem_id": f.tipoItem_id, 
+                        "fechaInicio": str(f.fechaInicio), "fechaFinalizacion": str(f.fechaFinalizacion), "tipoItem_id": ti_id, 
                         "costo": f.costo, "complejidad": f.complejidad, "estado": f.estado, "autorVersion_id":f.autorVersion_id,
                         "nombreAutorVersion": name, "descripcion":f.descripcion, "idFase":f.idFase}, separators=(',',':'))+",";
            
@@ -56,8 +57,27 @@ class Respuesta():
 
 
 class ListarItems(flask.views.MethodView):
+    """
+    Clase utilizada cuando se hace una peticion de listado de 
+    Items al servidor. 
+    """
     @login_required
     def get(self): 
+        """
+        Recibe la peticion de listar items, segun los parametros que incluya la peticion 
+        @type  totalPages: number
+        @param totalPages: Indica el numero de paginas que tendra el listado.
+        @type  currPage: number
+        @param currPage: Indica el numero de pagina actual.
+        @type  totalRecords: number
+        @param totalRecords: Indica el numero de registros en el listado.
+        @type  rows: number
+        @param rows: Indica el numero de filas por pagina que se tendra dentro del listado.
+        @type idP: String 
+        @param idP: id del proyecto 
+        @type idF: String
+        @param idF: id de la fase 
+        """ 
         #se obtiene los datos de post del server
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')

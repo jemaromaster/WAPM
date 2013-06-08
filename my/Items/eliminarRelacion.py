@@ -1,7 +1,7 @@
 
 import flask.views
 from flask import make_response
-from utils import login_required,controlRol
+from utils import login_required
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -15,17 +15,21 @@ from models.historialModelo import HistorialItem, HistorialRelacion
 sesion=Session()
 class EliminarRelacion(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de creacion de \
-    usuario al servidor. \Los metodos get y post indican como\
-    debe comportarse la clase segun el tipo de peticion que \
-    se realizo \
-    Atributos de la clase: id, nombre, fecha inicio, fecha finalizacion, descripcion, estado, proyecto
+    Clase utilizada cuando se hace una peticion de eliminacion de \
+    alguna relacion al servidor. 
+    
     """
     
    
     @login_required
     def post(self):
-        
+        """
+        Metodo utilizado para recibir los datos para eliminar una relacion dentro de la BD. 
+        @type  idRelacion: string
+        @param idRelacion: id del la relacion en BD
+        @type  version_hijo: string
+        @param version_hijo: version del hijo a quien pertence la relacion
+        """
         #idFase=flask.request.form['id_Fase']
         idRelacion=flask.request.form['idRelacion']
         version_hijo=flask.request.form['version_hijo']
@@ -38,13 +42,6 @@ class EliminarRelacion(flask.views.MethodView):
         
         
         i=sesion.query(Item).filter(Item.idItem==q.hijo_id).first()
-        
-        #se hace el control de rol
-        idFase=str(i.idFase)
-        if controlRol(idFase,'item','administrar')==0:
-            sesion.close()
-            return "t, No posee permiso para realizar esta accion"
-        
         if(i.version==int(version_hijo)-1): #hay que crear una nueva version del item porque es el primero en eliminar de la version
             
             

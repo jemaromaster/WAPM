@@ -135,7 +135,7 @@ class InstanciaNumerico(Base):
     __tablename__='instancia_numerico'
     
     idInstanciaNumerico=Column("id", Integer, primary_key=True)
-    numerico=Column("numero", Numeric(100))
+    numerico=Column("numero", Numeric)
     instanciaTipoItem_id=Column(Integer, ForeignKey('instancia_tipo_item.id'))
     version=Column("version", Integer)
     #instanciaTipoItem = relationship("InstanciaTipoItem", backref=backref("instanciaNum", uselist=False))

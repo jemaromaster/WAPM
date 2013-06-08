@@ -240,10 +240,12 @@
 					},
 					buttons : {
 						/* funcion asociado al boton aceptar */
+						
 						"Incluir item" : function(){agregarItem() },
 						"Quitar item" : function() {quitar() },
 						"Enviar Solicitud" : function() {enviar()},
 						"Cancelar Solicitud" : function() { cancelar()}
+						
 					}
 				});
 		$("#dialogo-item-incluido")
@@ -324,6 +326,7 @@
 		$("#dialogo-item-agregar").dialog("open");
 	}
 	
+	
 	function agregarItem(){
 		
 		var rowItem = $('#listItemAgregar').jqGrid('getGridParam', 'selrow');
@@ -348,8 +351,8 @@
 		
 		var rowItem = $('#listItemAgregar').jqGrid('getGridParam', 'selrow');
 		if (rowItem == null) {
-			window.alert("Debe seleccionar un item");
-			//mostrarMensaje("Atencion","Debe seleccionar un item");
+			//window.alert("Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar un item");
 			return;
 		}
 		var rowdata = $('#listItemAgregar').getRowData(rowItem);

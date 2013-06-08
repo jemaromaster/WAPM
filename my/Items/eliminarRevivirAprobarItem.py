@@ -1,7 +1,7 @@
 
 import flask.views
 from flask import make_response
-from utils import login_required,controlRol
+from utils import login_required
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -13,11 +13,9 @@ from models.bdCreator import Session
 sesion=Session() 
 class EliminarRevivirAprobarItem(flask.views.MethodView):
     """
-    Clase utilizada cuando se hace una peticion de creacion de \
-    usuario al servidor. \Los metodos get y post indican como\
-    debe comportarse la clase segun el tipo de peticion que \
-    se realizo \
-    Atributos de la clase: id, nombre, fecha inicio, fecha finalizacion, descripcion, estado, proyecto
+    Clase utilizada cuando se hace una peticion de \
+    eliminar, revivir o aprobar un item  al servidor. 
+    
     """
     
     @login_required
@@ -27,7 +25,15 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
     
     @login_required
     def post(self):
-        
+        """
+        Metodo utilizado para recibir los datos para eliminar, revivir o aprobar item en la base de datos. 
+        @type  idItem: string
+        @param idItem: id del item en BD
+        @type  idFase: string
+        @param idFase: id de la fase del item
+        @type  accion: string
+        @param accion: Permite definir si es un eliminar, revivir o aprobacion 
+        """
         idItem=flask.request.form['idItem']
         idFase=flask.request.form['idFase']
         accion=flask.request.form['accion']
@@ -35,10 +41,6 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
         q=sesion.query(Item).filter(Item.idItem==idItem).first();
         msg=""
         if(accion=="eliminar"):
-            #control de rol
-            if controlRol(idFase,'item','administrar')==0:
-                sesion.close()
-                return "t, No posee permiso para realizar esta accion"
             if(q.estado=='inactivo'):
                 sesion.close()
                 return make_response('t,El item ya se encuentra eliminado')
@@ -50,20 +52,12 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 msg='f,El item se ha eliminado correctamente'
         elif(accion=="revivir"):
-                #control de rol
-                if controlRol(idFase,'item','administrar')==0:
-                    sesion.close()
-                    return "t, No posee permiso para realizar esta accion"
                 q.estado='activo'
                 sesion.merge(q)
                 sesion.commit()
                 sesion.close()
                 msg='f,Se ha revivido correctamente al item'
         elif(accion=="aprobar"):
-            #control de rol
-            if controlRol(idFase,'item','finalizar')==0:
-                sesion.close()
-                return "t, No posee permiso para realizar esta accion"
             bandera=0;
             listaPadres='';
             contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
@@ -94,9 +88,6 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             msg='f,Se ha aprobado correctamente al item'
         elif(accion=="pendiente"):
             if(q.estado=="activo"):
-                if controlRol(idFase,'item','administrar')==0:
-                    sesion.close()
-                    return "t, No posee permiso para realizar esta accion"
                 contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
                 
                 f=sesion.query(Fase).filter(Fase.idFase==q.idFase).first()
@@ -108,9 +99,6 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
             elif(q.estado=="pendiente"):
-                if controlRol(idFase,'item','administrar')==0:
-                    sesion.close()
-                    return "t, No posee permiso para realizar esta accion"
                 q.estado='activo'
                 sesion.merge(q)
                 sesion.commit()

@@ -12,7 +12,7 @@ if DEV == True:
     #engine = create_engine('postgresql://postgres:pm@localhost:5432/wapm')
     print "ambiente de desarrollo"
 else:
-    engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm_prod')
+    engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm_prod2')
     #engine = create_engine('postgresql://postgres:pm@localhost:5432/WAPM_PROD')
     print "ambiente de produccion"
 Session = sessionmaker(bind=engine)
@@ -39,5 +39,6 @@ def initDB():
     from historialModelo import HistorialItem, HistorialRelacion
     from lineaBaseModelo import LineaBase
     from solicitudCambioModelo import SolicitudCambio
-    from solicitudCambioModelo import Voto    
+    from solicitudCambioModelo import Voto 
+    from archivosModelo import Archivos   
     Base.metadata.create_all(engine)

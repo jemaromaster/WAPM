@@ -52,6 +52,7 @@ from Fases.listarFases import ListarFases
 from Fases.listarFases import ListarComboFases
 from Fases.listarFasesComboBox import ListarFasesComboBox
 
+from TiposDeItem.inactivarTipoItem import InactivarTipoItem
 from TiposDeItem.importarTipoItem import ImportarTipoItem
 from TiposDeItem.tipoItemManager import TipoItemManager
 from TiposDeItem.agregarTipoItem import AgregarTipoItem
@@ -86,14 +87,21 @@ from Items.agregarRelacion import AgregarRelacion
 from Items.listarRelaciones import ListarRelaciones
 from Items.eliminarRelacion import EliminarRelacion
 from Items.adjuntarArchivo import AdjuntarArchivo
+from Items.downloadArchivo import DownloadArchivo
+from Items.eliminarArchivo import EliminarArchivo
 from login import Login
 from miembros import Miembros
 
+from Grafos.grafosManager import GrafosManager
+from Grafos.listarRelacionesEnFase import ListarRelacionesEnFase
 from TiposDeItem.listarAtributo import ListarAtributo
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.bdCreator import initDB
 from models import poblarBD
+
+from Items.listarArchivosItem import ListarArchivosItem
+from Informe.informe import Informe
  
 app = flask.Flask(__name__)
 """
@@ -321,7 +329,7 @@ app.add_url_rule('/listarTipoItemComboBox/',
 
 app.add_url_rule('/itemManager/',
                  view_func=ItemManager.as_view('itemManager'),
-                 methods=["GET"])
+                 methods=["GET","POST"])
 
 app.add_url_rule('/agregarItem/',
                  view_func=AgregarItem.as_view('agregarItem'),
@@ -391,8 +399,29 @@ app.add_url_rule('/agregarItemLB/',
 app.add_url_rule('/cerrarLB/',
                  view_func=CerrarLB.as_view('cerrarLB'),
                  methods=["GET","POST"])
+app.add_url_rule('/example/',
+                 view_func=GrafosManager.as_view('example'),
+                 methods=["GET"])
+app.add_url_rule('/listarRelacionesEnFase/',
+                 view_func=ListarRelacionesEnFase.as_view('listarRelacionesEnFase'),
+                 methods=["GET"])
 
+app.add_url_rule('/listarArchivosItem/',
+                 view_func=ListarArchivosItem.as_view('listarArchivosItem'),
+                 methods=["GET"])
 
+app.add_url_rule('/downloadArchivo/',
+                 view_func=DownloadArchivo.as_view('downloadArchivo'),
+                 methods=["POST"])
+app.add_url_rule('/eliminarArchivo/',
+                 view_func=EliminarArchivo.as_view('eliminarArchivo'),
+                 methods=["POST"])
+app.add_url_rule('/inactivarTipoItem/',
+                 view_func=InactivarTipoItem.as_view('inactivarTipoItem'),
+                 methods=["POST"])
+app.add_url_rule('/informe/',
+                 view_func=Informe.as_view('informe'),
+                 methods=["GET"])
 app.debug = True
 if __name__ == '__main__':
     app.run()

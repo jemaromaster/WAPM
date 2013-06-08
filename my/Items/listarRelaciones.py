@@ -83,6 +83,16 @@ class Respuesta():
 class ListarRelaciones(flask.views.MethodView):
     @login_required
     def get(self): 
+        """
+        @type  totalPages: number
+        @param totalPages: Indica el numero de paginas que tendra el listado.
+        @type  currPage: number
+        @param currPage: Indica el numero de pagina actual.
+        @type  totalRecords: number
+        @param totalRecords: Indica el numero de registros en el listado.
+        @type  rows: number
+        @param rows: Indica el numero de filas por pagina que se tendra dentro del listado.
+        """
         #se obtiene los datos de post del server
         search=flask.request.args.get('_search', '')
         param1=flask.request.args.get('page', '')
