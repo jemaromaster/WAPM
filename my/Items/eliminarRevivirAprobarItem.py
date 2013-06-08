@@ -1,7 +1,7 @@
 
 import flask.views
 from flask import make_response
-from utils import login_required
+from utils import login_required,controlRol
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -41,6 +41,11 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
         q=sesion.query(Item).filter(Item.idItem==idItem).first();
         msg=""
         if(accion=="eliminar"):
+            
+            if controlRol(idFase,'item','administrar')==0:
+                sesion.close()
+                return "t, No posee permiso para realizar esta accion"
+            
             if(q.estado=='inactivo'):
                 sesion.close()
                 return make_response('t,El item ya se encuentra eliminado')
@@ -52,12 +57,22 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 msg='f,El item se ha eliminado correctamente'
         elif(accion=="revivir"):
+            
+                if controlRol(idFase,'item','administrar')==0:
+                    sesion.close()
+                    return "t, No posee permiso para realizar esta accion"
+            
                 q.estado='activo'
                 sesion.merge(q)
                 sesion.commit()
                 sesion.close()
                 msg='f,Se ha revivido correctamente al item'
         elif(accion=="aprobar"):
+            
+            if controlRol(idFase,'item','finalizar')==0:
+                sesion.close()
+                return "t, No posee permiso para realizar esta accion"
+            
             bandera=0;
             listaPadres='';
             contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
@@ -88,6 +103,11 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             msg='f,Se ha aprobado correctamente al item'
         elif(accion=="pendiente"):
             if(q.estado=="activo"):
+                
+                if controlRol(idFase,'item','finalizar')==0:
+                    sesion.close()
+                    return "t, No posee permiso para realizar esta accion"
+                
                 contador=sesion.query(Relacion).filter(Relacion.hijo_id==q.idItem).count()
                 
                 f=sesion.query(Fase).filter(Fase.idFase==q.idFase).first()
@@ -99,6 +119,9 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
             elif(q.estado=="pendiente"):
+                if controlRol(idFase,'item','finalizar')==0:
+                    sesion.close()
+                    return "t, No posee permiso para realizar esta accion"
                 q.estado='activo'
                 sesion.merge(q)
                 sesion.commit()

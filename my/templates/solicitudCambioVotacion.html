@@ -394,14 +394,16 @@
 						$("#dialogo-votacion").dialog("close");
 					} else {
 						
+						$('#listVotaciones').trigger("reloadGrid");
+						$('#listSC').trigger("reloadGrid");
 						mostrarMensaje("Exito",data.substring(2));
+						
 						$("#dialogo-votacion").dialog("close");
 					}
 				}
 
 			);		
-		$('#listVotaciones').trigger("reloadGrid");
-		$('#listSC').trigger("reloadGrid");
+		
 	}
 	
 	function rechazar(){

@@ -1,4 +1,4 @@
-from utils import login_required
+from utils import login_required,controlRol
 import flask.views
 from flask import jsonify,json, g
 import flask
@@ -40,6 +40,9 @@ class Respuesta():
         
         
         for f in listaItems:
+            #si no se tiene permiso de consultar items, no se devuelve nada en el listar
+            if controlRol(str(f.idFase),'item','consulta')==0:
+                break
             name=sesion.query(Usuario.username).filter(Usuario.id==f.autorVersion_id).first()
             ti_id=f.tipoItem_id;
             if f.tipoItem_id==None:
@@ -47,7 +50,7 @@ class Respuesta():
             p=p+json.dumps({"idItem":f.idItem , "nombreItem":f.nombreItem, "version": f.version, "prioridad":f.prioridad, 
                         "fechaInicio": str(f.fechaInicio), "fechaFinalizacion": str(f.fechaFinalizacion), "tipoItem_id": ti_id, 
                         "costo": f.costo, "complejidad": f.complejidad, "estado": f.estado, "autorVersion_id":f.autorVersion_id,
-                        "nombreAutorVersion": name, "descripcion":f.descripcion, "idFase":f.idFase}, separators=(',',':'))+",";
+                        "nombreAutorVersion": name.username, "descripcion":f.descripcion, "idFase":f.idFase}, separators=(',',':'))+",";
            
         p=p[0:len(p)-1]    
         p=p+"]}"    

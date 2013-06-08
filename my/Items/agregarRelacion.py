@@ -1,7 +1,7 @@
 
 import flask.views
 from flask import make_response
-from utils import login_required
+from utils import login_required,controlRol
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -40,6 +40,12 @@ class AgregarRelacion(flask.views.MethodView):
         padre_id=flask.request.form['padre_id']
         hijo_id=flask.request.form['hijo_id']
         version_hijo=flask.request.form['versionHijo']
+        
+        
+        
+        if controlRol(str(idFase),'item','administrar')==0:
+            return "t, No posee permisos para realizar esta accion"
+        
         
         #se realiza el control
         if(padre_id==hijo_id):

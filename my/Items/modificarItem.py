@@ -63,7 +63,8 @@ class ModificarItem(flask.views.MethodView):
         
         tipoItemId=0; #aca le paso 0 ya que el tipo item no cambia y es el mismo de la version anterior
         
-        
+        if controlRol(idFase,'item','administrar')==0:
+            return "t, No posee permiso para realizar esta accion"
         
         
         fechaCreacion= datetime.date.today()

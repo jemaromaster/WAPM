@@ -1,7 +1,7 @@
 
 import flask.views, os
 from flask import make_response, config
-from utils import login_required
+from utils import login_required,controlRol
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -44,6 +44,13 @@ class AdjuntarArchivo(flask.views.MethodView):
         if flask.request.method == 'POST':
             file = flask.request.files['fileToUpload']
             id=flask.request.form['idItem']
+            
+            sesion=Session()
+            idFase=sesion.query(Item.idFase).filter(Item.idItem==int(id)).first()
+            if controlRol(str(idFase.idFase),'item','administrar')==0:
+                return "t, No tiene permisos para realizar esta accion"
+            
+            
             #flask.request.form['idItemInput']
             print (file) 
               
