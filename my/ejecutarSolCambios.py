@@ -26,9 +26,10 @@ def ejecutarSCLB(listaItemsEnSolicitud):
                 
             lb.items.remove(q)
             sesion.merge(lb)
-        
+       
             c=sesion.query(LineaBase.items).filter(LineaBase.id==lb.id).count()
-        
+            print "longitud de la lb es de:    "+str(c)
+            
             if (c==0): #si es que es el ultimo elemento de la LB
                 sesion.delete(lb);
         #lb.items.remove(Item)
@@ -58,7 +59,7 @@ def romperTodo(listaItems):
                 sesion.merge(lb)
                 
                 c=sesion.query(LineaBase.items).filter(LineaBase.id==lb.id).count()
-                
+                print "longitud de la lb en romper todo es de:    "+str(c)
                 if (c==0): #si es que es el ultimo elemento de la LB
                     sesion.delete(lb);
                 

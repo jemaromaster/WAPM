@@ -1,6 +1,5 @@
-
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.faseModelo import Fase
 import datetime
 from Items.itemController import ItemControllerClass;
@@ -65,7 +64,8 @@ class AgregarItem(flask.views.MethodView):
         fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
         '''
         #ver fechaCreacion TIMESTAMP
-       
+        if controlRol(str(idFase),'item','administrar')==0:
+                return "t, No tiene permisos para realizar esta accion"
         i=Item(nombreItem, prioridad, costo, complejidad, fechaInicio, \
                fechaFinalizacion, tipoItemId, estado, descripcion,\
                   fechaCreacion, autorVersion_id, idFase)

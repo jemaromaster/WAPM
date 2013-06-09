@@ -69,7 +69,7 @@ class WAPMTestCase(unittest.TestCase):
         """Se prueba modificar un Usuario y asignarle un nombre de usuario ya existente"""
         self.test_login_OK()
         rera=str(random.randint(-999999999999999999,9999999999999999999))
-        rv=self.modificarU('1',
+        rv=self.modificarU('5',
                          'hola',
                          'hola',
                          '65874',
