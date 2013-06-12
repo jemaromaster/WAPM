@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html style="background-color: #E6E6E6;">
+<header>
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" 
+		href="/static/css/redmond/jquery-ui-1.9.2.custom.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="/static/css/ui.jqgrid.css" />
+	
+	<!-- <link rel="stylesheet" type="text/css" href="/static/css/stylem.css" />-->
+	
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.8.3.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.maskedinput.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.number.js') }}"></script>
+	<script type="text/javascript"
+		src="{{ url_for('static', filename='js/jquery-ui-1.9.2.custom.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/i18n/grid.locale-en.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.jqGrid.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/WebToolKit.MD5.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.touch-punch.min.js') }}"></script>
+	
+		<title>WAPM</title>
+		
+	 <script>
+		$(function() {
+		$( "#menu" ).menu().draggable();
+		if ("{{session['esComite']}}" == 0)
+			$("#votantesOpcion").hide();
+		else
+			$("#votantesOpcion").show();
+		});
+		
+	</script>
+	<style>
+		.ui-menu {  float:left;  z-index: 5; }
+	</style>
+	{% block header %}{% endblock %}
+</header>
+
+	<script>
+	
+		
+	
+		var valorenSesion={{session['idProyecto']}};
+		$.getJSON("/listarProyectoComboBase", function(atribs) {
+		  
+			var select = $('#proyectosUsuario');
+			var options = select.prop('options');
+			//alert ('hola')
+			
+			$('option', select).remove();
+			if(valorenSesion==0){
+				options[options.length] = new Option('Seleccione Proyecto',0);
+			}
+				$.each(atribs, function(index,atrib) { //val,text
+				    options[options.length] = new Option(atrib.nombreProyecto,atrib.idProyecto);
+				});
+			//valorEnSesion={{session['idProyecto']}};
+			select.val(valorenSesion);
+			elegirSesionProyecto(select.val())
+			
+		 });
+		function elegirSesionProyecto(idProyecto){
+				valorelegido=$('#proyectosUsuario').val();
+				//alert('valor elegido' + valorelegido)
+				//alert('valor en sesion '+ valorenSesion)
+				if(valorenSesion!=valorelegido){ //si es que el valor del combo actual es diferente  
+													//del seleccionado, se hace el post y reload de la pagina, la primera vez el de la sesion es 0
+				valorenSesion=valorelegido;
+				$.post('/seleccionarProyectoSesion/',
+						{ /* se indican los parametros*/
+							idProyecto : idProyecto
+						},
+						function(data, status) {
+							/* funcion que maneja el resultruc : $("#ruc").val(),ado de la invocación */
+		
+							/* si hay error se muestra el mensaje*/
+							/*if (data.substring(0, 1) == 't') {
+								mostrarMensaje(
+										"Error",data.substring(2));
+								
+							}*/
+							/* se indicar la recarga de la tabla */
+							//location.reload();
+							var pathname = window.location.pathname;
+							switch (pathname){
+								case '/estadoFase/':
+									reloadFasePD();
+									$("#listaFases").trigger("reloadGrid");
+									break;
+								case '/usuarioManager/':
+									$('#list').trigger("reloadGrid");
+									break;
+								case'/proyectoManager/':
+									$('#list').trigger("reloadGrid");
+									break;
+								case'/tipoItemManager/':
+									cargarFasesEnComboBox();
+									break;
+								case'/itemManager/':
+					                  cargarFasesEnComboBox();
+					                  break;
+								case'/LBManager/':
+									  cargarFasesEnComboBox()
+					                  break;
+								case'/solicitudCambioManager/':
+									  updateListSC();
+					                  break;
+								case'/solicitudCambioVotacion/':
+									  window.location.reload()	
+									  updateListSC();
+					                  break;
+								default:
+									
+							}
+							
+							if (data=='0')			
+								$("#votantesOpcion").hide();
+							else
+								$("#votantesOpcion").show();	
+							
+						});
+				
+				}
+		}
+		
+		
+		function proyChange() {
+			    
+			$("#proyectosUsuario option[value='0']").remove();
+			  	elegirSesionProyecto($('#proyectosUsuario').val())
+			  	
+		};
+		//var selectedOption = 'green';
+
+		
+	</script>
+	
+
+<body>
+<div style="border-radius: 15px;width: 1028px; height: 100%; background-color:  #0B3F80; margin-left: auto ;
+  		margin-right: auto ;">
+	<div  style="border-radius: 15px;width: 1024px; height: 100%; background-color: #FFFFFF; margin-left: auto ;
+  margin-right: auto ;">
+		<table style="width:100%">
+			<tr>
+				<td>
+					<div align="left">
+
+						<img src="/static/images/blue-23957_640.png" width="250px"
+							title="Volver a Pagina Principal" onclick="location.href='/'"
+							style="cursor: pointer;" />
+					</div>
+				</td>
+				<td>
+					<div align="center"  id="sectorProyectoComboBox"  >
+						<br></br>
+						<table  >
+						<tr >
+						<td >
+						<h4 >Seleccionar Proyecto:</h4>
+						</td>
+						<td >
+						<select id="proyectosUsuario" 
+								style="display: block; margin-bottom: 12px; padding: 0.4em; "
+								class="ui-widget-content ui-corner-all"
+								onchange="proyChange()"	>
+								<option value="activo">Ninguno</option>
+						</select>
+						</td>
+						</tr>
+						</table>	
+					</div>					
+				</td>
+				
+				<td style=" padding:5px" align="right" >
+					<div  >
+						<h4 style="float: right; text-indent: 4;">
+							Bienvenido:{{session['username']}}! <br></br>
+							<script>
+								document.write(new Date().toLocaleString())
+							</script>
+							<br></br>
+							<form action="{{url_for('index')}}" method="post">
+								<input id="btLogOut" type="submit" name="logout" value="logout" />
+							</form>
+							<script>
+								$("#btLogOut").button();
+							</script>
+						</h4>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+
+
+		<div id="barraHeader"
+			style="clear: both; width: 100%; text-align: center; background-color: #659EC7;">
+			WAPM. Version 1.0.1</div>
+
+
+		<div  id="content" style="overflow: auto;padding:10px">
+			{% block body %}{%endblock %}
+		</div>
+		<br></br>
+		
+	</div>
+	<div id="barraFooter"
+			style=" position:relative;border-width: 0; bottom:25px;text-align: center;  height: 20px; width: 100%;">
+
+			<table align="center">
+				<tr >
+					<td  ><h6>Copyright © WAPM. Desarrollado por: RALSS email: ralss@software.ralss.py</h6></td>
+				
+					
+				</tr>
+			</table>
+		</div>
+	
+	</div>
+	
+	
+		
+						
+	
+	
+	
+	
+	
+	<div id="menuBarr" css=".ui-menu" style="position:fixed; top:220px;left:50px">
+			<ul id="menu">
+			<h2>Menu</h2>
+				{% if 'username' in session %}
+				<li><a href="#">Desarrollo</a>
+					<ul  style="width:180px">
+						<li><a href="/itemManager/">Item Manager</a>
+						<li><a href="#">Crear Solicitud de cambior</a>
+						<li><a href="#">Calculo de costos Manager</a>
+					</ul></li>
+				<li><a href="#">Gestion de Cambios</a>
+					<ul style="width:210px">
+						<li><a href="{{url_for('LBManager')}}">Linea Base Manager</a>
+						<li><a href="{{url_for('tipoItemManager')}}">Tipo Item Manager</a>
+						<li><a href="{{url_for('estadoFase')}}">Estado de Fases</a>
+					</ul></li> 
+				<li><a href="{{url_for('solicitudCambioManager')}}">Solicitud de Cambio</a>
+				
+				<li id="votantesOpcion"><a href="{{url_for('solicitudCambioVotacion')}}">Solicitudes Pendientes</a>
+					{% else %} {% endif %}
+			</ul>
+	</div>
+</body>
+</html>
+	
