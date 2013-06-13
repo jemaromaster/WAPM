@@ -289,37 +289,8 @@
 			return;
 		}
 		var rowdata = $('#listSC').getRowData(rowItem);
-		$("#divDetalles").empty()
-		
-		$.getJSON("/informe/", {
-			idSC : rowdata.idSC
-		}, function(atribs) {
+		window.open('/informe?idSC='+rowdata.idSC,"Informe","titlebar=0")
 			
-			$("#divDetalles").append(atribs.html)
-			
-			/*$.each(atribs, function(index, atrib) { //val,text
-				index = index + 1;
-				
-				bandera = true
-			});*/
-
-			//aca se agrega al postData el nuevo valor de idFase para hacer la consulta desde el grid	
-			/*var myPostData = $('#tipoItemIdComboBox').jqGrid("getGridParam",
-					"postData");
-			delete myPostData.idFase;
-			$('#listaTipoItem').setGridParam({
-				postData : {
-					search: true,
-					idFase : retornaValorComboBoxFases()
-				}
-			});
-
-			$('#listaTipoItem').trigger("reloadGrid");*/
-
-		});
-		//$("#table1").tablesorter(); 
-		$("#dialogo-informe-costos").dialog("open");
-		
 	}
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);

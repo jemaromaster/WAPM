@@ -1,6 +1,7 @@
 from utils import login_required
 import flask.views
 from flask import jsonify,json
+from flask_weasyprint import HTML, render_pdf
 from models.bdCreator import Session
 from models.solicitudCambioModelo import SolicitudCambio
 from models.itemModelo import Item, Relacion
@@ -175,9 +176,8 @@ class Informe(flask.views.MethodView):
         html=html+'<p>*<b>Observacion</b>: El calculo de costo (economico y complejidad) se obtiene a partir de la suma</p><p>\
          de todos los descendientes del item respectivos incluyendo el item</p> \
          <p>La escala de complejidad es de 0-19, donde 0 significa que no tiene complejidad</p> ' 
-        respuesta='{"html":"'+ html + '"}'
-        
-        return respuesta
+        return render_pdf(HTML(string=html))
+        #return respuesta
         
       
     @login_required
