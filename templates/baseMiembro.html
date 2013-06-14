@@ -40,6 +40,28 @@
 
 	<script>
 	
+	
+	function Mensaje(titulo, mensaje) {
+		$('#mbox').text(mensaje);
+		$('#mbox').dialog({
+			title : titulo,
+			modal : true,
+			show : {
+				effect : 'fade',
+				duration : 250
+			},
+			hide : {
+				effect : 'fade',
+				duration : 200
+			},
+			buttons : {
+				"Ok" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+
 		
 	
 		var valorenSesion={{session['idProyecto']}};
@@ -83,6 +105,13 @@
 							}*/
 							/* se indicar la recarga de la tabla */
 							//location.reload();
+							
+							if (data.substring(0, 1) == 't') {
+								Mensaje("Error",data.substring(2));
+								return;
+							}
+							
+							
 							var pathname = window.location.pathname;
 							switch (pathname){
 								case '/estadoFase/':
@@ -115,10 +144,10 @@
 									
 							}
 							
-							if (data=='0')			
-								$("#votantesOpcion").hide();
+							if (data=='1')
+								$("#votantesOpcion").show();
 							else
-								$("#votantesOpcion").show();	
+								$("#votantesOpcion").hide();	
 							
 						});
 				
@@ -132,13 +161,17 @@
 			  	elegirSesionProyecto($('#proyectosUsuario').val())
 			  	
 		};
+		
+		
+				
 		//var selectedOption = 'green';
-
 		
 	</script>
 	
 
 <body>
+<div id='mbox' title='' style='display: none'></div>
+
 <div style="border-radius: 15px;width: 1028px; height: 100%; background-color:  #0B3F80; margin-left: auto ;
   		margin-right: auto ;">
 	<div  style="border-radius: 15px;width: 1024px; height: 100%; background-color: #FFFFFF; margin-left: auto ;

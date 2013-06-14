@@ -38,6 +38,10 @@ class SetVoto(flask.views.MethodView):
             sesion.close()
             return "t,Solicitud no valida"
         
+        if SC.estado!= "pendiente":
+            sesion.close()
+            return "t,La Solicitud ya ha sido procesada"
+        
         aprobados=sesion.query(Voto).filter(Voto.solicitud==idSC,Voto.voto=='si').count()
         rechazados=sesion.query(Voto).filter(Voto.solicitud==idSC,Voto.voto=='no').count()
         total=sesion.query(Voto).filter(Voto.solicitud==idSC).count()

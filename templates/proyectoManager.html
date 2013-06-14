@@ -1252,12 +1252,10 @@ $('#dialogo-agregar-miembros-comite')
 						
 						var rowdata = $('#list').getRowData(row);
 						
-						if (rowdata.estado!="desarrollo"){
+						if (rowdata.estado=="finalizado"){
 							mostrarMensaje("Atencion", "El proyecto ya no puede ser modificado");
 							return 
 						}
-						
-						
 						
 						/* se pregunta si es que se selecciono la fila en proyectos, y en lel grid de users */
 						var rowComite = $(
@@ -1342,7 +1340,7 @@ $('#dialogo-agregar-miembros-comite')
 						
 						var rowdata = $('#list').getRowData(row);
 						
-						if (rowdata.estado!="desarrollo"){
+						if (rowdata.estado=="finalizado"){
 							mostrarMensaje("Atencion", "El proyecto ya no puede ser modificado");
 							return 
 						}

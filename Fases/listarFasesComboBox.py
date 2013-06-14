@@ -47,8 +47,12 @@ class ListarFasesComboBox(flask.views.MethodView):
         """
         sesion=Session() 
         #se obtiene los datos de post del server
-      
-        fasesLista=sesion.query(Fase).order_by("id asc").filter(Fase.idProyecto==flask.session['idProyecto']).all()
+        idProyecto=flask.session['idProyecto']
+        cantComite=sesion.query(Proyecto).filter(Proyecto.idProyecto==idProyecto).join(Proyecto.usuariosComite).count()
+        if cantComite % 2 ==0 or cantComite == 0:
+            idProyecto=0;
+        
+        fasesLista=sesion.query(Fase).order_by("id asc").filter(Fase.idProyecto==idProyecto).all()
        
         
         respuesta=self.jasonizar(fasesLista)

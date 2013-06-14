@@ -1,4 +1,5 @@
 from utils import login_required
+from flask import  make_response
 import flask.views
 import flask
 from models.bdCreator import Session
@@ -103,6 +104,22 @@ class SeleccionarProyectoSesion(flask.views.MethodView):
         flask.session['idProyecto']=idProyecto
         
         sesion=Session()
+        
+        idProyecto=flask.session['idProyecto']
+        cantComite=sesion.query(Proyecto.usuariosComite).filter(Proyecto.idProyecto==idProyecto).join(Proyecto.usuariosComite).count()
+        
+        if cantComite==0:
+            sesion.close()
+            flask.session['idProyecto']
+            return make_response('t,El proyecto no posee miembros en Comite')
+        if cantComite % 2 == 0 :
+            sesion.close()
+            flask.session['idProyecto']
+            return make_response('t,La cantidad de miembros de comite no es PAR')
+        
+        
+        
+        
         idProyectoSeleccion=flask.session['idProyecto']
         idUsuario=flask.session['idUsuario']
         comiteProject=sesion.query(Usuario.id).filter(Proyecto.idProyecto==idProyectoSeleccion).join(Proyecto.usuariosComite)\

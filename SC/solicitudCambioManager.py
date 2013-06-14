@@ -26,4 +26,6 @@ class SolicitudCambioVotacion(flask.views.MethodView):
     @login_required
     @miembroComite_required
     def get(self):
+        
         return flask.render_template('solicitudCambioVotacion.html')
+            
