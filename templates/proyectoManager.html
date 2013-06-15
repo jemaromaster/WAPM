@@ -10,6 +10,169 @@
 jQuery(document).ready(
 function() {
 	 
+	$("#dialogo-listaItems")
+	.dialog(
+			{
+				autoOpen : false,
+				modal : true,
+				overflow : scroll,
+				resizable : false,
+				width: 'auto',
+				heigth: 'auto',
+				
+				
+				show : {
+					effect : 'fade',
+					duration : 400
+				},
+				hide : {
+					effect : 'fade',
+					duration : 350
+				},
+				buttons : {
+					/* funcion asociado al boton aceptar */
+					"Salir" : function( ) {
+						$(this).dialog("close")
+					}
+				}
+			});
+	
+	var gridItems = jQuery("#listaItems").jqGrid(
+			{
+
+				// datatype : "local",
+				// data:mydata,
+				url : '/listarItems/',
+				datatype : "json",
+				mtype : "get",
+				postData : {
+					idP : '0',
+					idF : '0'
+				},
+				//aca se pone el proyecto el cual selecciono 
+				//y la fase al cual pertenece el proyecto
+				colNames : [ 'ID Item', 'Nombre Item', 'Version',
+						'prioridad', 'Fecha Inicio', 'Fecha Fin.',
+						'tipo Item id', 'Costo','complejidad', 'Estado',
+						'autorVersion_id', 'Autor', 'Descripcion',
+						'Id de Proyecto' ],
+				colModel : [ {
+					name : 'idItem',
+					index : 'idItem',
+					hidden : true
+				},
+
+				{
+					name : 'nombreItem',
+					index : 'nombreItem',
+					width : 150
+				}, {
+					name : 'version',
+					index : 'version',
+					width : 50,
+					search : false
+				}, {
+					name : 'prioridad',
+					index : 'prioridad',
+					width : 200,
+					hidden : true
+				}, {
+					name : 'fechaInicio',
+					index : 'fechaInicio',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				}, {
+					name : 'fechaFinalizacion',
+					index : 'fechaFinalizacion',
+					width : 100,
+					formatter : 'date',
+					sorttype : 'date',
+					datefmt : 'd/m/Y',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd/m/Y'
+					},
+					search : false
+				}, {
+					name : 'tipoItem_id',
+					index : 'tipoItem_id',
+					width : 200,
+					hidden : true
+				}, {
+					name : 'costo',
+					index : 'costo',
+					width : 100,search : false
+				}, {
+					name : 'complejidad',
+					index : 'complejidad',
+					hidden : true
+				}, {
+						name : 'estado',
+						index : 'estado',
+						formatter : 'select',
+						stype : 'select',
+						editoptions : {
+							value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo;revision:Revision"
+						},
+						hidden : false
+				}, {
+					name : 'autorVersion_id',
+					index : 'autorVersion_id',
+					hidden : true,
+					search:false
+				}, {
+					name : 'nombreAutorVersion',
+					index : 'nombreAutorVersion'
+				}, {
+					name : 'descripcion',
+					index : 'descripcion',
+					hidden : true
+				},
+
+				{
+					name : 'idFase',
+					index : 'idFase',
+					hidden : true
+				}
+
+				],
+				sortname : 'nombreItem',
+				viewrecords : true,
+				rownumbers : true,
+				sortorder : "desc",
+				ignoreCase : true,
+				pager : '#pagerItems',
+				caption : "Items",
+				jsonReader : {
+					root : "invdata",
+					page : "currpage",
+					total : "totalpages",
+					records : "totalrecords",
+					repeatitems : false,
+					id : "idItem"
+				}
+
+			}).jqGrid('navGrid', '#pagerItems', {
+		edit : false,
+		add : false,
+		del : false,
+		search : false,
+		refresh : true
+	});
+	gridItems.jqGrid('filterToolbar', {
+		stringResult : true,
+		searchOnEnter : false,
+		defaultSearch : "cn"
+	});
+
+	
 	$("#dialogo-rolUsuario")
 	.dialog(
 			{
@@ -665,6 +828,7 @@ function() {
 					"Nueva" : function(){agregarFase()},
 					"Modificar" : function(){modificarFase()},
 					"Consultar" : function(){consultarFase()},
+					"Consultar Items" : function(){consultarItems()}
 				}
 	});
 	var banderaFase;
@@ -2368,6 +2532,28 @@ var banderaRol;
 		$("#dialogo-datos-fase").dialog("open");
 		
 	}
+	
+	function consultarItems() {
+		
+		var row = $('#listaFases').jqGrid('getGridParam', 'selrow');
+		if (row == null) {
+			mostrarMensaje("Atencion", "Seleccione la fila a consultar");
+			return;
+		}
+		var rowdata;
+		rowdata = $('#listaFases').getRowData(row);
+		
+		$('#listaItems').setGridParam({
+			postData: { idP : "{{session['idProyecto']}}",
+				idF : rowdata.idFase  } });
+			//eso se setea el nuevo valor
+			$('#listaItems').trigger("reloadGrid");
+			
+			$("#dialogo-listaItems").dialog("open");
+		
+		
+	}
+	
 	function consultarFase() {
 		banderaFase=3;
 		/* se comprueba que hay un dato seleccionado para consultar */
@@ -2831,6 +3017,11 @@ var banderaRol;
 	</form>
 </div>
 
+
+<div id="dialogo-listaItems">
+	<table id="listaItems"></table>
+<div id="pagerItems"></div>
+</div>
 
 <div id="dialogo-agregar-miembros-comite" title="Agregar Miembros a Proyecto">
 	<table id="listComite"></table>
