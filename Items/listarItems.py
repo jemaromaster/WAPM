@@ -8,6 +8,7 @@ from models.usuarioModelo import Usuario
 from models.solicitudCambioModelo import SolicitudCambio
 from models.itemModelo import Item
 from models.proyectoModelo import Proyecto
+from models.faseModelo import Fase
 sesion=Session()
 
 
@@ -38,12 +39,19 @@ class Respuesta():
         pre="{\"totalpages\": \""+str(self.totalPages) + "\",\"currpage\" : \"" + str(self.currPage) + "\",\"totalrecords\" : \"" 
         pre= pre + str(self.totalRecords) + " \",\"invdata\" : [" 
        
-        
-        
+        idUsuario=flask.session['idUsuario']
+        controlarPermiso=1
         for f in listaItems:
-            #si no se tiene permiso de consultar items, no se devuelve nada en el listar
-            if controlRol(str(f.idFase),'item','consulta')==0:
-                break
+            
+            if controlarPermiso==1:
+                proyecto=sesion.query(Proyecto).join(Fase).filter(Fase.idFase==f.idFase).first()
+                if proyecto.projectLeaderId==idUsuario:
+                    #si es proyect leader no se controla que tenga permisos
+                    controlarPermiso=0
+                
+                #si no se tiene permiso de consultar items, no se devuelve nada en el listar
+                if controlarPermiso==1 and controlRol(str(f.idFase),'item','consulta')==0:
+                    break
             
             #Si el usuario logueado es el que pidio la SC sobre este item, entonces puede pasar de pendiente a activo
             if f.estado=="sc_aprobada":
