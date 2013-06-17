@@ -5,6 +5,7 @@ import flask
 from models.bdCreator import Session
 from datetime import date
 from models.usuarioModelo import Usuario
+from models.solicitudCambioModelo import SolicitudCambio
 from models.itemModelo import Item
 from models.proyectoModelo import Proyecto
 sesion=Session()
@@ -43,6 +44,16 @@ class Respuesta():
             #si no se tiene permiso de consultar items, no se devuelve nada en el listar
             if controlRol(str(f.idFase),'item','consulta')==0:
                 break
+            
+            #Si el usuario logueado es el que pidio la SC sobre este item, entonces puede pasar de pendiente a activo
+            if f.estado=="sc_aprobada":
+                sc=sesion.query(SolicitudCambio).order_by("solicitud_cambio.id desc").join(SolicitudCambio.items)\
+                                                        .filter(Item.idItem==f.idItem).first()
+                                                        
+                if(sc.idSolicitante==flask.session['idUsuario']):
+                    f.estado="pendiente"                                        
+            
+            
             name=sesion.query(Usuario.username).filter(Usuario.id==f.autorVersion_id).first()
             ti_id=f.tipoItem_id;
             if f.tipoItem_id==None:

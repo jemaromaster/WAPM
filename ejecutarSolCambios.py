@@ -65,7 +65,7 @@ def ejecutarSCLB(listaItemsEnSolicitud):
         
   
     for item in query:
-        item.estado="pendiente"
+        item.estado="sc_aprobada"
         sesion.merge(item);
     
     sesion.commit()

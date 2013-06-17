@@ -25,7 +25,7 @@
 	 <script>
 		$(function() {
 		$( "#menu" ).menu().draggable();
-		if ("{{session['esComite']}}" == 0)
+		if ("{{session['esComite']}}" ==0 || "{{session['idProyecto']}}" == 0)
 			$("#votantesOpcion").hide();
 		else
 			$("#votantesOpcion").show();
@@ -89,7 +89,7 @@
 				//alert('valor en sesion '+ valorenSesion)
 				if(valorenSesion!=valorelegido){ //si es que el valor del combo actual es diferente  
 													//del seleccionado, se hace el post y reload de la pagina, la primera vez el de la sesion es 0
-				valorenSesion=valorelegido;
+				
 				$.post('/seleccionarProyectoSesion/',
 						{ /* se indican los parametros*/
 							idProyecto : idProyecto
@@ -107,11 +107,12 @@
 							//location.reload();
 							
 							if (data.substring(0, 1) == 't') {
+								$("#votantesOpcion").hide();
 								Mensaje("Error",data.substring(2));
 								return;
 							}
 							
-							
+							valorenSesion={{session['idProyecto']}};
 							var pathname = window.location.pathname;
 							switch (pathname){
 								case '/estadoFase/':

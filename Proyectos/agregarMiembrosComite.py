@@ -47,6 +47,9 @@ class AgregarMiembrosComite(flask.views.MethodView):
         p.usuariosComite.append(user)
         sesion.add(p)
         sesion.commit()
+        #pone idProyecto en cero para que resetee la seleccion de proyectos en modulo de Desarrollo
+        flask.session['idProyecto']=0
+        
         sesion.close()
         
        

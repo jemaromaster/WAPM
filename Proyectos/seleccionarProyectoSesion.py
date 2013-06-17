@@ -101,23 +101,24 @@ class SeleccionarProyectoSesion(flask.views.MethodView):
         idProyecto=flask.request.form['idProyecto']
         print "el proyecto es"+ str(idProyecto)
         
-        flask.session['idProyecto']=idProyecto
+        
         
         sesion=Session()
         
-        idProyecto=flask.session['idProyecto']
+        
         cantComite=sesion.query(Proyecto.usuariosComite).filter(Proyecto.idProyecto==idProyecto).join(Proyecto.usuariosComite).count()
         
+        flask.session['esComite']=0
         if cantComite==0:
             sesion.close()
-            flask.session['idProyecto']
+            flask.session['idProyecto']=0
             return make_response('t,El proyecto no posee miembros en Comite')
         if cantComite % 2 == 0 :
             sesion.close()
-            flask.session['idProyecto']
+            flask.session['idProyecto']=0
             return make_response('t,La cantidad de miembros de comite no es PAR')
         
-        
+        flask.session['idProyecto']=idProyecto
         
         
         idProyectoSeleccion=flask.session['idProyecto']

@@ -102,7 +102,7 @@
 									formatter : 'select',
 									stype : 'select',
 									editoptions : {
-										value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo;revision:Revision"
+										value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo;revision:Revision;sc_aprobada:Solicitud Aprobada"
 									},
 									hidden : false
 							}, {
@@ -1131,6 +1131,13 @@
 			return;
 		}
 		var rowdata;
+		rowdata = $('#listaItems').getRowData(row);
+		if(rowdata.estado!='activo')
+		{
+			mostrarMensaje("Atencion", "Solo puede modificarse Item en estado: activo.")
+			return;
+		}
+		
 		/* se cargan los elementos HTML segun la fila seleccionada*/
 		
 		cargarComboBoxVersiones(row);

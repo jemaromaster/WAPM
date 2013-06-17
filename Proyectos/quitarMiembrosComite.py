@@ -49,7 +49,7 @@ class QuitarMiembrosComite(flask.views.MethodView):
         sesion.add(proyecto)
         sesion.commit()
         
-        
+        flask.session['idProyecto']=0
         sesion.close()
         
         return "f,Usuario eliminado correctamente del proyecto" 
