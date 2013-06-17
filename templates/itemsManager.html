@@ -1963,7 +1963,7 @@ $("#dialogo-archivos")
 function listarArchivosEnServer(){
 	var row = $('#listaItems').jqGrid('getGridParam', 'selrow');
 	if(row == null){
-		mostrarMensaje("Atencion", "Seleccione item a administrar Archivos")
+		//mostrarMensaje("Atencion", "Seleccione item a administrar Archivos")
 		return;
 	}
 	rowdata= $('#listaItems').getRowData(row);
@@ -2008,6 +2008,7 @@ function abrirDialogoArchivos(){
 	.dialog("open")
 }
 function deleteFile(idA){
+	$("#fileToUpload").val('')
 	$.post('/eliminarArchivo/',
 			{
 				idArchivo : idA

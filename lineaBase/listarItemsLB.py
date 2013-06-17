@@ -150,7 +150,6 @@ class ListarItemBase(flask.views.MethodView):
             if idLB!=0:
                 listaItem=sesion.query(Item).order_by(filtrarPor)\
                                                         .filter(Item.nombreItem.like(nombreItem))\
-                                                        .filter(Item.estado.like("bloqueado"))\
                                                         .join(Item.lb).filter(LineaBase.id==idLB)\
                                                         [desde:hasta]
                 
@@ -160,7 +159,6 @@ class ListarItemBase(flask.views.MethodView):
                                                         #.filter(Proyecto.projectLeaderId==projectLeaderId)
                 total=sesion.query(Item).order_by(filtrarPor)\
                                                         .filter(Item.nombreItem.like(nombreItem))\
-                                                        .filter(Item.estado.like("bloqueado"))\
                                                         .join(Item.lb).filter(LineaBase.id==idLB)\
                                                         .count()
             
@@ -185,11 +183,9 @@ class ListarItemBase(flask.views.MethodView):
         else:
             if idLB!=0:
                 listaItem=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.estado.like("bloqueado"))\
                                                         .join(Item.lb).filter(LineaBase.id==idLB)\
                                                         [desde:hasta]
                 total=sesion.query(Item).order_by(filtrarPor)\
-                                                        .filter(Item.estado.like("bloqueado"))\
                                                         .join(Item.lb).filter(LineaBase.id==idLB)\
                                                         .count()
             

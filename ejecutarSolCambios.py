@@ -17,7 +17,7 @@ def obtenerHijos(listaItems):
                 #se obtiene su linea base
                 lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==a.idItem).first()
                 #se obtiene todos los items en LB
-                if(lb.estado!='activa'):
+                if(lb.estado!='inactiva'):
                     
                     listaItemEnLB=sesion.query(Item).join(LineaBase.items).filter(LineaBase.id==lb.id).all();
                     
@@ -31,6 +31,8 @@ def obtenerHijos(listaItems):
                 s=sesion.query(Item).filter(Relacion.padre_id==a.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all();
                 obtenerHijos(s)
                 listaRomper[a.idItem]=a;
+            
+                
 def ejecutarSCLB(listaItemsEnSolicitud):
     
     print("hola") 

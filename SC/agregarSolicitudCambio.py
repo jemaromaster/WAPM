@@ -5,6 +5,7 @@ from utils import login_required
 from models.solicitudCambioModelo import SolicitudCambio
 from models.itemModelo import Item
 from models.usuarioModelo import Usuario
+from models.lineaBaseModelo import LineaBase
 from models.proyectoModelo import Proyecto
 from models.solicitudCambioModelo import Voto
 
@@ -54,6 +55,16 @@ class AgregarSolicitudCambio(flask.views.MethodView):
         for idItem in listaItem:
             id=int(idItem)
             item=sesion.query(Item).filter(Item.idItem==id).first()
+            
+            if item is None:
+                sesion.close()
+                return make_response('t,Uno de los items no existe')
+            
+            if item.estado=="bloqueado":
+                lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==item.idItem).first()
+                if lb.estado != "cerrada":
+                    sesion.close()
+                    return make_response('t, el item '+item.nombreItem+' se encuentra en una Linea Base abierta')
             #control para no poner un item en mas de una SC
             SCpendientes=sesion.query(SolicitudCambio).filter(SolicitudCambio.estado=="pendiente")\
                                             .join(SolicitudCambio.items)\
