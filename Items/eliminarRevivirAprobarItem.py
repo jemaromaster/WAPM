@@ -83,7 +83,7 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             consulta=sesion.query(Item).join(Relacion,Relacion.padre_id==Item.idItem).filter(Item.estado!='inactivo').filter(Relacion.hijo_id==q.idItem).all()
 
             for p in consulta:
-                if(p.estado=='activo' or p.estado=='pendiente'):
+                if(p.estado=='activo' or p.estado=='pendiente' or p.estado=="revision" or p.estado=="sc_aprobada"):
                     bandera=bandera+1;
                     listaPadres=listaPadres+p.tag+", "
             
@@ -118,7 +118,7 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.commit()
                 sesion.close()
                 msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
-            elif(q.estado=="pendiente"):
+            elif(q.estado=="pendiente" or q.estado=="sc_aprobada" ):
                 if controlRol(idFase,'item','administrar')==0:
                     sesion.close()
                     return "t, No posee permiso para realizar esta accion"

@@ -40,7 +40,7 @@ class ImportarTipoItem(flask.views.MethodView):
             return make_response('t,Ya existe el tipo de item con ese nombre en esa fase')
         
         ''' se crea el tipo nuevo'''
-        nuevoTipo=TipoItem(importado.nombreTipoItem,importado.descripcion,'inactivo')
+        nuevoTipo=TipoItem(importado.nombreTipoItem,importado.descripcion,'activo')
         atributos=importado.atributosItem
         nuevoAtributos=[]
         '''extraigo todos los atributos del item importado y los meto en una lista para agregar dicha lista

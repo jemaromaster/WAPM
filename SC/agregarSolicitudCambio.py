@@ -61,7 +61,7 @@ class AgregarSolicitudCambio(flask.views.MethodView):
                 return make_response('t,Uno de los items no existe')
             
             if item.estado=="bloqueado":
-                lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==item.idItem).first()
+                lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==item.idItem).filter(LineaBase.estado!="inactiva").first()
                 if lb.estado != "cerrada":
                     sesion.close()
                     return make_response('t, el item '+item.nombreItem+' se encuentra en una Linea Base abierta')

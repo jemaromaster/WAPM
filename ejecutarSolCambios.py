@@ -15,9 +15,10 @@ def obtenerHijos(listaItems):
                 obtenerHijos(s)
                 listaRomper[a.idItem]=a;
                 #se obtiene su linea base
-                lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==a.idItem).first()
+                lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==a.idItem).filter(LineaBase.estado!="inactiva").first()
                 #se obtiene todos los items en LB
-                if(lb.estado!='inactiva'):
+                #Si es None es porque su LB se paso a inactiva con una SC que contenia a su padre. 
+                if(lb != None):
                     
                     listaItemEnLB=sesion.query(Item).join(LineaBase.items).filter(LineaBase.id==lb.id).all();
                     
@@ -44,7 +45,18 @@ def ejecutarSCLB(listaItemsEnSolicitud):
         s=sesion.query(Item).filter(Relacion.padre_id==q.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all()
         obtenerHijos(s)
         
-    #se cargo la lista de los items que son hijos
+        #se obtiene su linea base
+        lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==q.idItem).filter(LineaBase.estado!="inactiva").first()
+        #se obtiene todos los items en LB
+        if(lb != None):
+            
+            listaItemEnLB=sesion.query(Item).join(LineaBase.items).filter(LineaBase.id==lb.id).all();   
+            for u in listaItemEnLB:
+                listaRomper[u.idItem]=u;
+            lb.estado='inactiva'
+            sesion.merge(lb) 
+        
+    #se cargo la lista de los items que son hijos y tambien los items que se encuentran en la mism LB
     for ids in listaRomper.keys():
         #cons=sesion.query(Item).filter(Item.idItem==listaRomper[ids].idItem).first()
         if listaRomper[ids].estado=='bloqueado':
@@ -63,7 +75,7 @@ def ejecutarSCLB(listaItemsEnSolicitud):
             item.estado='revision'
             sesion.merge(item)
         
-  
+    
     for item in query:
         item.estado="sc_aprobada"
         sesion.merge(item);

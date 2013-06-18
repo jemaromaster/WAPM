@@ -39,7 +39,7 @@ class AgregarRolUsuario(flask.views.MethodView):
         sesion.close()
         
        
-        return "f,Permiso agregado correctamente al Rol" 
+        return "f,Rol agregado correctamente al Usuario" 
     @login_required
     def get(self):
         return "nada"

@@ -267,12 +267,7 @@
 			<ul id="menu">
 			<h2>Menu</h2>
 				{% if 'username' in session %}
-				<li><a href="#">Desarrollo</a>
-					<ul  style="width:180px">
-						<li><a href="/itemManager/">Item Manager</a>
-						<li><a href="#">Crear Solicitud de cambior</a>
-						<li><a href="#">Calculo de costos Manager</a>
-					</ul></li>
+				<li><a href="/itemManager/">Item Manager</a>
 				<li><a href="#">Gestion de Cambios</a>
 					<ul style="width:210px">
 						<li><a href="{{url_for('LBManager')}}">Linea Base Manager</a>

@@ -197,7 +197,8 @@ class ItemControllerClass(flask.views.MethodView):
                     2+2
                 elif(a.tipoPrimarioId==4):
                     print(at["valor"])
-                    at["valor"]=at["valor"][3:5]+"/"+at["valor"][0:2]+"/"+at["valor"][6:10]
+                    at["valor"]=at["valor"][0:2]+"/"+at["valor"][3:5]+"/"+at["valor"][6:10]
+                    #at["valor"]=at["valor"][3:5]+"/"+at["valor"][0:2]+"/"+at["valor"][6:10]
                     print(at["valor"])
                     
                 else:

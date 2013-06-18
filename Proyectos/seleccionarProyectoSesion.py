@@ -106,7 +106,7 @@ class SeleccionarProyectoSesion(flask.views.MethodView):
         sesion=Session()
         
         
-        cantComite=sesion.query(Proyecto.usuariosComite).filter(Proyecto.idProyecto==idProyecto).join(Proyecto.usuariosComite).count()
+        cantComite=sesion.query(Usuario).filter(Proyecto.idProyecto==idProyecto).join(Proyecto.usuariosComite).count()
         
         flask.session['esComite']=0
         if cantComite==0:
