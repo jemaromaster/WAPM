@@ -67,7 +67,8 @@ class ItemManejador:
                     rela.versionHijo=rela.versionHijo+1;
                     sesion.add(histoRel);
                     sesion.merge(rela);
-                    
+            #el estado no debe cambiar con "modificar item"        
+            item.estado=i.estado        
             i.setValues(item.nombreItem, item.prioridad, item.costo, item.complejidad, item.fechaInicio, item.fechaFinalizacion, \
                         i.tipoItem_id,item.estado, item.descripcion, \
                         item.fechaCreacion, item.autorVersion_id, item.idFase)

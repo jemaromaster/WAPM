@@ -54,14 +54,15 @@ class Respuesta():
                     break
             
             #Si el usuario logueado es el que pidio la SC sobre este item, entonces puede pasar de pendiente a activo
-            if f.estado=="sc_aprobada":
+            if f.estado=="sc_activo" or f.estado=="sc_pendiente":
                 sc=sesion.query(SolicitudCambio).order_by("solicitud_cambio.id desc").join(SolicitudCambio.items)\
                                                         .filter(Item.idItem==f.idItem).first()
                                                         
                 if(sc.idSolicitante==flask.session['idUsuario']):
-                    f.estado="pendiente"                                        
-            
-            
+                    if f.estado=="sc_activo":
+                        f.estado="activo"                                        
+                    elif  f.estado=="sc_pendiente":       
+                        f.estado="pendiente"
             name=sesion.query(Usuario.username).filter(Usuario.id==f.autorVersion_id).first()
             ti_id=f.tipoItem_id;
             if f.tipoItem_id==None:

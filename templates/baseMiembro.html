@@ -106,11 +106,7 @@
 							/* se indicar la recarga de la tabla */
 							//location.reload();
 							
-							if (data.substring(0, 1) == 't') {
-								$("#votantesOpcion").hide();
-								Mensaje("Error",data.substring(2));
-								return;
-							}
+							
 							
 							valorenSesion={{session['idProyecto']}};
 							var pathname = window.location.pathname;
@@ -143,6 +139,12 @@
 					                  break;
 								default:
 									
+							}
+							
+							if (data.substring(0, 1) == 't') {
+								$("#votantesOpcion").hide();
+								Mensaje("Error",data.substring(2));
+								return;
 							}
 							
 							if (data=='1')

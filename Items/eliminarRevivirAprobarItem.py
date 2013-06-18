@@ -50,6 +50,15 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 return make_response('t,El item ya se encuentra eliminado')
             else:
+                #Puede que hayan hijos aprobados/bloqueados/revision. Si es asi, no podra eliminarse.
+                if q.estado=="sc_activo":
+                    cantHijos=sesion.query(Relacion).filter(Relacion.padre_id==q.idItem).count()
+                    if cantHijos>0:
+                        sesion.close()
+                        return make_response('t, Elimine a los hijos que dependen de este item primeramente.')
+                    
+                    
+                    
                 q.estado='inactivo'
                 sesion.merge(q)
                 sesion.query(Relacion).filter(or_(Relacion.padre_id==q.idItem, Relacion.hijo_id==q.idItem)).delete();
@@ -83,7 +92,7 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             consulta=sesion.query(Item).join(Relacion,Relacion.padre_id==Item.idItem).filter(Item.estado!='inactivo').filter(Relacion.hijo_id==q.idItem).all()
 
             for p in consulta:
-                if(p.estado=='activo' or p.estado=='pendiente' or p.estado=="revision" or p.estado=="sc_aprobada"):
+                if(p.estado=='activo' or p.estado=='pendiente' or p.estado=="revision" or p.estado  =="sc_activo" or p.estado  =="sc_pendiente"):
                     bandera=bandera+1;
                     listaPadres=listaPadres+p.tag+", "
             
@@ -92,17 +101,20 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 return make_response('t,El padre del item seleccionado": '+ listaPadres+ ' se encuentra en estado '+ p.estado\
                                      + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten por lo menos en estado "aprobado" para poder aprobarse. ')
-            elif(bandera==2):
+            elif(bandera>=2):
                 sesion.close()
                 return make_response('t,Los padres del item seleccionado: '+ listaPadres+ ' no se encuentran en estado de por lo menos aprobado'\
                                      + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten aprobados para poder aprobarse previamente. ')
-            q.estado='aprobado'
+            if q.estado == "pendiente" or q.estado=="sc_pendiente":
+                q.estado='aprobado'
+            else:
+                return "t,El item no puede aprobarse"
             sesion.merge(q)
             sesion.commit()
             sesion.close()
             msg='f,Se ha aprobado correctamente al item'
         elif(accion=="pendiente"):
-            if(q.estado=="activo"):
+            if(q.estado=="activo" or q.estado  =="sc_activo"):
                 
                 if controlRol(idFase,'item','administrar')==0:
                     sesion.close()
@@ -113,16 +125,25 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 f=sesion.query(Fase).filter(Fase.idFase==q.idFase).first()
                 if(f.tag!="F1" and contador==0): #si no esta en la primera fase y contador==0
                     return make_response('t,No puede pasar a pendiente un item que no tenga por lo menos algun padre')
-                q.estado='pendiente'
+                
+                if q.estado=="sc_activo":
+                    q.estado='sc_pendiente'
+                elif q.estado=="activo" :
+                    q.estado='pendiente'
                 sesion.merge(q)
                 sesion.commit()
                 sesion.close()
                 msg='f,Se ha cambiado correctamente el estado del item de "activo" a "pendiente"'
-            elif(q.estado=="pendiente" or q.estado=="sc_aprobada" ):
+            elif(q.estado=="pendiente" or q.estado=="sc_pendiente" ):
                 if controlRol(idFase,'item','administrar')==0:
                     sesion.close()
                     return "t, No posee permiso para realizar esta accion"
-                q.estado='activo'
+                
+                if q.estado=="sc_pendiente":
+                    q.estado='sc_activo'
+                elif q.estado=="pendiente" :
+                    q.estado='activo'
+                
                 sesion.merge(q)
                 sesion.commit()
                 sesion.close()
@@ -132,9 +153,3 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
             sesion.close()
             return make_response('t,accion invalida ')
         return make_response(msg)
-    
-        
-            
-        
-        
-               

@@ -102,7 +102,7 @@
 									formatter : 'select',
 									stype : 'select',
 									editoptions : {
-										value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo;revision:Revision;sc_aprobada:Solicitud Aprobada"
+										value : "todos:(Todos-Excep. Inactivos);activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo;revision:Revision;sc_activo:Activo por Solicitud;sc_pendiente:Pendiente por solicitud"
 									},
 									hidden : false
 							}, {
@@ -1170,7 +1170,7 @@
 			mensaje="No se puede aprobarItem en estado activo, primero debe pasar al estado \"Pendiente\""
 			mostrarMensaje(titulo, mensaje)
 			return;
-		}else if(rowdata.estado=="pendiente" || rowdata.estado=="revision"){
+		}else if(rowdata.estado=="pendiente" || rowdata.estado=="revision" || rowdata.estado=="sc_pendiente" ){
 					
 					titulo="Atencion"
 					mensaje="Esta seguro que desea aprobar el item "+ rowdata.nombreItem + "?"
@@ -1454,21 +1454,26 @@
 
 {% endblock %} {% block body %}
 		
+<table>	
+<tr>	
 <h2>Administrar Items</h2>
 
 
 <td><label>Fase:</label>
-
-
+</td>
+<td>
 <select id="comboBoxFases"
 	style="display: block; margin-bottom: 12px; padding: 0.4em; width: auto;"
 	class="ui-widget-content ui-corner-all">
 		<option value="0">(Ninguna)</option>
 </select>
+</td>
+</tr>
+</table>
 <input id="btGraficar" type="hidden" name="nuevo"
 				value="Graficar" onclick='graficar()' /> 
 
-</td>
+
 
 <tr>
 	<td><div>
