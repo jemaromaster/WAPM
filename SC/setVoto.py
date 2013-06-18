@@ -80,7 +80,7 @@ class SetVoto(flask.views.MethodView):
                 listaItem.append(it.idItem)
             for it in listaItem:
                 print "item en listado a pasar:  "+ str(it)    
-            ejecutarSCLB(listaItem)
+            ejecutarSCLB(listaItem,idSC)
             SCaprobada=sesion.query(SolicitudCambio).filter(SolicitudCambio.id==idSC).first()
             SCaprobada.estado='aprobada'
             sesion.add(SCaprobada)

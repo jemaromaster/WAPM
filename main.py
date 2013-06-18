@@ -102,6 +102,7 @@ from models import poblarBD
 
 from Items.listarArchivosItem import ListarArchivosItem
 from Informe.informe import Informe
+from Informe.informeSC import InformeSC
  
 app = flask.Flask(__name__)
 """
@@ -421,6 +422,9 @@ app.add_url_rule('/inactivarTipoItem/',
                  methods=["POST"])
 app.add_url_rule('/informe/',
                  view_func=Informe.as_view('informe'),
+                 methods=["GET"])
+app.add_url_rule('/informeSC/',
+                 view_func=InformeSC.as_view('informeSC'),
                  methods=["GET"])
 app.debug = True
 if __name__ == '__main__':

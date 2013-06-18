@@ -6,13 +6,13 @@ from models.faseModelo import Fase
 
 sesion=Session()
 listaRomper=dict()
-def obtenerHijos(listaItems): 
+def obtenerHijos(listaItems,idSC): 
     if(listaItems is not None):
         for a in listaItems:
             if(a.estado in ['bloqueado']):
                 #se obtienen los hijos 
                 s=sesion.query(Item).filter(Relacion.padre_id==a.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all();
-                obtenerHijos(s)
+                obtenerHijos(s,idSC)
                 listaRomper[a.idItem]=a;
                 #se obtiene su linea base
                 lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==a.idItem).filter(LineaBase.estado!="inactiva").first()
@@ -25,16 +25,17 @@ def obtenerHijos(listaItems):
                     for u in listaItemEnLB:
                         listaRomper[u.idItem]=u;
                     lb.estado='inactiva'
+                    lb.scAfecto=idSC
                     sesion.merge(lb) 
                 
                 
             elif a.estado in ['aprobado']:
                 s=sesion.query(Item).filter(Relacion.padre_id==a.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all();
-                obtenerHijos(s)
+                obtenerHijos(s,idSC)
                 listaRomper[a.idItem]=a;
             
                 
-def ejecutarSCLB(listaItemsEnSolicitud):
+def ejecutarSCLB(listaItemsEnSolicitud,idSC):
     
     print("hola") 
     query=sesion.query(Item).filter(Item.idItem.in_(listaItemsEnSolicitud)).all()
@@ -43,7 +44,7 @@ def ejecutarSCLB(listaItemsEnSolicitud):
         
         #se obtienen todos los hijos
         s=sesion.query(Item).filter(Relacion.padre_id==q.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all()
-        obtenerHijos(s)
+        obtenerHijos(s,idSC)
         
         #se obtiene su linea base
         lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==q.idItem).filter(LineaBase.estado!="inactiva").first()
@@ -54,6 +55,7 @@ def ejecutarSCLB(listaItemsEnSolicitud):
             for u in listaItemEnLB:
                 listaRomper[u.idItem]=u;
             lb.estado='inactiva'
+            lb.scAfecto=idSC
             sesion.merge(lb) 
         
     #se cargo la lista de los items que son hijos y tambien los items que se encuentran en la mism LB

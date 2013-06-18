@@ -27,7 +27,7 @@ class LineaBase(Base):
     items=relationship('Item',
                                   secondary=itemLB,
                                   backref='lb')
-    
+    scAfecto=Column(Integer, ForeignKey('solicitud_cambio.id'))
     
     #item=
     '''para obtener el one to many desde fase (una fase, muchas lbs se utiliza una foreignkey 
