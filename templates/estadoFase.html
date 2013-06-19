@@ -178,7 +178,8 @@ function retornaValorenSesion() {
 						srcformat : 'Y-m-d',
 						newformat : 'd/m/Y'
 					},
-					search : false
+					search : false,
+					hidden: true
 				}, {
 					name : 'fechaFinalizacion',
 					index : 'fechaFinalizacion',
@@ -190,7 +191,8 @@ function retornaValorenSesion() {
 						srcformat : 'Y-m-d',
 						newformat : 'd/m/Y'
 					},
-					search : false
+					search : false,
+					hidden: true
 				},{
 					name : 'costo',
 					index : 'costo',
@@ -203,7 +205,7 @@ function retornaValorenSesion() {
 					formatter : 'select',
 					stype : 'select',
 					editoptions : {
-						value : "todos:Todos;activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado"
+						value : "todos:Todos;activo:Activo;pendiente:Pendiente;aprobado:Aprobado;bloqueado:Bloqueado;inactivo:Inactivo;revision:Revision;sc_activo:Activo por Solicitud;sc_pendiente:Pendiente por solicitud"
 					}
 				}
 

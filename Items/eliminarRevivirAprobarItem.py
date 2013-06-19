@@ -105,10 +105,10 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 return make_response('t,Los padres del item seleccionado: '+ listaPadres+ ' no se encuentran en estado de por lo menos aprobado'\
                                      + ' y no puede aprobarse. Es condicion necesaria que todos los padres de un item esten aprobados para poder aprobarse previamente. ')
-            if q.estado == "pendiente" or q.estado=="sc_pendiente":
+            if q.estado == "pendiente" or q.estado=="sc_pendiente" or q.estado=="revision":
                 q.estado='aprobado'
             else:
-                return "t,El item no puede aprobarse"
+                return "t,El item con estado: "+q.estado+ " no puede aprobarse"
             sesion.merge(q)
             sesion.commit()
             sesion.close()

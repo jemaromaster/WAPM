@@ -5,14 +5,14 @@ from models.itemModelo import Item, Relacion
 from models.faseModelo import Fase
 
 sesion=Session()
-listaRomper=dict()
-def obtenerHijos(listaItems,idSC): 
+
+def obtenerHijos(listaItems,idSC,listaRomper): 
     if(listaItems is not None):
         for a in listaItems:
             if(a.estado in ['bloqueado']):
                 #se obtienen los hijos 
                 s=sesion.query(Item).filter(Relacion.padre_id==a.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all();
-                obtenerHijos(s,idSC)
+                obtenerHijos(s,idSC,listaRomper)
                 listaRomper[a.idItem]=a;
                 #se obtiene su linea base
                 lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==a.idItem).filter(LineaBase.estado!="inactiva").first()
@@ -31,12 +31,12 @@ def obtenerHijos(listaItems,idSC):
                 
             elif a.estado in ['aprobado']:
                 s=sesion.query(Item).filter(Relacion.padre_id==a.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all();
-                obtenerHijos(s,idSC)
+                obtenerHijos(s,idSC,listaRomper)
                 listaRomper[a.idItem]=a;
             
                 
 def ejecutarSCLB(listaItemsEnSolicitud,idSC):
-    
+    listaRomper=dict()
     print("hola") 
     query=sesion.query(Item).filter(Item.idItem.in_(listaItemsEnSolicitud)).all()
     
@@ -44,7 +44,7 @@ def ejecutarSCLB(listaItemsEnSolicitud,idSC):
         
         #se obtienen todos los hijos
         s=sesion.query(Item).filter(Relacion.padre_id==q.idItem).join(Relacion, Relacion.hijo_id==Item.idItem).all()
-        obtenerHijos(s,idSC)
+        obtenerHijos(s,idSC,listaRomper)
         
         #se obtiene su linea base
         lb=sesion.query(LineaBase).join(LineaBase.items).filter(Item.idItem==q.idItem).filter(LineaBase.estado!="inactiva").first()
@@ -77,7 +77,7 @@ def ejecutarSCLB(listaItemsEnSolicitud,idSC):
             item.estado='revision'
             sesion.merge(item)
         
-    
+        
     for item in query:
         item.estado="sc_activo"
         sesion.merge(item);
