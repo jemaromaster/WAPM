@@ -4,6 +4,7 @@ from utils import rolPL_required
 from models.proyectoModelo import Proyecto
 from models.faseModelo import Fase
 from models.bdCreator import Session
+import datetime
 
 class ActivarProyecto(flask.views.MethodView):
     """
@@ -55,8 +56,14 @@ class ActivarProyecto(flask.views.MethodView):
             print "Fase:  "+fase.nombreFase+" estado de la fase: "+fase.estado
             sesion.add(fase)
             
+        now=datetime.date.today()
+        proyecto.fechaInicio=now
         proyecto.estado="activo"
+        
+        primeraFase=sesion.query(Fase).filter(Fase.idProyecto==idProyecto,Fase.tag=="F1").first()
+        primeraFase.fechaInicio=proyecto.fechaInicio
         sesion.add(proyecto)
+        sesion.add(primeraFase)
         sesion.commit()
         
         

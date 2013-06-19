@@ -3,9 +3,9 @@ from utils import login_required
 from utils import controlRol
 from models.itemModelo import Item
 from models.faseModelo import Fase
-
+from models.proyectoModelo import Proyecto
 from models.bdCreator import Session
-
+import datetime
 class FinalizarFase(flask.views.MethodView):
     """
     Clase utilizada cuando se hace una peticion de finalizacion de 
@@ -52,8 +52,27 @@ class FinalizarFase(flask.views.MethodView):
             if item.estado!="bloqueado":
                 sesion.close()
                 return "t,Todos los ITEMS deben estar BLQUEADOS"
-            
+        
+        #Controla que todas las fases anteriores esten finalizadas
+        idProyecto= fase.idProyecto
+        fases=sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==idProyecto)
+        for f in fases:
+            if f.idFase < fase.idFase:
+                if f.estado!="finalizada":
+                    sesion.close()
+                    return "t,Fases anteriores deben ser finalizadas primeramente!"
+        
         fase.estado="finalizada"
+        now=datetime.date.today()
+        fase.fechaFinalizacion=now
+        #Pone como fecha de inicio de fase sgte la fecha de finalizacion de la actual
+        tagFaseSgte="F"+str(int(fase.tag[1:])+1)
+        faseSgte=sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==idProyecto)\
+                                                    .filter(Fase.tag==tagFaseSgte).first()
+        if faseSgte != None:
+            faseSgte.fechaInicio=fase.fechaFinalizacion
+            sesion.add(faseSgte)                                            
+        
         sesion.add(fase)
         sesion.commit()
         sesion.close()

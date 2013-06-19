@@ -41,10 +41,20 @@ class Respuesta():
         
         for proy in listaProyecto:
             nroFases=sesion.query(Proyecto).join(Fase).filter(Proyecto.idProyecto==proy.idProyecto).count()
+            
+            if proy.fechaInicio==None:
+                fechaInicio=''
+            else:
+                fechaInicio=proy.fechaInicio
+            if proy.fechaFinalizacion==None:
+                fechaFinalizacion=''
+            else:
+                fechaFinalizacion=proy.fechaFinalizacion
+            
             p=p+"{\"idProyecto\": \""+str(proy.idProyecto)+"\",\"nombreProyecto\": \""+ \
                 proy.nombreProyecto+"\", \"idProjectLeader\": \""+str(proy.projectLeaderId)+ \
-                "\",\"fechaInicio\": \""+str(proy.fechaInicio)+"\", \"fechaFinalizacion\": \""+ \
-                str(proy.fechaFinalizacion) +"\", \"presupuesto\": \""+str(int(proy.presupuesto))+ \
+                "\",\"fechaInicio\": \""+str(fechaInicio)+"\", \"fechaFinalizacion\": \""+ \
+                str(fechaFinalizacion) +"\", \"presupuesto\": \""+str(int(proy.presupuesto))+ \
                 "\", \"observacion\": \""+proy.observacion+"\", \"nroFases\": \""+ \
                 str(nroFases)+"\", \"estado\":\"" + proy.estado +\
                 "\",\"nombreProjectLeader\":\"" + nombreProjectLeader + "\"},"

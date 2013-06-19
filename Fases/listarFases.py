@@ -53,10 +53,21 @@ class Respuesta():
         
         
         for fase in listaFase:
+            
+            if fase.fechaInicio==None:
+                fechaInicio=''
+            else:
+                fechaInicio=fase.fechaInicio
+            if fase.fechaFinalizacion==None:
+                fechaFinalizacion=''
+            else:
+                fechaFinalizacion=fase.fechaFinalizacion
+                
+                
             p=p+"{\"idFase\": \""+str(fase.idFase)+"\",\"nombreFase\": \""+ \
                 fase.nombreFase+ \
-                "\",\"fechaInicio\": \""+str(fase.fechaInicio)+"\", \"fechaFinalizacion\": \""+ \
-                str(fase.fechaFinalizacion) +\
+                "\",\"fechaInicio\": \""+str(fechaInicio)+"\", \"fechaFinalizacion\": \""+ \
+                str(fechaFinalizacion) +\
                 "\", \"descripcion\": \""+fase.descripcion+"\", \"ordenFase\":\"" + fase.tag+"\", \"estado\":\"" + fase.estado +\
                 "\",\"idProyecto\":\"" + str(fase.idProyecto) + "\"},"
         p=p[0:len(p)-1]    

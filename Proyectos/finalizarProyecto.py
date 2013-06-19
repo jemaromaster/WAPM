@@ -2,7 +2,7 @@ import flask.views
 from utils import login_required
 from models.proyectoModelo import Proyecto
 from models.faseModelo import Fase
-
+import datetime
 from models.bdCreator import Session
 
 class FinalizarProyecto(flask.views.MethodView):
@@ -38,7 +38,10 @@ class FinalizarProyecto(flask.views.MethodView):
             if fase.estado!="finalizada":
                 sesion.close()
                 return "t,Todas las FASES deben estar FINALIZADAS"
-            
+        
+        
+        now=datetime.date.today()
+        proyecto.fechaFinalizacion=now    
         proyecto.estado="finalizado"
         sesion.add(proyecto)
         sesion.commit()

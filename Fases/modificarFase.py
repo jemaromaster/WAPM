@@ -47,17 +47,12 @@ class ModificarFase(flask.views.MethodView):
         """
         idFase=flask.request.form['idFase']
         nombreFase=flask.request.form['nombreFase']
-        fechaInicio=flask.request.form['fechaInicio']
-        fechaFinalizacion=flask.request.form['fechaFinal']
+        fechaInicio=None
+        fechaFinalizacion=None
         descripcion=flask.request.form['descripcion']
         estado=flask.request.form['estado']
         idProyecto=flask.request.form['idProyecto']
         
-        '''se intercambia de orden de la fecha de DMY a MDY'''
-        '''
-        fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
-        fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
-        '''
         f=Fase(nombreFase, descripcion, estado,fechaInicio, fechaFinalizacion,   idProyecto)
         
         

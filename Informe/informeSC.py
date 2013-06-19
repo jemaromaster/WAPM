@@ -10,7 +10,9 @@ from models.usuarioModelo import Usuario
 from models.proyectoModelo import Proyecto, comiteProyectoTabla
 from models.faseModelo import Fase
 from models.lineaBaseModelo import LineaBase
+
 sesion=Session()
+
 
 class InformeSC(flask.views.MethodView):
     @login_required
