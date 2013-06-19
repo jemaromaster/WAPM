@@ -51,8 +51,8 @@ class ModificarItem(flask.views.MethodView):
         esReversion=flask.request.form['esReversion']
         estado=flask.request.form['estado'] 
         
-        fechaInicio=flask.request.form['fechaInicio']
-        fechaFinalizacion=flask.request.form['fechaFinal']
+        fechaInicio=None
+        fechaFinalizacion=None
         
         idFase=flask.request.form['idFase']
         idItem=flask.request.form['idItem']
@@ -71,13 +71,6 @@ class ModificarItem(flask.views.MethodView):
         #este autorVersion se extrae del idUsuario de la sesion
         autorVersion_id=flask.session['idUsuario']
         
-        
-       
-       
-        '''     
-        fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
-        fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
-        '''
         #ver fechaCreacion TIMESTAMP
        
         i=Item(nombreItem, prioridad, costo, complejidad, fechaInicio, \

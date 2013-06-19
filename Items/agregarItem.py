@@ -45,8 +45,8 @@ class AgregarItem(flask.views.MethodView):
         atributos=json.loads(flask.request.form['atributos'])
         nombreItem=flask.request.form['nombreItem']
         prioridad=flask.request.form['prioridad']
-        fechaInicio=flask.request.form['fechaInicio']
-        fechaFinalizacion=flask.request.form['fechaFinal']
+        fechaInicio=None
+        fechaFinalizacion=None
         tipoItemId=flask.request.form['tipoItemId']
         complejidad=flask.request.form['complejidad']
         costo=flask.request.form['costo']
@@ -59,10 +59,7 @@ class AgregarItem(flask.views.MethodView):
         autorVersion_id=flask.session['idUsuario']
         
         idFase=flask.request.form['idFase']
-        '''
-        fechaInicio=fechaInicio[3:5]+'/'+fechaInicio[0:2]+'/'+fechaInicio[6:10]
-        fechaFinalizacion=fechaFinalizacion[3:5]+'/'+fechaFinalizacion[0:2]+'/'+fechaFinalizacion[6:10]
-        '''
+        
         #ver fechaCreacion TIMESTAMP
         if controlRol(str(idFase),'item','administrar')==0:
                 return "t, No tiene permisos para realizar esta accion"

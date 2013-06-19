@@ -28,7 +28,6 @@ class ListarDatosItemVersion(flask.views.MethodView):
         if(iv is not None):
             name=sesion.query(Usuario.username).filter(Usuario.id==iv.autorVersion_id).first()
             cad=json.dumps({"idItem":iv.idHistorialItem , "nombreItem":iv.nombreItem, "version": iv.version, "prioridad":iv.prioridad, 
-                        "fechaInicio": self.format_fecha(str(iv.fechaInicio)), "fechaFinalizacion": self.format_fecha(str(iv.fechaFinalizacion)), 
                         "costo": iv.costo, "complejidad": iv.complejidad, "estado": iv.estado, "autorVersion_id":iv.autorVersion_id,
                         "nombreAutorVersion": name, "descripcion":iv.descripcion}, separators=(',',':'));
         else: 

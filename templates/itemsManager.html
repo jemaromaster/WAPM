@@ -70,7 +70,8 @@
 									srcformat : 'Y-m-d',
 									newformat : 'd/m/Y'
 								},
-								search : false
+								search : false,
+								hidden : true
 							}, {
 								name : 'fechaFinalizacion',
 								index : 'fechaFinalizacion',
@@ -82,7 +83,8 @@
 									srcformat : 'Y-m-d',
 									newformat : 'd/m/Y'
 								},
-								search : false
+								search : false,
+								hidden : true
 							}, {
 								name : 'tipoItem_id',
 								index : 'tipoItem_id',
@@ -195,12 +197,10 @@
 		$.datepicker.setDefaults($.datepicker.regional['es']);
 	});
 
-	$(document).ready(function() {
-		$("#datepicker").datepicker();
-	});
+	
 
 	$(document).ready(function() {
-		$("#datepicker2").datepicker();
+		
 		$("#costo").mask("?9999999999", {
 			placeholder : " "
 		});
@@ -232,22 +232,6 @@
 				</tr>
 				
 
-				<tr>
-					<td><label for="fechaInicio" style="display: block">*Fecha
-							de Inicio</label> <input type="text" name="datepicker" id="datepicker"
-						readonly="readonly" class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 100%;" />
-					</td>
-				</tr>
-				<tr>
-					<td><label for="fechaFinalizacion" style="display: block">*Fecha
-							de Finalizacion</label> <input type="text" name="datepicker2"
-						id="datepicker2" readonly="readonly"
-						class="text ui-widget-content ui-corner-all"
-						style="display: block; margin-bottom: 12px; padding: 0.4em; width: 80%;" />
-					</td>
-
-				</tr>
 				<tr>
 					<td><label for="descripcion" style="display: block">*Descripcion</label>
 						<textarea id="descripcion"
@@ -619,12 +603,6 @@
 															complejidad : $(
 																	"#complejidad")
 																	.val(),
-															fechaInicio : $(
-																	"#datepicker")
-																	.val(),
-															fechaFinal : $(
-																	"#datepicker2")
-																	.val(),
 															descripcion : $(
 																	"#descripcion")
 																	.val(),
@@ -692,12 +670,7 @@
 											complejidad : $(
 													"#complejidad")
 													.val(),
-											fechaInicio : $(
-													"#datepicker")
-													.val(),
-											fechaFinal : $(
-													"#datepicker2")
-													.val(),
+											
 											descripcion : $(
 													"#descripcion")
 													.val(),
@@ -763,12 +736,7 @@
 															complejidad : $(
 																	"#complejidad")
 																	.val(),
-															fechaInicio : $(
-																	"#datepicker")
-																	.val(),
-															fechaFinal : $(
-																	"#datepicker2")
-																	.val(),
+															
 															descripcion : $(
 																	"#descripcion")
 																	.val(),
@@ -832,8 +800,7 @@
 			$("#costo").val(rowdata.costo);
 			$("#complejidad").val(rowdata.complejidad);
 			$("#prioridad").val(rowdata.prioridad);
-			$("#datepicker").val(rowdata.fechaInicio);
-			$("#datepicker2").val(rowdata.fechaFinalizacion);
+			
 			$("#descripcion").val(rowdata.descripcion);
 			$("#estado").val(rowdata.estado);
 			$("#idFase").val(rowdata.idFase);
@@ -856,8 +823,7 @@
 				$("#costo").val(atribs.costo);
 				$("#complejidad").val(atribs.complejidad);
 				$("#prioridad").val(atribs.prioridad);
-				$("#datepicker").val(atribs.fechaInicio);
-				$("#datepicker2").val(atribs.fechaFinalizacion);
+				
 				$("#descripcion").val(atribs.descripcion);
 				$("#estado").val(atribs.estado);
 				$("#idFase").val(atribs.idFase);
@@ -905,8 +871,7 @@
 		$("#versionComboBox").attr('disabled', false);
 		$("#complejidad").attr('disabled', habilitar);
 		$("#prioridad").attr('disabled', habilitar);
-		$("#datepicker").attr('disabled', habilitar);
-		$("#datepicker2").attr('disabled', habilitar);
+		
 		$("#descripcion").attr('disabled', habilitar);
 		$("#estado").attr('disabled', habilitar);
 		$("#idFase").attr('disabled', habilitar);
@@ -948,8 +913,7 @@
 		$("#costo").css('border-color', 'skyblue');
 		$("#complejidad").css('border-color', 'skyblue');
 		$("#prioridad").css('border-color', 'skyblue');
-		$("#datepicker").css('border-color', 'skyblue');
-		$("#datepicker2").css('border-color', 'skyblue');
+		
 		$("#descripcion").css('border-color', 'skyblue');
 		$("#estado").css('border-color', 'skyblue');
 		$("#idFase").css('border-color', 'skyblue');
@@ -992,19 +956,6 @@
 			$("#descripcion").css('border-color', 'red');
 			error = 1;
 		}
-		len = document.getElementById("datepicker").value.trim().length;
-		//len=$("#observacion").val().trim().length;
-		if (len <= 0) {
-			$("#datepicker").css('border-color', 'red');
-			error = 1;
-		}
-
-		len = document.getElementById("datepicker2").value.trim().length;
-		//len=$("#observacion").val().trim().length;
-		if (len <= 0) {
-			$("#datepicker2").css('border-color', 'red');
-			error = 1;
-		}
 		return error;
 	}
 
@@ -1023,8 +974,7 @@
 		$("#costo").val("");
 		
 		$("#prioridad").val("");
-		$("#datepicker").val("");
-		$("#datepicker2").val("");
+		
 		$("#descripcion").val("");
 		$("#estado").val("activo");
 		$("#idFase").val(retornaValorComboBoxFases());
