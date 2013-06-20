@@ -103,6 +103,8 @@ from models import poblarBD
 from Items.listarArchivosItem import ListarArchivosItem
 from Informe.informe import Informe
 from Informe.informeSC import InformeSC
+from Informe.informeHistorialItems import InformeHistorialItems
+from Informe.informeListaItems import InformeListaItems
  
 app = flask.Flask(__name__)
 """
@@ -425,6 +427,12 @@ app.add_url_rule('/informe/',
                  methods=["GET"])
 app.add_url_rule('/informeSC/',
                  view_func=InformeSC.as_view('informeSC'),
+                 methods=["GET"])
+app.add_url_rule('/informeHistorialItems/',
+                 view_func=InformeHistorialItems.as_view('informeHistorialItems'),
+                 methods=["GET"])
+app.add_url_rule('/informeListaItems/',
+                 view_func=InformeListaItems.as_view('informeListaItems'),
                  methods=["GET"])
 app.debug = True
 if __name__ == '__main__':

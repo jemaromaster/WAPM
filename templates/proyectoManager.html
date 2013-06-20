@@ -2842,6 +2842,18 @@ var banderaRol;
 		var rowdata = $('#list').getRowData(rowItem);
 		window.open('/informeSC?idProyecto='+rowdata.idProyecto,'Informe',"location=0")
 	}
+	function informeItems(){
+		
+		var rowItem = $('#list').jqGrid('getGridParam', 'selrow');
+		if (rowItem == null) {
+			//window.alert("Debe seleccionar un item");
+			mostrarMensaje("Atencion","Debe seleccionar un Proyecto");
+			return;
+		}
+		var rowdata = $('#list').getRowData(rowItem);
+		window.open('/informeListaItems?idProyecto='+rowdata.idProyecto,'Informe',"location=0")
+	}
+	
 	function mostrarMensaje(titulo, mensaje) {
 		$('#msgbox').text(mensaje);
 		$('#msgbox').dialog({
@@ -2947,12 +2959,14 @@ var banderaRol;
 		value="Roles" onclick='cargaComboFase()' />
 		<input id="btRolUser" type="button" name="btRolUser"
 		value="Asignar roles a Usuario" onclick='cargaComboUsuario()' /> <br></br>
-		<input id="btFinalizarPy" type="button" name="btFinalizarPy"
-		value="Finalizar Proyecto" onclick='finalizarProyecto()' />
 		<input id="btActivarPy" type="button" name="btActivarPy"
 		value="Activar Proyecto" onclick='activarProyecto()' />
+		<input id="btFinalizarPy" type="button" name="btFinalizarPy"
+		value="Finalizar Proyecto" onclick='finalizarProyecto()' />
 		<input id="btInformeSC" type="button" name="informe"
 		value="Informe: Solicitudes de Cambio" onclick='informeSC()' />
+		<input id="btInformeItems" type="button" name="informe"
+		value="Informe: Lista de items" onclick='informeItems()' />
 	<script>
 		$("#btFinalizarPy").button();
 		$("#btActivarPy").button();
@@ -2965,6 +2979,7 @@ var banderaRol;
 		$("#btRoles").button();
 		$("#btRolUser").button();
 		$("#btInformeSC").button();
+		$("#btInformeItems").button();
 		$("#btFinalizarPy").button();
 	</script>
 </div>
