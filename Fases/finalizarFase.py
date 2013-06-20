@@ -3,6 +3,7 @@ from utils import login_required
 from utils import controlRol
 from models.itemModelo import Item
 from models.faseModelo import Fase
+from models.lineaBaseModelo import LineaBase
 from models.proyectoModelo import Proyecto
 from models.bdCreator import Session
 import datetime
@@ -41,6 +42,7 @@ class FinalizarFase(flask.views.MethodView):
             sesion.close()
             return "t,No se puede finalizar una fase que no este activa"
         
+        #Controla items en la fase
         itemsFase= sesion.query(Item).join(Fase).filter(Fase.idFase==int(idFase))
         
         numberItems=itemsFase.count() 
@@ -53,15 +55,24 @@ class FinalizarFase(flask.views.MethodView):
                 sesion.close()
                 return "t,Todos los ITEMS deben estar BLQUEADOS"
         
+        #Controla LBs en la fase
+        bases= sesion.query(LineaBase).join(Fase).filter(Fase.idFase==int(idFase),LineaBase.estado=="cerrada").count()
+        if bases <= 0:
+                sesion.close()
+                return "t,Todas las Lineas Bases deben estar Cerradas"
         #Controla que todas las fases anteriores esten finalizadas
         idProyecto= fase.idProyecto
-        fases=sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==idProyecto)
+        fases=sesion.query(Fase).join(Proyecto).filter(Proyecto.idProyecto==idProyecto).all()
         for f in fases:
             if f.idFase < fase.idFase:
                 if f.estado!="finalizada":
                     sesion.close()
                     return "t,Fases anteriores deben ser finalizadas primeramente!"
-        
+        for f in fases:
+            if f.idFase > fase.idFase:
+                f.estado="activa"
+                f.fechaFinalizacion=None
+                sesion.add(f)
         fase.estado="finalizada"
         now=datetime.date.today()
         fase.fechaFinalizacion=now

@@ -28,9 +28,10 @@ class ListarFasesComboBox(flask.views.MethodView):
                 strFase=str(f.idFase)
                 
                 if controlRol(strFase,'fase','consulta')==1:
-                    print('f inside loop  is ' + str(f.idFase))
-                    cad=cad+ json.dumps({"idFase":f.idFase , "nombreFase":f.nombreFase}, separators=(',',':'));
-                    cad=cad + ","
+                    if f.estado=="activa":
+                        print('f inside loop  is ' + str(f.idFase))
+                        cad=cad+ json.dumps({"idFase":f.idFase , "nombreFase":f.tag+" "+f.nombreFase}, separators=(',',':'));
+                        cad=cad + ","
             cad=cad[0:len(cad)-1] 
         else:
             cad=cad+ json.dumps({"idFase":0 , "nombreFase":'ninguna'}, separators=(',',':'));
