@@ -152,6 +152,10 @@
 			  	elegirSesionProyecto($('#proyectosUsuario').val())
 			  	
 		};
+		function grafoGraficar() {
+			window.open('/listarRelacionesProyecto?idProyecto='+valorenSesion,'Grafo del Proyecto',"width=600, height=400","location=0")
+			  	
+		};
 		
 		
 				
@@ -257,7 +261,11 @@
 			<ul id="menu">
 			<h2>Menu</h2>
 				{% if 'username' in session %}
-				<li><a href="/itemManager/">Item Manager</a>
+				<li><a href="#">Desarrollo</a>
+					<ul style="width:210px">
+						<li><a href="/itemManager/">Item Manager</a>
+						<li><a style="cursor: pointer;" onclick="grafoGraficar()">Grafo del Proyecto</a>
+						</ul></li> 
 				<li><a href="#">Gestion de Cambios</a>
 					<ul style="width:210px">
 						<li><a href="{{url_for('LBManager')}}">Linea Base Manager</a>

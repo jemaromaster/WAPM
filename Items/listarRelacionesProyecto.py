@@ -12,6 +12,7 @@ from models.proyectoModelo import Proyecto
 from models.itemModelo import Relacion
 from models.usuarioModelo import Usuario
 from models.historialModelo import HistorialRelacion
+from flask_weasyprint import HTML, render_pdf
 from sqlalchemy import or_
 import pydot
 from babel.util import distinct
@@ -44,7 +45,7 @@ class ListarRelacionesProyecto(flask.views.MethodView):
             listacluster[f.idFase]=pydot.Cluster(str(f.idFase), label=f.tag + "."+f.nombreFase);
             c=listacluster[f.idFase]
             #se obtiene todas las LB's de la fase
-            listalb=sesion.query(LineaBase).filter(LineaBase.idFase==f.idFase).all();
+            listalb=sesion.query(LineaBase).filter(LineaBase.idFase==f.idFase,LineaBase.estado!="inactiva").all();
             cont=0
             for lib in listalb:
                 cont=cont+1
@@ -58,7 +59,7 @@ class ListarRelacionesProyecto(flask.views.MethodView):
                 c.add_subgraph(clustLB);
             
             #se obtiene elementos quee no estan bloqueado
-            itemEnFase=sesion.query(Item).filter(Item.idFase==f.idFase).filter(Item.estado!='bloqueado').order_by('id asc').all()
+            itemEnFase=sesion.query(Item).filter(Item.idFase==f.idFase).filter(Item.estado!='bloqueado',Item.estado!='inactivo').order_by('id asc').all()
             if(itemEnFase is not None):
                 #c.add_subgraph(pydot.Cluster)
                 for i in itemEnFase:
@@ -77,11 +78,10 @@ class ListarRelacionesProyecto(flask.views.MethodView):
         for lr in listaRel:
             print(str(lr.padre_id)+'+'+str(lr.hijo_id))
             callgraph.add_edge(pydot.Edge(str(lr.padre_id),str(lr.hijo_id)))
-        
+    
         sesion.close()
-        callgraph.write_png('example_cluster2.png')
         
-        sesion.close()
-        return 'nada'
-        
+        callgraph.write_png('./static/images/example_cluster3.png')
+        html="<div><img src='/static/images/example_cluster3.png'/></div>"
+        return render_pdf(HTML(string=html))
         

@@ -1,6 +1,8 @@
 import flask, flask.views
 from flask import jsonify
 
+from Items.listarRelacionesProyecto import ListarRelacionesProyecto
+
 from SC.setVoto import SetVoto
 from SC.listarVotos import ListarVotos
 from SC.listarSCVotante import ListarSCVotante
@@ -433,6 +435,10 @@ app.add_url_rule('/informeHistorialItems/',
                  methods=["GET"])
 app.add_url_rule('/informeListaItems/',
                  view_func=InformeListaItems.as_view('informeListaItems'),
+                 methods=["GET"])
+
+app.add_url_rule('/listarRelacionesProyecto/',
+                 view_func=ListarRelacionesProyecto.as_view('listarRelacionesProyecto'),
                  methods=["GET"])
 app.debug = True
 if __name__ == '__main__':
