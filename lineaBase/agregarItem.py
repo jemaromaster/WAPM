@@ -34,6 +34,9 @@ class AgregarItemLB(flask.views.MethodView):
                    
         if(idLB!=0):
             lb=sesion.query(LineaBase).filter(LineaBase.id==int(idLB)).first()
+            if lb.estado != "abierta":
+                sesion.close()
+                return "t, no se pueden agregar items a una Linea Base "+ lb.estado
             lb.items.append(item)
             item.estado="bloqueado"
             sesion.add(lb)

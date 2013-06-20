@@ -585,13 +585,15 @@
 								//a=JSON.stringify($('#form').serializeArray())
 								//alert(a)
 								//alert(jsonizarAtributos())
+								
 								if (bandera == 1) {
 									/* se indica la URL */
+									alert($('#tipoItemIdComboBox').val())
 									if (control(true) == 1 | controlTI()==1) { //aca se usa cortocircuito
 										mostrarMensaje("Error",
 												"Campos completados incorrectamente");
 									} else {
-										
+												
 										$.post('/agregarItem/',
 														{
 															/* se indican los parametros*/
@@ -965,7 +967,7 @@
 
 	function agregar() {
 		/* se indica que se cargará un nuevo dato */
-		
+		alert($('#tipoItemIdComboBox').val());
 		if(retornaValorComboBoxFases()==0){
 			mostrarMensaje("Atencion", "Se debe seleccionar una fase para agregar un item")
 			return;

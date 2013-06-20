@@ -30,9 +30,9 @@ class CerrarLB(flask.views.MethodView):
             sesion.close()
             return "t, No posee permiso para realizar esta accion"
                    
-        if(lb.estado=="cerrada"):
+        if(lb.estado!="abierta"):
             sesion.close()
-            return "t,Linea Base ya se encuentra cerrada"
+            return "t, No se puede cerrar una Linea Base "+lb.estado
         if len(lb.items) <= 0:
             sesion.close()
             return "t,Linea Base no posee items. No puede ser cerrada"

@@ -551,8 +551,8 @@
 			return;
 		}
 		var rowdata = $('#listaLB').getRowData(row);
-		if (rowdata.estado=="cerrada"){
-			mostrarMensaje("Atencion", "Linea Base no puede ser modificada, ya se encuentra Cerrada!");
+		if (rowdata.estado!="abierta"){
+			mostrarMensaje("Atencion", "Linea Base en estado "+rowdata.estado + " no puede ser modificada");
 			return;
 		}
 		
@@ -767,6 +767,12 @@
 			return;
 		}
 		var rowdata = $('#listaLB').getRowData(row);
+		if (rowdata.estado!="abierta"){
+			mostrarMensaje("Atencion", "Linea Base en estado "+rowdata.estado + " no puede ser cerrada");
+			return;
+		}
+		
+		
 		idLBEnviar=rowdata.idLB;
 		$.post('/cerrarLB/',{
 			idLB : idLBEnviar
@@ -810,8 +816,8 @@
 		}
 		
 		var rowdata = $('#listaLB').getRowData(row);
-		if (rowdata.estado=="cerrada"){
-			mostrarMensaje("Atencion", "Linea Base no puede ser modificada, ya se encuentra Cerrada!");
+		if (rowdata.estado!="abierta"){
+			mostrarMensaje("Atencion", "No se pueden agregar items a una Linea base en estado:  "+rowdata.estado);
 			return;
 		}
 		

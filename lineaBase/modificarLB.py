@@ -39,8 +39,8 @@ class ModificarLB(flask.views.MethodView):
             return "t, No posee permiso para realizar esta accion"
         
         
-        if estado=="cerrada":
-            return "t,La linea Base se ha cerrado. No puede modificarse"
+        if estado!="abierta":
+            return "t,No puede modificarse una Linea Base " + estado
         lb=LineaBase(descripcion,estado)
         lb.descripcion=lb.descripcion.strip()
         lb.estado=lb.estado.strip()

@@ -116,7 +116,7 @@ class SeleccionarProyectoSesion(flask.views.MethodView):
         if cantComite % 2 == 0 :
             sesion.close()
             flask.session['idProyecto']=0
-            return make_response('t,La cantidad de miembros de comite no es PAR')
+            return make_response('t,La cantidad de miembros de comite es PAR')
         
         flask.session['idProyecto']=idProyecto
         

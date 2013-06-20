@@ -1,10 +1,11 @@
 import flask.views
-from utils import login_required
+from utils import login_required,controlRol
 from models.tipoItemModelo import TipoItem
 from models.atributosModelo import Atributos
 from TipoItemController import TipoItemControllerClass;
 from models.bdCreator import Session
 from models.rolSistemaModelo import RolSistema
+from models.faseModelo import Fase
 import json
 from flask import make_response 
 
@@ -27,8 +28,10 @@ class InactivarTipoItem(flask.views.MethodView):
         idTI=flask.request.form['idTI']
         
         q=sesion.query(TipoItem).filter(TipoItem.idTipoItem==int(idTI)).first()
+        
         if(q is not None):
-            
+            if controlRol(str(q.fase_id),'tipo','administrar')==0:
+                return "t, No posee permiso para realizar esta accion"
             q.estado='inactivo'
             sesion.merge(q)
             sesion.commit()
