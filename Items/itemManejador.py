@@ -73,6 +73,7 @@ class ItemManejador:
                         i.tipoItem_id,item.estado, item.descripcion, \
                         item.fechaCreacion, item.autorVersion_id, item.idFase)
             i.version=i.version+1;
+            i.tag=item.tag
            
         
         else: #item nuevo

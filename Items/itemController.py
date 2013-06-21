@@ -141,9 +141,9 @@ class ItemControllerClass(flask.views.MethodView):
             ############################################################################
         
         if(esReversion==0):#cuando no es reversion
-            if(idF==0):
-                laFase=sesion.query(Fase).filter(Fase.idFase==f.idFase).first()
-                f.tag=laFase.tag+ "."+ f.nombreItem
+            laFase=sesion.query(Fase).filter(Fase.idFase==f.idFase).first()
+            print "El nombre del fucking item es! "+f.nombreItem
+            f.tag=laFase.tag+ "."+ f.nombreItem
         #se valida la fecha 
        
          
