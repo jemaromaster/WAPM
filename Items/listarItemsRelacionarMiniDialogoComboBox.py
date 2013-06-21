@@ -9,6 +9,7 @@ from models.tipoItemModelo import TipoItem
 from models.itemModelo import Item
 from models.itemModelo import Relacion
 from models.usuarioModelo import Usuario
+from models.faseModelo import Fase
 
 sesion=Session()
 
@@ -46,7 +47,11 @@ class ListarItemsRelacionarMiniDialogoComboBox(flask.views.MethodView):
         idItem=idTI=flask.request.args.get('idItem', '')
         idFase=flask.request.args.get('idFase', '')
         
-        faseMenor=int(idFase)-1;
+        faseActual=sesion.query(Fase).filter(Fase.idFase==idFase).first()
+        if faseActual.tag=="F1":
+            faseMenor=0
+        else:
+            faseMenor=int(idFase)-1;
         relLista=sesion.query(Item).filter(or_(Item.idFase==idFase,Item.idFase==str(faseMenor)))\
                                     .filter(Item.estado!='inactivo').filter(Item.idItem!=idItem)\
                                     .all()

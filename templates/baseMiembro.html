@@ -153,7 +153,11 @@
 			  	
 		};
 		function grafoGraficar() {
-			window.open('/listarRelacionesProyecto?idProyecto='+valorenSesion,'Grafo del Proyecto',"width=600, height=400","location=0")
+			if (valorenSesion==0){
+				Mensaje("Atencion","Debe seleccionar un proyecto");
+				return
+			}	
+			window.open('/listarRelacionesProyecto?idProyecto='+valorenSesion,'Grafo del Proyecto',"width=600, height=400,location=0,scrollbars=1")
 			  	
 		};
 		

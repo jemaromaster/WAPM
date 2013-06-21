@@ -422,8 +422,9 @@
 					//alert(len)
 					if (len > atributosTI[i]["longitudCadena"] || len <= 0) {
 						$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
+						$("#controlCarecteresred").remove()
 						$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
-								"type=\"text\" value='Ingrese caracteres en rango [1-"+ parseInt(atributosTI[i]["longitudCadena"]) + "] '"+
+								"type=\"text\" id=\"controlCarecteresred\" value='Ingrese caracteres en rango [1-"+ parseInt(atributosTI[i]["longitudCadena"]) + "] '"+
 									"float=\"left\""+
 									"style=\"width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;color:red;\" /></div>")
 						error = 1;
@@ -433,7 +434,7 @@
 						valor=$("#input_"+atributosTI[i]["idAtributos"]).val()
 						len=$("#input_"+atributosTI[i]["idAtributos"]).val().length
 						//alert(len)
-						if(len!=0 && valor.indexOf('.')!=-1){ //si es que no tiene "," entonces se debe el len=1 para que pase la prueba
+						/*if(len!=0 && valor.indexOf('.')!=-1){ //si es que no tiene "," entonces se debe el len=1 para que pase la prueba
 							valor=valor.substring(valor.indexOf('.')+1,valor.length)
 							len = valor.length;
 						}
@@ -441,16 +442,18 @@
 						if (len > atributosTI[i]["longitudCadena"]) {
 							$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
 							error = 1;
+							$("#precisioNumericoRed").remove()
 							$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
-									"type=\"text\" value='Precision del entero: "+ parseInt(atributosTI[i]["longitudCadena"]) + " '"+
+									"type=\"text\" id=\"precisionNumericoRed\" value='Precision del entero: "+ parseInt(atributosTI[i]["longitudCadena"]) + " '"+
 										"float=\"left\""+
 										"style=\"width: 200px; border: none; display: block; margin-bottom: 2px; padding: 0.4em;color:red;\" /></div>")
 							
-						}else if(len<=0){
+						}else */if(len<=0){
 							$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
 							error = 1;
+							$("#precisionNumericoRed222").remove()
 							$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
-									"type=\"text\" value='Campo vacio. Ingrese entero con precision: "+ parseInt(atributosTI[i]["longitudCadena"]) + " '"+
+									"type=\"text\" id=\"precisionNumericoRed222\" value='Campo vacio. Ingrese entero con precision: "+ parseInt(atributosTI[i]["longitudCadena"]) + " '"+
 										"float=\"left\""+
 										"style=\"width: 300px; border: none; display: block; margin-bottom: 2px; padding: 0.4em;color:red;\" /></div>")
 							
@@ -461,7 +464,8 @@
 					//alert(len)
 					if (len <= 0) {
 						$("#input_"+atributosTI[i]["idAtributos"]).css('border-color', 'red');
-						$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
+						$("#precisionControlRed").remove()
+						$("#input_"+atributosTI[i]["idAtributos"]).after("<div id='Ediv_'"+atributosTI[i]["idAtributos"]+"'><input id=\"precisionControlRed\" title=\"20 caracteres max\" readonly tabIndex=\"-1\"" +
 								"type=\"text\" value='Campo vacio. Ingrese "+atributosTI[i]["tipoPrimario"]+"'"+
 									"float=\"left\""+
 									"style=\"width: 200px; border: none; display: block; margin-bottom: 12px; padding: 0.4em;color:red;\" /></div>")

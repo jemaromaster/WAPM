@@ -50,7 +50,7 @@ class ListarRelacionesProyecto(flask.views.MethodView):
             for lib in listalb:
                 cont=cont+1
                 #se obtiene items de la LB 
-                listaItemEnLB=sesion.query(Item).join(LineaBase.items).filter(LineaBase.id==lib.id).all(); 
+                listaItemEnLB=sesion.query(Item).join(LineaBase.items).filter(LineaBase.id==lib.id).filter(Item.estado!='inactivo').all(); 
                 #se crea el sub cluster
                 clustLB=pydot.Cluster(str(lib.id), label="LB."+f.tag+"."+str(cont), color="#00AA00", style="dashed");
                 #se agrega al sub cluster y luego se agrega al cluster
@@ -68,6 +68,8 @@ class ListarRelacionesProyecto(flask.views.MethodView):
                     if i.estado=='pendiente': st='dashed'
                     #elif i.estado=='bloqueado': st='bold'
                     elif i.estado=='activo': st='dotted'
+                    elif i.estado=='sc_activo': st='dotted'; col='#AA0000';
+                    elif i.estado=='sc_pendiente':col='#AA0000';st='dashed';
                     elif i.estado=='revision':
                         st='solid'
                         col='#AA0000'
@@ -80,8 +82,11 @@ class ListarRelacionesProyecto(flask.views.MethodView):
             callgraph.add_edge(pydot.Edge(str(lr.padre_id),str(lr.hijo_id)))
     
         sesion.close()
-        
-        callgraph.write_png('./static/images/example_cluster3.png')
-        html="<div><img src='/static/images/example_cluster3.png'/></div>"
-        return render_pdf(HTML(string=html))
+        import time;
+        t=str(time.time())
+        callgraph.write_png('./static/images/'+ t+'example_cluster3.png')
+        html="<div><img src='/static/images/" + t+"example_cluster3.png'/></div>"
+        html=html+"<div><img src='/static/images/Estados.png'/></div>"
+        #return render_pdf(HTML(string=html))
+        return html;
         
