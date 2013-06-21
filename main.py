@@ -105,6 +105,7 @@ from models import poblarBD
 from Items.listarArchivosItem import ListarArchivosItem
 from Informe.informe import Informe
 from Informe.informeSC import InformeSC
+from Informe.informeRoles import InformeRoles
 from Informe.informeHistorialItems import InformeHistorialItems
 from Informe.informeListaItems import InformeListaItems
  
@@ -429,6 +430,9 @@ app.add_url_rule('/informe/',
                  methods=["GET"])
 app.add_url_rule('/informeSC/',
                  view_func=InformeSC.as_view('informeSC'),
+                 methods=["GET"])
+app.add_url_rule('/informeRoles/',
+                 view_func=InformeRoles.as_view('informeRoles'),
                  methods=["GET"])
 app.add_url_rule('/informeHistorialItems/',
                  view_func=InformeHistorialItems.as_view('informeHistorialItems'),

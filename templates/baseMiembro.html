@@ -160,7 +160,14 @@
 			window.open('/listarRelacionesProyecto?idProyecto='+valorenSesion,'Grafo del Proyecto',"width=600, height=400,location=0,scrollbars=1")
 			  	
 		};
-		
+		function misRoles() {
+			if (valorenSesion==0){
+				Mensaje("Atencion","Debe seleccionar un proyecto");
+				return
+			}	
+			window.open('/informeRoles?idProyecto='+valorenSesion,'Roles en Proyecto',"width=600, height=400,location=0,scrollbars=1")
+			  	
+		};
 		
 				
 		//var selectedOption = 'green';
@@ -269,6 +276,7 @@
 					<ul style="width:210px">
 						<li><a href="/itemManager/">Item Manager</a>
 						<li><a style="cursor: pointer;" onclick="grafoGraficar()">Grafo del Proyecto</a>
+						<li><a style="cursor: pointer;" onclick="misRoles()">Mis Roles</a>
 						</ul></li> 
 				<li><a href="#">Gestion de Cambios</a>
 					<ul style="width:210px">
