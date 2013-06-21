@@ -1421,7 +1421,7 @@
 			return;
 		}
 		var rowdata = $('#listaItems').getRowData(rowItem);
-		window.open('/informeHistorialItems?idProyecto='+retornaValorenSesion()+'&idItem='+rowdata.idItem,'Informe',"location=0")
+		window.open('/informeHistorialItems?idProyecto='+retornaValorenSesion()+'&idItem='+rowdata.idItem,'Informe',"width=600, height=400","location=0")
 	}
 	
 	function retornaValorComboBoxFases() {
@@ -1996,7 +1996,10 @@ function abrirDialogoArchivos(){
 		return;
 	}
 	rowdata= $('#listaItems').getRowData(row);
-	
+	if (rowdata.estado!="activo"){
+		mostrarMensaje("Atencion","El item ya no se encuentra activo")
+		return
+	}
 	listarArchivosEnServer();
 	$("#idItemInput").val(rowdata.idItem)
 	$("#fileToUpload").val('')

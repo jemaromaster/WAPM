@@ -43,7 +43,7 @@ class FinalizarFase(flask.views.MethodView):
             return "t,No se puede finalizar una fase que no este activa"
         
         #Controla items en la fase
-        itemsFase= sesion.query(Item).join(Fase).filter(Fase.idFase==int(idFase))
+        itemsFase= sesion.query(Item).join(Fase).filter(Fase.idFase==int(idFase),Item.estado!="inactivo")
         
         numberItems=itemsFase.count() 
         if numberItems <= 0:

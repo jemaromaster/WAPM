@@ -119,7 +119,10 @@ class InformeHistorialItems(flask.views.MethodView):
             if(a.idItem==item.idItem):
                 break;
         h=sesion.query(HistorialItem).filter(HistorialItem.idItemFK==int(item.idItem)).order_by('id_item_fk asc').all()
-        listaAtributo=sesion.query(Atributos).filter(Atributos.tipoItemId==int(item.tipoItem_id)).all()
+        if item.tipoItem_id==None:
+            listaAtributo=None
+        else:
+            listaAtributo=sesion.query(Atributos).filter(Atributos.tipoItemId==int(item.tipoItem_id)).all()
         ti=sesion.query(TipoItem).filter(TipoItem.idTipoItem==item.tipoItem_id).first()
         iti=sesion.query(InstanciaTipoItem)\
                                 .filter(InstanciaTipoItem.idItem==int(item.idItem)).all();
