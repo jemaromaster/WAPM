@@ -12,7 +12,7 @@ if DEV == True:
     #engine = create_engine('postgresql://postgres:pm@localhost:5432/wapm')
     print "ambiente de desarrollo"
 else:
-    engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm_prod')
+    engine = create_engine('postgresql://postgres:linkano@localhost:5433/wapm_prod2')
     #engine = create_engine('postgresql://postgres:pm@localhost:5432/cargada2')
     print "ambiente de produccion"
 Session = sessionmaker(bind=engine)
