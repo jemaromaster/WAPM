@@ -1,7 +1,7 @@
 from utils import login_required
 import flask.views
 from flask import jsonify,json
-#from flask_weasyprint import HTML, render_pdf
+from flask_weasyprint import HTML, render_pdf
 from models.bdCreator import Session
 from models.solicitudCambioModelo import SolicitudCambio
 from models.itemModelo import Item, Relacion
@@ -14,9 +14,9 @@ from flask.templating import render_template
 from models.atributosModelo import Atributos
 from models.historialModelo import HistorialItem;
 from flask.helpers import make_response
-from flask_weasyprint import HTML, render_pdf
+#from flask_weasyprint import HTML, render_pdf
 from models.instanciaAtributos import InstanciaCadena, InstanciaEntero, InstanciaFecha, InstanciaNumerico, InstanciaTipoItem
-from flask_weasyprint import HTML, render_pdf
+#from flask_weasyprint import HTML, render_pdf
 sesion=Session()
 
 
@@ -119,13 +119,12 @@ class InformeHistorialItems(flask.views.MethodView):
             if(a.idItem==item.idItem):
                 break;
         h=sesion.query(HistorialItem).filter(HistorialItem.idItemFK==int(item.idItem)).order_by('id_item_fk asc').all()
-        if item.tipoItem_id==None:
-            listaAtributo=None
-        else:
+        ti=None;iti=None;listaAtributo=None;
+        if item.tipoItem_id is not None:
             listaAtributo=sesion.query(Atributos).filter(Atributos.tipoItemId==int(item.tipoItem_id)).all()
-        ti=sesion.query(TipoItem).filter(TipoItem.idTipoItem==item.tipoItem_id).first()
-        iti=sesion.query(InstanciaTipoItem)\
-                                .filter(InstanciaTipoItem.idItem==int(item.idItem)).all();
+            ti=sesion.query(TipoItem).filter(TipoItem.idTipoItem==item.tipoItem_id).first()
+            iti=sesion.query(InstanciaTipoItem)\
+                                    .filter(InstanciaTipoItem.idItem==int(item.idItem)).all();
         html=''
         html=html+'<img src="/static/images/blue-23957_640.png" width="250px"\
                             style="cursor: pointer;" />'
@@ -143,7 +142,10 @@ class InformeHistorialItems(flask.views.MethodView):
         html=html+'<h3>Historial del Item: ' + item.nombreItem + '</h3>'
         html=html+'<p>Codigo : ' + faseDelItem.tag +'.'+ str(cont) + '_' + item.nombreItem+'</p>'
         html=html+'<p>Fase : ' + faseDelItem.nombreFase +'</p>'
-        html=html+'<p>Tipo de Item : ' + ti.nombreTipoItem +'</p>'
+        if(ti is None):
+            html=html+'<p>Tipo de Item : ' + 'Ninguno' +'</p>'
+        else:
+            html=html+'<p>Tipo de Item : ' + ti.nombreTipoItem +'</p>'
         html=html+'<b><p>Version ' + str(item.version ) + ' (Actual)</p></b>'
         
         
@@ -270,6 +272,7 @@ class InformeHistorialItems(flask.views.MethodView):
         #return render_pdf(HTML(string=html))
         sesion.close()
         return render_pdf(HTML(string=html))
+        #return html
         #return respuesta
         
       

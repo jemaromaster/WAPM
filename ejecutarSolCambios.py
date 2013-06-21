@@ -79,7 +79,8 @@ def ejecutarSCLB(listaItemsEnSolicitud,idSC):
             #se obtiene la fase para pasarla a activar si es necsario
             f=sesion.query(Fase).filter(Fase.idFase==item.idFase).first()
             if(f.estado=="finalizada"):
-                f.estado="activa";
+                f.estado="activa"
+                f.fechaFinalizacion=None
                 sesion.merge(f)
             item.estado='revision'
             sesion.merge(item)

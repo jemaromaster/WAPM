@@ -18,6 +18,9 @@ class RolProyectoControllerClass(flask.views.MethodView):
             return make_response("f,Descripcion del Rol incorrecto")
         
         sesion=Session()
+        if idRol != 0:
+            rolFase=sesion.query(RolProyecto).filter(RolProyecto.id==int(idRol)).first()
+            rol.idFase=rolFase.idFase
         
         if rol.idFase == '' or rol.idFase=='0':
             sesion.close()
@@ -26,7 +29,7 @@ class RolProyectoControllerClass(flask.views.MethodView):
         
         proyectoId=sesion.query(Fase.idProyecto).filter(Fase.idFase==rol.idFase).first()
         
-        controlNombre=sesion.query(RolProyecto).join(Fase).filter(RolProyecto.nombre==rol.nombre).filter(Fase.idProyecto==proyectoId).first()
+        controlNombre=sesion.query(RolProyecto).join(Fase).filter(RolProyecto.nombre==rol.nombre).filter(Fase.idProyecto==proyectoId.idProyecto).first()
         if idRol==0:    
             if controlNombre is not None:
                 sesion.close()
