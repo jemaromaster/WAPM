@@ -46,19 +46,18 @@ class EliminarRevivirAprobarItem(flask.views.MethodView):
                 sesion.close()
                 return "t, No posee permiso para realizar esta accion"
             
-            if(q.estado=='inactivo'):
+            if(q.estado not in ['sc_activo','activo']):
                 sesion.close()
-                return make_response('t,El item ya se encuentra eliminado')
+                return make_response('t,El item en estado '+q.estado+' no puede ser eliminado')
             else:
                 #Puede que hayan hijos aprobados/bloqueados/revision. Si es asi, no podra eliminarse.
-                if q.estado=="sc_activo":
-                    cantHijos=sesion.query(Relacion).filter(Relacion.padre_id==q.idItem).count()
-                    if cantHijos>0:
-                        sesion.close()
-                        return make_response('t, Elimine a los hijos que dependen de este item primeramente.')
-                    
-                    
-                    
+                cantHijos=sesion.query(Relacion).filter(Relacion.padre_id==q.idItem).count()
+                if cantHijos>0:
+                    sesion.close()
+                    return make_response('t, Elimine a los hijos que dependen de este item primeramente.')
+                
+                
+                
                 q.estado='inactivo'
                 sesion.merge(q)
                 sesion.query(Relacion).filter(or_(Relacion.padre_id==q.idItem, Relacion.hijo_id==q.idItem)).delete();
