@@ -14,6 +14,7 @@ from models.usuarioModelo import Usuario
 from models.historialModelo import HistorialRelacion
 from flask_weasyprint import HTML, render_pdf
 from sqlalchemy import or_
+from models.config import DEV
 import pydot
 from babel.util import distinct
 
@@ -84,8 +85,16 @@ class ListarRelacionesProyecto(flask.views.MethodView):
         sesion.close()
         import time;
         t=str(time.time())
-        callgraph.write_png('./static/images/'+ t+'example_cluster3.png')
-        html="<div><img src='/static/images/" + t+"example_cluster3.png'/></div>"
+        
+        if DEV==True:
+            #Desarrollo
+            callgraph.write_png('./static/images/'+ t+'example_cluster3.png')
+            html="<div><img src='/static/images/" + t+"example_cluster3.png'/></div>"
+        else:
+            #Produccion    
+            callgraph.write_png('/tmp/'+ t+'example_cluster3.png')
+            html="<div><img src='/tmp/" + t+"example_cluster3.png'/></div>"
+        
         html=html+"<div><img src='/static/images/Estados.png'/></div>"
         #return render_pdf(HTML(string=html))
         return html;
